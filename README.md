@@ -10,3 +10,4 @@ TODO:
 5. Adding actions for gathering resources (Wood, stone, plants)
 6. Placing builds and other infranstructure
 7. Basic sounddesigg (walking sound, basic soundtrack, ambient sounds)
+8. Adding basic UI (Inventory menu, loading bars, overview of buildings, statistics)
