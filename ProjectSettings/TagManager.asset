@@ -4,10 +4,18 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Obstacle
   - Ground
   - WoodPile
   - player
+  - Wood
+  - MaterialBox
+  - Tree
+  - StoneDepot
+  - IronDepot
+  - CoalDepot
+  - StonePile
+  - IronPile
+  - CoalPile
   layers:
   - Default
   - TransparentFX

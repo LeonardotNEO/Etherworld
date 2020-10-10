@@ -2,28 +2,40 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Inventory : MonoBehaviour
+public class Inventory
 {
-    public List<Item> mainInventory;
-    
+    List<Item> mainInventory = new List<Item>();
 
     public Inventory(){
-
+        
     }
 
-    public void updateInventory(Item item){
-        GameObject player = GameObject.FindGameObjectWithTag("player");
-        Item itemComponent = player.GetComponent<Item>();
+    public void addItemToInventory(Item item){
         mainInventory.Add(item);
     }
 
-    public string getInventory(){
-        string getInventoryString = "";
+    public void SetNewItem(){
+        
+    }
+
+    public List<Item> getMainInventory(){
+        return mainInventory;
+    }
+
+    public string getInventoryName(){
+        string inventoryName = "Resource: \n";
         foreach(var item in mainInventory){
-            getInventoryString += item.getAmount().ToString() + " " + item.getName() + " "; 
+            inventoryName += item.getName() + "\n";
         }
-        Debug.Log(mainInventory.Count);
-        return getInventoryString;
+        return inventoryName;
+    }
+
+    public string getInventoryAmount(){
+        string inventoryAmount = "Amount: \n";
+        foreach(var item in mainInventory){
+            inventoryAmount += item.getItemAmount() + "\n";
+        }
+        return inventoryAmount;
     }
 
 }

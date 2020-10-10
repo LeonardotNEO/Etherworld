@@ -29,16 +29,10 @@ public class MoveCameraScript : MonoBehaviour
         if(Input.GetKey("d")){
             positionZ -= cameraSensitivity * Time.deltaTime;
         }
-        if(Input.GetKey("q")){
-            positionZ += cameraSensitivity * Time.deltaTime;
-        }
-        if(Input.GetKey("e")){
-            positionZ -= cameraSensitivity * Time.deltaTime;
-        }
-        if(Input.GetKey("space")){
+        if(Input.GetKey("space")  && 50 > positionY && positionY > 3.5F){
             positionY += cameraSensitivity * Time.deltaTime;
         }
-        if(Input.GetKey("left shift")){
+        if(Input.GetKey("left shift") && 60 > positionY && positionY > 4){
             positionY -= cameraSensitivity * Time.deltaTime;
         }
 

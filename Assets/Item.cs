@@ -2,28 +2,34 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Item : MonoBehaviour
+public class Item
 {
-    private int itemID;
-    private string itemName;
-    private int itemAmount;
-    public Item(string itemName, int itemAmount){
+    string itemName;
+    int itemID;
+    int itemAmount;
+
+    public Item(string itemName, int itemAmount, int itemID){
         this.itemName = itemName;
+        this.itemID = itemID;
         this.itemAmount = itemAmount;
     }
 
-    public void setItemNameAmount(string newItem, int newAmount){
-        itemName = newItem;
-        itemAmount = newAmount;
+    public void setIncreaseAmount(int amount){
+        this.itemAmount += amount;
     }
 
-
+    public void setDecreaseAmount(int amount){
+        this.itemAmount -= amount;
+    }
 
     public string getName(){
         return itemName;
     }
 
-    public int getAmount(){
+    public int getItemAmount(){
         return itemAmount;
+    }
+    public int getItemID(){
+        return itemID;
     }
 }
