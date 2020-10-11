@@ -146,7 +146,7 @@ public class InventorySystem : MonoBehaviour
         // STONEDEPOT; IRONDEPOT; COALDEPOT
         if(colliderInfo.tag == "StoneDepot" || colliderInfo.tag == "IronDepot" || colliderInfo.tag == "CoalDepot"){
             float progressNumber = x.GetComponent<ItemAtributes>().progress; 
-            float progressSpeed = 30;  
+            float progressSpeed = 30;
 
             while(progressNumber <= 360){
                 bool isMoving = GameObject.Find("/player").GetComponent<PlayerBehavior>().isMoving;
