@@ -16,6 +16,7 @@ TagManager:
   - StonePile
   - IronPile
   - CoalPile
+  - MainCamera2
   layers:
   - Default
   - TransparentFX

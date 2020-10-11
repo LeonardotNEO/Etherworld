@@ -11,6 +11,8 @@ public class InventorySystem : MonoBehaviour
     public bool gatheringsResourcesRunning = false;
     Text inventoryTextName;
     Text inventoryTextAmount;
+
+    RectTransform progressBar;
     public Collider colliderInfo;
 
     // ITEMS CURRENTLY INGAME
@@ -25,6 +27,8 @@ public class InventorySystem : MonoBehaviour
     
     void Start()
     {
+        progressBar = GameObject.Find("/UI Panel/LoadingBar/LoadingBarProgress").GetComponent<RectTransform>();
+
         // ADDING ITEMS TO INVENTORY
         mainInventory.addItemToInventory(Item0);
         mainInventory.addItemToInventory(Item1);
@@ -56,18 +60,22 @@ public class InventorySystem : MonoBehaviour
             if(colliderInfo.tag == "WoodPile"){
                 Item0.setIncreaseAmount(10);
                 Destroy(colliderInfo.gameObject);
+                GetComponent<Animator>().SetTrigger("pickingUpItem");
             }
             if(colliderInfo.tag == "StonePile"){
                 Item1.setIncreaseAmount(5);
                 Destroy(colliderInfo.gameObject);
+                GetComponent<Animator>().SetTrigger("pickingUpItem");
             }
             if(colliderInfo.tag == "IronPile"){
                 Item2.setIncreaseAmount(5);
                 Destroy(colliderInfo.gameObject);
+                GetComponent<Animator>().SetTrigger("pickingUpItem");
             }
             if(colliderInfo.tag == "CoalPile"){
                 Item3.setIncreaseAmount(5);
                 Destroy(colliderInfo.gameObject);
+                GetComponent<Animator>().SetTrigger("pickingUpItem");
             }
         }
 
@@ -109,25 +117,26 @@ public class InventorySystem : MonoBehaviour
     }
 
     public IEnumerator gatheringResources(GameObject resource){
-        RectTransform progressBar = GameObject.Find("/UI Panel/LoadingBar/LoadingBarProgress").GetComponent<RectTransform>();
+        GameObject x = colliderInfo.gameObject;
         gatheringsResourcesRunning = true;
 
         // TREES
-        if(colliderInfo.tag == "Tree"){
+        if(x.tag == "Tree"){
             float progressNumber = 0;
-            Debug.Log("WE GET HERE");
-            while(progressNumber <= 10){
+            float progressSpeed = 50;
+
+            while(progressNumber <= 360){
                 bool isMoving = GameObject.Find("/player").GetComponent<PlayerBehavior>().isMoving; 
-                progressNumber += 1 * Time.deltaTime;
-                progressBar.sizeDelta = new Vector2(100*progressNumber, 26.4F);
+                progressNumber += Time.deltaTime * progressSpeed;
+                progressBar.sizeDelta = new Vector2(progressNumber, 26.4F);
 
                 if(isMoving){
-                    progressBar.sizeDelta = new Vector2(0, 26F);
+                    resetProgressBar();
                     break;
-                } else if(progressBar.sizeDelta.x > 360){
-                    progressBar.sizeDelta = new Vector2(0, 26F);
-                    Instantiate(woodPile, new Vector3(colliderInfo.transform.position.x + 2.5F, colliderInfo.transform.position.y - 2, colliderInfo.transform.position.z + 3f), Quaternion.identity);
-                    Destroy(colliderInfo.gameObject);
+                } else if(progressBar.sizeDelta.x >= 360){
+                    resetProgressBar();
+                    Instantiate(woodPile, new Vector3(x.transform.position.x + 1f, x.transform.position.y + 1f, x.transform.position.z), Quaternion.identity);
+                    Destroy(x.gameObject);
                     break;
                 }
                 yield return null;
@@ -136,71 +145,84 @@ public class InventorySystem : MonoBehaviour
 
         // STONEDEPOT; IRONDEPOT; COALDEPOT
         if(colliderInfo.tag == "StoneDepot" || colliderInfo.tag == "IronDepot" || colliderInfo.tag == "CoalDepot"){
-            float progressNumber = colliderInfo.GetComponent<ItemAtributes>().progress;
-            float progressSpeed = 1; 
+            float progressNumber = x.GetComponent<ItemAtributes>().progress; 
+            float progressSpeed = 30;  
 
             while(progressNumber <= 360){
                 bool isMoving = GameObject.Find("/player").GetComponent<PlayerBehavior>().isMoving;
-                progressNumber += 10 * Time.deltaTime * progressSpeed;
+                progressNumber += Time.deltaTime * progressSpeed;
                 progressBar.sizeDelta = new Vector2(progressNumber, 26.4F);
-                bool firstTriggered = colliderInfo.GetComponent<ItemAtributes>().firstTriggered;
-                bool secondTriggered = colliderInfo.GetComponent<ItemAtributes>().secondTriggered;
-                bool thirdTriggered = colliderInfo.GetComponent<ItemAtributes>().thirdTriggered;
-                bool fourthTriggered = colliderInfo.GetComponent<ItemAtributes>().fourthTriggered;
-                bool fifthTriggered = colliderInfo.GetComponent<ItemAtributes>().fifthTriggered;
-                bool sixtTriggered = colliderInfo.GetComponent<ItemAtributes>().sixtTriggered; 
+
+                bool firstTriggered = x.GetComponent<ItemAtributes>().firstTriggered;
+                bool secondTriggered = x.GetComponent<ItemAtributes>().secondTriggered;
+                bool thirdTriggered = x.GetComponent<ItemAtributes>().thirdTriggered;
+                bool fourthTriggered = x.GetComponent<ItemAtributes>().fourthTriggered;
+                bool fifthTriggered = x.GetComponent<ItemAtributes>().fifthTriggered;
+                bool sixtTriggered = x.GetComponent<ItemAtributes>().sixtTriggered;
+
 
                 if(isMoving){
-                    progressBar.sizeDelta = new Vector2(0, 26F);
+                    resetProgressBar();
                     break;
                 } 
                 if(progressBar.sizeDelta.x >= 60 && firstTriggered == false){
-                    Instantiate(resource, new Vector3(colliderInfo.transform.position.x + 1F, colliderInfo.transform.position.y + 3, colliderInfo.transform.position.z + 4f), Quaternion.identity);
-                    Instantiate(resource, new Vector3(colliderInfo.transform.position.x + 1F, colliderInfo.transform.position.y + 3, colliderInfo.transform.position.z + 4f), Quaternion.identity);
-                    colliderInfo.GetComponent<ItemAtributes>().progress = 60;
-                    colliderInfo.GetComponent<ItemAtributes>().firstTriggered = true;
-                    colliderInfo.GetComponent<ItemAtributes>().amountLeft--;
+                    Instantiate(resource, new Vector3(x.transform.position.x + 1F, x.transform.position.y + 1, x.transform.position.z + 1f), Quaternion.identity);
+                    Instantiate(resource, new Vector3(x.transform.position.x + 1F, x.transform.position.y + 1, x.transform.position.z + 1f), Quaternion.identity);
+                    x.GetComponent<Animator>().SetTrigger("first");
+                    x.GetComponent<ItemAtributes>().progress = 60;
+                    x.GetComponent<ItemAtributes>().firstTriggered = true;
+                    x.GetComponent<ItemAtributes>().amountLeft--;
                 } 
                 if(progressBar.sizeDelta.x >= 120 && secondTriggered == false){
-                    Instantiate(resource, new Vector3(colliderInfo.transform.position.x + 1F, colliderInfo.transform.position.y + 3, colliderInfo.transform.position.z + 4f), Quaternion.identity);
-                    Instantiate(resource, new Vector3(colliderInfo.transform.position.x + 1F, colliderInfo.transform.position.y + 3, colliderInfo.transform.position.z + 4f), Quaternion.identity);
-                    colliderInfo.GetComponent<ItemAtributes>().progress = 120;
-                    colliderInfo.GetComponent<ItemAtributes>().secondTriggered = true;
-                    colliderInfo.GetComponent<ItemAtributes>().amountLeft--;
+                    Instantiate(resource, new Vector3(x.transform.position.x + 1.5F, x.transform.position.y + 1, x.transform.position.z + 1f), Quaternion.identity);
+                    Instantiate(resource, new Vector3(x.transform.position.x + 1.5F, x.transform.position.y + 1, x.transform.position.z + 1f), Quaternion.identity);
+                    x.GetComponent<Animator>().SetTrigger("second");
+                    x.GetComponent<ItemAtributes>().progress = 120;
+                    x.GetComponent<ItemAtributes>().secondTriggered = true;
+                    x.GetComponent<ItemAtributes>().amountLeft--;
                 } 
                 if(progressBar.sizeDelta.x >= 180 && thirdTriggered == false){
-                    Instantiate(resource, new Vector3(colliderInfo.transform.position.x + 1F, colliderInfo.transform.position.y + 3, colliderInfo.transform.position.z + 4f), Quaternion.identity);
-                    Instantiate(resource, new Vector3(colliderInfo.transform.position.x + 1F, colliderInfo.transform.position.y + 3, colliderInfo.transform.position.z + 4f), Quaternion.identity);
-                    colliderInfo.GetComponent<ItemAtributes>().progress = 180;
-                    colliderInfo.GetComponent<ItemAtributes>().thirdTriggered = true;
-                    colliderInfo.GetComponent<ItemAtributes>().amountLeft--;
+                    Instantiate(resource, new Vector3(x.transform.position.x + 1.5F, x.transform.position.y + 1, x.transform.position.z + 1f), Quaternion.identity);
+                    Instantiate(resource, new Vector3(x.transform.position.x + 1.5F, x.transform.position.y + 1, x.transform.position.z + 1f), Quaternion.identity);
+                    x.GetComponent<Animator>().SetTrigger("third");
+                    x.GetComponent<ItemAtributes>().progress = 180;
+                    x.GetComponent<ItemAtributes>().thirdTriggered = true;
+                    x.GetComponent<ItemAtributes>().amountLeft--;
                 } 
                 if(progressBar.sizeDelta.x >= 240 && fourthTriggered == false){
-                    Instantiate(resource, new Vector3(colliderInfo.transform.position.x + 1F, colliderInfo.transform.position.y + 3, colliderInfo.transform.position.z + 4f), Quaternion.identity);
-                    Instantiate(resource, new Vector3(colliderInfo.transform.position.x + 1F, colliderInfo.transform.position.y + 3, colliderInfo.transform.position.z + 4f), Quaternion.identity);
-                    colliderInfo.GetComponent<ItemAtributes>().progress = 240;  
-                    colliderInfo.GetComponent<ItemAtributes>().fourthTriggered = true;
-                    colliderInfo.GetComponent<ItemAtributes>().amountLeft--;  
+                    Instantiate(resource, new Vector3(x.transform.position.x + 1.5F, x.transform.position.y + 1, x.transform.position.z + 1f), Quaternion.identity);
+                    Instantiate(resource, new Vector3(x.transform.position.x + 1.5F, x.transform.position.y + 1, x.transform.position.z + 1f), Quaternion.identity);
+                    x.GetComponent<Animator>().SetTrigger("fourth");
+                    x.GetComponent<ItemAtributes>().progress = 240;
+                    x.GetComponent<ItemAtributes>().fourthTriggered = true;
+                    x.GetComponent<ItemAtributes>().amountLeft--; 
                 } 
                 if(progressBar.sizeDelta.x >= 300 && fifthTriggered == false){
-                    Instantiate(resource, new Vector3(colliderInfo.transform.position.x + 1F, colliderInfo.transform.position.y + 3, colliderInfo.transform.position.z + 4f), Quaternion.identity);
-                    Instantiate(resource, new Vector3(colliderInfo.transform.position.x + 1F, colliderInfo.transform.position.y + 3, colliderInfo.transform.position.z + 4f), Quaternion.identity);
-                    colliderInfo.GetComponent<ItemAtributes>().progress = 300; 
-                    colliderInfo.GetComponent<ItemAtributes>().fifthTriggered = true;
-                    colliderInfo.GetComponent<ItemAtributes>().amountLeft--; 
+                    Instantiate(resource, new Vector3(x.transform.position.x + 1.5F, x.transform.position.y + 1, x.transform.position.z + 1f), Quaternion.identity);
+                    Instantiate(resource, new Vector3(x.transform.position.x + 1.5F, x.transform.position.y + 1, x.transform.position.z + 1f), Quaternion.identity);
+                    x.GetComponent<Animator>().SetTrigger("fifth");
+                    x.GetComponent<ItemAtributes>().progress = 300;
+                    x.GetComponent<ItemAtributes>().fifthTriggered = true;
+                    x.GetComponent<ItemAtributes>().amountLeft--;
                 } 
                 if(progressBar.sizeDelta.x >= 360 && sixtTriggered == false){
-                    Instantiate(resource, new Vector3(colliderInfo.transform.position.x + 1F, colliderInfo.transform.position.y + 3, colliderInfo.transform.position.z + 4f), Quaternion.identity);
-                    Instantiate(resource, new Vector3(colliderInfo.transform.position.x + 1F, colliderInfo.transform.position.y + 3, colliderInfo.transform.position.z + 4f), Quaternion.identity);
-                    colliderInfo.GetComponent<ItemAtributes>().sixtTriggered = true;
-                    progressBar.sizeDelta = new Vector2(0, 26F);
-                    Destroy(colliderInfo.gameObject);
+                    Instantiate(resource, new Vector3(x.transform.position.x + 1.5F, x.transform.position.y + 1, x.transform.position.z + 1f), Quaternion.identity);
+                    Instantiate(resource, new Vector3(x.transform.position.x + 1.5F, x.transform.position.y + 1, x.transform.position.z + 1f), Quaternion.identity);
+                    x.GetComponent<ItemAtributes>().sixtTriggered = true;
+                    x.GetComponent<Animator>().SetTrigger("final");
+                    resetProgressBar();
+                    yield return new WaitForSeconds(2);
+                    Destroy(x.gameObject);
                     break;
                 }
                 yield return null;
             }
         }
         gatheringsResourcesRunning = false;
+    }
+
+    public void resetProgressBar(){
+        progressBar.sizeDelta = new Vector2(0, 26F);
     }
 }
 

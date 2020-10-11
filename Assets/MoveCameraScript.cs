@@ -4,38 +4,58 @@ using UnityEngine;
 
 public class MoveCameraScript : MonoBehaviour
 {
-    public float positionX = 0;
-    public float positionY = 0;
-    public float positionZ = 0;
+    public float positionX;
+    public float positionY;
+    public float positionZ;
     public float cameraSensitivity = 50;
+    public float scrollSensitivity = 200;
+    public float rotateSensitivity = 50;
 
     void Start()
     {
         
     }
 
-    // Update is called once per frame
     void Update()
     {
+
         if(Input.GetKey("w")){
-            positionX += cameraSensitivity * Time.deltaTime;
+            GameObject.FindGameObjectWithTag("MainCamera").transform.Translate(Vector3.forward * Time.deltaTime * cameraSensitivity, GameObject.FindGameObjectWithTag("MainCamera").transform);
+            positionX = GameObject.FindGameObjectWithTag("MainCamera").transform.position.x;
         }
         if(Input.GetKey("s")){
-            positionX -= cameraSensitivity * Time.deltaTime;
+            GameObject.FindGameObjectWithTag("MainCamera").transform.Translate(Vector3.back * Time.deltaTime * cameraSensitivity, GameObject.FindGameObjectWithTag("MainCamera").transform);
+            positionX = GameObject.FindGameObjectWithTag("MainCamera").transform.position.x;
         }
         if(Input.GetKey("a")){
-            positionZ += cameraSensitivity * Time.deltaTime;
+            GameObject.FindGameObjectWithTag("MainCamera").transform.Translate(Vector3.left * Time.deltaTime * cameraSensitivity, GameObject.FindGameObjectWithTag("MainCamera").transform);
+            positionZ = GameObject.FindGameObjectWithTag("MainCamera").transform.position.z;
         }
         if(Input.GetKey("d")){
-            positionZ -= cameraSensitivity * Time.deltaTime;
+            GameObject.FindGameObjectWithTag("MainCamera").transform.Translate(Vector3.right * Time.deltaTime * cameraSensitivity, GameObject.FindGameObjectWithTag("MainCamera").transform);
+            positionZ = GameObject.FindGameObjectWithTag("MainCamera").transform.position.z;
         }
-        if(Input.GetKey("space")  && 50 > positionY && positionY > 3.5F){
-            positionY += cameraSensitivity * Time.deltaTime;
+        if(Input.GetKey("z")){
+            GameObject.FindGameObjectWithTag("MainCamera").transform.RotateAround(GameObject.FindGameObjectWithTag("MainCamera").transform.position, Vector3.up, +cameraSensitivity * Time.deltaTime * 10);
         }
-        if(Input.GetKey("left shift") && 60 > positionY && positionY > 4){
-            positionY -= cameraSensitivity * Time.deltaTime;
+        if(Input.GetKey("x")){
+            GameObject.FindGameObjectWithTag("MainCamera").transform.RotateAround(GameObject.FindGameObjectWithTag("MainCamera").transform.position, Vector3.up, -cameraSensitivity * Time.deltaTime * 10);
+        }
+        if(Input.GetAxis("Mouse ScrollWheel") < 0f && 50F > positionY && positionY > 0F){
+            GameObject.FindGameObjectWithTag("MainCamera").transform.Translate(Vector3.up * Time.deltaTime * scrollSensitivity, GameObject.FindGameObjectWithTag("MainCamera").transform);
+            //WHEN ZOOMING OUT, THE CAMERA MOVES BACK FROM PIVOT POINT
+            GameObject.FindGameObjectWithTag("MainCamera2").transform.Translate(Vector3.back * Time.deltaTime * scrollSensitivity, GameObject.FindGameObjectWithTag("MainCamera").transform);
+            positionY = GameObject.FindGameObjectWithTag("MainCamera").transform.position.y;
+
+
+        }
+        if(Input.GetAxis("Mouse ScrollWheel") > 0f && 60F > positionY && positionY > 5F){
+            GameObject.FindGameObjectWithTag("MainCamera").transform.Translate(Vector3.down * Time.deltaTime * scrollSensitivity, GameObject.FindGameObjectWithTag("MainCamera").transform);
+            //WHEN ZOOMING IN, THE CAMERA MOVES FORWARD TO PIVOT POINT
+            GameObject.FindGameObjectWithTag("MainCamera2").transform.Translate(Vector3.forward * Time.deltaTime * scrollSensitivity, GameObject.FindGameObjectWithTag("MainCamera").transform);
+            positionY = GameObject.FindGameObjectWithTag("MainCamera").transform.position.y;
+            
         }
 
-        transform.position = new Vector3(positionX, positionY, positionZ);
     }
 }

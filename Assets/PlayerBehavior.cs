@@ -16,9 +16,10 @@ public class PlayerBehavior : MonoBehaviour
     
     void Update()
     {
-        
+
+        // CASTING A RAY FROM CAMERA TO COLLIDER WITH TAG GROUND
         if (Input.GetMouseButtonDown(0)) {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Ray ray = GameObject.FindGameObjectWithTag("MainCamera2").GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
 
             if (Physics.Raycast(ray, out hit) && hit.collider.tag == "Ground"){
                 isMoving = true;
@@ -28,17 +29,25 @@ public class PlayerBehavior : MonoBehaviour
             
         }
 
-        // CHECK IF PLAYER IS MOVING, IS MOVING IF POSITION != NEW POSITION
-        if(transform.position != hit.point){
-            isMoving = true;
+        
+        if(GetComponent<InventorySystem>().gatheringsResourcesRunning == true){
+            GetComponent<Animator>().SetBool("isGatheringResources" , true);
         } else {
+            GetComponent<Animator>().SetBool("isGatheringResources" , false);
+        }
+
+        // CHECK IF PLAYER HAS REACHED HIT.POINT, IF IT HAS, SET TO WALKING TO FALSE
+        if(transform.position == hit.point){
             isMoving = false;
         }
 
         // MOVES THE PLAYER TO POSITION
         if(isMoving == true){
             transform.position = Vector3.MoveTowards(transform.position, hit.point /*+ offset*/, playerSpeed * Time.deltaTime);
+            GetComponent<Animator>().SetBool("isMoving" , true);
             transform.LookAt(hit.point);
+        } else {
+            GetComponent<Animator>().SetBool("isMoving", false);
         }
     }
 }
