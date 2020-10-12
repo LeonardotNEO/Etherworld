@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ItemAtributes : MonoBehaviour
+public class ResourceAttributes : MonoBehaviour
 {
     public int amountLeft = 6;
     public int progress = 0;
+    public GameObject resourceMined;
     public bool firstTriggered = false;
     public bool secondTriggered = false;
     public bool thirdTriggered = false;
@@ -17,8 +18,16 @@ public class ItemAtributes : MonoBehaviour
         
     }
 
+    public GameObject getResourceMined(){
+        return resourceMined;
+    }
+
     public void decreaseAmountLeft(){
         amountLeft--;
+    }
+
+    public void increaseProgress(int addProgress){
+        progress += addProgress;
     }
 
 }

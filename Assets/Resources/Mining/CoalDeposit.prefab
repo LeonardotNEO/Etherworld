@@ -644,6 +644,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   amountLeft: 6
   progress: 0
+  resourceMined: {fileID: 4778975141876416704, guid: b1de7450f06afe344adf9490e123ce2f,
+    type: 3}
   firstTriggered: 0
   secondTriggered: 0
   thirdTriggered: 0

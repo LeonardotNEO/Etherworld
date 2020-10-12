@@ -673,7 +673,7 @@ GameObject:
   - component: {fileID: -2949036992609713368}
   - component: {fileID: 5706012111329235346}
   m_Layer: 2
-  m_Name: Iron
+  m_Name: IronDeposit
   m_TagString: IronDepot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -737,6 +737,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   amountLeft: 6
   progress: 0
+  resourceMined: {fileID: 4869259629645432428, guid: 49edf0b47320dd446ad4e8cb56fb1244,
+    type: 3}
   firstTriggered: 0
   secondTriggered: 0
   thirdTriggered: 0

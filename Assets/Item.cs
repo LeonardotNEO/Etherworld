@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class Item
 {
-    string itemName;
-    int itemID;
-    int itemAmount;
+    private string itemName;
+    private int itemID;
+    private int itemAmount;
 
-    public Item(string itemName, int itemAmount, int itemID){
+    public Item(string itemName, int itemAmount){
         this.itemName = itemName;
-        this.itemID = itemID;
         this.itemAmount = itemAmount;
+        itemID++;
     }
 
     public void setIncreaseAmount(int amount){
@@ -31,5 +31,9 @@ public class Item
     }
     public int getItemID(){
         return itemID;
+    }
+
+    public Item itemObject(){
+        return this;
     }
 }
