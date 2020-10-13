@@ -14,7 +14,7 @@ TODO:
 3. Adding trees, rocks, plants, basic buildings and other models //IN PROGRESS
 4. Animating player movements //DONE
 5. Adding actions for gathering resources (Wood, stone, plants) //DONE
-6. Random map generator for resources and random items on start
+6. Random map generator for resources, random items and local villages on start
 7. Basic sounddesigg (walking sound, basic soundtrack, ambient sounds)
 8. Adding basic UI (Inventory menu, loading bars, overview of buildings, statistics)
 9. UI for inventory and crafting //IN PROGRESS
