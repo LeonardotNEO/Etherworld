@@ -9,9 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5020764186887055165}
+  - component: {fileID: 2038124580703617560}
   m_Layer: 0
   m_Name: House01
-  m_TagString: Untagged
+  m_TagString: House01
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -31,6 +32,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &2038124580703617560
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1278284133551103944}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 3.2229953, y: 2.9675703, z: 3.1815205}
+  m_Center: {x: -0.5429971, y: 1.453609, z: -1.4921517}
 --- !u!1 &3645983180789618049
 GameObject:
   m_ObjectHideFlags: 0
@@ -45,8 +59,8 @@ GameObject:
   - component: {fileID: 4839568333916717539}
   - component: {fileID: 5583057864417121542}
   m_Layer: 0
-  m_Name: Cube
-  m_TagString: Untagged
+  m_Name: House01
+  m_TagString: House01
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

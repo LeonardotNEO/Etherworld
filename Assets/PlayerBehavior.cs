@@ -2,20 +2,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.EventSystems;
 
 public class PlayerBehavior : MonoBehaviour
 {
     public float playerSpeed = 2;
     public bool isMoving = false;
     public bool playerInBoundsResource = false;
+    public bool playerInBoundsItems = false;
     public bool gatheringsResourcesRunning = false;
+    public bool touchingObstacle = false;
+    public bool mouseOnItemResource = false;
+    bool pingPong;
     public Collider colliderInfo;
-    RaycastHit hit;
+    public Collider resourceColliderInfo;
+    RaycastHit mouseButtonPressed;
+    RaycastHit hitItemResource;
+    RaycastHit hitItemResourceSaved;
     RectTransform progressBar;
     void Start()
     {
         // Makes the position of the ray the same as the player (so the player doesent automaticaly move at the start)
-        hit.point = transform.position; 
+        mouseButtonPressed.point = transform.position; 
     }
     
     void Update()
@@ -23,27 +31,86 @@ public class PlayerBehavior : MonoBehaviour
         // Setting up progressbar, and that it will update each frame
         progressBar = GameObject.Find("/UI Panel/LoadingBar/LoadingBarProgress").GetComponent<RectTransform>();
 
+        // PLAYER MOVEMENT
         // Move player to new position when pressing mouse click
-        if (Input.GetMouseButtonDown(0)) {
-            Ray ray = GameObject.FindGameObjectWithTag("MainCamera2").GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
+        if (Input.GetMouseButtonDown(0) && !isMouseOverUI()) {
+            Ray movementRay = GameObject.FindGameObjectWithTag("MainCamera2").GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
 
-            if (Physics.Raycast(ray, out hit) && hit.collider.tag == "Ground"){
+            if (Physics.Raycast(movementRay, out mouseButtonPressed, Mathf.Infinity, LayerMask.GetMask("Ground"))){ //specify to hit layer 8
                 isMoving = true;
             } else {
                 isMoving = false;
             }
-            
+        }  
+        // Player moves slower is there is a obstacle (So that the player doesnt accidentaly clip through)
+        if(touchingObstacle == true){
+            playerSpeed = 0.3f;
+        } else {
+            playerSpeed = 4;
+        }
+        // check if player has reached new destination(HIT.POINT), if it has, set walking bool to false
+        if(transform.position == mouseButtonPressed.point){
+            isMoving = false;
+        }
+        // moves the player to new postition and play animation accordingly
+        if(isMoving == true){
+            transform.position = Vector3.MoveTowards(transform.position, mouseButtonPressed.point /*+ offset*/, playerSpeed * Time.deltaTime);
+            GetComponent<Animator>().SetBool("isMoving" , true);
+            transform.LookAt(mouseButtonPressed.point);
+        } else {
+            GetComponent<Animator>().SetBool("isMoving", false);
         }
 
-        // When in bounds of resource and pressing e, do action (Pick up item, start gathering resources)
-        if(Input.GetKeyDown("e") && playerInBoundsResource){
-            playerInBoundsResource = false;
+        // PLAYER HOVER OVER ITEMS
+        Ray hoverRay = GameObject.FindGameObjectWithTag("MainCamera2").GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
 
-            //Gathering resources from tree or depot
-            if((colliderInfo.tag == "Tree" || colliderInfo.tag == "StoneDepot" || colliderInfo.tag == "IronDepot" || colliderInfo.tag == "CoalDepot") && !gatheringsResourcesRunning){
-                StartCoroutine(gatheringResources(colliderInfo.GetComponent<ResourceAttributes>().getResourceMined()));
+        if(Physics.Raycast(hoverRay, out hitItemResource, Mathf.Infinity, LayerMask.GetMask("ResourcesMesh", "ItemsMesh"))){
+            hitItemResourceSaved = hitItemResource;
+            mouseOnItemResource = true;
+        } else {
+            mouseOnItemResource = false;
+        }
+
+        if(mouseOnItemResource){
+            hitItemResource.collider.GetComponentInChildren<Outline>().eraseRenderer = false;
+
+            Color c = GameObject.FindWithTag("MainCamera2").GetComponent<OutlineEffect>().lineColor0;
+            if(pingPong)
+            {
+                c.a += Time.deltaTime;
+                if(c.a >= 1)
+                    pingPong = false;
+            } else {
+                c.a -= Time.deltaTime;
+                if(c.a <= 0.4)
+                    pingPong = true;
             }
-            //Picking up items from the ground
+            c.a = Mathf.Clamp01(c.a);
+            GameObject.FindWithTag("MainCamera2").GetComponent<OutlineEffect>().lineColor0 = c;
+            GameObject.FindWithTag("MainCamera2").GetComponent<OutlineEffect>().UpdateMaterialsPublicProperties();
+        } else {
+            if(hitItemResourceSaved.collider){
+                hitItemResourceSaved.collider.GetComponentInChildren<Outline>().eraseRenderer = true;
+            }
+        }
+        
+
+
+
+        // Gathering resources
+        if(playerInBoundsResource && touchingObstacle == false){ //We do this so that the mesh collider doesnt get choosen
+            resourceColliderInfo = colliderInfo;
+        }
+        if(Input.GetKeyDown("e") && playerInBoundsResource && !gatheringsResourcesRunning || (mouseOnItemResource && playerInBoundsResource && Input.GetMouseButtonDown(0) && !gatheringsResourcesRunning)){
+            playerInBoundsResource = false;
+            isMoving = false;
+            StartCoroutine(gatheringResources(resourceColliderInfo.GetComponent<ResourceAttributes>().getResourceMined()));
+        }
+
+        //Picking up items from the ground
+        if(Input.GetKeyDown("e") && playerInBoundsItems){
+            playerInBoundsItems = false;
+
             if(colliderInfo.tag == "WoodPile"){
                 pickUpItem(colliderInfo.tag, 20);
             }
@@ -57,50 +124,37 @@ public class PlayerBehavior : MonoBehaviour
                 pickUpItem(colliderInfo.tag, 5);
             }
         }
-
-
-
-
         // Play animation when gathering resources
         if(gatheringsResourcesRunning == true){
             GetComponent<Animator>().SetBool("isGatheringResources" , true);
         } else {
             GetComponent<Animator>().SetBool("isGatheringResources" , false);
         }
-
-        // check if player has reached new destination(HIT.POINT), if it has, set walking bool to false
-        if(transform.position == hit.point){
-            isMoving = false;
-        }
-        // moves the player to new postition
-        if(isMoving == true){
-            transform.position = Vector3.MoveTowards(transform.position, hit.point /*+ offset*/, playerSpeed * Time.deltaTime);
-            GetComponent<Animator>().SetBool("isMoving" , true);
-            transform.LookAt(hit.point);
-        } else {
-            GetComponent<Animator>().SetBool("isMoving", false);
-        }
     }
 
     // Triggers when player collides with other objects; sets collider bool to true if it collides with these objects
     void OnTriggerStay(Collider collider){
         colliderInfo = collider;
+        if(colliderInfo.gameObject.layer == 9 /*Layer 9 is RESOURCES*/){
+            playerInBoundsResource = true;
+        }
+        if(colliderInfo.gameObject.layer == 10 /*Layer 10 is ITEMS*/){
+            playerInBoundsItems = true;
+        }
         if(
-            colliderInfo.tag == "Tree"              ||
-            colliderInfo.tag == "StoneDepot"        ||
-            colliderInfo.tag == "IronDepot"         ||
-            colliderInfo.tag == "CoalDepot"         ||
-            colliderInfo.tag == "WoodPile"          ||
-            colliderInfo.tag == "IronPile"          ||
-            colliderInfo.tag == "CoalPile"          ||
-            colliderInfo.tag == "StonePile" 
-        ){playerInBoundsResource = true;}
+            colliderInfo.gameObject.layer == 12  || /*Layer 12 is BUILDINGS*/
+            colliderInfo.gameObject.layer == 13  || /*Layer 13 is RESOURCESMESH*/
+            colliderInfo.gameObject.layer == 14     /*Layer 14 is ITEMSMESH*/
+            ){touchingObstacle = true;
+        }
     }
 
     // no collider detected if player has moved out of collider
     void OnTriggerExit(Collider collider){
         colliderInfo = null;
         playerInBoundsResource = false;
+        playerInBoundsItems = false;
+        touchingObstacle = false;
     }
 
     public IEnumerator gatheringResources(GameObject resource){
@@ -113,7 +167,6 @@ public class PlayerBehavior : MonoBehaviour
             float progressSpeed = 50;
 
             while(progressNumber <= 360){
-                bool isMoving = GameObject.Find("/player").GetComponent<PlayerBehavior>().isMoving; 
                 progressNumber += Time.deltaTime * progressSpeed;
                 progressBar.sizeDelta = new Vector2(progressNumber, 26.4F);
 
@@ -136,7 +189,6 @@ public class PlayerBehavior : MonoBehaviour
             float progressSpeed = 30;
 
             while(progressNumber <= 360){
-                bool isMoving = GameObject.Find("/player").GetComponent<PlayerBehavior>().isMoving;
                 progressNumber += Time.deltaTime * progressSpeed;
                 progressBar.sizeDelta = new Vector2(progressNumber, 26.4F);
 
@@ -206,6 +258,8 @@ public class PlayerBehavior : MonoBehaviour
             }
         }
         gatheringsResourcesRunning = false;
+        playerInBoundsResource = false;
+        touchingObstacle = false;
     }
 
     public void pickUpItem(string itemName, int amountToAdd){
@@ -215,5 +269,9 @@ public class PlayerBehavior : MonoBehaviour
     }
     public void resetProgressBar(){
         progressBar.sizeDelta = new Vector2(0, 26F);
+    }
+
+    public bool isMouseOverUI(){
+        return EventSystem.current.IsPointerOverGameObject();
     }
 }

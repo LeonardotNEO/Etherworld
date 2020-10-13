@@ -17,6 +17,13 @@ TagManager:
   - IronPile
   - CoalPile
   - MainCamera2
+  - House01
+  - Obstacle
+  - MainMeshOfObject
+  - Inventory
+  - Crafting
+  - InventoryName
+  - InventoryAmount
   layers:
   - Default
   - TransparentFX
@@ -26,13 +33,13 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Ground
+  - Resources
+  - Items
+  - Mobs
+  - Buildings
+  - ResourcesMesh
+  - ItemsMesh
   - 
   - 
   - 

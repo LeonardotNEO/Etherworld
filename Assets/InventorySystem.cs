@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class InventorySystem : MonoBehaviour
 {
-    //Inventory mainInventory = new Inventory();
     Inventory mainInventory;
 
     Text inventoryTextName;
@@ -13,14 +12,14 @@ public class InventorySystem : MonoBehaviour
     
     void Start()
     {
-        mainInventory = GetComponent<Inventory>();
+        mainInventory = GameObject.FindGameObjectWithTag("player").GetComponent<Inventory>();
     }
 
     void Update()
     {
         // Showing items and amout to the inventory UI
-        inventoryTextName = GameObject.Find("/UI Panel/Inventory/Panel/InventoryItemsName").GetComponent<Text>();
-        inventoryTextAmount = GameObject.Find("/UI Panel/Inventory/Panel/InventoryItemsAmount").GetComponent<Text>();
+        inventoryTextName = GameObject.FindGameObjectWithTag("InventoryName").GetComponentInChildren<Text>();
+        inventoryTextAmount = GameObject.FindGameObjectWithTag("InventoryAmount").GetComponentInChildren<Text>();
         inventoryTextName.text = mainInventory.getNameOfResourcesInInventory();
         inventoryTextAmount.text = mainInventory.getAmountOfResourcesInInventory();
     }
