@@ -24,6 +24,8 @@ TagManager:
   - Crafting
   - InventoryName
   - InventoryAmount
+  - CraftingSprite
+  - CraftingItems
   layers:
   - Default
   - TransparentFX

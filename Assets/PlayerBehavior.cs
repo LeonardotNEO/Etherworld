@@ -61,8 +61,8 @@ public class PlayerBehavior : MonoBehaviour
             GetComponent<Animator>().SetBool("isMoving", false);
         }
 
-        // PLAYER HOVER OVER ITEMS
-        Ray hoverRay = GameObject.FindGameObjectWithTag("MainCamera2").GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
+        // PLAYER HOVER OVER ITEMS, fix problem that one cant Outline ???
+        /*Ray hoverRay = GameObject.FindGameObjectWithTag("MainCamera2").GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
 
         if(Physics.Raycast(hoverRay, out hitItemResource, Mathf.Infinity, LayerMask.GetMask("ResourcesMesh", "ItemsMesh"))){
             hitItemResourceSaved = hitItemResource;
@@ -93,7 +93,7 @@ public class PlayerBehavior : MonoBehaviour
                 hitItemResourceSaved.collider.GetComponentInChildren<Outline>().eraseRenderer = true;
             }
         }
-        
+        */
 
 
 
@@ -105,6 +105,12 @@ public class PlayerBehavior : MonoBehaviour
             playerInBoundsResource = false;
             isMoving = false;
             StartCoroutine(gatheringResources(resourceColliderInfo.GetComponent<ResourceAttributes>().getResourceMined()));
+        }
+        // Play animation when gathering resources
+        if(gatheringsResourcesRunning == true){
+            GetComponent<Animator>().SetBool("isGatheringResources" , true);
+        } else {
+            GetComponent<Animator>().SetBool("isGatheringResources" , false);
         }
 
         //Picking up items from the ground
@@ -124,12 +130,6 @@ public class PlayerBehavior : MonoBehaviour
                 pickUpItem(colliderInfo.tag, 5);
             }
         }
-        // Play animation when gathering resources
-        if(gatheringsResourcesRunning == true){
-            GetComponent<Animator>().SetBool("isGatheringResources" , true);
-        } else {
-            GetComponent<Animator>().SetBool("isGatheringResources" , false);
-        }
     }
 
     // Triggers when player collides with other objects; sets collider bool to true if it collides with these objects
@@ -148,7 +148,6 @@ public class PlayerBehavior : MonoBehaviour
             ){touchingObstacle = true;
         }
     }
-
     // no collider detected if player has moved out of collider
     void OnTriggerExit(Collider collider){
         colliderInfo = null;
@@ -156,6 +155,8 @@ public class PlayerBehavior : MonoBehaviour
         playerInBoundsItems = false;
         touchingObstacle = false;
     }
+
+
 
     public IEnumerator gatheringResources(GameObject resource){
         GameObject x = colliderInfo.gameObject;

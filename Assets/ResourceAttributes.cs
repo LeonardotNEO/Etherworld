@@ -13,10 +13,6 @@ public class ResourceAttributes : MonoBehaviour
     public bool fourthTriggered = false;
     public bool fifthTriggered = false;
     public bool sixtTriggered = false; 
-    void Update()
-    {
-        
-    }
 
     public GameObject getResourceMined(){
         return resourceMined;

@@ -9,11 +9,6 @@ public class UI : MonoBehaviour
     public bool inventoryOpen = false;
     public bool craftingOpen = false;
 
-
-
-
-
-
     void Start()
     {
         closeCrafting();

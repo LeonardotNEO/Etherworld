@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PopulateScrollViewLeft : MonoBehaviour
+public class AddCategoriesToMenu : MonoBehaviour
 {
     public GameObject ObjectInView;
-    int numberToGenerate = 7;
+
     List<string> buttonNames = new List<string>();
+    
     void Start()
     {
         addToList("Houses");
@@ -20,17 +21,10 @@ public class PopulateScrollViewLeft : MonoBehaviour
 
         GameObject elements;
 
-        for(int i = 0; i < numberToGenerate; i++){
-
+        for(int i = 0; i < buttonNames.Count; i++){
             elements = (GameObject)Instantiate(ObjectInView, transform);
             elements.GetComponentInChildren<Text>().text = buttonNames[i];
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public void addToList(string NameOfButton){
