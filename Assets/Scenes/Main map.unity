@@ -520,6 +520,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   color: 0
   eraseRenderer: 1
+--- !u!1 &281109312 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1278284133551103944, guid: abb6194493f40ea488f917e9eab06ed7,
+    type: 3}
+  m_PrefabInstance: {fileID: 1550021635}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &281109313
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 281109312}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 0}
 --- !u!1 &297976901
 GameObject:
   m_ObjectHideFlags: 0
@@ -1540,7 +1560,7 @@ MonoBehaviour:
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 1
+  m_ScrollSensitivity: 10
   m_Viewport: {fileID: 267052438}
   m_HorizontalScrollbar: {fileID: 1157895302}
   m_VerticalScrollbar: {fileID: 1651801988}
@@ -2451,7 +2471,6 @@ GameObject:
   - component: {fileID: 784196242}
   - component: {fileID: 784196241}
   - component: {fileID: 784196240}
-  - component: {fileID: 784196244}
   - component: {fileID: 784196243}
   - component: {fileID: 784196245}
   m_Layer: 5
@@ -2568,18 +2587,6 @@ MonoBehaviour:
   house05Model: {fileID: 1278284133551103944, guid: abb6194493f40ea488f917e9eab06ed7,
     type: 3}
   house05Sprite: {fileID: 21300000, guid: 675c97c7d16fd6b4e9269ccc5f5ce855, type: 3}
---- !u!114 &784196244
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 784196238}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8828831a760c29a488425fe71a89badb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &784196245
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2592,6 +2599,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2803c939a9faf2b4092a20b4159c9426, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  item01Model: {fileID: 0}
+  item01Sprite: {fileID: 0}
+  item02Model: {fileID: 0}
+  item02Sprite: {fileID: 0}
 --- !u!1 &843282765
 GameObject:
   m_ObjectHideFlags: 0
@@ -3818,7 +3829,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-1482
+  m_Name: pb_Mesh-1472
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -4230,40 +4241,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   color: 0
   eraseRenderer: 1
---- !u!1 &1445722794 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3645983180789618049, guid: abb6194493f40ea488f917e9eab06ed7,
-    type: 3}
-  m_PrefabInstance: {fileID: 1550021635}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1445722796
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1445722794}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fbf3575480402db40813e763382412fb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  color: 0
-  eraseRenderer: 1
---- !u!64 &1445722801
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1445722794}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 366986158}
 --- !u!1 &1448384110
 GameObject:
   m_ObjectHideFlags: 0
@@ -4450,7 +4427,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh14772
+  m_Name: pb_Mesh14782
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -4881,35 +4858,19 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1808416577}
     m_Modifications:
+    - target: {fileID: 1445722801, guid: abb6194493f40ea488f917e9eab06ed7, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 366986158}
     - target: {fileID: 465485223291428490, guid: abb6194493f40ea488f917e9eab06ed7,
         type: 3}
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 1617965138}
-    - target: {fileID: 839864979595131120, guid: abb6194493f40ea488f917e9eab06ed7,
-        type: 3}
-      propertyPath: m_Mesh
-      value: 
-      objectReference: {fileID: 366986158}
     - target: {fileID: 1278284133551103944, guid: abb6194493f40ea488f917e9eab06ed7,
         type: 3}
       propertyPath: m_Name
       value: House01
-      objectReference: {fileID: 0}
-    - target: {fileID: 1278284133551103944, guid: abb6194493f40ea488f917e9eab06ed7,
-        type: 3}
-      propertyPath: m_Layer
-      value: 12
-      objectReference: {fileID: 0}
-    - target: {fileID: 3645983180789618049, guid: abb6194493f40ea488f917e9eab06ed7,
-        type: 3}
-      propertyPath: m_TagString
-      value: House01
-      objectReference: {fileID: 0}
-    - target: {fileID: 3645983180789618049, guid: abb6194493f40ea488f917e9eab06ed7,
-        type: 3}
-      propertyPath: m_Layer
-      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 4839568333916717539, guid: abb6194493f40ea488f917e9eab06ed7,
         type: 3}
@@ -4976,13 +4937,7 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 1617965138}
-    - target: {fileID: 5583057864417121542, guid: abb6194493f40ea488f917e9eab06ed7,
-        type: 3}
-      propertyPath: m_IsTrigger
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 1677327010220063255, guid: abb6194493f40ea488f917e9eab06ed7, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: abb6194493f40ea488f917e9eab06ed7, type: 3}
 --- !u!1 &1602470273 stripped
 GameObject:
@@ -5086,7 +5041,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh14572
+  m_Name: pb_Mesh14580
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -5364,7 +5319,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1090175309}
   m_HandleRect: {fileID: 1090175308}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -5739,7 +5694,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh14760
+  m_Name: pb_Mesh14770
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -6610,7 +6565,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-1440
+  m_Name: pb_Mesh-1428
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
