@@ -6,9 +6,7 @@ using UnityEngine.UI;
 public class InventorySystem : MonoBehaviour
 {
     Inventory mainInventory;
-
-    Text inventoryTextName;
-    Text inventoryTextAmount;
+    public GameObject npc;
     
     void Start()
     {
@@ -17,11 +15,19 @@ public class InventorySystem : MonoBehaviour
 
     void Update()
     {
-        // Showing items and amout to the inventory UI
-        inventoryTextName = GameObject.FindGameObjectWithTag("InventoryName").GetComponentInChildren<Text>();
-        inventoryTextAmount = GameObject.FindGameObjectWithTag("InventoryAmount").GetComponentInChildren<Text>();
-        inventoryTextName.text = mainInventory.getNameOfResourcesInInventory();
-        inventoryTextAmount.text = mainInventory.getAmountOfResourcesInInventory();
+        // Showing inventory of player: items and amout to the inventory UI
+        Text inventoryTextName = GameObject.FindGameObjectWithTag("InventoryName").GetComponentInChildren<Text>();
+        Text inventoryTextAmount = GameObject.FindGameObjectWithTag("InventoryAmount").GetComponentInChildren<Text>();
+        inventoryTextName.text = mainInventory.getNameOfResourcesInInventoryToString();
+        inventoryTextAmount.text = mainInventory.getAmountOfResourcesInInventoryToString();
+
+        if(Input.GetKeyDown("g")){
+            RaycastHit mouseButtonPressed;
+            Ray movementRay = GameObject.FindGameObjectWithTag("MainCamera2").GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
+            if(Physics.Raycast(movementRay, out mouseButtonPressed, Mathf.Infinity, LayerMask.GetMask("Ground"))){
+                Instantiate(npc, new Vector3(mouseButtonPressed.point.x, mouseButtonPressed.point.y, mouseButtonPressed.transform.position.z), mouseButtonPressed.transform.rotation);
+            }
+        }
     }
 }
 

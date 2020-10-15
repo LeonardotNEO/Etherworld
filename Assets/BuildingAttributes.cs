@@ -7,9 +7,9 @@ public class BuildingAttributes : MonoBehaviour
     bool isOwnedByPlayer;
 
     //public List<NPC> npcsAssignedHere;
-    public List<Item> itemsStoredInBuilding;
-    public List<Item> itemsProducedInBuilding;
-    public List<Item> itemsNeededForBuildingProduction;
+    public Dictionary<string, int> itemsStoredInBuilding;
+    public Dictionary<string, int> itemsProducedInBuilding;
+    public Dictionary<string, int> itemsNeededForBuildingProduction;
     public int houseValue;
     public int buildingID;
     public float positionX;
@@ -29,7 +29,7 @@ public class BuildingAttributes : MonoBehaviour
     }
 
     //GETTERS
-    public List<Item> getItemsStoredInBuilding()
+    public Dictionary<string, int> getItemsStoredInBuilding()
     {
         return itemsStoredInBuilding;
     }
@@ -37,14 +37,14 @@ public class BuildingAttributes : MonoBehaviour
     {
         string itemsStoredInBuildingToString = "";
         foreach(var item in itemsStoredInBuilding){
-            itemsStoredInBuildingToString += "ItemName: " + item.getName() + "\nItemAmount: " + item.getItemAmount();
+            itemsStoredInBuildingToString += "ItemName: " + item.Key + "\nItemAmount: " + item.Value;
         }
         if(itemsStoredInBuildingToString == ""){
             itemsStoredInBuildingToString = "None";
         }
         return itemsStoredInBuildingToString;
     }
-    public List<Item> getItemsProducedInBuilding()
+    public Dictionary<string, int> getItemsProducedInBuilding()
     {
         return itemsProducedInBuilding;
     }
@@ -52,14 +52,14 @@ public class BuildingAttributes : MonoBehaviour
     {
         string itemsProducedInBuildingToString = "";
         foreach(var item in itemsProducedInBuilding){
-            itemsProducedInBuildingToString += "ItemName: " + item.getName() + "\nItemAmount: " + item.getItemAmount();
+            itemsProducedInBuildingToString += "ItemName: " + item.Key + "\nItemAmount: " + item.Value;
         }
         if(itemsProducedInBuildingToString == ""){
             itemsProducedInBuildingToString = "None";
         }
         return itemsProducedInBuildingToString;
     }
-    public List<Item> getItemsNeededForBuildingProduction()
+    public Dictionary<string, int> getItemsNeededForBuildingProduction()
     {
         return itemsNeededForBuildingProduction;
     }
@@ -67,7 +67,7 @@ public class BuildingAttributes : MonoBehaviour
     {
         string itemsNeededForBuildingProductionToString = "";
         foreach(var item in itemsNeededForBuildingProduction){
-            itemsNeededForBuildingProductionToString += "ItemName: " + item.getName() + "\nItemAmount: " + item.getItemAmount();
+            itemsNeededForBuildingProductionToString += "ItemName: " + item.Key + "\nItemAmount: " + item.Value;
         }
         if(itemsNeededForBuildingProductionToString == ""){
             itemsNeededForBuildingProductionToString = "None";
@@ -92,15 +92,15 @@ public class BuildingAttributes : MonoBehaviour
     }
 
     //SETTERS
-    public void setItemsStoredInBuilding(List<Item> newItemsStoredInBuilding)
+    public void setItemsStoredInBuilding(Dictionary<string, int> newItemsStoredInBuilding)
     {
         itemsStoredInBuilding = newItemsStoredInBuilding;
     }
-    public void setItemsProducedInBuilding(List<Item> newItemsProduced)
+    public void setItemsProducedInBuilding(Dictionary<string, int> newItemsProduced)
     {
         itemsProducedInBuilding = newItemsProduced;
     }
-    public void setItemsNeededForBuildingProduction(List<Item> newItemsNeededForProduction)
+    public void setItemsNeededForBuildingProduction(Dictionary<string, int> newItemsNeededForProduction)
     {
         itemsNeededForBuildingProduction = newItemsNeededForProduction;
     }

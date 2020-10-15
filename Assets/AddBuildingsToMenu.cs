@@ -15,10 +15,11 @@ public class AddBuildingsToMenu : MonoBehaviour
         for(int i = 0; i < buildingsCatalog.getAmountOfBuildingsInCatalog(); i++){
             GameObject thisElement = (GameObject)Instantiate(element, transform);
             thisElement.transform.Find("Description/Text").GetComponent<Text>().text = buildingsCatalog.getBuildingsCatalog()[i].getDescriptionOfBulding();
-            for(int y = 0; y < buildingsCatalog.getBuildingsCatalog()[i].getCostToCraftBuilding().Count; y++){
-                thisElement.transform.Find("ResourcesToCraft/Text").GetComponent<Text>().text += buildingsCatalog.getBuildingsCatalog()[i].getCostToCraftBuilding()[y].getItemAmount() + " " + buildingsCatalog.getBuildingsCatalog()[y].getCostToCraftBuilding()[y].getName() + "\n";
+            foreach(var item in buildingsCatalog.getBuildingsCatalog()[i].getCostToCraftBuilding()){
+                thisElement.transform.Find("ResourcesToCraft/Text").GetComponent<Text>().text += item.Value + " " + item.Key + "\n";
             }
             thisElement.transform.Find("Sprite").GetComponent<Image>().sprite = buildingsCatalog.getBuildingsCatalog()[i].getBuildingSprite();
+            thisElement.transform.Find("Manager").GetComponent<CraftingSystem>().setButtonNr(i);
         }
     }
 }

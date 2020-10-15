@@ -116,19 +116,7 @@ public class PlayerBehavior : MonoBehaviour
         //Picking up items from the ground
         if(Input.GetKeyDown("e") && playerInBoundsItems){
             playerInBoundsItems = false;
-
-            if(colliderInfo.tag == "WoodPile"){
-                pickUpItem(colliderInfo.tag, 20);
-            }
-            if(colliderInfo.tag == "StonePile"){
-                pickUpItem(colliderInfo.tag, 10);
-            }
-            if(colliderInfo.tag == "IronPile"){
-                pickUpItem(colliderInfo.tag, 5);
-            }
-            if(colliderInfo.tag == "CoalPile"){
-                pickUpItem(colliderInfo.tag, 5);
-            }
+            pickUpItem(colliderInfo.GetComponent<ItemAttributes>().getItemName(), colliderInfo.GetComponent<ItemAttributes>().getItemAmount());
         }
     }
 
@@ -264,7 +252,7 @@ public class PlayerBehavior : MonoBehaviour
     }
 
     public void pickUpItem(string itemName, int amountToAdd){
-        GetComponent<Inventory>().addItemToInventory(new Item(colliderInfo.tag, amountToAdd));
+        GetComponent<Inventory>().addItemToInventory(itemName, amountToAdd);
         GetComponent<Animator>().SetTrigger("pickingUpItem");
         Destroy(colliderInfo.gameObject);
     }

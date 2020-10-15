@@ -4,54 +4,66 @@ using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
-    public List<Item> mainInventory = new List<Item>();
-    
-
+    public Dictionary<string, int> inventory = new Dictionary<string, int>();
+    private InventoryCatalog inventories;
+    public int inventoryID = 0;
     public Inventory(){
-        // Adding new items to the inventory at start, when an inventory is constructed
-        addItemToInventory(new Item("WoodPile", 20));
-        addItemToInventory(new Item("StonePile", 10));
-        addItemToInventory(new Item("IronPile", 10));
-        addItemToInventory(new Item("CoalPile", 2000));
+        // Adding new items to the inventory at start, when an inventory is constructed, this will be an empty inventory
+
+        addItemToInventory("StonePile", 200);
+        addItemToInventory("WoodPile", 2000);
+
     }
 
     void Awake()
     {
-        
+        // Gets the inventory catalog and ads this inventory to it
+        inventories = GameObject.FindWithTag("Inventory").GetComponent<InventoryCatalog>();
+        inventories.addInventoryToCatalog(this);
+        inventoryID = inventories.getAmountOfInventoriesInCatalog();
     }
 
     // Adds items to inventory. If item already exists, just increment itemValue in the array with itemAmount specified for item object
-    public void addItemToInventory(Item item){
-        var itemInInventory = mainInventory.Find(x => x.getName() == item.getName());
-        if(itemInInventory != null){
-            itemInInventory.setIncreaseAmount(item.getItemAmount());
+    public void addItemToInventory(string name, int amount){
+        if(!inventory.ContainsKey(name)){
+            inventory.Add(name, amount);
         } else {
-            mainInventory.Add(item); 
+            inventory[name] += amount;
         }
     }
+    public void removeItemFromInventory(string name, int amount){
+        inventory[name] -= amount;
+    }
+    /*public void removeItemFromInventory(Dictionary<string, int> itemsToRemove){
+        foreach(var name in itemsToRemove){
+            if(name.Key = inventory.ke)
+            inventory[items] -= name.Value
+        }
+    }*/
 
-    public void removeItemFromInventory(Item item){
-        mainInventory.Remove(item);
+    public Dictionary<string, int> getMainInventory(){
+        return inventory;
     }
 
-    public List<Item> getMainInventory(){
-        return mainInventory;
-    }
-
-    public string getNameOfResourcesInInventory(){
+    public string getNameOfResourcesInInventoryToString(){
         string inventoryName = "Resource: \n";
-        foreach(var item in mainInventory){
-            inventoryName += item.getName() + "\n";
+        foreach(var item in inventory){
+            inventoryName += item.Key + "\n";
         }
         return inventoryName;
     }
 
-    public string getAmountOfResourcesInInventory(){
+    public string getAmountOfResourcesInInventoryToString(){
         string inventoryAmount = "Amount: \n";
-        foreach(var item in mainInventory){
-            inventoryAmount += item.getItemAmount() + "\n";
+        foreach(var item in inventory){
+            inventoryAmount += item.Value + "\n";
         }
         return inventoryAmount;
     }
-
+    public int getInventorySize(){
+        return inventory.Count;
+    }
+    public Dictionary<string, int> getInventory(){
+        return inventory;
+    }
 }

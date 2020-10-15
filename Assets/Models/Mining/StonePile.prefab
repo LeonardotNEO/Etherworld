@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 789738550749354684}
   - component: {fileID: 789738550749354685}
   - component: {fileID: 789738550749354659}
+  - component: {fileID: 9112435010599692492}
   m_Layer: 10
   m_Name: StonePile
   m_TagString: StonePile
@@ -62,6 +63,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 1
+--- !u!114 &9112435010599692492
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 789738550749354686}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b292f7335baf61a4c9bca83f2c2c4716, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemAmount: 5
 --- !u!1 &789738551900164906
 GameObject:
   m_ObjectHideFlags: 0

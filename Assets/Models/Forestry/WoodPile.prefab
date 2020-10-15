@@ -1793,6 +1793,7 @@ GameObject:
   - component: {fileID: 7208927213302807800}
   - component: {fileID: 118651456}
   - component: {fileID: 1473501534}
+  - component: {fileID: -8096017474483274184}
   m_Layer: 10
   m_Name: WoodPile
   m_TagString: WoodPile
@@ -1844,3 +1845,16 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 1
+--- !u!114 &-8096017474483274184
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5679385085818385487}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b292f7335baf61a4c9bca83f2c2c4716, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemAmount: 20

@@ -5,34 +5,35 @@ using UnityEngine;
 public class Item
 {
     private string itemName;
-    private int itemID;
-    private int itemAmount;
+    private string itemDescription;
+    private string itemType;
+    Dictionary<string, int> costToCraftItem;
+    private GameObject itemPrefab;
+    private Sprite itemSprite;
+    private List<string> itemTypesAvailable = new List<string>{"Weapon", "Resource", "Tool", "Food"};
 
-    public Item(string itemName, int itemAmount){
+    public Item(string itemName, string itemDescription, string itemType, Dictionary<string, int> costToCraftItem, GameObject itemPrefab, Sprite itemSprite){
         this.itemName = itemName;
-        this.itemAmount = itemAmount;
-        itemID++;
-    }
-
-    public void setIncreaseAmount(int amount){
-        this.itemAmount += amount;
-    }
-
-    public void setDecreaseAmount(int amount){
-        this.itemAmount -= amount;
+        this.itemDescription = itemDescription;
+        if(itemTypesAvailable.Contains(itemType)){
+            this.itemType = itemType;
+        } else {
+            throw new System.ArgumentException("This type doesnt exist. Chose from: " + itemTypesAvailable[0] + " " + itemTypesAvailable[1] + " " + itemTypesAvailable[2] + " " + itemTypesAvailable[3] + " ");
+        }
+        this.itemPrefab = itemPrefab;
+        this.itemSprite = itemSprite;
+        this.costToCraftItem = costToCraftItem;
     }
 
     public string getName(){
         return itemName;
     }
-
-    public int getItemAmount(){
-        return itemAmount;
+    public string getItemDescription(){
+        return itemDescription;
     }
-    public int getItemID(){
-        return itemID;
+    public string getItemType(){
+        return itemType;
     }
-
     public Item itemObject(){
         return this;
     }

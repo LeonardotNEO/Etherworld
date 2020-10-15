@@ -4,23 +4,25 @@ using UnityEngine;
 
 public class Building
 {
-    private List<Item> costToCraftBuilding;
+    private Dictionary<string, int> costToCraftBuilding;
     private GameObject buildingPrefab;
     public Sprite buildingSprite;
+    private int maxItemsStoredInBuilding;
     private string nameOfBuilding;
     private string buildingDescription;
 
     //CONSTRUCTOR
-    public Building(List<Item> costToCraftBuilding, GameObject  buildingPrefab, Sprite buildingSprite, string nameOfBuilding, string buildingDescription){
+    public Building(Dictionary<string, int> costToCraftBuilding, GameObject  buildingPrefab, Sprite buildingSprite, int maxItemssStoredInBuilding, string nameOfBuilding, string buildingDescription){
         this.costToCraftBuilding = costToCraftBuilding;
         this.buildingPrefab = buildingPrefab;
         this.buildingSprite = buildingSprite;
+        this.maxItemsStoredInBuilding = maxItemssStoredInBuilding;
         this.nameOfBuilding = nameOfBuilding;
         this.buildingDescription = buildingDescription;
     }
 
     //GETTERS
-    public List<Item> getCostToCraftBuilding()
+    public Dictionary<string, int> getCostToCraftBuilding()
     {
         return costToCraftBuilding;
     }
@@ -28,13 +30,16 @@ public class Building
     {
         string costToCraftBuildingToString = "";
         foreach(var item in costToCraftBuilding){
-            costToCraftBuildingToString += "ItemName: " + item.getName() + "\nItemAmount: " + item.getItemAmount();
+            costToCraftBuildingToString += "ItemName: " + item.Key + "\nItemAmount: " + item.Value + "\n";
         }
         if(costToCraftBuildingToString == ""){
             costToCraftBuildingToString = "None";
         }
         return costToCraftBuildingToString;
     }  
+    public GameObject getBuildingPrefab(){
+        return buildingPrefab;
+    }
     public Sprite getBuildingSprite(){
         return buildingSprite;
     }
@@ -48,7 +53,7 @@ public class Building
 
 
     //SETTERS
-    public void setCostToCraftBuilding(List<Item> newCostToCraftBuilding)
+    public void setCostToCraftBuilding(Dictionary<string, int> newCostToCraftBuilding)
     {
         costToCraftBuilding = newCostToCraftBuilding;
     }
