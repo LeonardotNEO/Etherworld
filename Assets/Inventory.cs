@@ -5,44 +5,54 @@ using UnityEngine;
 public class Inventory : MonoBehaviour
 {
     public Dictionary<string, int> inventory = new Dictionary<string, int>();
-    private InventoryCatalog inventories;
+    private InventoryCatalog inventoryCatalog;
     public int inventoryID = 0;
-    public Inventory(){
-        // Adding new items to the inventory at start, when an inventory is constructed, this will be an empty inventory
-
-        addItemToInventory("StonePile", 200);
-        addItemToInventory("WoodPile", 2000);
-
-    }
-
+    string itemSaved;
+    
     void Awake()
     {
-        // Gets the inventory catalog and ads this inventory to it
-        inventories = GameObject.FindWithTag("Inventory").GetComponent<InventoryCatalog>();
-        inventories.addInventoryToCatalog(this);
-        inventoryID = inventories.getAmountOfInventoriesInCatalog();
+        // Gets the inventory catalog and add this inventory to it
+        inventoryCatalog = GameObject.FindWithTag("GameManager").GetComponent<GameManager>().getInventoryCatalog();
+        inventoryCatalog.addInventoryToCatalog(this);
+        inventoryID = inventoryCatalog.getAmountOfInventoriesInCatalog();
     }
 
-    // Adds items to inventory. If item already exists, just increment itemValue in the array with itemAmount specified for item object
-    public void addItemToInventory(string name, int amount){
-        if(!inventory.ContainsKey(name)){
-            inventory.Add(name, amount);
-        } else {
-            inventory[name] += amount;
-        }
-    }
-    public void removeItemFromInventory(string name, int amount){
-        inventory[name] -= amount;
-    }
-    /*public void removeItemFromInventory(Dictionary<string, int> itemsToRemove){
-        foreach(var name in itemsToRemove){
-            if(name.Key = inventory.ke)
-            inventory[items] -= name.Value
-        }
-    }*/
 
-    public Dictionary<string, int> getMainInventory(){
-        return inventory;
+
+    public void addItemToInventory(Dictionary<string, int> itemsToAdd){
+        foreach(var itemAdd in itemsToAdd){
+            bool sameKey = false;
+
+            foreach(var itemInv in inventory){
+                if(itemInv.Key == itemAdd.Key){
+                    sameKey = true;
+                    itemSaved = itemInv.Key;
+                }
+            }
+            if(sameKey){
+                inventory[itemSaved] += itemAdd.Value;
+            } else {
+                inventory.Add(itemAdd.Key, itemAdd.Value);
+            }
+        }
+    }
+    public void removeItemFromInventory(Dictionary<string, int> itemsToRemove){
+        foreach(var itemRemove in itemsToRemove){
+            bool sameKey = false;
+
+            foreach(var itemInv in inventory){
+                if(itemInv.Key == itemRemove.Key){
+                    sameKey = true;
+                    itemSaved = itemInv.Key;
+                }
+            }
+            if(sameKey){
+                inventory[itemSaved] -= itemRemove.Value;
+                if(inventory[itemSaved] == 0){
+                    inventory.Remove(itemRemove.Key);
+                }
+            }
+        }
     }
 
     public string getNameOfResourcesInInventoryToString(){
@@ -52,7 +62,6 @@ public class Inventory : MonoBehaviour
         }
         return inventoryName;
     }
-
     public string getAmountOfResourcesInInventoryToString(){
         string inventoryAmount = "Amount: \n";
         foreach(var item in inventory){

@@ -1,92 +1,110 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class CraftingSystem : MonoBehaviour
 {
     
     Inventory mainInventory;
-    BuildingsCatalog buildingsCatalog;
-    ItemCatalog itemCatalog;
-    PlayerBehavior playerBehavior;
-    Building buildingSelected;
-    Dictionary<string, int> itemsNeededToCraft;
-    Dictionary<string, int> itemsInInventory;
-    public int buttonNr;
-    string enoughResources;
-    bool lastValue;
-    bool placingBuilding;
-    GameObject craftedBuilding;
-    Ray movementRay;
-    RaycastHit hit;
+    GameManager gameManager;
+
+    Dictionary<string, int> itemsToRemoveFromInventory;
+    public bool isCrafting;
+    public GameObject currentlyCraftedBuilding;
+    
+    public Ray movementRay;
+    public RaycastHit hit;
 
     void Start()
     {
-        mainInventory = GameObject.FindGameObjectWithTag("Inventory").GetComponent<InventoryCatalog>().getInventoryCatalog()[0]; //Find main inventory in inventorycatalog, nr 0
-        buildingsCatalog = GameObject.FindGameObjectWithTag("Crafting").GetComponent<BuildingsCatalog>();
-        itemCatalog = GameObject.FindGameObjectWithTag("Crafting").GetComponent<ItemCatalog>();
-        playerBehavior = GameObject.FindGameObjectWithTag("player").GetComponent<PlayerBehavior>();
+        gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+        mainInventory = gameManager.getInventoryCatalog().getMainInventory(); //Find main inventory in inventorycatalog, nr 0
     }
 
 
     void Update()
     {
-        if(placingBuilding && Input.GetKey("1")){
-            craftedBuilding.transform.Rotate(0,-2,0, Space.Self);
-        }
-        if(placingBuilding && Input.GetKey("2")){
-            craftedBuilding.transform.Rotate(0,2,0, Space.Self);
-        }
-        if(placingBuilding && !Input.GetKeyDown(KeyCode.Escape)){
+        // updating placingBuilding
+        if(isCrafting){
             movementRay = GameObject.FindGameObjectWithTag("MainCamera2").GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
             Physics.Raycast(movementRay, out hit, Mathf.Infinity, LayerMask.GetMask("Ground"));
-            craftedBuilding.transform.position = hit.point;
-            if(Input.GetMouseButtonDown(0)){
-                mainInventory.removeItemFromInventory("WoodPile", 500);
-                mainInventory.removeItemFromInventory("StonePile", 20);
-                placingBuilding = false;
+            currentlyCraftedBuilding.transform.position = hit.point;
+
+            if(isCrafting && Input.GetMouseButtonDown(0) && !gameManager.getcollidingWithOtherObject()){
+                mainInventory.removeItemFromInventory(itemsToRemoveFromInventory);
+                gameManager.increaseAmountOfBuildingsInGame(1);
+                setIsCrafting(false);
             }
+        } 
+        if(isCrafting && Input.GetKeyDown(KeyCode.Escape) || isCrafting && Input.GetMouseButtonDown(1)){
+            setIsCrafting(false);
+            Destroy(currentlyCraftedBuilding);
         }
+        
     }
 
-    public void onButtonClick(){
-        buildingSelected = buildingsCatalog.getBuilding(buttonNr);
-        itemsNeededToCraft = buildingSelected.getCostToCraftBuilding();
-        itemsInInventory = mainInventory.getInventory();
-        enoughResources = "";
-        bool lastValue = false;
+    public void craftBuilding(){
+        if(!GameObject.FindGameObjectWithTag("GameManager").GetComponent<CraftingSystem>().getIsCrafting()){
+            int thisButtonID = EventSystem.current.currentSelectedGameObject.GetComponent<CraftingButton>().getButtonId();
+            GameManager gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+            BuildingsCatalog buildingsCatalog = gameManager.getBuildingCatalog();
+            Inventory mainInventory = gameManager.getInventoryCatalog().getMainInventory();
+    
+            Building buildingSelected = buildingsCatalog.getBuilding(thisButtonID);
+            Dictionary<string, int> itemsNeededToCraft = buildingSelected.getCostToCraftBuilding();
+            Dictionary<string, int> itemsInInventory = mainInventory.getInventory();
+            
+            string enoughResources = "";
+            bool lastValue = false;
 
-        
-        foreach(var itemC in itemsNeededToCraft){
-            foreach(var itemI in itemsInInventory){
-                if(itemC.Key == itemI.Key){
-                    if(itemC.Value <= itemI.Value){
-                        enoughResources += "true";
-                        lastValue = true;
-                        break;
+            foreach(var itemC in itemsNeededToCraft){
+                foreach(var itemI in itemsInInventory){
+                    if(itemC.Key == itemI.Key){
+                        if(itemC.Value <= itemI.Value){
+                            enoughResources += "true";
+                            lastValue = true;
+                            break;
+                        }
                     }
                 }
+                if(!lastValue){
+                    enoughResources += "false";
+                }
+                lastValue = false;
             }
-            if(!lastValue){
-                enoughResources += "false";
-            }
-            lastValue = false;
+            if(!enoughResources.Contains("false")){
+                
+                GameObject craftedBuilding = Instantiate(buildingSelected.getBuildingPrefab(), new Vector3(0,0,0), transform.rotation);
+                GameObject.FindGameObjectWithTag("GameManager").GetComponent<CraftingSystem>().setItemsToRemoveFromInventory(itemsNeededToCraft);
+                GameObject.FindGameObjectWithTag("GameManager").GetComponent<CraftingSystem>().setCraftedBuilding(craftedBuilding);
+                GameObject.FindGameObjectWithTag("GameManager").GetComponent<CraftingSystem>().setIsCrafting(true);
+            } 
         }
-        if(!enoughResources.Contains("false")){
-            craftedBuilding = Instantiate(buildingSelected.getBuildingPrefab(), new Vector3(0,0,0), transform.rotation);
-            placingBuilding = true;
-        } 
-    }
-    public int getButtonNr(){
-        return buttonNr;
     }
 
-    public void setButtonNr(int number){
-        this.buttonNr = number;
+    public void rotateBuildingLeft(){
+        currentlyCraftedBuilding.transform.Rotate(0,-3,0, Space.Self);
     }
-
-    void craftBuildingSelected(){
-        
-        
+    public void rotateBuildingRight(){
+        currentlyCraftedBuilding.transform.Rotate(0,3,0, Space.Self);
+    }
+    public bool getIsCrafting(){
+        return isCrafting;
+    }
+    public void setIsCrafting(bool value){
+        isCrafting = value;
+    }
+    public GameObject getCraftedBuilding(){
+        return currentlyCraftedBuilding;
+    }
+    public void setCraftedBuilding(GameObject set){
+        currentlyCraftedBuilding = set;
+    }
+    public Dictionary<string, int> getItemsToRemoveFromInventory(){
+        return itemsToRemoveFromInventory;
+    }
+    public void setItemsToRemoveFromInventory(Dictionary<string, int> items){
+        itemsToRemoveFromInventory = items;
     }
 }

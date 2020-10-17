@@ -8,6 +8,7 @@ public class Building
     private GameObject buildingPrefab;
     public Sprite buildingSprite;
     private int maxItemsStoredInBuilding;
+    private int buildingID;
     private string nameOfBuilding;
     private string buildingDescription;
 
@@ -19,6 +20,7 @@ public class Building
         this.maxItemsStoredInBuilding = maxItemssStoredInBuilding;
         this.nameOfBuilding = nameOfBuilding;
         this.buildingDescription = buildingDescription;
+        this.buildingID++;
     }
 
     //GETTERS
@@ -49,6 +51,9 @@ public class Building
     }
     public string getDescriptionOfBulding(){
         return buildingDescription;
+    }
+    public int getBuildingID(){
+        return buildingID;
     }
 
 

@@ -27,6 +27,8 @@ TagManager:
   - CraftingSprite
   - CraftingItems
   - npc
+  - GameManager
+  - UI
   layers:
   - Default
   - TransparentFX

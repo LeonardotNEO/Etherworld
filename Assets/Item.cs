@@ -34,7 +34,10 @@ public class Item
     public string getItemType(){
         return itemType;
     }
-    public Item itemObject(){
+    public Item getItemObject(){
         return this;
+    }
+    public GameObject getItemPrefab(){
+        return itemPrefab;
     }
 }

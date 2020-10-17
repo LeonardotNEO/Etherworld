@@ -6,49 +6,39 @@ using UnityEngine.UI;
 public class UI : MonoBehaviour
 {
     // INVENTORY
-    public bool inventoryOpen = false;
-    public bool craftingOpen = false;
+    private bool inventoryOpen;
+    private bool craftingOpen;
 
     void Start()
     {
-        closeCrafting();
-        closeInventory();
-    }
 
-    
+    }
     void Update()
     {
-
-        if(Input.GetKeyDown("i") && inventoryOpen == false){
-            openInventory();
-            closeCrafting();
-        } else if(Input.GetKeyDown("i") && inventoryOpen == true){
-            closeInventory();
+        if(inventoryOpen){
+            GameObject.FindGameObjectWithTag("Inventory").GetComponent<Canvas>().enabled = true;
+        } else {
+            GameObject.FindGameObjectWithTag("Inventory").GetComponent<Canvas>().enabled = false;
         }
 
-        if(Input.GetKeyDown("tab") && craftingOpen == false){
-            openCrafting();
-            closeInventory();
-        } else if(Input.GetKeyDown("tab") && craftingOpen == true) {
-            closeCrafting();
+        if(craftingOpen){
+            GameObject.FindGameObjectWithTag("Crafting").GetComponent<Canvas>().enabled = true;
+        } else {
+            GameObject.FindGameObjectWithTag("Crafting").GetComponent<Canvas>().enabled = false;
         }
+
+    }
+    public bool getInventoryOpen(){
+        return inventoryOpen;
+    }
+    public bool getCraftingOpen(){
+        return craftingOpen;
     }
 
-    public void openInventory(){
-        GameObject.FindGameObjectWithTag("Inventory").GetComponent<Canvas>().enabled = true;
-        inventoryOpen = true;
+    public void setInventory(bool openClosed){
+        inventoryOpen = openClosed;
     }
-    public void closeInventory(){
-        GameObject.FindGameObjectWithTag("Inventory").GetComponent<Canvas>().enabled = false;
-        inventoryOpen = false;
-    }
-
-    public void openCrafting(){
-        GameObject.FindGameObjectWithTag("Crafting").GetComponent<Canvas>().enabled = true;
-        craftingOpen = true;
-    }
-    public void closeCrafting(){
-        GameObject.FindGameObjectWithTag("Crafting").GetComponent<Canvas>().enabled = false;
-        craftingOpen = false;
+    public void setCrafting(bool openClosed){
+        craftingOpen = openClosed;
     }
 }

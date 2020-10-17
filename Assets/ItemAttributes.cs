@@ -4,12 +4,27 @@ using UnityEngine;
 
 public class ItemAttributes : MonoBehaviour
 {
+    public PlayerBehavior playerBehavior;
+    public Inventory mainInventory;
+    public Collider player;
     public int itemAmount;
     public string itemName;
+    public bool playerInBounds;
 
     void Awake()
     {
         itemName = this.tag;
+    }
+
+    void Update()
+    {
+        playerBehavior = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().getPlayerBehavior();
+        mainInventory = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().getInventoryCatalog().getMainInventory();
+
+        if(Input.GetKeyDown("e") && playerInBounds){
+            pickUpItem();
+        }
+        
     }
 
     public int getItemAmount(){
@@ -19,4 +34,42 @@ public class ItemAttributes : MonoBehaviour
         return itemName;
     }
     
+    public void OnMouseDown()
+    {
+        StartCoroutine(walkingToItem()); 
+    }
+    void OnTriggerStay(Collider other)
+    {
+        if(other.tag == "player"){
+            player = other;
+            playerInBounds = true;
+        }
+    }
+    void OnTriggerExit(Collider other)
+    {
+        if(other.tag == "player"){
+            playerInBounds = false;
+        }
+    }
+
+    public void pickUpItem(){
+        mainInventory.addItemToInventory(new Dictionary<string, int>{{getItemName(), getItemAmount()}});
+        player.GetComponent<Animator>().SetTrigger("pickingUpItem");
+        Destroy(this.gameObject);
+    }
+
+    public IEnumerator walkingToItem(){
+        bool runLoop = true;
+        while(runLoop){
+            if(playerInBounds){
+                playerBehavior.setReachedDestination(true);
+                playerBehavior.setPlayerRaycastHitVector(playerBehavior.getPlayerPosition());
+                pickUpItem();
+                runLoop = false;
+            }
+            yield return null;
+        }
+    }
 }
+
+

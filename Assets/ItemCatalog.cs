@@ -9,7 +9,7 @@ public class ItemCatalog : MonoBehaviour
     public Sprite item01Sprite;
     public GameObject item02Model;
     public Sprite item02Sprite;
-    void Start()
+    void Awake()
     {
         //ADDING ITEMS TO CATALOG
         addItemToCatalog(
@@ -62,5 +62,9 @@ public class ItemCatalog : MonoBehaviour
 
     public List<Item> getItemCatalog(){
         return itemCatalog;
+    }
+    
+    public Item getItemByIndex(int index){
+        return itemCatalog[index];
     }
 }

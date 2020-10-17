@@ -17,7 +17,7 @@ public class BuildingsCatalog : MonoBehaviour
     public Sprite house05Sprite;
 
 
-    void Start()
+    void Awake()
     {
         //ADDING BUILDINGS TO CATALOG
         addBuildingToCatalog(
@@ -75,9 +75,7 @@ public class BuildingsCatalog : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetKeyDown("j")){
-            Debug.Log(buildingsCatalogToString());   
-        }
+        
     }
 
     public void addBuildingToCatalog(Building building){
@@ -90,7 +88,7 @@ public class BuildingsCatalog : MonoBehaviour
         return buildingCatalog;
     }
 
-    public string buildingsCatalogToString(){
+    public string getBuildingsCatalogToString(){
         string buildingsCatalogToString = "";
         foreach(var building in buildingCatalog){
             buildingsCatalogToString += 
@@ -105,7 +103,7 @@ public class BuildingsCatalog : MonoBehaviour
         return buildingCatalog.Count;
     }
 
-    public Building getBuilding(int buildingNr){
-        return buildingCatalog[buildingNr];
+    public Building getBuilding(int buildingID){
+        return buildingCatalog[buildingID];
     }
 }

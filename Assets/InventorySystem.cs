@@ -7,10 +7,11 @@ public class InventorySystem : MonoBehaviour
 {
     Inventory mainInventory;
     public GameObject npc;
+    public int amountOfInventoriesInGame;
     
     void Start()
     {
-        mainInventory = GameObject.FindGameObjectWithTag("player").GetComponent<Inventory>();
+        mainInventory = GameObject.FindGameObjectWithTag("GameManager").GetComponent<InventoryCatalog>().getMainInventory();
     }
 
     void Update()
@@ -20,12 +21,14 @@ public class InventorySystem : MonoBehaviour
         Text inventoryTextAmount = GameObject.FindGameObjectWithTag("InventoryAmount").GetComponentInChildren<Text>();
         inventoryTextName.text = mainInventory.getNameOfResourcesInInventoryToString();
         inventoryTextAmount.text = mainInventory.getAmountOfResourcesInInventoryToString();
+    }
 
-        if(Input.GetKeyDown("g")){
-            RaycastHit mouseButtonPressed;
-            Ray movementRay = GameObject.FindGameObjectWithTag("MainCamera2").GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
-            if(Physics.Raycast(movementRay, out mouseButtonPressed, Mathf.Infinity, LayerMask.GetMask("Ground"))){
-                Instantiate(npc, new Vector3(mouseButtonPressed.point.x, mouseButtonPressed.point.y, mouseButtonPressed.transform.position.z), mouseButtonPressed.transform.rotation);
+    public void spawnNPC(){
+        RaycastHit mouseButtonPressed;
+        Ray movementRay = GameObject.FindGameObjectWithTag("MainCamera2").GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
+        if(Physics.Raycast(movementRay, out mouseButtonPressed, Mathf.Infinity, LayerMask.GetMask("Ground"))){
+            for(int i = 0; i < 10; i++){
+                Instantiate(npc, new Vector3(mouseButtonPressed.point.x, mouseButtonPressed.point.y, mouseButtonPressed.point.z), mouseButtonPressed.transform.rotation);
             }
         }
     }

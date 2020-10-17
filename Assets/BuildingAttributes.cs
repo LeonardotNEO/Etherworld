@@ -4,28 +4,45 @@ using UnityEngine;
 
 public class BuildingAttributes : MonoBehaviour
 {
-    bool isOwnedByPlayer;
-
+    GameManager gameManager;
+    BuildingsCatalog buildingsCatalog;
+    public bool isOwnedByPlayer;
     //public List<NPC> npcsAssignedHere;
     public Dictionary<string, int> itemsStoredInBuilding;
     public Dictionary<string, int> itemsProducedInBuilding;
     public Dictionary<string, int> itemsNeededForBuildingProduction;
-    public int houseValue;
+    private int houseValue;
     public int buildingID;
     public float positionX;
     public float positionY;
     public float positionZ;
+    public bool collidingWithOtherObject;
     void Start()
     {
+        gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+        buildingsCatalog = gameManager.getBuildingCatalog();
+        buildingID = gameManager.getAmountOfBuildingsInGame();
         positionX = transform.position.x;
         positionY = transform.position.y;
         positionZ = transform.position.z;
     }
 
-    // Update is called once per frame
     void Update()
     {
         
+    }
+
+    void OnTriggerStay(Collider other)
+    {
+        if(
+            other.gameObject.layer == 12  || /*Layer 12 is BUILDINGS*/
+            other.gameObject.layer == 13  || /*Layer 13 is RESOURCESMESH*/
+            other.gameObject.layer == 14     /*Layer 14 is ITEMSMESH*/
+        ){setCollidingWithOtherObject(true);} 
+    }
+    void OnTriggerExit(Collider other)
+    {
+        setCollidingWithOtherObject(false);
     }
 
     //GETTERS
@@ -90,6 +107,9 @@ public class BuildingAttributes : MonoBehaviour
     {
         return positionZ;
     }
+    public bool getCollidingWithOtherObject(){
+        return collidingWithOtherObject;
+    }
 
     //SETTERS
     public void setItemsStoredInBuilding(Dictionary<string, int> newItemsStoredInBuilding)
@@ -115,5 +135,8 @@ public class BuildingAttributes : MonoBehaviour
     }
     public void setPositionZ(int newPositionZ){
         positionZ = newPositionZ;
+    }
+    public void setCollidingWithOtherObject(bool set){
+        collidingWithOtherObject = set;
     }
 }
