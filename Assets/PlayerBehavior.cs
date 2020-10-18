@@ -14,14 +14,10 @@ public class PlayerBehavior : MonoBehaviour
     public bool mouseOnItemResource;
     bool pingPong;
     public Collider colliderInfo;
-    RaycastHit hitGround;
-    RaycastHit resource;
-    RaycastHit hitItemResource;
-    RaycastHit hitItemResourceSaved;
-    Vector3 playerPosition;
+    public RaycastHit hitGround;
     void Start()
     {
-        hitGround.point = transform.position;
+        stopPlayer();
     }
     
     void Update()
@@ -32,42 +28,26 @@ public class PlayerBehavior : MonoBehaviour
         // PLAYER MOVEMENT
         // Move player to new position when pressing mouse click
         if (Input.GetMouseButtonDown(0) && !isMouseOverUI() && !gameManager.getPlacingBuilding()){
+            RaycastHit hit;
             Ray ray = GameObject.FindGameObjectWithTag("MainCamera2").GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
-            Physics.Raycast(ray, out hitGround, Mathf.Infinity, LayerMask.GetMask("Ground"));
-        }  
-        if(!reachedDestination){
-            // Moves the player
-            transform.position = Vector3.MoveTowards(transform.position, hitGround.point, playerSpeed * Time.deltaTime);
-            transform.LookAt(hitGround.point);
-            // Player moves slower is there is a obstacle (So that the player doesnt accidentaly clip through)
-            if(touchingObstacle == true){
-                transform.Translate(new Vector3(0f,0f,-0.25f), transform);
-                hitGround.point = transform.position;
+            Physics.Raycast(ray, out hit, Mathf.Infinity);
+            if(hit.collider.tag == "Ground"){
+                hitGround.point = hit.point;
             }
+            transform.LookAt(hitGround.point);
         } 
         // check if player has reached new destination
-        if(transform.position == hitGround.point){
+        if(transform.position == getHitGroundPosition()){
             isMovingToDestination = false;
             reachedDestination = true;
             GetComponent<Animator>().SetBool("isMoving", false);
         } else {
+            GetComponent<Rigidbody>().MovePosition(Vector3.MoveTowards(transform.position, hitGround.point, playerSpeed * Time.deltaTime));
             isMovingToDestination = true;
             reachedDestination = false;
             GetComponent<Animator>().SetBool("isMoving" , true);
         }
-    
-
-
-        // PLAYER HOVER OVER ITEMS, fix problem that one cant Outline ???
-        Ray hoverRay = GameObject.FindGameObjectWithTag("MainCamera2").GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
-
-        if(Physics.Raycast(hoverRay, out hitItemResource, Mathf.Infinity, LayerMask.GetMask("ResourcesMesh", "ItemsMesh", "Buildings"))){
-            hitItemResourceSaved = hitItemResource;
-            mouseOnItemResource = true;
-        } else {
-            mouseOnItemResource = false;
-        }
-        
+        // PUT THIS SCRIPT ON ITEMS THAT WANT TO BE OUTLINED LIKE BUILDINGS; RESOURCE; ITEMS ETC  
         /*
         if(mouseOnItemResource){
             hitItemResource.collider.GetComponentInChildren<Outline>().eraseRenderer = false;
@@ -94,20 +74,12 @@ public class PlayerBehavior : MonoBehaviour
         */
     }
 
-    // Triggers when player collides with other objects; sets collider bool to true if it collides with these objects
-    void OnTriggerStay(Collider collider){
-        colliderInfo = collider;
-        if(
-            colliderInfo.gameObject.layer == 12  || /*Layer 12 is BUILDINGS*/
-            colliderInfo.gameObject.layer == 13  || /*Layer 13 is RESOURCESMESH*/
-            colliderInfo.gameObject.layer == 14     /*Layer 14 is ITEMSMESH*/
-            ){touchingObstacle = true;
-        }
+    void OnTriggerStay(Collider colliderInfo){
+        
     }
     // no collider detected if player has moved out of collider
     void OnTriggerExit(Collider collider){
         colliderInfo = null;
-        touchingObstacle = false;
     }
 
     public bool isMouseOverUI(){
@@ -131,25 +103,13 @@ public class PlayerBehavior : MonoBehaviour
     public void setReachedDestination(bool newBool){
         reachedDestination = newBool;
     }
-    public bool getTouchingObstacle(){
-        return touchingObstacle;
+    public Vector3 getHitGroundPosition(){
+        return hitGround.point;
     }
-    public void setTouchingObstacle(bool newBool){
-        touchingObstacle = newBool;
-    }
-    public bool getMouseOnItemResource(){
-        return mouseOnItemResource;
-    }
-    public RaycastHit getPlayerRaycastHit(){
-        return hitGround;
-    }
-    public void setPlayerRaycastHitVector(Vector3 vector){
-        hitGround.point = vector;
-    }
-    public Vector3 getPlayerPosition(){
-        return transform.position;
-    }
-    public void setPlayerPosition(Vector3 newPosition){
-        playerPosition = newPosition;
+    public void setHitGroundPostion(Vector3 newPosition){
+        hitGround.point = newPosition;
     }   
+    public void stopPlayer(){
+        setHitGroundPostion(transform.position);
+    }
 }

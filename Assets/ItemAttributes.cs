@@ -38,6 +38,17 @@ public class ItemAttributes : MonoBehaviour
     {
         StartCoroutine(walkingToItem()); 
     }
+
+    void OnMouseOver()
+    {
+        GetComponentInChildren<Outline>().eraseRenderer = false;
+    }
+
+    void OnMouseExit()
+    {
+        GetComponentInChildren<Outline>().eraseRenderer = true;
+    }
+    
     void OnTriggerStay(Collider other)
     {
         if(other.tag == "player"){
@@ -60,10 +71,10 @@ public class ItemAttributes : MonoBehaviour
 
     public IEnumerator walkingToItem(){
         bool runLoop = true;
+        playerBehavior.setHitGroundPostion(this.transform.position);
         while(runLoop){
-            if(playerInBounds){
-                playerBehavior.setReachedDestination(true);
-                playerBehavior.setPlayerRaycastHitVector(playerBehavior.getPlayerPosition());
+            if(playerInBounds && playerBehavior.getIsMovingToDestination()){
+                playerBehavior.stopPlayer();
                 pickUpItem();
                 runLoop = false;
             }

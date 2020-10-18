@@ -27,13 +27,16 @@ public class CraftingSystem : MonoBehaviour
     {
         // updating placingBuilding
         if(isCrafting){
+            currentlyCraftedBuilding.GetComponentInChildren<MeshCollider>().isTrigger = true;
             movementRay = GameObject.FindGameObjectWithTag("MainCamera2").GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
             Physics.Raycast(movementRay, out hit, Mathf.Infinity, LayerMask.GetMask("Ground"));
             currentlyCraftedBuilding.transform.position = hit.point;
 
             if(isCrafting && Input.GetMouseButtonDown(0) && !gameManager.getcollidingWithOtherObject()){
+                currentlyCraftedBuilding.GetComponentInChildren<MeshCollider>().isTrigger = false;
                 mainInventory.removeItemFromInventory(itemsToRemoveFromInventory);
                 gameManager.increaseAmountOfBuildingsInGame(1);
+                currentlyCraftedBuilding = null;
                 setIsCrafting(false);
             }
         } 
@@ -84,10 +87,14 @@ public class CraftingSystem : MonoBehaviour
     }
 
     public void rotateBuildingLeft(){
-        currentlyCraftedBuilding.transform.Rotate(0,-3,0, Space.Self);
+        if(currentlyCraftedBuilding){
+            currentlyCraftedBuilding.transform.Rotate(0,-3,0, Space.Self);
+        }
     }
     public void rotateBuildingRight(){
-        currentlyCraftedBuilding.transform.Rotate(0,3,0, Space.Self);
+        if(currentlyCraftedBuilding){
+            currentlyCraftedBuilding.transform.Rotate(0,3,0, Space.Self);
+        }
     }
     public bool getIsCrafting(){
         return isCrafting;

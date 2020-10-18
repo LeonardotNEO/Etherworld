@@ -47,6 +47,13 @@ public class ResourceAttributes : MonoBehaviour
         if(!gatheringsResourcesRunning){
             StartCoroutine(walkingToResource());
         }
+        if(playerInBounds && !gatheringsResourcesRunning){
+            StartCoroutine(walkingToResource());
+        }
+    }
+    void OnMouseEnter()
+    {
+        Debug.Log("This is a resource");
     }
 
     public GameObject getResourceMined(){
@@ -59,6 +66,16 @@ public class ResourceAttributes : MonoBehaviour
 
     public void increaseProgress(int addProgress){
         progress += addProgress;
+    }
+
+    void OnMouseOver()
+    {
+        GetComponentInChildren<Outline>().eraseRenderer = false;
+    }
+
+    void OnMouseExit()
+    {
+        GetComponentInChildren<Outline>().eraseRenderer = true;
     }
 
     void OnTriggerStay(Collider other)
@@ -77,10 +94,10 @@ public class ResourceAttributes : MonoBehaviour
 
     public IEnumerator walkingToResource(){
         bool runLoop = true;
+        playerBehavior.setHitGroundPostion(this.transform.position);
         while(runLoop){
             if(playerInBounds){
-                playerBehavior.setPlayerRaycastHitVector(playerBehavior.getPlayerPosition());
-                playerBehavior.setReachedDestination(true);
+                playerBehavior.stopPlayer();
                 StartCoroutine(gatheringResources());
                 runLoop = false;
             }
@@ -88,8 +105,8 @@ public class ResourceAttributes : MonoBehaviour
         }
     }
     public IEnumerator gatheringResources(){
+        yield return new WaitForSeconds(0.3f);
         gatheringsResourcesRunning = true;
-        playerBehavior.setIsMovingToDestination(false);
         player.GetComponent<Animator>().SetBool("isGatheringResources" , true);
 
         // TREES
@@ -157,7 +174,6 @@ public class ResourceAttributes : MonoBehaviour
             }
         }
         gatheringsResourcesRunning = false;
-        playerBehavior.setTouchingObstacle(false);
     }
     public void resetProgressBar(){
         progressBar.sizeDelta = new Vector2(0, 26F);

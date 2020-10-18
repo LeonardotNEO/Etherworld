@@ -42,7 +42,7 @@ TagManager:
   - Resources
   - Items
   - Mobs
-  - Buildings
+  - BuildingsMesh
   - ResourcesMesh
   - ItemsMesh
   - 

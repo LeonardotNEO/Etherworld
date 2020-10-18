@@ -9,10 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8760402837038622258}
-  - component: {fileID: 4180042968653956271}
-  - component: {fileID: 4180042968653956270}
   - component: {fileID: 1511813172410897953}
   - component: {fileID: 1525332236202057250}
+  - component: {fileID: 1857265906}
   m_Layer: 9
   m_Name: StoneDepot
   m_TagString: StoneDepot
@@ -29,41 +28,12 @@ Transform:
   m_GameObject: {fileID: 8760402837038622259}
   m_LocalRotation: {x: 0, y: -0.3196706, z: 0, w: 0.9475288}
   m_LocalPosition: {x: -5.3255844, y: 0, z: -10.703081}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_Children:
   - {fileID: 8760402837967711092}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -37.286003, z: 0}
---- !u!65 &4180042968653956271
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8760402837038622259}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 2.7677603, y: 1.1585255, z: 2.9505787}
-  m_Center: {x: 0.04349941, y: 0.57633924, z: 0.054889917}
---- !u!54 &4180042968653956270
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8760402837038622259}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 126
-  m_CollisionDetection: 1
 --- !u!114 &1511813172410897953
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -76,10 +46,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68f52fa77d670d54aabebb22e233c2ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  amountLeft: 6
-  progress: 0
   resourceMined: {fileID: 789738550749354686, guid: d2e73e34e76cb4c4580e232083bffc97,
     type: 3}
+  playerInBounds: 0
+  amountLeft: 6
+  progress: 0
+  resourceTag: 
+  gatheringsResourcesRunning: 0
   firstTriggered: 0
   secondTriggered: 0
   thirdTriggered: 0
@@ -105,6 +78,20 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!136 &1857265906
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8760402837038622259}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 1.2855473
+  m_Height: 2.8457136
+  m_Direction: 1
+  m_Center: {x: 0.023762707, y: 0, z: 0.073186636}
 --- !u!1 &8760402837967711093
 GameObject:
   m_ObjectHideFlags: 0
@@ -118,7 +105,8 @@ GameObject:
   - component: {fileID: 8760402837967711098}
   - component: {fileID: 5355605025533767576}
   - component: {fileID: 2413678724368883533}
-  - component: {fileID: 7793296693621596705}
+  - component: {fileID: 8760402836643285791}
+  - component: {fileID: 8760402836643285785}
   m_Layer: 13
   m_Name: StoneDepositModel
   m_TagString: MainMeshOfObject
@@ -1691,7 +1679,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   color: 0
   eraseRenderer: 1
---- !u!64 &7793296693621596705
+--- !u!54 &8760402836643285791
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8760402837967711093}
+  serializedVersion: 2
+  m_Mass: 1e+9
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!64 &8760402836643285785
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

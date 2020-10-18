@@ -45,6 +45,16 @@ public class BuildingAttributes : MonoBehaviour
         setCollidingWithOtherObject(false);
     }
 
+    void OnMouseOver()
+    {
+        GetComponentInChildren<Outline>().eraseRenderer = false;
+    }
+
+    void OnMouseExit()
+    {
+        GetComponentInChildren<Outline>().eraseRenderer = true;
+    }
+
     //GETTERS
     public Dictionary<string, int> getItemsStoredInBuilding()
     {

@@ -41,13 +41,13 @@ public class MoveCameraScript : MonoBehaviour
         if(Input.GetKey("x")){
             GameObject.FindGameObjectWithTag("MainCamera").transform.RotateAround(GameObject.FindGameObjectWithTag("MainCamera").transform.position, Vector3.up, -cameraSensitivity * Time.deltaTime * 10);
         }
-        if(Input.GetAxis("Mouse ScrollWheel") < 0f && 50F > positionY && positionY > 0F && !GameObject.FindGameObjectWithTag("player").GetComponent<PlayerBehavior>().isMouseOverUI()){
+        if(Input.GetAxis("Mouse ScrollWheel") < 0f && 50F > positionY && positionY > 3F && !GameObject.FindGameObjectWithTag("player").GetComponent<PlayerBehavior>().isMouseOverUI()){
             GameObject.FindGameObjectWithTag("MainCamera").transform.Translate(Vector3.up * Time.deltaTime * scrollSensitivity, GameObject.FindGameObjectWithTag("MainCamera").transform);
             //WHEN ZOOMING OUT, THE CAMERA MOVES BACK FROM PIVOT POINT
             GameObject.FindGameObjectWithTag("MainCamera2").transform.Translate(Vector3.back * Time.deltaTime * scrollSensitivity, GameObject.FindGameObjectWithTag("MainCamera").transform);
             positionY = GameObject.FindGameObjectWithTag("MainCamera").transform.position.y;
         }
-        if(Input.GetAxis("Mouse ScrollWheel") > 0f && 60F > positionY && positionY > 5F && !GameObject.FindGameObjectWithTag("player").GetComponent<PlayerBehavior>().isMouseOverUI()){
+        if(Input.GetAxis("Mouse ScrollWheel") > 0f && 60F > positionY && positionY > 8F && !GameObject.FindGameObjectWithTag("player").GetComponent<PlayerBehavior>().isMouseOverUI()){
             GameObject.FindGameObjectWithTag("MainCamera").transform.Translate(Vector3.down * Time.deltaTime * scrollSensitivity, GameObject.FindGameObjectWithTag("MainCamera").transform);
             //WHEN ZOOMING IN, THE CAMERA MOVES FORWARD TO PIVOT POINT
             GameObject.FindGameObjectWithTag("MainCamera2").transform.Translate(Vector3.forward * Time.deltaTime * scrollSensitivity, GameObject.FindGameObjectWithTag("MainCamera").transform);

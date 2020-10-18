@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 509102605602016196}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_Children:
   - {fileID: 509102605732018300}
   m_Father: {fileID: 0}
@@ -46,8 +46,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.7661233, y: 4.1635995, z: 1.4982171}
-  m_Center: {x: -0.010573149, y: 2.0842984, z: 0.078365564}
+  m_Size: {x: 1.0248692, y: 4.1635995, z: 0.9568038}
+  m_Center: {x: 0.006391883, y: 2.0842984, z: 0.009091139}
 --- !u!114 &1084976971110723651
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -60,10 +60,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68f52fa77d670d54aabebb22e233c2ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  amountLeft: 1
-  progress: 0
   resourceMined: {fileID: 5679385085818385487, guid: df32b47164d506e4a8616db51de45c61,
     type: 3}
+  playerInBounds: 0
+  amountLeft: 1
+  progress: 0
+  resourceTag: 
+  gatheringsResourcesRunning: 0
   firstTriggered: 0
   secondTriggered: 0
   thirdTriggered: 0
@@ -119,6 +122,7 @@ GameObject:
   - component: {fileID: 6521704748262266977}
   - component: {fileID: 509102605996612195}
   - component: {fileID: 2248082145585232192}
+  - component: {fileID: 8695564267557566739}
   m_Layer: 13
   m_Name: TreeModel
   m_TagString: MainMeshOfObject
@@ -3980,10 +3984,8 @@ MonoBehaviour:
   m_Mesh: {fileID: 0}
   m_IsSelectable: 1
   m_SelectedFaces: 
-  m_SelectedEdges:
-  - a: 482
-    b: 483
-  m_SelectedVertices: e2010000e3010000
+  m_SelectedEdges: []
+  m_SelectedVertices: 
 --- !u!114 &509102605996612195
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4006,9 +4008,23 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 509102605732018301}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 4
   m_Convex: 1
   m_CookingOptions: -1
+  m_Mesh: {fileID: 0}
+--- !u!64 &8695564267557566739
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 509102605732018301}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
   m_Mesh: {fileID: 0}
