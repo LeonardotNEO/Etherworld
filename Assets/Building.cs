@@ -5,19 +5,25 @@ using UnityEngine;
 public class Building
 {
     private Dictionary<string, int> costToCraftBuilding;
+    private Dictionary<string, int> buildingUpkeep;
+    private Dictionary<string, int> buildingProduction;
+    private Dictionary<string, int> neededForProduction;
     private GameObject buildingPrefab;
     public Sprite buildingSprite;
-    private int maxItemsStoredInBuilding;
+    private int storageCapacity;
     private int buildingID;
     private string nameOfBuilding;
     private string buildingDescription;
 
     //CONSTRUCTOR
-    public Building(Dictionary<string, int> costToCraftBuilding, GameObject  buildingPrefab, Sprite buildingSprite, int maxItemssStoredInBuilding, string nameOfBuilding, string buildingDescription){
+    public Building(Dictionary<string, int> costToCraftBuilding, Dictionary<string, int> buildingUpkeep, Dictionary<string, int> buildingProduction, Dictionary<string, int> neededForProduction, GameObject  buildingPrefab, Sprite buildingSprite, int storageCapacity, string nameOfBuilding, string buildingDescription){
         this.costToCraftBuilding = costToCraftBuilding;
+        this.buildingUpkeep = buildingUpkeep;
+        this.buildingProduction = buildingProduction;
+        this.neededForProduction = neededForProduction;
+        this.storageCapacity = storageCapacity;
         this.buildingPrefab = buildingPrefab;
         this.buildingSprite = buildingSprite;
-        this.maxItemsStoredInBuilding = maxItemssStoredInBuilding;
         this.nameOfBuilding = nameOfBuilding;
         this.buildingDescription = buildingDescription;
         this.buildingID++;

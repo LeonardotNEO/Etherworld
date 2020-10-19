@@ -4,12 +4,18 @@ using UnityEngine;
 
 public class MoveCameraScript : MonoBehaviour
 {
+    GameManager gameManager;
     public float positionX;
     public float positionY;
     public float positionZ;
     public float cameraSensitivity = 50;
     public float scrollSensitivity = 200;
     public float rotateSensitivity = 50;
+
+    void Awake()
+    {
+        gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+    }
 
     void Start()
     {
@@ -18,6 +24,7 @@ public class MoveCameraScript : MonoBehaviour
 
     void Update()
     {
+        gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
 
         if(Input.GetKey("w")){
             GameObject.FindGameObjectWithTag("MainCamera").transform.Translate(Vector3.forward * Time.deltaTime * cameraSensitivity, GameObject.FindGameObjectWithTag("MainCamera").transform);
@@ -35,11 +42,13 @@ public class MoveCameraScript : MonoBehaviour
             GameObject.FindGameObjectWithTag("MainCamera").transform.Translate(Vector3.right * Time.deltaTime * cameraSensitivity, GameObject.FindGameObjectWithTag("MainCamera").transform);
             positionZ = GameObject.FindGameObjectWithTag("MainCamera").transform.position.z;
         }
-        if(Input.GetKey("z")){
-            GameObject.FindGameObjectWithTag("MainCamera").transform.RotateAround(GameObject.FindGameObjectWithTag("MainCamera").transform.position, Vector3.up, +cameraSensitivity * Time.deltaTime * 10);
-        }
-        if(Input.GetKey("x")){
-            GameObject.FindGameObjectWithTag("MainCamera").transform.RotateAround(GameObject.FindGameObjectWithTag("MainCamera").transform.position, Vector3.up, -cameraSensitivity * Time.deltaTime * 10);
+        if(!gameManager.getCraftingSystem().getIsCrafting()){
+            if(Input.GetKey("q")){
+                GameObject.FindGameObjectWithTag("MainCamera").transform.RotateAround(GameObject.FindGameObjectWithTag("MainCamera").transform.position, Vector3.up, +cameraSensitivity * Time.deltaTime * 10);
+            }
+            if(Input.GetKey("e")){
+                GameObject.FindGameObjectWithTag("MainCamera").transform.RotateAround(GameObject.FindGameObjectWithTag("MainCamera").transform.position, Vector3.up, -cameraSensitivity * Time.deltaTime * 10);
+            }
         }
         if(Input.GetAxis("Mouse ScrollWheel") < 0f && 50F > positionY && positionY > 3F && !GameObject.FindGameObjectWithTag("player").GetComponent<PlayerBehavior>().isMouseOverUI()){
             GameObject.FindGameObjectWithTag("MainCamera").transform.Translate(Vector3.up * Time.deltaTime * scrollSensitivity, GameObject.FindGameObjectWithTag("MainCamera").transform);
@@ -51,9 +60,7 @@ public class MoveCameraScript : MonoBehaviour
             GameObject.FindGameObjectWithTag("MainCamera").transform.Translate(Vector3.down * Time.deltaTime * scrollSensitivity, GameObject.FindGameObjectWithTag("MainCamera").transform);
             //WHEN ZOOMING IN, THE CAMERA MOVES FORWARD TO PIVOT POINT
             GameObject.FindGameObjectWithTag("MainCamera2").transform.Translate(Vector3.forward * Time.deltaTime * scrollSensitivity, GameObject.FindGameObjectWithTag("MainCamera").transform);
-            positionY = GameObject.FindGameObjectWithTag("MainCamera").transform.position.y;
-            
+            positionY = GameObject.FindGameObjectWithTag("MainCamera").transform.position.y;               
         }
-
     }
 }

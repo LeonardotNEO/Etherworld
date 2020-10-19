@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    // MAIN CAMERA //
+    GameObject mainCamera;
+
     // PLAYER BEHAVIOR //
     PlayerBehavior playerBehavior;
 
@@ -36,11 +39,18 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
-        // CATALOGS
+        // CATALOGS //
         buildingCatalog = GetComponent<BuildingsCatalog>();
         itemCatalog = GetComponent<ItemCatalog>();
         inventoryCatalog = GetComponent<InventoryCatalog>();
+
+        // MAIN CAMERA //
+        mainCamera = GameObject.FindGameObjectWithTag("MainCamera2");
+
+        // CRAFTING SYSTEM
+        craftingSystem = GetComponent<CraftingSystem>();
     }
+
 
     void Start()
     {
@@ -49,6 +59,7 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+
         // PLAYER BEHAVIOR //
         playerBehavior = GameObject.FindGameObjectWithTag("player").GetComponent<PlayerBehavior>();
 
@@ -100,13 +111,11 @@ public class GameManager : MonoBehaviour
         } else if(Input.GetKeyDown("tab") && craftingOpen == true) {
             UI.setCrafting(false);
         }
-        if(Input.GetKey("c")){
-            if(craftingSystem){
+        if(isCrafting){
+            if(Input.GetKey("q")){
                 craftingSystem.rotateBuildingLeft();
             }
-        }
-        if(Input.GetKey("v")){
-            if(craftingSystem){
+            if(Input.GetKey("e")){
                 craftingSystem.rotateBuildingRight();
             }
         }
@@ -167,5 +176,8 @@ public class GameManager : MonoBehaviour
     }
     public bool getcollidingWithOtherObject(){
         return collidingWithOtherObject;
+    }
+    public GameObject getMainCamera(){
+        return mainCamera;
     }
 }

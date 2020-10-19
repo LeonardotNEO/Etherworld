@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 public class PlayerBehavior : MonoBehaviour
 {
     GameManager gameManager;
-    public float playerSpeed = 2;
+    public float playerSpeed;
     public bool isMovingToDestination;
     public bool reachedDestination;
     public bool touchingObstacle;
@@ -34,7 +34,7 @@ public class PlayerBehavior : MonoBehaviour
             if(hit.collider.tag == "Ground"){
                 hitGround.point = hit.point;
             }
-            transform.LookAt(hitGround.point);
+            transform.LookAt(new Vector3(hitGround.point.x, 0, hitGround.point.z));
         } 
         // check if player has reached new destination
         if(transform.position == getHitGroundPosition()){
@@ -42,36 +42,11 @@ public class PlayerBehavior : MonoBehaviour
             reachedDestination = true;
             GetComponent<Animator>().SetBool("isMoving", false);
         } else {
-            GetComponent<Rigidbody>().MovePosition(Vector3.MoveTowards(transform.position, hitGround.point, playerSpeed * Time.deltaTime));
+            GetComponent<Rigidbody>().MovePosition(Vector3.MoveTowards(transform.position, hitGround.point, playerSpeed * Time.fixedDeltaTime));
             isMovingToDestination = true;
             reachedDestination = false;
             GetComponent<Animator>().SetBool("isMoving" , true);
         }
-        // PUT THIS SCRIPT ON ITEMS THAT WANT TO BE OUTLINED LIKE BUILDINGS; RESOURCE; ITEMS ETC  
-        /*
-        if(mouseOnItemResource){
-            hitItemResource.collider.GetComponentInChildren<Outline>().eraseRenderer = false;
-
-            Color c = GameObject.FindWithTag("MainCamera2").GetComponent<OutlineEffect>().lineColor0;
-            if(pingPong)
-            {
-                c.a += Time.deltaTime;
-                if(c.a >= 1)
-                    pingPong = false;
-            } else {
-                c.a -= Time.deltaTime;
-                if(c.a <= 0.4)
-                    pingPong = true;
-            }
-            c.a = Mathf.Clamp01(c.a);
-            GameObject.FindWithTag("MainCamera2").GetComponent<OutlineEffect>().lineColor0 = c;
-            GameObject.FindWithTag("MainCamera2").GetComponent<OutlineEffect>().UpdateMaterialsPublicProperties();
-        } else {
-            if(hitItemResourceSaved.collider){
-                hitItemResourceSaved.collider.GetComponentInChildren<Outline>().eraseRenderer = true;
-            }
-        }
-        */
     }
 
     void OnTriggerStay(Collider colliderInfo){

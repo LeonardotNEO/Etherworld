@@ -42,6 +42,7 @@ using System.Collections.Generic;
 
 		private void Awake()
 		{
+			color = 50;
 			Renderer = GetComponent<Renderer>();
 			SkinnedMeshRenderer = GetComponent<SkinnedMeshRenderer>();
 			SpriteRenderer = GetComponent<SpriteRenderer>();

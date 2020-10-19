@@ -128,7 +128,6 @@ using UnityEngine.VR;
 
 			Instance = this;
 		}
-
 		void Start()
 		{
 			CreateMaterialsIfNeeded();
@@ -458,6 +457,10 @@ using UnityEngine.VR;
 #else
 			outlineCamera.hdr = false;
 #endif
+		}
+
+		public void setLineColor0(Color color){
+			lineColor0 = color;
 		}
 
 		public void AddOutline(Outline outline)

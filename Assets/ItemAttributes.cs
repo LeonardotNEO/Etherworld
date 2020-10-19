@@ -20,11 +20,6 @@ public class ItemAttributes : MonoBehaviour
     {
         playerBehavior = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().getPlayerBehavior();
         mainInventory = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().getInventoryCatalog().getMainInventory();
-
-        if(Input.GetKeyDown("e") && playerInBounds){
-            pickUpItem();
-        }
-        
     }
 
     public int getItemAmount(){

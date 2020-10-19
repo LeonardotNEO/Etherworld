@@ -5,16 +5,16 @@ using UnityEngine;
 public class BuildingsCatalog : MonoBehaviour
 {   
     public List<Building> buildingCatalog = new List<Building>();
-    public GameObject house01Model;
-    public Sprite house01Sprite;
-    public GameObject house02Model;
-    public Sprite house02Sprite;
-    public GameObject house03Model;
-    public Sprite house03Sprite;
-    public GameObject house04Model;
-    public Sprite house04Sprite;
-    public GameObject house05Model;
-    public Sprite house05Sprite;
+    public GameObject smallWoodHouse;
+    public Sprite smallWoodHouseSprite;
+    public GameObject mediumWoodHouse;
+    public Sprite mediumWoodHouseSprite;
+    public GameObject boardingHouse;
+    public Sprite boardingHouseSprite;
+    public GameObject waterWell;
+    public Sprite waterWellSprite;
+    public GameObject woodFence;
+    public Sprite woodFenceSprite;
 
 
     void Awake()
@@ -22,52 +22,67 @@ public class BuildingsCatalog : MonoBehaviour
         //ADDING BUILDINGS TO CATALOG
         addBuildingToCatalog(
             new Building(
-                /*Cost to craft*/       new Dictionary<string, int>(){ {"WoodPile", 500}, {"StonePile", 20}},
-                /*Prefab*/              house01Model,
-                /*Sprite*/              house01Sprite,
-                /*MaxItemsStored*/      3,
-                /*Name*/                "House 1",
-                /*Description*/         "This is just a simple house"
+                /*Cost to craft*/       new Dictionary<string, int>(){ {"WoodPile", 50}},
+                /*Upkeep*/              new Dictionary<string, int>(){ {"WoodPile", 3}},
+                /*Production*/          new Dictionary<string, int>(){},
+                /*NeededForProduction*/ new Dictionary<string, int>(){},
+                /*Prefab*/              smallWoodHouse,
+                /*Sprite*/              smallWoodHouseSprite,
+                /*StorageCapcity*/      3,
+                /*Name*/                "Small Wood House",
+                /*Description*/         "A house that can be used to store items and used as shelter"
             )
         );
         addBuildingToCatalog(
             new Building(
-                /*Cost to craft*/       new Dictionary<string, int>(){ {"WoodPile", 1000}, {"StonePile", 100}},
-                /*Prefab*/              house02Model,
-                /*Sprite*/              house02Sprite,
-                /*MaxItemsStored*/      5,
-                /*Name*/                "House 2",
-                /*Description*/         "This house is a litle bigger than house 1, but still almost the same"
+                /*Cost to craft*/       new Dictionary<string, int>(){ {"WoodPile", 100}},
+                /*Upkeep*/              new Dictionary<string, int>(){ {"WoodPile", 5}},
+                /*Production*/          new Dictionary<string, int>(){},
+                /*NeededForProduction*/ new Dictionary<string, int>(){},
+                /*Prefab*/              mediumWoodHouse,
+                /*Sprite*/              mediumWoodHouseSprite,
+                /*StorageCapcity*/      4,
+                /*Name*/                "Medium Wood House",
+                /*Description*/         "A house that can be used to store items and used as shelter"
             )
         );
         addBuildingToCatalog(
             new Building(
-                /*Cost to craft*/       new Dictionary<string, int>(){ {"WoodPile", 2000}, {"StonePile", 300}},
-                /*Prefab*/              house03Model,
-                /*Sprite*/              house03Sprite,
-                /*MaxItemsStored*/      7,
-                /*Name*/                "House 3",
-                /*Descriptione*/        "House 3... Now we're talking. Look at those walls! Look at he floor! Truly a magnificent beast of a building"
+                /*Cost to craft*/       new Dictionary<string, int>(){ {"WoodPile", 100}, {"StonePile", 100}},
+                /*Upkeep*/              new Dictionary<string, int>(){ {"WoodPile", 5}, {"StonePile", 5}},
+                /*Production*/          new Dictionary<string, int>(){},
+                /*NeededForProduction*/ new Dictionary<string, int>(){},
+                /*Prefab*/              boardingHouse,
+                /*Sprite*/              boardingHouseSprite,
+                /*StorageCapcity*/      2,
+                /*Name*/                "Boarding House",
+                /*Descriptione*/        "Housing for those that dont have their own house"
             )
         );
         addBuildingToCatalog(
             new Building(
-                /*Cost to craft*/       new Dictionary<string, int>(){ {"WoodPile", 3000}, {"StonePile", 2000}},
-                /*Prefab*/              house04Model,
-                /*Sprite*/              house04Sprite,
-                /*MaxItemsStored*/      10,
-                /*Name*/                "House 4",
-                /*Descriptione*/        "The house cant possible get better than this, just look at the price!"
+                /*Cost to craft*/       new Dictionary<string, int>(){ {"WoodPile", 20}, {"StonePile", 50}},
+                /*Upkeep*/              new Dictionary<string, int>(){ {"WoodPile", 1}, {"StonePile", 3}},
+                /*Production*/          new Dictionary<string, int>(){},
+                /*NeededForProduction*/ new Dictionary<string, int>(){},
+                /*Prefab*/              waterWell,
+                /*Sprite*/              waterWellSprite,
+                /*StorageCapcity*/      1,
+                /*Name*/                "Waterwell",
+                /*Descriptione*/        "Can gather water here"
             )
         );
         addBuildingToCatalog(
             new Building(
-                /*Cost to craft*/       new Dictionary<string, int>(){ {"WoodPile", 5000}, {"StonePile", 5000}},
-                /*Prefab*/              house05Model,
-                /*Sprite*/              house05Sprite,
-                /*MaxItemsStored*/      15,
-                /*Name*/                "House 5",
-                /*Descriptione*/        "Why is it snowing with this house?"
+                /*Cost to craft*/       new Dictionary<string, int>(){ {"WoodPile", 5}},
+                /*Upkeep*/              new Dictionary<string, int>(){ {"WoodPile", 1}},
+                /*Production*/          new Dictionary<string, int>(){},
+                /*NeededForProduction*/ new Dictionary<string, int>(){},
+                /*Prefab*/              woodFence,
+                /*Sprite*/              woodFenceSprite,
+                /*StorageCapcity*/      0,
+                /*Name*/                "Wood fence",
+                /*Descriptione*/        "Keeps things out"
             )
         );
   

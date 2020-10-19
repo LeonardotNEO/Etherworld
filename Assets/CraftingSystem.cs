@@ -16,6 +16,11 @@ public class CraftingSystem : MonoBehaviour
     public Ray movementRay;
     public RaycastHit hit;
 
+    void Awake()
+    {
+        isCrafting = false;
+    }
+
     void Start()
     {
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
@@ -44,7 +49,11 @@ public class CraftingSystem : MonoBehaviour
             setIsCrafting(false);
             Destroy(currentlyCraftedBuilding);
         }
-        
+        if(gameManager.getcollidingWithOtherObject() && isCrafting){
+            gameManager.getMainCamera().GetComponentInChildren<OutlineEffect>().setLineColor0(Color.red);
+        } else {
+            gameManager.getMainCamera().GetComponentInChildren<OutlineEffect>().setLineColor0(Color.green);
+        }
     }
 
     public void craftBuilding(){
@@ -88,12 +97,12 @@ public class CraftingSystem : MonoBehaviour
 
     public void rotateBuildingLeft(){
         if(currentlyCraftedBuilding){
-            currentlyCraftedBuilding.transform.Rotate(0,-3,0, Space.Self);
+            currentlyCraftedBuilding.transform.Rotate(0,-100 * Time.deltaTime ,0, Space.Self);
         }
     }
     public void rotateBuildingRight(){
         if(currentlyCraftedBuilding){
-            currentlyCraftedBuilding.transform.Rotate(0,3,0, Space.Self);
+            currentlyCraftedBuilding.transform.Rotate(0,100 * Time.deltaTime ,0, Space.Self);
         }
     }
     public bool getIsCrafting(){
