@@ -47,12 +47,12 @@ public class BuildingAttributes : MonoBehaviour
 
     void OnMouseOver()
     {
-        GetComponentInChildren<Outline>().eraseRenderer = false;
+        //GetComponentInChildren<Outline>().eraseRenderer = false;
     }
 
     void OnMouseExit()
     {
-        GetComponentInChildren<Outline>().eraseRenderer = true;
+        //GetComponentInChildren<Outline>().eraseRenderer = true;
     }
 
     //GETTERS

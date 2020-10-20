@@ -4,12 +4,10 @@ using UnityEngine;
 
 public class ResourceAttributes : MonoBehaviour
 {
-    PlayerBehavior playerBehavior;
-    Inventory mainInventory;
+    public PlayerBehavior playerBehavior;
     Collider player;
-    RectTransform progressBar;
     public GameObject resourceMined;
-    
+    public Progressbar progressbar;
     public bool playerInBounds;
     public int amountLeft = 6;
     public float progress = 0;
@@ -28,13 +26,13 @@ public class ResourceAttributes : MonoBehaviour
         resourceTag = this.tag;
     }
 
+    void Awake()
+    {
+        progressbar = GameObject.FindGameObjectWithTag("GameManager").GetComponent<Progressbar>();
+    }
     void Update()
     {
-        playerBehavior = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().getPlayerBehavior();
-        mainInventory = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().getInventoryCatalog().getMainInventory();
 
-        // Setting up progressbar, and that it will update each frame
-        progressBar = GameObject.Find("/UI Panel/LoadingBar/LoadingBarProgress").GetComponent<RectTransform>();
     }
 
     void OnMouseDown()
@@ -49,6 +47,13 @@ public class ResourceAttributes : MonoBehaviour
     void OnMouseEnter()
     {
         Debug.Log("This is a resource");
+        //GetComponentInChildren<Outline>().enabled = true;
+        //GetComponentInChildren<Outline>().eraseRenderer = false;
+    }
+
+    void OnMouseExit()
+    {
+        //GetComponentInChildren<Outline>().enabled = false;
     }
 
     public GameObject getResourceMined(){
@@ -63,15 +68,8 @@ public class ResourceAttributes : MonoBehaviour
         progress += addProgress;
     }
 
-    void OnMouseOver()
-    {
-        GetComponentInChildren<Outline>().eraseRenderer = false;
-    }
+    
 
-    void OnMouseExit()
-    {
-        GetComponentInChildren<Outline>().eraseRenderer = true;
-    }
 
     void OnTriggerStay(Collider other)
     {
@@ -89,6 +87,7 @@ public class ResourceAttributes : MonoBehaviour
 
     public IEnumerator walkingToResource(){
         bool runLoop = true;
+        playerBehavior.playerLookAt(transform.position.x, 0, transform.position.y);
         playerBehavior.setHitGroundPostion(this.transform.position);
         while(runLoop){
             if(playerInBounds){
@@ -106,22 +105,23 @@ public class ResourceAttributes : MonoBehaviour
 
         // TREES
         if(resourceTag == "Tree"){
-            float progressNumber = 0;
+            float progress = 0;
             float progressSpeed = 50;
 
-            while(progressNumber <= 360){
-                progressNumber += Time.deltaTime * progressSpeed;
-                progressBar.sizeDelta = new Vector2(progressNumber, 26.4F);
+            while(progress <= 360){
+                progress += Time.deltaTime * progressSpeed;
+                progressbar.updateProgressBar(progress);
 
                 if(playerBehavior.getIsMovingToDestination()){
+                    gatheringsResourcesRunning = false;
                     player.GetComponent<Animator>().SetBool("isGatheringResources" , false);
-                    resetProgressBar();
+                    progressbar.resetProgressBar();
                     break;
                 } 
-                if(progressNumber >= 360){
-                    Instantiate(resourceMined, new Vector3(transform.position.x + 1.5F, transform.position.y + 1, transform.position.z + 1f), Quaternion.identity);
+                if(progress >= 360){
+                    Instantiate(resourceMined, new Vector3(transform.position.x, transform.position.y + 1, transform.position.z), Quaternion.identity);
                     player.GetComponent<Animator>().SetBool("isGatheringResources" , false);
-                    resetProgressBar();
+                    progressbar.resetProgressBar();
                     Destroy(gameObject);
                 }
                 yield return null;
@@ -133,11 +133,12 @@ public class ResourceAttributes : MonoBehaviour
 
             while(progress <= 360){
                 progress += Time.deltaTime * progressSpeed;
-                progressBar.sizeDelta = new Vector2(progress, 26.4F);
+                progressbar.updateProgressBar(progress);
 
                 if(playerBehavior.getIsMovingToDestination()){
+                    gatheringsResourcesRunning = false;
                     player.GetComponent<Animator>().SetBool("isGatheringResources" , false);
-                    resetProgressBar();
+                    progressbar.resetProgressBar();
                     break;
                 } 
                 if(progress >= 60 && !firstTriggered){
@@ -170,17 +171,14 @@ public class ResourceAttributes : MonoBehaviour
         }
         gatheringsResourcesRunning = false;
     }
-    public void resetProgressBar(){
-        progressBar.sizeDelta = new Vector2(0, 26F);
-    }
     public void gatheringResourceSteps(string animationTrigger){
-        Instantiate(resourceMined, new Vector3(transform.position.x + 1.5F, transform.position.y + 1, transform.position.z + 1f), Quaternion.identity);
+        Instantiate(resourceMined, new Vector3(player.transform.position.x - 1.5F, player.transform.position.y + 1, player.transform.position.z), Quaternion.identity);
         //GetComponent<Animator>().SetTrigger(animationTrigger);
         amountLeft--;
         if(amountLeft == 0){
             player.GetComponent<Animator>().SetBool("isGatheringResources" , false);
             gatheringsResourcesRunning = false;
-            resetProgressBar();
+            progressbar.resetProgressBar();
             Destroy(gameObject);
         }       
     }

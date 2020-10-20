@@ -50,9 +50,9 @@ public class CraftingSystem : MonoBehaviour
             Destroy(currentlyCraftedBuilding);
         }
         if(gameManager.getcollidingWithOtherObject() && isCrafting){
-            gameManager.getMainCamera().GetComponentInChildren<OutlineEffect>().setLineColor0(Color.red);
+            //gameManager.getMainCamera().GetComponentInChildren<OutlineEffect>().setLineColor0(Color.red);
         } else {
-            gameManager.getMainCamera().GetComponentInChildren<OutlineEffect>().setLineColor0(Color.green);
+            //gameManager.getMainCamera().GetComponentInChildren<OutlineEffect>().setLineColor0(Color.green);
         }
     }
 

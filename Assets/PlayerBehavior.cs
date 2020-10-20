@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.EventSystems;
+using System;
 
 public class PlayerBehavior : MonoBehaviour
 {
@@ -12,9 +13,10 @@ public class PlayerBehavior : MonoBehaviour
     public bool reachedDestination;
     public bool touchingObstacle;
     public bool mouseOnItemResource;
-    bool pingPong;
+    bool move;
     public Collider colliderInfo;
     public RaycastHit hitGround;
+    public Vector3 playerPosition;
     void Start()
     {
         stopPlayer();
@@ -22,6 +24,8 @@ public class PlayerBehavior : MonoBehaviour
     
     void Update()
     {
+        playerPosition = transform.position;
+
         // Get gamemanager
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
 
@@ -34,18 +38,15 @@ public class PlayerBehavior : MonoBehaviour
             if(hit.collider.tag == "Ground"){
                 hitGround.point = hit.point;
             }
-            transform.LookAt(new Vector3(hitGround.point.x, 0, hitGround.point.z));
         } 
-        // check if player has reached new destination
-        if(transform.position == getHitGroundPosition()){
-            isMovingToDestination = false;
-            reachedDestination = true;
-            GetComponent<Animator>().SetBool("isMoving", false);
+    }
+
+    void FixedUpdate()
+    {   
+        if(System.Math.Round(transform.position.x) == System.Math.Round(getHitGroundPosition().x) && System.Math.Round(transform.position.z) == System.Math.Round(getHitGroundPosition().z)){
+            stopPlayer();
         } else {
-            GetComponent<Rigidbody>().MovePosition(Vector3.MoveTowards(transform.position, hitGround.point, playerSpeed * Time.fixedDeltaTime));
-            isMovingToDestination = true;
-            reachedDestination = false;
-            GetComponent<Animator>().SetBool("isMoving" , true);
+            movePlayer();
         }
     }
 
@@ -57,6 +58,35 @@ public class PlayerBehavior : MonoBehaviour
         colliderInfo = null;
     }
 
+    public IEnumerator moveToPosition(){
+        bool runloop = true;
+        while(runloop){
+            if(System.Math.Round(transform.position.x) == System.Math.Round(getHitGroundPosition().x) && System.Math.Round(transform.position.z) == System.Math.Round(getHitGroundPosition().z)){
+                stopPlayer();
+                break;
+            }
+            movePlayer();
+            yield return null;
+        }
+            
+            /*
+            if(transform.position.z > getHitGroundPosition().z){
+                if(transform.position.z <= getHitGroundPosition().z){
+                    stopPlayer();
+                }
+            }
+            if(transform.position.x < getHitGroundPosition().x){
+                if(transform.position.x >= getHitGroundPosition().x){
+                    stopPlayer();
+                }
+            }
+            if(transform.position.z < getHitGroundPosition().z){
+                if(transform.position.z >= getHitGroundPosition().z){
+                    stopPlayer();
+                }
+            }
+            */ 
+    }
     public bool isMouseOverUI(){
         return EventSystem.current.IsPointerOverGameObject();
     }
@@ -83,8 +113,27 @@ public class PlayerBehavior : MonoBehaviour
     }
     public void setHitGroundPostion(Vector3 newPosition){
         hitGround.point = newPosition;
-    }   
+    } 
+    public Vector3 getPlayerPosition(){
+        return playerPosition;
+    }  
     public void stopPlayer(){
+
+        isMovingToDestination = false;
+        reachedDestination = true;
+        GetComponent<Animator>().SetBool("isMoving" , false);
         setHitGroundPostion(transform.position);
+    }
+
+    public void movePlayer(){
+        playerLookAt(getHitGroundPosition().x, 0, getHitGroundPosition().z);
+        GetComponent<Rigidbody>().MovePosition(transform.position + transform.forward * Time.fixedDeltaTime * playerSpeed);
+        isMovingToDestination = true;
+        reachedDestination = false;
+        GetComponent<Animator>().SetBool("isMoving" , true);
+    }
+
+    public void playerLookAt(float x, float y, float z){
+        transform.LookAt(new Vector3(x, y, z));
     }
 }

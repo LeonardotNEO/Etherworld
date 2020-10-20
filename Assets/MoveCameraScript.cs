@@ -42,6 +42,10 @@ public class MoveCameraScript : MonoBehaviour
             GameObject.FindGameObjectWithTag("MainCamera").transform.Translate(Vector3.right * Time.deltaTime * cameraSensitivity, GameObject.FindGameObjectWithTag("MainCamera").transform);
             positionZ = GameObject.FindGameObjectWithTag("MainCamera").transform.position.z;
         }
+        if(Input.GetKey("space")){
+            //IMPROVE THIS!
+            GameObject.FindGameObjectWithTag("MainCamera").transform.position = new Vector3(gameManager.getPlayerBehavior().getPlayerPosition().x, gameManager.getPlayerBehavior().getPlayerPosition().y + 8, gameManager.getPlayerBehavior().getPlayerPosition().z);
+        }
         if(!gameManager.getCraftingSystem().getIsCrafting()){
             if(Input.GetKey("q")){
                 GameObject.FindGameObjectWithTag("MainCamera").transform.RotateAround(GameObject.FindGameObjectWithTag("MainCamera").transform.position, Vector3.up, +cameraSensitivity * Time.deltaTime * 10);
@@ -50,7 +54,7 @@ public class MoveCameraScript : MonoBehaviour
                 GameObject.FindGameObjectWithTag("MainCamera").transform.RotateAround(GameObject.FindGameObjectWithTag("MainCamera").transform.position, Vector3.up, -cameraSensitivity * Time.deltaTime * 10);
             }
         }
-        if(Input.GetAxis("Mouse ScrollWheel") < 0f && 50F > positionY && positionY > 3F && !GameObject.FindGameObjectWithTag("player").GetComponent<PlayerBehavior>().isMouseOverUI()){
+        if(Input.GetAxis("Mouse ScrollWheel") < 0f && 50F > positionY && positionY > 0F && !GameObject.FindGameObjectWithTag("player").GetComponent<PlayerBehavior>().isMouseOverUI()){
             GameObject.FindGameObjectWithTag("MainCamera").transform.Translate(Vector3.up * Time.deltaTime * scrollSensitivity, GameObject.FindGameObjectWithTag("MainCamera").transform);
             //WHEN ZOOMING OUT, THE CAMERA MOVES BACK FROM PIVOT POINT
             GameObject.FindGameObjectWithTag("MainCamera2").transform.Translate(Vector3.back * Time.deltaTime * scrollSensitivity, GameObject.FindGameObjectWithTag("MainCamera").transform);

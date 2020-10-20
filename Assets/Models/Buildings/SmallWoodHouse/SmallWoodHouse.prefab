@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1181420135316735878}
   - component: {fileID: 5296434055472964259}
   - component: {fileID: 7529164382859875898}
-  - component: {fileID: 6181306177212302330}
+  - component: {fileID: 5716938026439770534}
   m_Layer: 0
   m_Name: SmallWoodHouse
   m_TagString: Untagged
@@ -65,7 +65,7 @@ MonoBehaviour:
   positionY: 0
   positionZ: 0
   collidingWithOtherObject: 0
---- !u!54 &6181306177212302330
+--- !u!54 &5716938026439770534
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -73,13 +73,13 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4932859491038232435}
   serializedVersion: 2
-  m_Mass: 1e+9
+  m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
-  m_Constraints: 112
+  m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!64 &2161968140191409772
 MeshCollider:
@@ -102,7 +102,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6415660134121413512}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fbf3575480402db40813e763382412fb, type: 3}
   m_Name: 
