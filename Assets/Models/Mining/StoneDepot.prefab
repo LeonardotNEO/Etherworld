@@ -88,6 +88,7 @@ GameObject:
   - component: {fileID: 5355605025533767576}
   - component: {fileID: 2413678724368883533}
   - component: {fileID: 8760402836643285785}
+  - component: {fileID: 1304483364208889367}
   m_Layer: 13
   m_Name: StoneDepositModel
   m_TagString: MainMeshOfObject
@@ -1674,3 +1675,19 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!208 &1304483364208889367
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8760402837967711093}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 0
+  m_Extents: {x: 1.08, y: 1.11, z: 1.08}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0.02376271, y: 0, z: 0.07318664}
+  m_TimeToStationary: 0.5

@@ -123,6 +123,7 @@ GameObject:
   - component: {fileID: 4536736845297269348}
   - component: {fileID: 1727921688130297648}
   - component: {fileID: 8117677303061470838}
+  - component: {fileID: 151930894528537175}
   m_Layer: 12
   m_Name: pCube4
   m_TagString: Untagged
@@ -224,6 +225,22 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 3861478300804232965, guid: 6166f28a30113014b981dd8fc1c531a5, type: 3}
+--- !u!208 &151930894528537175
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7882509137426262784}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 2, y: 2.7970002, z: 2.5170002}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: -0.007, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &7997308053412777993
 GameObject:
   m_ObjectHideFlags: 0

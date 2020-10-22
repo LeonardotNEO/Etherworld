@@ -111,6 +111,7 @@ GameObject:
   - component: {fileID: 141102375711719499}
   - component: {fileID: 2391527296557932064}
   - component: {fileID: 99010242421222545}
+  - component: {fileID: 6745191997732625338}
   m_Layer: 12
   m_Name: pCube8
   m_TagString: Untagged
@@ -207,3 +208,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   color: 0
   eraseRenderer: 1
+--- !u!208 &6745191997732625338
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8239012333558118444}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 3.6880002, y: 1.5910001, z: 0.279}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0.017, y: 0, z: 0.014}
+  m_TimeToStationary: 0.5

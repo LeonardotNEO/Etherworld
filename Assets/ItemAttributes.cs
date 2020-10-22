@@ -61,18 +61,17 @@ public class ItemAttributes : MonoBehaviour
 
     public void pickUpItem(){
         mainInventory.addItemToInventory(new Dictionary<string, int>{{getItemName(), getItemAmount()}});
-        //player.GetComponent<Animator>().SetTrigger("pickingUpItem");
+        player.GetComponent<Animator>().SetTrigger("pickingUpItem");
         Destroy(this.gameObject);
     }
 
     public IEnumerator walkingToItem(){
         bool runLoop = true;
-        playerBehavior.playerLookAt(transform.position.x, 0, transform.position.y);
-        playerBehavior.setHitGroundPostion(this.transform.position);
+        playerBehavior.moveToPosition(this.transform.position);
         while(runLoop){
-            if(playerInBounds && playerBehavior.getIsMovingToDestination()){
-                player.GetComponent<Animator>().SetTrigger("pickingUpItem");
+            if(playerInBounds){
                 playerBehavior.stopPlayer();
+                playerBehavior.playerLookAt(transform.position.x, transform.position.y, transform.position.z);
                 pickUpItem();
                 runLoop = false;
             }

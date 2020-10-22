@@ -43,9 +43,9 @@ public class GenerateGround : MonoBehaviour
             GameObject spawn = Instantiate(stonePrefab, new Vector3(Random.Range(transform.position.x + 150, transform.position.x - 150), transform.position.y, Random.Range(transform.position.z + 150, transform.position.z - 150)), transform.rotation);
             Collider[] intersecting = Physics.OverlapSphere(new Vector3(spawn.transform.position.x, spawn.transform.position.y, spawn.transform.position.z), 0.5f);
             spawn.transform.parent = gameObject.transform;
-            for(int y = 0; y < intersecting.Length; y++){
+            /*for(int y = 0; y < intersecting.Length; y++){
                 Debug.Log(intersecting[y].name);
-            }
+            }*/
             if(intersecting.Length != 4){
                 Destroy(spawn);
                 actualSpawnedStone--;

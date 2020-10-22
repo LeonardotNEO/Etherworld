@@ -68,9 +68,6 @@ public class ResourceAttributes : MonoBehaviour
         progress += addProgress;
     }
 
-    
-
-
     void OnTriggerStay(Collider other)
     {
         if(other.tag == "player"){
@@ -87,11 +84,11 @@ public class ResourceAttributes : MonoBehaviour
 
     public IEnumerator walkingToResource(){
         bool runLoop = true;
-        playerBehavior.playerLookAt(transform.position.x, 0, transform.position.y);
-        playerBehavior.setHitGroundPostion(this.transform.position);
+        playerBehavior.moveToPosition(this.transform.position);
         while(runLoop){
             if(playerInBounds){
                 playerBehavior.stopPlayer();
+                playerBehavior.playerLookAt(transform.position.x, transform.position.y, transform.position.z);
                 StartCoroutine(gatheringResources());
                 runLoop = false;
             }

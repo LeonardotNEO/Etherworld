@@ -8,15 +8,13 @@ using System;
 public class PlayerBehavior : MonoBehaviour
 {
     GameManager gameManager;
-    public float playerSpeed;
+    public Vector3 hitGround;
+    public Vector3 playerPosition;
+    public NavMeshAgent agent;
     public bool isMovingToDestination;
     public bool reachedDestination;
     public bool touchingObstacle;
     public bool mouseOnItemResource;
-    bool move;
-    public Collider colliderInfo;
-    public RaycastHit hitGround;
-    public Vector3 playerPosition;
     void Start()
     {
         stopPlayer();
@@ -36,65 +34,29 @@ public class PlayerBehavior : MonoBehaviour
             Ray ray = GameObject.FindGameObjectWithTag("MainCamera2").GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
             Physics.Raycast(ray, out hit, Mathf.Infinity);
             if(hit.collider.tag == "Ground"){
-                hitGround.point = hit.point;
+                hitGround = hit.point;
+                moveToPosition(hitGround);
             }
         } 
-    }
-
-    void FixedUpdate()
-    {   
-        if(System.Math.Round(transform.position.x) == System.Math.Round(getHitGroundPosition().x) && System.Math.Round(transform.position.z) == System.Math.Round(getHitGroundPosition().z)){
-            stopPlayer();
+        if(agent.remainingDistance <= 0.2){
+            isMovingToDestination = false;
+            reachedDestination = true;
+            GetComponent<Animator>().SetBool("isMoving" , false);
         } else {
-            movePlayer();
+            agent.isStopped = false;
+            isMovingToDestination = true;
+            reachedDestination = false;
+            GetComponent<Animator>().SetBool("isMoving" , true);
         }
     }
-
     void OnTriggerStay(Collider colliderInfo){
         
     }
-    // no collider detected if player has moved out of collider
-    void OnTriggerExit(Collider collider){
-        colliderInfo = null;
-    }
-
-    public IEnumerator moveToPosition(){
-        bool runloop = true;
-        while(runloop){
-            if(System.Math.Round(transform.position.x) == System.Math.Round(getHitGroundPosition().x) && System.Math.Round(transform.position.z) == System.Math.Round(getHitGroundPosition().z)){
-                stopPlayer();
-                break;
-            }
-            movePlayer();
-            yield return null;
-        }
-            
-            /*
-            if(transform.position.z > getHitGroundPosition().z){
-                if(transform.position.z <= getHitGroundPosition().z){
-                    stopPlayer();
-                }
-            }
-            if(transform.position.x < getHitGroundPosition().x){
-                if(transform.position.x >= getHitGroundPosition().x){
-                    stopPlayer();
-                }
-            }
-            if(transform.position.z < getHitGroundPosition().z){
-                if(transform.position.z >= getHitGroundPosition().z){
-                    stopPlayer();
-                }
-            }
-            */ 
+    void OnTriggerExit(Collider colliderInfo){
+        
     }
     public bool isMouseOverUI(){
         return EventSystem.current.IsPointerOverGameObject();
-    }
-    public float getPlayerSpeed(){
-        return playerSpeed;
-    }
-    public void setPlayerSpeed(int newspeed){
-        playerSpeed = newspeed;
     }
     public bool getIsMovingToDestination(){
         return isMovingToDestination;
@@ -109,28 +71,20 @@ public class PlayerBehavior : MonoBehaviour
         reachedDestination = newBool;
     }
     public Vector3 getHitGroundPosition(){
-        return hitGround.point;
+        return hitGround;
     }
     public void setHitGroundPostion(Vector3 newPosition){
-        hitGround.point = newPosition;
+        hitGround = newPosition;
     } 
     public Vector3 getPlayerPosition(){
         return playerPosition;
     }  
     public void stopPlayer(){
-
-        isMovingToDestination = false;
-        reachedDestination = true;
-        GetComponent<Animator>().SetBool("isMoving" , false);
-        setHitGroundPostion(transform.position);
+        agent.ResetPath();
     }
 
-    public void movePlayer(){
-        playerLookAt(getHitGroundPosition().x, 0, getHitGroundPosition().z);
-        GetComponent<Rigidbody>().MovePosition(transform.position + transform.forward * Time.fixedDeltaTime * playerSpeed);
-        isMovingToDestination = true;
-        reachedDestination = false;
-        GetComponent<Animator>().SetBool("isMoving" , true);
+    public void moveToPosition(Vector3 newPosition){
+        agent.SetDestination(newPosition);
     }
 
     public void playerLookAt(float x, float y, float z){

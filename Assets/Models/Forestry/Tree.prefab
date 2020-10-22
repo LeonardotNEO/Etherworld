@@ -87,6 +87,7 @@ GameObject:
   - component: {fileID: 6521704748262266977}
   - component: {fileID: 2248082145585232192}
   - component: {fileID: 5196726308883296045}
+  - component: {fileID: 3272079573287104214}
   m_Layer: 13
   m_Name: TreeModel
   m_TagString: MainMeshOfObject
@@ -3978,3 +3979,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   color: 0
   eraseRenderer: 1
+--- !u!208 &3272079573287104214
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 509102605732018301}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.155, y: 2.12, z: 0.13}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: -0.01, y: 2.0760002, z: -0.01}
+  m_TimeToStationary: 0.5
