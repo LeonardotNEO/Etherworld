@@ -29,13 +29,12 @@ public class PlayerBehavior : MonoBehaviour
 
         // PLAYER MOVEMENT
         // Move player to new position when pressing mouse click
-        if (Input.GetMouseButtonDown(0) && !isMouseOverUI() && !gameManager.getPlacingBuilding()){
+        if (Input.GetMouseButtonDown(0) && !gameManager.getIsMouseOverUI() && !gameManager.getPlacingBuilding()){
             RaycastHit hit;
             Ray ray = GameObject.FindGameObjectWithTag("MainCamera2").GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
             Physics.Raycast(ray, out hit, Mathf.Infinity);
             if(hit.collider.tag == "Ground"){
-                hitGround = hit.point;
-                moveToPosition(hitGround);
+                moveToPosition(hit.point);
             }
         } 
         if(agent.remainingDistance <= 0.2){
@@ -43,7 +42,6 @@ public class PlayerBehavior : MonoBehaviour
             reachedDestination = true;
             GetComponent<Animator>().SetBool("isMoving" , false);
         } else {
-            agent.isStopped = false;
             isMovingToDestination = true;
             reachedDestination = false;
             GetComponent<Animator>().SetBool("isMoving" , true);
@@ -54,9 +52,6 @@ public class PlayerBehavior : MonoBehaviour
     }
     void OnTriggerExit(Collider colliderInfo){
         
-    }
-    public bool isMouseOverUI(){
-        return EventSystem.current.IsPointerOverGameObject();
     }
     public bool getIsMovingToDestination(){
         return isMovingToDestination;
@@ -70,12 +65,6 @@ public class PlayerBehavior : MonoBehaviour
     public void setReachedDestination(bool newBool){
         reachedDestination = newBool;
     }
-    public Vector3 getHitGroundPosition(){
-        return hitGround;
-    }
-    public void setHitGroundPostion(Vector3 newPosition){
-        hitGround = newPosition;
-    } 
     public Vector3 getPlayerPosition(){
         return playerPosition;
     }  

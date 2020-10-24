@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,6 +10,10 @@ public class GameManager : MonoBehaviour
 
     // PLAYER BEHAVIOR //
     PlayerBehavior playerBehavior;
+
+    // BUILDING ATTRIBUTES //
+
+    GameObject buildingLastClicked;
 
     // CRAFTING SYSTEM //
     CraftingSystem craftingSystem;
@@ -27,6 +32,7 @@ public class GameManager : MonoBehaviour
     UI UI;
     public bool inventoryOpen;
     public bool craftingOpen;
+    public bool isMouseOverUI;
 
     // CATALOGS //
     private BuildingsCatalog buildingCatalog;
@@ -76,9 +82,10 @@ public class GameManager : MonoBehaviour
         inventorySystem = GetComponent<InventorySystem>();
 
         // UI //
-        UI = GameObject.FindGameObjectWithTag("UI").GetComponent<UI>();
+        UI = GetComponent<UI>();
         inventoryOpen = UI.getInventoryOpen();
         craftingOpen = UI.getCraftingOpen();
+        isMouseOverUI = getIsMouseOverUI();
 
         //MAININVENTORY //
         mainInventory = inventoryCatalog.getMainInventory();
@@ -177,7 +184,28 @@ public class GameManager : MonoBehaviour
     public bool getcollidingWithOtherObject(){
         return collidingWithOtherObject;
     }
+    public bool getIsCrafting(){
+        return isCrafting;
+    }
+
+    // MAIN CAMERA //
     public GameObject getMainCamera(){
         return mainCamera;
+    }
+
+    // UI //
+    public bool getIsMouseOverUI(){
+        return EventSystem.current.IsPointerOverGameObject();
+    }
+    public UI GetUI(){
+        return UI;
+    }
+
+    // BUILDING ATTRIBUTES //
+    public void setBuildingLastClicked(GameObject building){
+        buildingLastClicked = building;
+    }
+    public GameObject getBuildingLastClicked(){
+        return buildingLastClicked;
     }
 }

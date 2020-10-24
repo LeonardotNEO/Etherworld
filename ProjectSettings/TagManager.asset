@@ -5,23 +5,13 @@ TagManager:
   serializedVersion: 2
   tags:
   - Ground
-  - WoodPile
   - player
   - Wood
-  - MaterialBox
   - Tree
   - StoneDepot
-  - IronDepot
-  - CoalDepot
   - StonePile
-  - IronPile
-  - CoalPile
   - MainCamera2
-  - House01
-  - Obstacle
   - MainMeshOfObject
-  - Inventory
-  - Crafting
   - InventoryName
   - InventoryAmount
   - CraftingSprite
@@ -29,6 +19,12 @@ TagManager:
   - npc
   - GameManager
   - UI
+  - InventoryMenuUI
+  - CraftingMenuUI
+  - MessageLogUI
+  - Small Wood House
+  - BuildingMenuOwnedUI
+  - BuildingMenuNotOwnedUI
   layers:
   - Default
   - TransparentFX

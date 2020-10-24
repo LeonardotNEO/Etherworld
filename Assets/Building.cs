@@ -34,6 +34,18 @@ public class Building
     {
         return costToCraftBuilding;
     }
+    public Dictionary<string, int> getBuildingUpKeep()
+    {
+        return buildingUpkeep;
+    }
+    public Dictionary<string, int> getBuildingProduction()
+    {
+        return buildingProduction;
+    }
+    public Dictionary<string, int> getNeededForProduction()
+    {
+        return neededForProduction;
+    }
     public string getCostToCraftBuildingToString()
     {
         string costToCraftBuildingToString = "";

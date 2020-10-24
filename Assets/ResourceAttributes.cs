@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class ResourceAttributes : MonoBehaviour
 {
-    public PlayerBehavior playerBehavior;
+    PlayerBehavior playerBehavior;
+    GameManager gameManager;
     Collider player;
     public GameObject resourceMined;
     public Progressbar progressbar;
@@ -24,6 +25,7 @@ public class ResourceAttributes : MonoBehaviour
     void Start()
     {
         resourceTag = this.tag;
+        playerBehavior = GameObject.FindGameObjectWithTag("player").GetComponent<PlayerBehavior>();
     }
 
     void Awake()
@@ -32,21 +34,21 @@ public class ResourceAttributes : MonoBehaviour
     }
     void Update()
     {
-
+        gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
     }
 
     void OnMouseDown()
     {
-        if(!gatheringsResourcesRunning){
+        if(!gatheringsResourcesRunning && !gameManager.getIsMouseOverUI()){
             StartCoroutine(walkingToResource());
         }
-        if(playerInBounds && !gatheringsResourcesRunning){
+        if(playerInBounds && !gatheringsResourcesRunning && !gameManager.getIsMouseOverUI()){
             StartCoroutine(walkingToResource());
         }
     }
     void OnMouseEnter()
     {
-        Debug.Log("This is a resource");
+        //Debug.Log("This is a resource");
         //GetComponentInChildren<Outline>().enabled = true;
         //GetComponentInChildren<Outline>().eraseRenderer = false;
     }
@@ -116,7 +118,9 @@ public class ResourceAttributes : MonoBehaviour
                     break;
                 } 
                 if(progress >= 360){
-                    Instantiate(resourceMined, new Vector3(transform.position.x, transform.position.y + 1, transform.position.z), Quaternion.identity);
+                    Instantiate(resourceMined, new Vector3(transform.position.x, transform.position.y + 1f, transform.position.z -0.5f), Quaternion.identity);
+                    Instantiate(resourceMined, new Vector3(transform.position.x, transform.position.y + 1.5f, transform.position.z + 0.5f), Quaternion.identity);
+                    Instantiate(resourceMined, new Vector3(transform.position.x, transform.position.y + 2f, transform.position.z), Quaternion.identity);
                     player.GetComponent<Animator>().SetBool("isGatheringResources" , false);
                     progressbar.resetProgressBar();
                     Destroy(gameObject);

@@ -5,31 +5,31 @@ using UnityEngine;
 public class ItemCatalog : MonoBehaviour
 {
     List<Item> itemCatalog = new List<Item>();
-    public GameObject item01Model;
-    public Sprite item01Sprite;
-    public GameObject item02Model;
-    public Sprite item02Sprite;
+    public GameObject woodModel;
+    public Sprite woodSprite;
+    public GameObject stonePileModel;
+    public Sprite stonePileSprite;
     void Awake()
     {
         //ADDING ITEMS TO CATALOG
         addItemToCatalog(
             new Item(
-                /*Name*/            "WoodPile",
-                /*Description*/     "A pile of wood",
+                /*Name*/            "Wood",
+                /*Description*/     "A piece of a tree",
                 /*Type*/            "Resource",
-                /*CostToCraft*/     new Dictionary<string, int>(){{"Wood", 5}, },
-                /*Prefab*/          item01Model,
-                /*Sprite*/          item01Sprite
+                /*CostToCraft*/     new Dictionary<string, int>(){{"Woodplanks", 5}, },
+                /*Prefab*/          woodModel,
+                /*Sprite*/          woodSprite
             )
         );
         addItemToCatalog(
             new Item(
-                /*Name*/            "StonePile",
+                /*Name*/            "Stone",
                 /*Description*/     "A pile of stone",
                 /*Type*/            "Resource",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Stone", 5}, },
-                /*Prefab*/          item01Model,
-                /*Sprite*/          item01Sprite
+                /*Prefab*/          stonePileModel,
+                /*Sprite*/          stonePileSprite
             )
         );
         

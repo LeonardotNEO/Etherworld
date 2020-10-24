@@ -24,11 +24,13 @@ public class InventorySystem : MonoBehaviour
     }
 
     public void spawnNPC(){
+        int increase = 0;
         RaycastHit mouseButtonPressed;
         Ray movementRay = GameObject.FindGameObjectWithTag("MainCamera2").GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
         if(Physics.Raycast(movementRay, out mouseButtonPressed, Mathf.Infinity, LayerMask.GetMask("Ground"))){
             for(int i = 0; i < 10; i++){
-                Instantiate(npc, new Vector3(mouseButtonPressed.point.x, mouseButtonPressed.point.y, mouseButtonPressed.point.z), mouseButtonPressed.transform.rotation);
+                Instantiate(npc, new Vector3(mouseButtonPressed.point.x + increase, mouseButtonPressed.point.y, mouseButtonPressed.point.z), mouseButtonPressed.transform.rotation);
+                increase++;
             }
         }
     }

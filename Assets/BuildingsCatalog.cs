@@ -15,6 +15,16 @@ public class BuildingsCatalog : MonoBehaviour
     public Sprite waterWellSprite;
     public GameObject woodFence;
     public Sprite woodFenceSprite;
+    public GameObject sawmill;
+    public Sprite sawmillSprite;
+    public GameObject smallStoneWall;
+    public Sprite smallStoneWallSprite;
+    public GameObject mediumStoneWall;
+    public Sprite mediumStoneWallSprite;
+    public GameObject mediumStoneWallGate;
+    public Sprite mediumStoneWallGateSprite;
+    public GameObject mediumStoneWallCorner;
+    public Sprite MediumStoneWallCornerSprite;
 
 
     void Awake()
@@ -22,8 +32,8 @@ public class BuildingsCatalog : MonoBehaviour
         //ADDING BUILDINGS TO CATALOG
         addBuildingToCatalog(
             new Building(
-                /*Cost to craft*/       new Dictionary<string, int>(){ {"WoodPile", 50}},
-                /*Upkeep*/              new Dictionary<string, int>(){ {"WoodPile", 3}},
+                /*Cost to craft*/       new Dictionary<string, int>(){ {"Wood", 50}},
+                /*Upkeep*/              new Dictionary<string, int>(){ {"Wood", 3}},
                 /*Production*/          new Dictionary<string, int>(){},
                 /*NeededForProduction*/ new Dictionary<string, int>(){},
                 /*Prefab*/              smallWoodHouse,
@@ -35,8 +45,8 @@ public class BuildingsCatalog : MonoBehaviour
         );
         addBuildingToCatalog(
             new Building(
-                /*Cost to craft*/       new Dictionary<string, int>(){ {"WoodPile", 100}},
-                /*Upkeep*/              new Dictionary<string, int>(){ {"WoodPile", 5}},
+                /*Cost to craft*/       new Dictionary<string, int>(){ {"Wood", 100}},
+                /*Upkeep*/              new Dictionary<string, int>(){ {"Wood", 5}},
                 /*Production*/          new Dictionary<string, int>(){},
                 /*NeededForProduction*/ new Dictionary<string, int>(){},
                 /*Prefab*/              mediumWoodHouse,
@@ -48,8 +58,8 @@ public class BuildingsCatalog : MonoBehaviour
         );
         addBuildingToCatalog(
             new Building(
-                /*Cost to craft*/       new Dictionary<string, int>(){ {"WoodPile", 100}, {"StonePile", 100}},
-                /*Upkeep*/              new Dictionary<string, int>(){ {"WoodPile", 5}, {"StonePile", 5}},
+                /*Cost to craft*/       new Dictionary<string, int>(){ {"Wood", 100}, {"Stone", 100}},
+                /*Upkeep*/              new Dictionary<string, int>(){ {"Wood", 5}, {"Stone", 5}},
                 /*Production*/          new Dictionary<string, int>(){},
                 /*NeededForProduction*/ new Dictionary<string, int>(){},
                 /*Prefab*/              boardingHouse,
@@ -61,8 +71,8 @@ public class BuildingsCatalog : MonoBehaviour
         );
         addBuildingToCatalog(
             new Building(
-                /*Cost to craft*/       new Dictionary<string, int>(){ {"WoodPile", 20}, {"StonePile", 50}},
-                /*Upkeep*/              new Dictionary<string, int>(){ {"WoodPile", 1}, {"StonePile", 3}},
+                /*Cost to craft*/       new Dictionary<string, int>(){ {"Wood", 20}, {"Stone", 50}},
+                /*Upkeep*/              new Dictionary<string, int>(){ {"Wood", 1}, {"Stone", 3}},
                 /*Production*/          new Dictionary<string, int>(){},
                 /*NeededForProduction*/ new Dictionary<string, int>(){},
                 /*Prefab*/              waterWell,
@@ -74,15 +84,80 @@ public class BuildingsCatalog : MonoBehaviour
         );
         addBuildingToCatalog(
             new Building(
-                /*Cost to craft*/       new Dictionary<string, int>(){ {"WoodPile", 5}},
-                /*Upkeep*/              new Dictionary<string, int>(){ {"WoodPile", 1}},
+                /*Cost to craft*/       new Dictionary<string, int>(){ {"Wood", 5}},
+                /*Upkeep*/              new Dictionary<string, int>(){ {"Wood", 1}},
                 /*Production*/          new Dictionary<string, int>(){},
                 /*NeededForProduction*/ new Dictionary<string, int>(){},
                 /*Prefab*/              woodFence,
                 /*Sprite*/              woodFenceSprite,
                 /*StorageCapcity*/      0,
-                /*Name*/                "Wood fence",
+                /*Name*/                "Wood Fence",
                 /*Descriptione*/        "Keeps things out"
+            )
+        );
+        addBuildingToCatalog(
+            new Building(
+                /*Cost to craft*/       new Dictionary<string, int>(){ {"Wood", 200}},
+                /*Upkeep*/              new Dictionary<string, int>(){ {"Wood", 5}},
+                /*Production*/          new Dictionary<string, int>(){},
+                /*NeededForProduction*/ new Dictionary<string, int>(){},
+                /*Prefab*/              sawmill,
+                /*Sprite*/              sawmillSprite,
+                /*StorageCapcity*/      10,
+                /*Name*/                "Sawmill",
+                /*Descriptione*/        "Sawmill produce planks"
+            )
+        );
+        addBuildingToCatalog(
+            new Building(
+                /*Cost to craft*/       new Dictionary<string, int>(){ {"Stone", 15}},
+                /*Upkeep*/              new Dictionary<string, int>(){ {"Stone", 3}},
+                /*Production*/          new Dictionary<string, int>(){},
+                /*NeededForProduction*/ new Dictionary<string, int>(){},
+                /*Prefab*/              mediumStoneWall,
+                /*Sprite*/              mediumStoneWallSprite,
+                /*StorageCapcity*/      10,
+                /*Name*/                "Medium Stone Wall",
+                /*Descriptione*/        "A medium sized stone wall used for protection"
+            )
+        );
+        addBuildingToCatalog(
+            new Building(
+                /*Cost to craft*/       new Dictionary<string, int>(){ {"Wood", 5}, {"Stone", 10}},
+                /*Upkeep*/              new Dictionary<string, int>(){ {"Wood", 2}, {"Stone", 3}},
+                /*Production*/          new Dictionary<string, int>(){},
+                /*NeededForProduction*/ new Dictionary<string, int>(){},
+                /*Prefab*/              mediumStoneWallGate,
+                /*Sprite*/              mediumStoneWallGateSprite,
+                /*StorageCapcity*/      10,
+                /*Name*/                "Medium Stone Gate",
+                /*Descriptione*/        "A gate for getting through to the other side of the wall"
+            )
+        );
+        addBuildingToCatalog(
+            new Building(
+                /*Cost to craft*/       new Dictionary<string, int>(){ {"Stone", 5}},
+                /*Upkeep*/              new Dictionary<string, int>(){ {"Stone", 2}},
+                /*Production*/          new Dictionary<string, int>(){},
+                /*NeededForProduction*/ new Dictionary<string, int>(){},
+                /*Prefab*/              mediumStoneWallCorner,
+                /*Sprite*/              MediumStoneWallCornerSprite,
+                /*StorageCapcity*/      10,
+                /*Name*/                "Medium Stone Wall Corner",
+                /*Descriptione*/        "A medium sized stone wall corner"
+            )
+        );
+        addBuildingToCatalog(
+            new Building(
+                /*Cost to craft*/       new Dictionary<string, int>(){ {"Stone", 3}},
+                /*Upkeep*/              new Dictionary<string, int>(){ {"Stone", 1}},
+                /*Production*/          new Dictionary<string, int>(){},
+                /*NeededForProduction*/ new Dictionary<string, int>(){},
+                /*Prefab*/              smallStoneWall,
+                /*Sprite*/              smallStoneWallSprite,
+                /*StorageCapcity*/      10,
+                /*Name*/                "Small Stone Wall",
+                /*Descriptione*/        "A small stone sized wall for keeping things out"
             )
         );
   
@@ -120,5 +195,14 @@ public class BuildingsCatalog : MonoBehaviour
 
     public Building getBuilding(int buildingID){
         return buildingCatalog[buildingID];
+    }
+
+    public Building getBuildingByName(string name){
+        foreach(Building building in buildingCatalog){
+            if(name.Contains(building.getNameOfBuilding())){
+                return building;
+            }
+        }
+        return null; 
     }
 }

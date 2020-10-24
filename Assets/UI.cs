@@ -5,26 +5,30 @@ using UnityEngine.UI;
 
 public class UI : MonoBehaviour
 {
+    // GAMEMANAGER
+
+    GameManager gameManager;
+
     // INVENTORY
     private bool inventoryOpen;
     private bool craftingOpen;
 
     void Start()
     {
-
+        gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
     }
     void Update()
     {
         if(inventoryOpen){
-            GameObject.FindGameObjectWithTag("Inventory").GetComponent<Canvas>().enabled = true;
+            GameObject.FindGameObjectWithTag("InventoryMenuUI").GetComponent<Canvas>().enabled = true;
         } else {
-            GameObject.FindGameObjectWithTag("Inventory").GetComponent<Canvas>().enabled = false;
+            GameObject.FindGameObjectWithTag("InventoryMenuUI").GetComponent<Canvas>().enabled = false;
         }
 
         if(craftingOpen){
-            GameObject.FindGameObjectWithTag("Crafting").GetComponent<Canvas>().enabled = true;
+            GameObject.FindGameObjectWithTag("CraftingMenuUI").GetComponent<Canvas>().enabled = true;
         } else {
-            GameObject.FindGameObjectWithTag("Crafting").GetComponent<Canvas>().enabled = false;
+            GameObject.FindGameObjectWithTag("CraftingMenuUI").GetComponent<Canvas>().enabled = false;
         }
 
     }
@@ -40,5 +44,12 @@ public class UI : MonoBehaviour
     }
     public void setCrafting(bool openClosed){
         craftingOpen = openClosed;
+    }
+
+    public void visitBuildingOnClick(){
+        GameObject buildingSelected = gameManager.getBuildingLastClicked();
+        //Debug.Log(buildingSelected.GetComponent<BuildingAttributes>().getBuildingID());
+        gameManager.getPlayerBehavior().moveToPosition(buildingSelected.transform.Find("Entrance").GetComponent<Collider>().transform.position);
+        
     }
 }

@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class ItemAttributes : MonoBehaviour
 {
-    public PlayerBehavior playerBehavior;
-    public Inventory mainInventory;
-    public Collider player;
+    PlayerBehavior playerBehavior;
+    Inventory mainInventory;
+    Collider player;
     public int itemAmount;
     public string itemName;
     public bool playerInBounds;

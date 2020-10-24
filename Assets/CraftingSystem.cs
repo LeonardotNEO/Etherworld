@@ -39,8 +39,8 @@ public class CraftingSystem : MonoBehaviour
 
             if(isCrafting && Input.GetMouseButtonDown(0) && !gameManager.getcollidingWithOtherObject()){
                 currentlyCraftedBuilding.GetComponentInChildren<MeshCollider>().isTrigger = false;
+                currentlyCraftedBuilding.GetComponent<BuildingAttributes>().setIsOwnedByPlayer(true);
                 mainInventory.removeItemFromInventory(itemsToRemoveFromInventory);
-                gameManager.increaseAmountOfBuildingsInGame(1);
                 currentlyCraftedBuilding = null;
                 setIsCrafting(false);
             }

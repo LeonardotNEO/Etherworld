@@ -1,30 +1,49 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class BuildingAttributes : MonoBehaviour
 {
     GameManager gameManager;
     BuildingsCatalog buildingsCatalog;
+    GameObject buildingMenuOwned;
+    GameObject buildingMenuNotOwned;
+    GameObject thisBuilding;
     public bool isOwnedByPlayer;
     //public List<NPC> npcsAssignedHere;
+    public string buildingTag;
     public Dictionary<string, int> itemsStoredInBuilding;
     public Dictionary<string, int> itemsProducedInBuilding;
     public Dictionary<string, int> itemsNeededForBuildingProduction;
     private int houseValue;
     public int buildingID;
+    public string buildingName;
     public float positionX;
     public float positionY;
     public float positionZ;
     public bool collidingWithOtherObject;
+    public bool buildingUIOpen;
     void Start()
     {
+        buildingMenuOwned = GameObject.FindGameObjectWithTag("BuildingMenuOwnedUI");
+        buildingMenuNotOwned = GameObject.FindGameObjectWithTag("BuildingMenuNotOwnedUI");
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
         buildingsCatalog = gameManager.getBuildingCatalog();
+
+        gameManager.increaseAmountOfBuildingsInGame(1);
         buildingID = gameManager.getAmountOfBuildingsInGame();
+
         positionX = transform.position.x;
         positionY = transform.position.y;
         positionZ = transform.position.z;
+
+        buildingTag = gameObject.tag;
+        // ALLE OBJEKTVARIABLER MÅ VÆRE FERDIG STADFESTET PÅ START!!!!!!!!!!!!
+        buildingName = buildingsCatalog.getBuildingByName(transform.name).getNameOfBuilding();
+
+        thisBuilding = this.gameObject;
     }
 
     void Update()
@@ -45,6 +64,11 @@ public class BuildingAttributes : MonoBehaviour
         setCollidingWithOtherObject(false);
     }
 
+    void OnMouseDown()
+    {
+        openBuildingUI();
+    }
+
     void OnMouseOver()
     {
         //GetComponentInChildren<Outline>().eraseRenderer = false;
@@ -52,7 +76,7 @@ public class BuildingAttributes : MonoBehaviour
 
     void OnMouseExit()
     {
-        //GetComponentInChildren<Outline>().eraseRenderer = true;
+        closeBuildingUI();
     }
 
     //GETTERS
@@ -148,5 +172,51 @@ public class BuildingAttributes : MonoBehaviour
     }
     public void setCollidingWithOtherObject(bool set){
         collidingWithOtherObject = set;
+    }
+    public bool getIsOwnedByPlayer(){
+        return isOwnedByPlayer;
+    }
+    public void setIsOwnedByPlayer(bool value){
+        isOwnedByPlayer = value;
+    }
+    public void setBuildingName(string name){
+        buildingName = name;
+    }
+    public GameObject getThisBuilding(){
+        return thisBuilding;
+    }
+
+    public void openBuildingUI(){
+        buildingUIOpen = true;
+        gameManager.setBuildingLastClicked(thisBuilding);
+        buildingMenuOwned.transform.Find("Background").Find("Headline").GetComponent<Text>().text = buildingName;
+        buildingMenuNotOwned.transform.Find("Background").Find("Headline").GetComponent<Text>().text = buildingName;
+
+        if(!gameManager.getIsMouseOverUI() && !gameManager.getIsCrafting()){
+            if(isOwnedByPlayer){
+                buildingMenuOwned.GetComponent<Canvas>().enabled = true;
+                buildingMenuNotOwned.GetComponent<Canvas>().enabled = false;
+
+
+                buildingMenuOwned.transform.Find("Background").position = new Vector3(Input.mousePosition.x + buildingMenuOwned.transform.Find("Background").GetComponent<RectTransform>().sizeDelta.x/2, Input.mousePosition.y + buildingMenuOwned.transform.Find("Background").GetComponent<RectTransform>().sizeDelta.y/2, 0);
+                buildingMenuOwned.transform.Find("Background").Find("VisitButton").Find("VisitText").GetComponentInChildren<Text>().text = "Visit " + buildingName;
+                buildingMenuOwned.transform.Find("Background").Find("StatsButton").Find("StatsText").GetComponentInChildren<Text>().text = buildingName + " Stats";
+            } else {
+                buildingMenuOwned.GetComponent<Canvas>().enabled = false;
+                buildingMenuNotOwned.GetComponent<Canvas>().enabled = true;
+
+                buildingMenuNotOwned.transform.Find("Background").position = new Vector3(Input.mousePosition.x + buildingMenuNotOwned.transform.Find("Background").GetComponent<RectTransform>().sizeDelta.x/2, Input.mousePosition.y + buildingMenuNotOwned.transform.Find("Background").GetComponent<RectTransform>().sizeDelta.y/2, 0);
+                buildingMenuNotOwned.transform.Find("Background").Find("VisitButton").Find("VisitText").GetComponentInChildren<Text>().text = "Visit " + buildingName;
+            }
+        }
+    }
+
+    public void closeBuildingUI(){
+        buildingUIOpen = false;
+        GameObject buildingMenuOwned = GameObject.FindGameObjectWithTag("BuildingMenuOwnedUI");
+        GameObject buildingMenuNotOwned = GameObject.FindGameObjectWithTag("BuildingMenuNotOwnedUI");
+
+        buildingMenuOwned.GetComponent<Canvas>().enabled = false;
+        buildingMenuNotOwned.GetComponent<Canvas>().enabled = false;
     }
 }
