@@ -112,9 +112,9 @@ GameObject:
   - component: {fileID: 3296051941312900941}
   - component: {fileID: 2884375673205752303}
   - component: {fileID: 141102375711719499}
-  - component: {fileID: 2391527296557932064}
   - component: {fileID: 99010242421222545}
   - component: {fileID: 6745191997732625338}
+  - component: {fileID: 7070307347201001921}
   m_Layer: 12
   m_Name: pCube8
   m_TagString: Untagged
@@ -130,7 +130,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8239012333558118444}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.5639129, y: 1.569305, z: -0.15260819}
+  m_LocalPosition: {x: 3.13, y: 1.569305, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2426885254068159099}
@@ -183,20 +183,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!64 &2391527296557932064
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8239012333558118444}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 6788383922943872000, guid: 8f836c2bf78bc2248809da67521c380b, type: 3}
 --- !u!114 &99010242421222545
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -227,3 +213,16 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0.017, y: 0, z: 0.014}
   m_TimeToStationary: 0.5
+--- !u!65 &7070307347201001921
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8239012333558118444}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 6.671881, y: 3.1823792, z: 0.557726}
+  m_Center: {x: 0.09438926, y: 0.00000012357931, z: 0.0144822905}

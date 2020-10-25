@@ -12,7 +12,8 @@ GameObject:
   - component: {fileID: 1945349618186727300}
   - component: {fileID: 4403309196035414862}
   - component: {fileID: 2745874238761695892}
-  m_Layer: 0
+  - component: {fileID: 7888875681998676268}
+  m_Layer: 12
   m_Name: Medium Stone Corner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27,7 +28,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2745874238761695899}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3.6491697, y: 1.9920762, z: -1.0488814}
+  m_LocalPosition: {x: 0, y: 1.9920762, z: 0}
   m_LocalScale: {x: 3, y: 4, z: 3}
   m_Children: []
   m_Father: {fileID: 2753136040801021905}
@@ -96,6 +97,19 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: -0.18, y: 0.095000006, z: -0.148}
   m_TimeToStationary: 0.5
+--- !u!65 &7888875681998676268
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2745874238761695899}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.58050376, y: 1.2055068, z: 1.2529687}
+  m_Center: {x: -0.22316283, y: 0.09498966, z: -0.10782838}
 --- !u!1 &4947086190444154704
 GameObject:
   m_ObjectHideFlags: 0
@@ -151,9 +165,8 @@ GameObject:
   - component: {fileID: 2753136040801021905}
   - component: {fileID: 6786030613450964589}
   - component: {fileID: 8720799731184626161}
-  - component: {fileID: 8225029139522262821}
   m_Layer: 0
-  m_Name: Medium Stone Wall (36)
+  m_Name: Medium Stone Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -166,15 +179,15 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8225029139522262820}
-  m_LocalRotation: {x: -0, y: 0.6999622, z: -0, w: -0.7141799}
-  m_LocalPosition: {x: -64.69, y: 0, z: -19.19}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6240693572656910064}
   - {fileID: 3265284272985546785}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 271.15198, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6786030613450964589
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -212,16 +225,3 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!65 &8225029139522262821
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8225029139522262820}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1.7278683, y: 4.9803123, z: 3.701868}
-  m_Center: {x: -4.3329973, y: 2.380247, z: -1.3509291}

@@ -5,6 +5,7 @@ using UnityEngine;
 public class ItemAttributes : MonoBehaviour
 {
     PlayerBehavior playerBehavior;
+    GameManager gameManager;
     Inventory mainInventory;
     Collider player;
     public int itemAmount;
@@ -15,12 +16,18 @@ public class ItemAttributes : MonoBehaviour
     void Awake()
     {
         itemName = this.tag;
+        gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+        playerBehavior = gameManager.getPlayerBehavior();
     }
 
     void Update()
     {
-        playerBehavior = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().getPlayerBehavior();
-        mainInventory = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().getInventoryCatalog().getMainInventory();
+        mainInventory = gameManager.getInventoryCatalog().getMainInventory();
+    }
+
+    void Start()
+    {
+
     }
 
     public int getItemAmount(){
@@ -32,7 +39,9 @@ public class ItemAttributes : MonoBehaviour
     
     public void OnMouseDown()
     {
-        StartCoroutine(walkingToItem()); 
+        if(!gameManager.getIsMouseOverUI()){
+            StartCoroutine(walkingToItem()); 
+        }
     }
 
     void OnMouseOver()

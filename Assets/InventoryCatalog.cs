@@ -39,4 +39,16 @@ public class InventoryCatalog : MonoBehaviour
     public Inventory getMainInventory(){
         return inventoryCatalog[0];
     }
+
+    public string getListOfItemsToString(Dictionary<string, int> list){
+        string listOfItems = "";
+        if(list != null){
+            foreach(var item in list){
+                listOfItems += "Item: " + item.Key + " Amount: " + item.Value + "\n";
+            }
+        } else {
+            listOfItems += "None";
+        }
+        return listOfItems;
+    }
 }

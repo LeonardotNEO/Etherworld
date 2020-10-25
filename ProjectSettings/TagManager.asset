@@ -23,8 +23,10 @@ TagManager:
   - CraftingMenuUI
   - MessageLogUI
   - Small Wood House
-  - BuildingMenuOwnedUI
-  - BuildingMenuNotOwnedUI
+  - ResidentialBuilding
+  - BuildingStatsUI
+  - BuildingMenuUI
+  - MessageLogBarUI
   layers:
   - Default
   - TransparentFX

@@ -56,7 +56,7 @@ GameObject:
   - component: {fileID: 1474931180475984919}
   - component: {fileID: 3698108254112742283}
   m_Layer: 0
-  m_Name: Stone Wall
+  m_Name: Small Stone Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -69,15 +69,15 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4067309664729466206}
-  m_LocalRotation: {x: -0, y: 0.7088057, z: -0, w: 0.70540386}
-  m_LocalPosition: {x: -10.38, y: 0, z: -15.56}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2076077269042322570}
   - {fileID: 7461855557326466878}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 90.276, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1474931180475984919
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -154,7 +154,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: d476e6a4248a26b48a85e906c57bacaa,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.69
+      value: 1.243
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d476e6a4248a26b48a85e906c57bacaa,
         type: 3}
@@ -210,6 +210,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Stone wall
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: d476e6a4248a26b48a85e906c57bacaa,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d476e6a4248a26b48a85e906c57bacaa, type: 3}

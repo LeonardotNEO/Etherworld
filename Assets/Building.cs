@@ -73,6 +73,9 @@ public class Building
     public int getBuildingID(){
         return buildingID;
     }
+    public int getStorageCapacity(){
+        return storageCapacity;
+    }
 
 
     //SETTERS

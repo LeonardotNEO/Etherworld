@@ -6,10 +6,10 @@ using UnityEngine.EventSystems;
 public class GameManager : MonoBehaviour
 {
     // MAIN CAMERA //
-    GameObject mainCamera;
+    public GameObject mainCamera;
 
     // PLAYER BEHAVIOR //
-    PlayerBehavior playerBehavior;
+    public PlayerBehavior playerBehavior;
 
     // BUILDING ATTRIBUTES //
 
@@ -30,6 +30,7 @@ public class GameManager : MonoBehaviour
 
     // UI //
     UI UI;
+    MessageLogText messageLogbar;
     public bool inventoryOpen;
     public bool craftingOpen;
     public bool isMouseOverUI;
@@ -50,8 +51,8 @@ public class GameManager : MonoBehaviour
         itemCatalog = GetComponent<ItemCatalog>();
         inventoryCatalog = GetComponent<InventoryCatalog>();
 
-        // MAIN CAMERA //
-        mainCamera = GameObject.FindGameObjectWithTag("MainCamera2");
+        // MAIN INVENTORY //
+        inventorySystem = GetComponent<InventorySystem>();
 
         // CRAFTING SYSTEM
         craftingSystem = GetComponent<CraftingSystem>();
@@ -66,9 +67,6 @@ public class GameManager : MonoBehaviour
     void Update()
     {
 
-        // PLAYER BEHAVIOR //
-        playerBehavior = GameObject.FindGameObjectWithTag("player").GetComponent<PlayerBehavior>();
-
         // CRAFTING SYSTEM //
         craftingSystem = GetComponent<CraftingSystem>();
         isCrafting = craftingSystem.getIsCrafting();
@@ -82,6 +80,7 @@ public class GameManager : MonoBehaviour
         inventorySystem = GetComponent<InventorySystem>();
 
         // UI //
+        messageLogbar = GameObject.FindGameObjectWithTag("MessageLogBarUI").GetComponentInChildren<MessageLogText>();
         UI = GetComponent<UI>();
         inventoryOpen = UI.getInventoryOpen();
         craftingOpen = UI.getCraftingOpen();
@@ -104,7 +103,7 @@ public class GameManager : MonoBehaviour
             mainInventory.removeItemFromInventory(new Dictionary<string, int>{{"WoodPile", 5}});
         }
         if(Input.GetKeyDown("5")){
-            mainInventory.addItemToInventory(new Dictionary<string, int>{{"WoodPile", 1000}, {"StonePile", 1000}});
+            mainInventory.addItemToInventory(new Dictionary<string, int>{{"Wood", 1000}, {"Stone", 1000}, {"Bucket", 2}});
         }
         if(Input.GetKeyDown("i") && inventoryOpen == false){
             UI.setInventory(true);
@@ -199,6 +198,9 @@ public class GameManager : MonoBehaviour
     }
     public UI GetUI(){
         return UI;
+    }
+    public MessageLogText getMessageLogBar(){
+        return messageLogbar;
     }
 
     // BUILDING ATTRIBUTES //

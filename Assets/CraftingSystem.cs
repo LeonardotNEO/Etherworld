@@ -32,13 +32,22 @@ public class CraftingSystem : MonoBehaviour
     {
         // updating placingBuilding
         if(isCrafting){
-            currentlyCraftedBuilding.GetComponentInChildren<MeshCollider>().isTrigger = true;
+            if(currentlyCraftedBuilding.GetComponentInChildren<MeshCollider>()){
+                currentlyCraftedBuilding.GetComponentInChildren<MeshCollider>().isTrigger = true;
+            } else if(!currentlyCraftedBuilding.GetComponentInChildren<MeshCollider>()){
+                currentlyCraftedBuilding.GetComponentInChildren<BoxCollider>().isTrigger = true;
+            }
+            
             movementRay = GameObject.FindGameObjectWithTag("MainCamera2").GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
             Physics.Raycast(movementRay, out hit, Mathf.Infinity, LayerMask.GetMask("Ground"));
             currentlyCraftedBuilding.transform.position = hit.point;
 
             if(isCrafting && Input.GetMouseButtonDown(0) && !gameManager.getcollidingWithOtherObject()){
-                currentlyCraftedBuilding.GetComponentInChildren<MeshCollider>().isTrigger = false;
+                if(currentlyCraftedBuilding.GetComponentInChildren<MeshCollider>()){
+                    currentlyCraftedBuilding.GetComponentInChildren<MeshCollider>().isTrigger = false;
+                } else if(!currentlyCraftedBuilding.GetComponentInChildren<MeshCollider>()){
+                    currentlyCraftedBuilding.GetComponentInChildren<BoxCollider>().isTrigger = false;
+                }
                 currentlyCraftedBuilding.GetComponent<BuildingAttributes>().setIsOwnedByPlayer(true);
                 mainInventory.removeItemFromInventory(itemsToRemoveFromInventory);
                 currentlyCraftedBuilding = null;
@@ -62,36 +71,17 @@ public class CraftingSystem : MonoBehaviour
             GameManager gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
             BuildingsCatalog buildingsCatalog = gameManager.getBuildingCatalog();
             Inventory mainInventory = gameManager.getInventoryCatalog().getMainInventory();
-    
             Building buildingSelected = buildingsCatalog.getBuilding(thisButtonID);
             Dictionary<string, int> itemsNeededToCraft = buildingSelected.getCostToCraftBuilding();
-            Dictionary<string, int> itemsInInventory = mainInventory.getInventory();
-            
-            string enoughResources = "";
-            bool lastValue = false;
 
-            foreach(var itemC in itemsNeededToCraft){
-                foreach(var itemI in itemsInInventory){
-                    if(itemC.Key == itemI.Key){
-                        if(itemC.Value <= itemI.Value){
-                            enoughResources += "true";
-                            lastValue = true;
-                            break;
-                        }
-                    }
-                }
-                if(!lastValue){
-                    enoughResources += "false";
-                }
-                lastValue = false;
-            }
-            if(!enoughResources.Contains("false")){
-                
+            if(mainInventory.checkIfListOfItemsAreInInventory(itemsNeededToCraft)){
                 GameObject craftedBuilding = Instantiate(buildingSelected.getBuildingPrefab(), new Vector3(0,0,0), transform.rotation);
                 GameObject.FindGameObjectWithTag("GameManager").GetComponent<CraftingSystem>().setItemsToRemoveFromInventory(itemsNeededToCraft);
                 GameObject.FindGameObjectWithTag("GameManager").GetComponent<CraftingSystem>().setCraftedBuilding(craftedBuilding);
                 GameObject.FindGameObjectWithTag("GameManager").GetComponent<CraftingSystem>().setIsCrafting(true);
-            } 
+            } else {
+                gameManager.getMessageLogBar().addMessageToLog("You don't have enough items to craft that building");
+            }
         }
     }
 

@@ -8,18 +8,24 @@ public class BuildingAttributes : MonoBehaviour
 {
     GameManager gameManager;
     BuildingsCatalog buildingsCatalog;
-    GameObject buildingMenuOwned;
-    GameObject buildingMenuNotOwned;
+    GameObject buildingMenu;
     GameObject thisBuilding;
+
     public bool isOwnedByPlayer;
     //public List<NPC> npcsAssignedHere;
     public string buildingTag;
-    public Dictionary<string, int> itemsStoredInBuilding;
-    public Dictionary<string, int> itemsProducedInBuilding;
-    public Dictionary<string, int> itemsNeededForBuildingProduction;
-    private int houseValue;
+    private int buildingValue;
     public int buildingID;
     public string buildingName;
+    public string buildingDescription;
+    public int storageCapacity;
+
+    public Dictionary<string, int> buildingUpKeep;
+    public Dictionary<string, int> itemsStoredInBuilding;
+    public Dictionary<string, int> itemsProducedInBuilding;
+    public Dictionary<string, int> itemsNeededForProduction;
+
+    public bool playerInBoundsBuilding;
     public float positionX;
     public float positionY;
     public float positionZ;
@@ -27,22 +33,27 @@ public class BuildingAttributes : MonoBehaviour
     public bool buildingUIOpen;
     void Start()
     {
-        buildingMenuOwned = GameObject.FindGameObjectWithTag("BuildingMenuOwnedUI");
-        buildingMenuNotOwned = GameObject.FindGameObjectWithTag("BuildingMenuNotOwnedUI");
+        buildingMenu = GameObject.FindGameObjectWithTag("BuildingMenuUI");
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
         buildingsCatalog = gameManager.getBuildingCatalog();
 
         gameManager.increaseAmountOfBuildingsInGame(1);
-        buildingID = gameManager.getAmountOfBuildingsInGame();
 
+        buildingTag = gameObject.tag;
+        buildingID = gameManager.getAmountOfBuildingsInGame();
+        buildingName = buildingsCatalog.getBuildingByName(transform.name).getNameOfBuilding();
+        buildingDescription = buildingsCatalog.getBuildingByName(transform.name).getDescriptionOfBulding();
+        storageCapacity = buildingsCatalog.getBuildingByName(transform.name).getStorageCapacity();
+
+        buildingUpKeep = buildingsCatalog.getBuildingByName(transform.name).getBuildingUpKeep();
+        itemsNeededForProduction = buildingsCatalog.getBuildingByName(transform.name).getNeededForProduction();
+        itemsProducedInBuilding = buildingsCatalog.getBuildingByName(transform.name).getBuildingProduction();
+        storageCapacity = buildingsCatalog.getBuildingByName(transform.name).getStorageCapacity();
+
+        
         positionX = transform.position.x;
         positionY = transform.position.y;
         positionZ = transform.position.z;
-
-        buildingTag = gameObject.tag;
-        // ALLE OBJEKTVARIABLER MÅ VÆRE FERDIG STADFESTET PÅ START!!!!!!!!!!!!
-        buildingName = buildingsCatalog.getBuildingByName(transform.name).getNameOfBuilding();
-
         thisBuilding = this.gameObject;
     }
 
@@ -58,10 +69,15 @@ public class BuildingAttributes : MonoBehaviour
             other.gameObject.layer == 13  || /*Layer 13 is RESOURCESMESH*/
             other.gameObject.layer == 14     /*Layer 14 is ITEMSMESH*/
         ){setCollidingWithOtherObject(true);} 
+        if(
+            other.gameObject.layer == 15      /*Layer 15 is PLAYER*/
+
+        ){setPlayerInBoundsBuilding(true);} 
     }
     void OnTriggerExit(Collider other)
     {
         setCollidingWithOtherObject(false);
+        setPlayerInBoundsBuilding(false);
     }
 
     void OnMouseDown()
@@ -76,58 +92,49 @@ public class BuildingAttributes : MonoBehaviour
 
     void OnMouseExit()
     {
-        closeBuildingUI();
+        if(!gameManager.getIsMouseOverUI()){
+            closeBuildingUI();
+        }
     }
 
     //GETTERS
+    public Dictionary<string, int> getBuildingUpKeep(){
+        return buildingUpKeep;
+    }
     public Dictionary<string, int> getItemsStoredInBuilding()
     {
         return itemsStoredInBuilding;
-    }
-    public string getItemsStoredInBuildingToString()
-    {
-        string itemsStoredInBuildingToString = "";
-        foreach(var item in itemsStoredInBuilding){
-            itemsStoredInBuildingToString += "ItemName: " + item.Key + "\nItemAmount: " + item.Value;
-        }
-        if(itemsStoredInBuildingToString == ""){
-            itemsStoredInBuildingToString = "None";
-        }
-        return itemsStoredInBuildingToString;
     }
     public Dictionary<string, int> getItemsProducedInBuilding()
     {
         return itemsProducedInBuilding;
     }
-    public string getItemsProducedInBuildingToString()
-    {
-        string itemsProducedInBuildingToString = "";
-        foreach(var item in itemsProducedInBuilding){
-            itemsProducedInBuildingToString += "ItemName: " + item.Key + "\nItemAmount: " + item.Value;
-        }
-        if(itemsProducedInBuildingToString == ""){
-            itemsProducedInBuildingToString = "None";
-        }
-        return itemsProducedInBuildingToString;
-    }
     public Dictionary<string, int> getItemsNeededForBuildingProduction()
     {
-        return itemsNeededForBuildingProduction;
+        return itemsNeededForProduction;
     }
-    public string getItemsNeededForBuildingProductionToString()
-    {
-        string itemsNeededForBuildingProductionToString = "";
-        foreach(var item in itemsNeededForBuildingProduction){
-            itemsNeededForBuildingProductionToString += "ItemName: " + item.Key + "\nItemAmount: " + item.Value;
-        }
-        if(itemsNeededForBuildingProductionToString == ""){
-            itemsNeededForBuildingProductionToString = "None";
-        }
-        return itemsNeededForBuildingProductionToString;
+    public bool getIsOwnedByPlayer(){
+        return isOwnedByPlayer;
+    }
+    public string getBuildingTag(){
+        return buildingTag;
+    }
+    public int getBuildingValue(){
+        return buildingValue;
     }
     public int getBuildingID()
     {
         return buildingID;
+    }
+    public string getBuildingName(){
+        return buildingName;
+    }
+    public string getBuildingDescription(){
+        return buildingDescription;
+    }
+
+    public int getStorageCapacity(){
+        return storageCapacity;
     }
     public float getPositionX()
     {
@@ -144,6 +151,12 @@ public class BuildingAttributes : MonoBehaviour
     public bool getCollidingWithOtherObject(){
         return collidingWithOtherObject;
     }
+    public GameObject getThisBuilding(){
+        return thisBuilding;
+    }
+    public bool getPlayerInBoundsBuilding(){
+        return playerInBoundsBuilding;
+    }
 
     //SETTERS
     public void setItemsStoredInBuilding(Dictionary<string, int> newItemsStoredInBuilding)
@@ -156,7 +169,7 @@ public class BuildingAttributes : MonoBehaviour
     }
     public void setItemsNeededForBuildingProduction(Dictionary<string, int> newItemsNeededForProduction)
     {
-        itemsNeededForBuildingProduction = newItemsNeededForProduction;
+        itemsNeededForProduction = newItemsNeededForProduction;
     }
     public void setBuildingID(int newBuildingID){
         buildingID = newBuildingID;
@@ -173,50 +186,61 @@ public class BuildingAttributes : MonoBehaviour
     public void setCollidingWithOtherObject(bool set){
         collidingWithOtherObject = set;
     }
-    public bool getIsOwnedByPlayer(){
-        return isOwnedByPlayer;
-    }
     public void setIsOwnedByPlayer(bool value){
         isOwnedByPlayer = value;
     }
     public void setBuildingName(string name){
         buildingName = name;
     }
-    public GameObject getThisBuilding(){
-        return thisBuilding;
+    public void setPlayerInBoundsBuilding(bool val){
+        playerInBoundsBuilding = val;
     }
+
 
     public void openBuildingUI(){
         buildingUIOpen = true;
         gameManager.setBuildingLastClicked(thisBuilding);
-        buildingMenuOwned.transform.Find("Background").Find("Headline").GetComponent<Text>().text = buildingName;
-        buildingMenuNotOwned.transform.Find("Background").Find("Headline").GetComponent<Text>().text = buildingName;
+        buildingMenu.transform.Find("Background").Find("Headline").GetComponent<Text>().text = buildingName;
 
         if(!gameManager.getIsMouseOverUI() && !gameManager.getIsCrafting()){
+
+            // WHAT TO SHOW BY DEFAULT
+            buildingMenu.transform.Find("Background").Find("Visit").gameObject.SetActive(true);
+            buildingMenu.transform.Find("Background").Find("Stats").gameObject.SetActive(false);
+            buildingMenu.transform.Find("Background").Find("Set Workers").gameObject.SetActive(false);
+            buildingMenu.transform.Find("Background").Find("Open Inventory").gameObject.SetActive(false);
+            buildingMenu.transform.Find("Background").Find("Fill Bucket").gameObject.SetActive(false);
+
+            buildingMenu.GetComponent<Canvas>().enabled = true;
+            buildingMenu.transform.Find("Background").position = new Vector3(Input.mousePosition.x + buildingMenu.transform.Find("Background").GetComponent<RectTransform>().sizeDelta.x/2 - 10, Input.mousePosition.y + buildingMenu.transform.Find("Background").GetComponent<RectTransform>().sizeDelta.y/2 - 10, 0);
+
             if(isOwnedByPlayer){
-                buildingMenuOwned.GetComponent<Canvas>().enabled = true;
-                buildingMenuNotOwned.GetComponent<Canvas>().enabled = false;
-
-
-                buildingMenuOwned.transform.Find("Background").position = new Vector3(Input.mousePosition.x + buildingMenuOwned.transform.Find("Background").GetComponent<RectTransform>().sizeDelta.x/2, Input.mousePosition.y + buildingMenuOwned.transform.Find("Background").GetComponent<RectTransform>().sizeDelta.y/2, 0);
-                buildingMenuOwned.transform.Find("Background").Find("VisitButton").Find("VisitText").GetComponentInChildren<Text>().text = "Visit " + buildingName;
-                buildingMenuOwned.transform.Find("Background").Find("StatsButton").Find("StatsText").GetComponentInChildren<Text>().text = buildingName + " Stats";
+                if(buildingName.Equals("Waterwell")){
+                    
+                    buildingMenu.transform.Find("Background").Find("Stats").gameObject.SetActive(true);
+                    buildingMenu.transform.Find("Background").Find("Fill Bucket").gameObject.SetActive(true);
+                }
+                if(buildingName.Equals("Furnace")){
+                    buildingMenu.transform.Find("Background").Find("Stats").gameObject.SetActive(true);
+                    buildingMenu.transform.Find("Background").Find("Set Workers").gameObject.SetActive(false);
+                    buildingMenu.transform.Find("Background").Find("Open Inventory").gameObject.SetActive(false);
+                }
+                if(buildingName.Equals("Sawmill")){
+                    buildingMenu.transform.Find("Background").Find("Stats").gameObject.SetActive(true);
+                    buildingMenu.transform.Find("Background").Find("Set Workers").gameObject.SetActive(false);
+                    buildingMenu.transform.Find("Background").Find("Open Inventory").gameObject.SetActive(false);
+                }
+                if(buildingName.Equals("Small Wood House")){
+                    buildingMenu.transform.Find("Background").Find("Stats").gameObject.SetActive(true);
+                }
             } else {
-                buildingMenuOwned.GetComponent<Canvas>().enabled = false;
-                buildingMenuNotOwned.GetComponent<Canvas>().enabled = true;
-
-                buildingMenuNotOwned.transform.Find("Background").position = new Vector3(Input.mousePosition.x + buildingMenuNotOwned.transform.Find("Background").GetComponent<RectTransform>().sizeDelta.x/2, Input.mousePosition.y + buildingMenuNotOwned.transform.Find("Background").GetComponent<RectTransform>().sizeDelta.y/2, 0);
-                buildingMenuNotOwned.transform.Find("Background").Find("VisitButton").Find("VisitText").GetComponentInChildren<Text>().text = "Visit " + buildingName;
+                // THIS IS BUILDING IS NOT OWNED BY PLAYER
+                //buildingMenu.transform.Find("Background").Find("Visit").gameObject.SetActive(true);
             }
         }
     }
-
     public void closeBuildingUI(){
         buildingUIOpen = false;
-        GameObject buildingMenuOwned = GameObject.FindGameObjectWithTag("BuildingMenuOwnedUI");
-        GameObject buildingMenuNotOwned = GameObject.FindGameObjectWithTag("BuildingMenuNotOwnedUI");
-
-        buildingMenuOwned.GetComponent<Canvas>().enabled = false;
-        buildingMenuNotOwned.GetComponent<Canvas>().enabled = false;
+        buildingMenu.GetComponent<Canvas>().enabled = false;
     }
 }

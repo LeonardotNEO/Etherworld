@@ -55,6 +55,32 @@ public class Inventory : MonoBehaviour
         }
     }
 
+    public bool checkIfListOfItemsAreInInventory(Dictionary<string, int> list){
+        string enoughInInventory = "";
+        bool lastValue = false;
+
+        foreach(var itemC in list){
+            foreach(var itemI in inventory){
+                if(itemC.Key == itemI.Key){
+                    if(itemC.Value <= itemI.Value){
+                        enoughInInventory += "true";
+                        lastValue = true;
+                        break;
+                    }
+                }
+            }
+            if(!lastValue){
+                enoughInInventory += "false";
+            }
+            lastValue = false;
+        }
+        if(!enoughInInventory.Contains("false")){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public string getNameOfResourcesInInventoryToString(){
         string inventoryName = "Resource: \n";
         foreach(var item in inventory){
@@ -68,6 +94,14 @@ public class Inventory : MonoBehaviour
             inventoryAmount += item.Value + "\n";
         }
         return inventoryAmount;
+    }
+
+    public string getListOfItemsToString(Dictionary<string, int> list){
+        string listOfItems = "";
+        foreach(var item in list){
+            listOfItems += "Item: " + item.Key + " Amount: " + item.Value + "\n";
+        }
+        return listOfItems;
     }
     public int getInventorySize(){
         return inventory.Count;

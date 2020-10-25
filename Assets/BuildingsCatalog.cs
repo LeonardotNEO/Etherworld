@@ -25,6 +25,8 @@ public class BuildingsCatalog : MonoBehaviour
     public Sprite mediumStoneWallGateSprite;
     public GameObject mediumStoneWallCorner;
     public Sprite MediumStoneWallCornerSprite;
+    public GameObject furnace;
+    public Sprite furnaceSprite;
 
 
     void Awake()
@@ -158,6 +160,19 @@ public class BuildingsCatalog : MonoBehaviour
                 /*StorageCapcity*/      10,
                 /*Name*/                "Small Stone Wall",
                 /*Descriptione*/        "A small stone sized wall for keeping things out"
+            )
+        );
+        addBuildingToCatalog(
+            new Building(
+                /*Cost to craft*/       new Dictionary<string, int>(){ {"Stone", 200}},
+                /*Upkeep*/              new Dictionary<string, int>(){ {"Stone", 5}},
+                /*Production*/          new Dictionary<string, int>(){},
+                /*NeededForProduction*/ new Dictionary<string, int>(){},
+                /*Prefab*/              furnace,
+                /*Sprite*/              furnaceSprite,
+                /*StorageCapcity*/      10,
+                /*Name*/                "Furnace",
+                /*Descriptione*/        "A place where one can smelt ore to bars"
             )
         );
   

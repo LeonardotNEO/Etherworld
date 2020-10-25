@@ -235,9 +235,9 @@ NavMeshObstacle:
   m_Enabled: 1
   serializedVersion: 3
   m_Shape: 1
-  m_Extents: {x: 2, y: 2.7970002, z: 2.5170002}
+  m_Extents: {x: 1.925, y: 2.795, z: 1.78}
   m_MoveThreshold: 0.1
-  m_Carve: 0
+  m_Carve: 1
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: -0.007, z: 0}
   m_TimeToStationary: 0.5
@@ -252,6 +252,7 @@ GameObject:
   - component: {fileID: 5646772467153459098}
   - component: {fileID: -1504935686762539357}
   - component: {fileID: -6974313391245275205}
+  - component: {fileID: 2040396175730287376}
   m_Layer: 0
   m_Name: Waterwell
   m_TagString: Untagged
@@ -271,7 +272,6 @@ Transform:
   m_LocalScale: {x: 0.58499175, y: 0.58499175, z: 0.58499175}
   m_Children:
   - {fileID: 1285548089977199364}
-  - {fileID: 6007196752666611494}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -291,10 +291,14 @@ MonoBehaviour:
   buildingTag: 
   buildingID: 0
   buildingName: 
+  buildingDescription: 
+  storageCapacity: 0
+  playerInBoundsBuilding: 0
   positionX: 0
   positionY: 0
   positionZ: 0
   collidingWithOtherObject: 0
+  buildingUIOpen: 0
 --- !u!54 &-6974313391245275205
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -311,47 +315,16 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!1 &8398436854371803041
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6007196752666611494}
-  - component: {fileID: 3297550392079463609}
-  m_Layer: 0
-  m_Name: Entrance
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6007196752666611494
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8398436854371803041}
-  m_LocalRotation: {x: -0, y: -0.64809173, z: -0, w: 0.76156235}
-  m_LocalPosition: {x: -0.62, y: 0.11, z: -3.2}
-  m_LocalScale: {x: 0.28699, y: 0.8285353, z: 0.44167}
-  m_Children: []
-  m_Father: {fileID: 5646772467153459098}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: -80.796005, z: 0}
---- !u!65 &3297550392079463609
+--- !u!65 &2040396175730287376
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8398436854371803041}
+  m_GameObject: {fileID: 7997308053412777993}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 5.0707307, y: 6.6417246, z: 5.2511444}
-  m_Center: {x: 0, y: 2.8208625, z: 0}
+  m_Size: {x: 2.370386, y: 5.2073236, z: 2.0277245}
+  m_Center: {x: -0.40494406, y: 2.1036615, z: -3.8098998}

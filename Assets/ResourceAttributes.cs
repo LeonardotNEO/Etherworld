@@ -24,17 +24,19 @@ public class ResourceAttributes : MonoBehaviour
 
     void Start()
     {
-        resourceTag = this.tag;
-        playerBehavior = GameObject.FindGameObjectWithTag("player").GetComponent<PlayerBehavior>();
+    
     }
 
     void Awake()
     {
+        gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
         progressbar = GameObject.FindGameObjectWithTag("GameManager").GetComponent<Progressbar>();
+        playerBehavior = gameManager.getPlayerBehavior();
+        resourceTag = this.tag;
     }
     void Update()
     {
-        gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+        
     }
 
     void OnMouseDown()
@@ -48,7 +50,6 @@ public class ResourceAttributes : MonoBehaviour
     }
     void OnMouseEnter()
     {
-        //Debug.Log("This is a resource");
         //GetComponentInChildren<Outline>().enabled = true;
         //GetComponentInChildren<Outline>().eraseRenderer = false;
     }
@@ -70,7 +71,7 @@ public class ResourceAttributes : MonoBehaviour
         progress += addProgress;
     }
 
-    void OnTriggerStay(Collider other)
+    void OnTriggerEnter(Collider other)
     {
         if(other.tag == "player"){
             player = other;

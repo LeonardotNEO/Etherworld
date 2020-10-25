@@ -1,49 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1186265289668759281
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4335842930237514761}
-  - component: {fileID: 6215643821993157357}
-  m_Layer: 0
-  m_Name: Entrance
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4335842930237514761
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1186265289668759281}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.34, y: 1.2, z: 2.87}
-  m_LocalScale: {x: 1, y: 2.4703, z: 1}
-  m_Children: []
-  m_Father: {fileID: 8473066453181369193}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &6215643821993157357
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1186265289668759281}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2415714753047737244
 GameObject:
   m_ObjectHideFlags: 0
@@ -56,6 +12,7 @@ GameObject:
   - component: {fileID: 977185787571935957}
   - component: {fileID: 3073137812316769609}
   - component: {fileID: 4349020946454369055}
+  - component: {fileID: 7094237437406377294}
   m_Layer: 0
   m_Name: Sawmill
   m_TagString: Untagged
@@ -75,7 +32,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8671571911968698519}
-  - {fileID: 4335842930237514761}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -95,10 +51,14 @@ MonoBehaviour:
   buildingTag: 
   buildingID: 0
   buildingName: 
+  buildingDescription: 
+  storageCapacity: 0
+  playerInBoundsBuilding: 0
   positionX: 0
   positionY: 0
   positionZ: 0
   collidingWithOtherObject: 0
+  buildingUIOpen: 0
 --- !u!54 &3073137812316769609
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -131,6 +91,19 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0.07, y: 1.83, z: 6.85}
   m_TimeToStationary: 0.5
+--- !u!65 &7094237437406377294
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2415714753047737244}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2.0437288, y: 2.955782, z: 1.5218964}
+  m_Center: {x: -5.264767, y: 1.2849226, z: 2.9660378}
 --- !u!1 &4378314864715923286
 GameObject:
   m_ObjectHideFlags: 0
