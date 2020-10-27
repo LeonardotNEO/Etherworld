@@ -29,7 +29,7 @@ public class PlayerBehavior : MonoBehaviour
 
         // PLAYER MOVEMENT
         // Move player to new position when pressing mouse click
-        if (Input.GetMouseButtonDown(0) && !gameManager.getIsMouseOverUI() && !gameManager.getPlacingBuilding()){
+        if (Input.GetMouseButtonDown(0) && !gameManager.GetUI().getIsMouseOverUI() && !gameManager.getCraftingSystem().getIsCrafting()){
             RaycastHit hit;
             Ray ray = GameObject.FindGameObjectWithTag("MainCamera2").GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
             Physics.Raycast(ray, out hit, Mathf.Infinity);

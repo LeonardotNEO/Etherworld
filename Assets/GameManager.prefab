@@ -14,7 +14,8 @@ GameObject:
   - component: {fileID: 3342161661001408959}
   - component: {fileID: 3342161661001408952}
   - component: {fileID: 3342161661001408956}
-  - component: {fileID: 3342161661001408957}
+  - component: {fileID: 1461552315}
+  - component: {fileID: 1461552316}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: GameManager
@@ -48,16 +49,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbd84af297fa23c4fa1cfc96b3bd6770, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isMoving: 0
-  isCrafting: 0
-  isPickingUpItem: 0
-  isGatheringResources: 0
-  placingBuilding: 0
-  amountOfBuildingsInGame: 0
-  craftingButtons: 0
-  amountOfInventoriesInGame: 0
-  inventoryOpen: 0
-  craftingOpen: 0
 --- !u!114 &3342161661001408958
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -71,6 +62,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inventoryCatalog: []
+  amountOfInventoriesInCatalog: 0
 --- !u!114 &3342161661001408959
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -83,21 +75,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d67672aac1f1f0545bf5fa3a33937aa3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  house01Model: {fileID: 1278284133551103944, guid: abb6194493f40ea488f917e9eab06ed7,
+  amountOfBuildingsInGame: 0
+  smallWoodHouse: {fileID: 4932859491038232435, guid: b661f47856557a34fb5ee3699ec4be7c,
     type: 3}
-  house01Sprite: {fileID: 21300000, guid: 861c33001ee0f00488fde073a393fc84, type: 3}
-  house02Model: {fileID: 1278284133551103944, guid: abb6194493f40ea488f917e9eab06ed7,
+  smallWoodHouseSprite: {fileID: 0}
+  mediumWoodHouse: {fileID: 7358438098602448440, guid: c7c0e9c9ee0feea42baf0d05b9ac909c,
     type: 3}
-  house02Sprite: {fileID: 21300000, guid: 4bdaefc61f957664ba407abb48ec0c4f, type: 3}
-  house03Model: {fileID: 1278284133551103944, guid: abb6194493f40ea488f917e9eab06ed7,
+  mediumWoodHouseSprite: {fileID: 0}
+  boardingHouse: {fileID: 6089689720214339309, guid: f4167f48c1c27a5469f1f083f39f786b,
     type: 3}
-  house03Sprite: {fileID: 21300000, guid: 4752bf3a6d277254faa3001894e8c87f, type: 3}
-  house04Model: {fileID: 1278284133551103944, guid: abb6194493f40ea488f917e9eab06ed7,
+  boardingHouseSprite: {fileID: 0}
+  waterWell: {fileID: 7997308053412777993, guid: 2857293bbd2f47348aad8f1231c99137,
     type: 3}
-  house04Sprite: {fileID: 21300000, guid: e33bf682e53b17b43a65b7afe102b6b1, type: 3}
-  house05Model: {fileID: 1278284133551103944, guid: abb6194493f40ea488f917e9eab06ed7,
+  waterWellSprite: {fileID: 0}
+  woodFence: {fileID: 15760311937558185, guid: 04cf90eabfd0a154ebd1ae3838bc6faa, type: 3}
+  woodFenceSprite: {fileID: 0}
+  sawmill: {fileID: 2415714753047737244, guid: ffc0b1622cc190246890b23c2ce148f2, type: 3}
+  sawmillSprite: {fileID: 0}
+  smallStoneWall: {fileID: 4067309664729466206, guid: dfa62ea7f908c604db93c985b16b4d57,
     type: 3}
-  house05Sprite: {fileID: 21300000, guid: 675c97c7d16fd6b4e9269ccc5f5ce855, type: 3}
+  smallStoneWallSprite: {fileID: 0}
+  mediumStoneWall: {fileID: 3409450098367123140, guid: 59c6d24bedcc31449a7e6894b1d80b93,
+    type: 3}
+  mediumStoneWallSprite: {fileID: 0}
+  mediumStoneWallGate: {fileID: 5492531052293579125, guid: 36a058d53ec92d14bb3e8ff1e16aa8ad,
+    type: 3}
+  mediumStoneWallGateSprite: {fileID: 0}
+  mediumStoneWallCorner: {fileID: 8225029139522262820, guid: d93f1b719357e59459df73b7808b640b,
+    type: 3}
+  MediumStoneWallCornerSprite: {fileID: 0}
+  furnace: {fileID: 201775190020943813, guid: ca7ecf39c8151aa48bf4e862b565c2ba, type: 3}
+  furnaceSprite: {fileID: 0}
 --- !u!114 &3342161661001408952
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -110,12 +118,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2803c939a9faf2b4092a20b4159c9426, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item01Model: {fileID: 5679385085818385487, guid: df32b47164d506e4a8616db51de45c61,
+  woodModel: {fileID: 6277615705952907542, guid: ae8f45abfe7da8b43860067e5eb82e56,
     type: 3}
-  item01Sprite: {fileID: 21300000, guid: e5570cef7a7753444b16ec50eb80d325, type: 3}
-  item02Model: {fileID: 789738550749354686, guid: d2e73e34e76cb4c4580e232083bffc97,
+  woodSprite: {fileID: 0}
+  stonePileModel: {fileID: 789738550749354686, guid: d2e73e34e76cb4c4580e232083bffc97,
     type: 3}
-  item02Sprite: {fileID: 21300000, guid: e5570cef7a7753444b16ec50eb80d325, type: 3}
+  stonePileSprite: {fileID: 0}
 --- !u!114 &3342161661001408956
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -128,8 +136,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8828831a760c29a488425fe71a89badb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  placingBuilding: 0
---- !u!114 &3342161661001408957
+  craftingButtonsIDCounter: 0
+--- !u!114 &1461552315
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -138,7 +146,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 3342161661001408955}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e050f7a6b665a24bac0fa838b746cc8, type: 3}
+  m_Script: {fileID: 11500000, guid: d8e62d1b177f8bd43b4d188fb02b0770, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  npc: {fileID: 1632936571273554034, guid: c6f711af7bd668a44bc9d1e18f27a88b, type: 3}
+--- !u!114 &1461552316
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3342161661001408955}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71674b6548e430d47bfdbdae8a4f1c07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

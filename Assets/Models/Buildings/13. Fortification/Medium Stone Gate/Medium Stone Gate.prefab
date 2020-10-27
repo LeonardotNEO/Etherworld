@@ -141,6 +141,7 @@ GameObject:
   - component: {fileID: 1741016382246607232}
   - component: {fileID: 6931212909479413820}
   - component: {fileID: 5123634772926537632}
+  - component: {fileID: 6999189000160731298}
   m_Layer: 0
   m_Name: Medium Stone Gate
   m_TagString: Untagged
@@ -177,9 +178,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isOwnedByPlayer: 0
+  isRented: 0
   buildingTag: 
   buildingID: 0
   buildingName: 
+  buildingDescription: 
+  storageCapacity: 0
+  playerInBoundsBuilding: 0
   positionX: 0
   positionY: 0
   positionZ: 0
@@ -201,6 +206,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &6999189000160731298
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5492531052293579125}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cf890f7f08611345ae9c3de8cba0494, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gateOpen: 0
 --- !u!1 &7164185271934546763
 GameObject:
   m_ObjectHideFlags: 0

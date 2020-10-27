@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 9112435010599692492}
   m_Layer: 10
   m_Name: StonePile
-  m_TagString: StonePile
+  m_TagString: Stone
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -75,12 +75,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b292f7335baf61a4c9bca83f2c2c4716, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerBehavior: {fileID: 0}
-  mainInventory: {fileID: 0}
-  player: {fileID: 0}
-  itemAmount: 5
-  itemName: 
-  playerInBounds: 0
 --- !u!1 &789738551900164906
 GameObject:
   m_ObjectHideFlags: 0

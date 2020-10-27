@@ -9,11 +9,8 @@ TagManager:
   - Wood
   - Tree
   - StoneDepot
-  - StonePile
   - MainCamera2
   - MainMeshOfObject
-  - InventoryName
-  - InventoryAmount
   - CraftingSprite
   - CraftingItems
   - npc
@@ -24,9 +21,13 @@ TagManager:
   - MessageLogUI
   - Small Wood House
   - ResidentialBuilding
-  - BuildingStatsUI
   - BuildingMenuUI
   - MessageLogBarUI
+  - Stone
+  - Industrial
+  - InventoryContentUI
+  - ProgressBar
+  - BuildingOpenUI
   layers:
   - Default
   - TransparentFX

@@ -9,15 +9,27 @@ public class AddCategoriesToMenu : MonoBehaviour
 
     List<string> buttonNames = new List<string>();
     
-    void Start()
+    void Awake()
     {
-        addToList("Houses");
+        addToList("Buildings");
+        addToList("Items");
+
+        addToList("Residential");
+        addToList("Educational");
+        addToList("Institutional");
+        addToList("Health");
+        addToList("Entertainment");
+        addToList("Road");
+        addToList("Mercantile");
+        addToList("Industrial");
+        addToList("Storage");
+        addToList("Military");
         addToList("Farming");
-        addToList("Shops");
-        addToList("Tools");
-        addToList("Weapons");
-        addToList("Armor");
+        addToList("Religion");
         addToList("Misc");
+        addToList("Fortificiation");
+
+
 
         GameObject elements;
 

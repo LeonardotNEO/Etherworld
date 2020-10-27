@@ -6,6 +6,13 @@ public class InventoryCatalog : MonoBehaviour
 {
     public List<Inventory> inventoryCatalog;
 
+    public int amountOfInventoriesInCatalog;
+
+    void Update()
+    {
+        amountOfInventoriesInCatalog = getAmountOfInventoriesInCatalog();
+    }
+
     public void addInventoryToCatalog(Inventory inventory){
         inventoryCatalog.Add(inventory);
     }
@@ -16,16 +23,6 @@ public class InventoryCatalog : MonoBehaviour
 
     public List<Inventory> getInventoryCatalog(){
         return inventoryCatalog;
-    }
-
-    public string inventoryCatalogToString(){
-        string inventoryCatalogToString = "";
-        foreach(var inventory in inventoryCatalog){
-            inventoryCatalogToString += 
-            "------------INVENTORY------------- " 
-            + "\nINVENTORY SIZE:\n" + inventory.getInventorySize() + "\n";
-        }
-        return inventoryCatalogToString;
     }
 
     public int getAmountOfInventoriesInCatalog(){
@@ -40,15 +37,26 @@ public class InventoryCatalog : MonoBehaviour
         return inventoryCatalog[0];
     }
 
+
+    // TO STRING
     public string getListOfItemsToString(Dictionary<string, int> list){
         string listOfItems = "";
         if(list != null){
             foreach(var item in list){
-                listOfItems += "Item: " + item.Key + " Amount: " + item.Value + "\n";
+                listOfItems += item.Value + " " + item.Key + "\n";
             }
         } else {
             listOfItems += "None";
         }
         return listOfItems;
+    }
+    public string inventoryCatalogToString(){
+        string inventoryCatalogToString = "";
+        foreach(var inventory in inventoryCatalog){
+            inventoryCatalogToString += 
+            "------------INVENTORY------------- " 
+            + "\nINVENTORY SIZE:\n" + inventory.getInventoryCapacity() + "\n";
+        }
+        return inventoryCatalogToString;
     }
 }

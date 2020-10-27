@@ -5,21 +5,21 @@ using UnityEngine.UI;
 
 public class AddBuildingsToMenu : MonoBehaviour
 {
-    BuildingsCatalog buildingsCatalog;
+    GameManager gameManager;
     public GameObject element;
     void Start()
     {
-        GameManager gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
-        BuildingsCatalog buildingsCatalog = gameManager.getBuildingCatalog();
-        //Debug.Log(buildingsCatalog.getAmountOfBuildingsInCatalog());
+        gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
 
-        for(int i = 0; i < buildingsCatalog.getAmountOfBuildingsInCatalog(); i++){
+        for(int i = 0; i < gameManager.getBuildingCatalog().getAmountOfBuildingsInCatalog(); i++){
             GameObject thisElement = (GameObject)Instantiate(element, transform);
-            thisElement.transform.Find("Description/Text").GetComponent<Text>().text = buildingsCatalog.getBuildingsCatalog()[i].getDescriptionOfBulding();
+            thisElement.transform.Find("Text").GetComponent<Text>().text = gameManager.getBuildingCatalog().getBuildingsCatalog()[i].getNameOfBuilding();
+            /*thisElement.transform.Find("Text").GetComponent<Text>().text = buildingsCatalog.getBuildingsCatalog()[i].getDescriptionOfBulding();
             foreach(var item in buildingsCatalog.getBuildingsCatalog()[i].getCostToCraftBuilding()){
                 thisElement.transform.Find("ResourcesToCraft/Text").GetComponent<Text>().text += item.Value + " " + item.Key + "\n";
             }
             thisElement.transform.Find("Sprite").GetComponent<Image>().sprite = buildingsCatalog.getBuildingsCatalog()[i].getBuildingSprite();
+            */
         }
     }
 }

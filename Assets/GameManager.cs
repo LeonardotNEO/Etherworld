@@ -5,143 +5,27 @@ using UnityEngine.EventSystems;
 
 public class GameManager : MonoBehaviour
 {
-    // MAIN CAMERA //
-    public GameObject mainCamera;
-
-    // PLAYER BEHAVIOR //
+    // SCRIPTS //
     public PlayerBehavior playerBehavior;
-
-    // BUILDING ATTRIBUTES //
-
-    GameObject buildingLastClicked;
-
-    // CRAFTING SYSTEM //
-    CraftingSystem craftingSystem;
-    public bool isCrafting;
-    public int amountOfBuildingsInGame;
-    public int craftingButtonsID;
-    public Dictionary<string, int> itemsToRemoveFromInventory;
-    public GameObject currentlyCraftedBuilding;
-    public bool collidingWithOtherObject;
-    
- 
-    // INVENTORY SYSTEM //
-    InventorySystem inventorySystem;
-
-    // UI //
-    UI UI;
-    MessageLogText messageLogbar;
-    public bool inventoryOpen;
-    public bool craftingOpen;
-    public bool isMouseOverUI;
-
-    // CATALOGS //
+    private CraftingSystem craftingSystem;
     private BuildingsCatalog buildingCatalog;
     private ItemCatalog itemCatalog;
     private InventoryCatalog inventoryCatalog;
-
-    // MAININVENTORY //
-    Inventory mainInventory;
-    
+    private UI UI;
+    private MessageLogText messageLogText;
 
     void Awake()
     {
-        // CATALOGS //
+        //playerBehavior = GameObject.FindGameObjectWithTag("player").GetComponent<PlayerBehavior>();
+        craftingSystem = GetComponent<CraftingSystem>();
         buildingCatalog = GetComponent<BuildingsCatalog>();
         itemCatalog = GetComponent<ItemCatalog>();
         inventoryCatalog = GetComponent<InventoryCatalog>();
-
-        // MAIN INVENTORY //
-        inventorySystem = GetComponent<InventorySystem>();
-
-        // CRAFTING SYSTEM
-        craftingSystem = GetComponent<CraftingSystem>();
-    }
-
-
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-
-        // CRAFTING SYSTEM //
-        craftingSystem = GetComponent<CraftingSystem>();
-        isCrafting = craftingSystem.getIsCrafting();
-        currentlyCraftedBuilding = craftingSystem.getCraftedBuilding();
-        itemsToRemoveFromInventory = craftingSystem.getItemsToRemoveFromInventory();
-        if(currentlyCraftedBuilding){
-            collidingWithOtherObject = currentlyCraftedBuilding.GetComponent<BuildingAttributes>().getCollidingWithOtherObject();
-        }
-
-        // INVENTORY SYSTEM //
-        inventorySystem = GetComponent<InventorySystem>();
-
-        // UI //
-        messageLogbar = GameObject.FindGameObjectWithTag("MessageLogBarUI").GetComponentInChildren<MessageLogText>();
         UI = GetComponent<UI>();
-        inventoryOpen = UI.getInventoryOpen();
-        craftingOpen = UI.getCraftingOpen();
-        isMouseOverUI = getIsMouseOverUI();
-
-        //MAININVENTORY //
-        mainInventory = inventoryCatalog.getMainInventory();
-
-        // INPUTS //
-        if(Input.GetKeyDown("1")){
-            Debug.Log(buildingCatalog.getBuildingsCatalogToString());
-        }
-        if(Input.GetKeyDown("2")){
-            Debug.Log(inventoryCatalog.inventoryCatalogToString());
-        }
-        if(Input.GetKeyDown("3")){
-            Debug.Log(itemCatalog.itemCatalogToString());
-        }
-        if(Input.GetKeyDown("4")){
-            mainInventory.removeItemFromInventory(new Dictionary<string, int>{{"WoodPile", 5}});
-        }
-        if(Input.GetKeyDown("5")){
-            mainInventory.addItemToInventory(new Dictionary<string, int>{{"Wood", 1000}, {"Stone", 1000}, {"Bucket", 2}});
-        }
-        if(Input.GetKeyDown("i") && inventoryOpen == false){
-            UI.setInventory(true);
-            UI.setCrafting(false);
-        } else if(Input.GetKeyDown("i") && inventoryOpen == true){
-            UI.setInventory(false);
-        }
-        if(Input.GetKeyDown("tab") && craftingOpen == false){
-            UI.setCrafting(true);
-            UI.setInventory(false);
-        } else if(Input.GetKeyDown("tab") && craftingOpen == true) {
-            UI.setCrafting(false);
-        }
-        if(isCrafting){
-            if(Input.GetKey("q")){
-                craftingSystem.rotateBuildingLeft();
-            }
-            if(Input.GetKey("e")){
-                craftingSystem.rotateBuildingRight();
-            }
-        }
-        if(Input.GetKeyDown("g")){
-            inventorySystem.spawnNPC();
-        }
-        if(Input.GetKeyDown("h")){
-            RaycastHit mouseButtonPressed;
-            Ray movementRay = GameObject.FindGameObjectWithTag("MainCamera2").GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
-            if(Physics.Raycast(movementRay, out mouseButtonPressed, Mathf.Infinity, LayerMask.GetMask("Ground"))){
-                float y = 0;
-                for(int i = 0; i < 10; i++){
-                    Instantiate(itemCatalog.getItemByIndex(0).getItemPrefab(), new Vector3(mouseButtonPressed.point.x, mouseButtonPressed.point.y, mouseButtonPressed.point.z + y), mouseButtonPressed.transform.rotation);
-                    y += 1.5f;
-                }
-            }
-        }
+        messageLogText = GameObject.FindGameObjectWithTag("MessageLogBarUI").GetComponentInChildren<MessageLogText>();
     }
 
-    // CATALOGS //
+    // GET SCRIPTS //
     public BuildingsCatalog getBuildingCatalog(){
         return buildingCatalog;
     }
@@ -154,60 +38,13 @@ public class GameManager : MonoBehaviour
     public PlayerBehavior getPlayerBehavior(){
         return playerBehavior;
     }
-    public InventorySystem getInventorySystem(){
-        return inventorySystem;
-    }
     public CraftingSystem getCraftingSystem(){
         return craftingSystem;
-    }
-
-    // CRAFTING SYSTEM //
-    public int getAmountOfBuildingsInGame(){
-        return amountOfBuildingsInGame;
-    }
-    public bool getPlacingBuilding(){
-        return isCrafting;
-    }
-    public void increaseAmountOfBuildingsInGame(int amount){
-        amountOfBuildingsInGame += amount;
-    }
-    public void decreaseAmountOfBuildingsInGame(int amount){
-        amountOfBuildingsInGame -= amount;
-    }
-    public int getCraftingButtonID(){
-        return craftingButtonsID;
-    }
-    public void newCraftingButtonID(){
-        craftingButtonsID++;
-    }
-    public bool getcollidingWithOtherObject(){
-        return collidingWithOtherObject;
-    }
-    public bool getIsCrafting(){
-        return isCrafting;
-    }
-
-    // MAIN CAMERA //
-    public GameObject getMainCamera(){
-        return mainCamera;
-    }
-
-    // UI //
-    public bool getIsMouseOverUI(){
-        return EventSystem.current.IsPointerOverGameObject();
     }
     public UI GetUI(){
         return UI;
     }
-    public MessageLogText getMessageLogBar(){
-        return messageLogbar;
-    }
-
-    // BUILDING ATTRIBUTES //
-    public void setBuildingLastClicked(GameObject building){
-        buildingLastClicked = building;
-    }
-    public GameObject getBuildingLastClicked(){
-        return buildingLastClicked;
+    public MessageLogText getMessageLogText(){
+        return messageLogText;
     }
 }

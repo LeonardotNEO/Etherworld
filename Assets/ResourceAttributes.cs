@@ -4,23 +4,22 @@ using UnityEngine;
 
 public class ResourceAttributes : MonoBehaviour
 {
-    PlayerBehavior playerBehavior;
-    GameManager gameManager;
-    Collider player;
+    private GameManager gameManager;
+    private Collider player;
     public GameObject resourceMined;
     public Progressbar progressbar;
-    public bool playerInBounds;
-    public int amountLeft = 6;
-    public float progress = 0;
-    public string resourceTag;
-    public bool gatheringsResourcesRunning;
+    private bool playerInBounds;
+    private int amountLeft = 6;
+    private float progress = 0;
+    private string resourceTag;
+    private bool gatheringsResourcesRunning;
 
-    public bool firstTriggered = false;
-    public bool secondTriggered = false;
-    public bool thirdTriggered = false;
-    public bool fourthTriggered = false;
-    public bool fifthTriggered = false;
-    public bool sixtTriggered = false; 
+    private bool firstTriggered = false;
+    private bool secondTriggered = false;
+    private bool thirdTriggered = false;
+    private bool fourthTriggered = false;
+    private bool fifthTriggered = false;
+    private bool sixtTriggered = false; 
 
     void Start()
     {
@@ -29,10 +28,10 @@ public class ResourceAttributes : MonoBehaviour
 
     void Awake()
     {
-        gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
-        progressbar = GameObject.FindGameObjectWithTag("GameManager").GetComponent<Progressbar>();
-        playerBehavior = gameManager.getPlayerBehavior();
         resourceTag = this.tag;
+        gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+        progressbar = GameObject.FindGameObjectWithTag("ProgressBar").GetComponent<Progressbar>();
+        
     }
     void Update()
     {
@@ -41,10 +40,7 @@ public class ResourceAttributes : MonoBehaviour
 
     void OnMouseDown()
     {
-        if(!gatheringsResourcesRunning && !gameManager.getIsMouseOverUI()){
-            StartCoroutine(walkingToResource());
-        }
-        if(playerInBounds && !gatheringsResourcesRunning && !gameManager.getIsMouseOverUI()){
+        if(!gatheringsResourcesRunning && !gameManager.GetUI().getIsMouseOverUI() && !gameManager.getCraftingSystem().getIsCrafting()){
             StartCoroutine(walkingToResource());
         }
     }
@@ -87,11 +83,11 @@ public class ResourceAttributes : MonoBehaviour
 
     public IEnumerator walkingToResource(){
         bool runLoop = true;
-        playerBehavior.moveToPosition(this.transform.position);
+        gameManager.getPlayerBehavior().moveToPosition(this.transform.position);
         while(runLoop){
             if(playerInBounds){
-                playerBehavior.stopPlayer();
-                playerBehavior.playerLookAt(transform.position.x, transform.position.y, transform.position.z);
+                gameManager.getPlayerBehavior().stopPlayer();
+                gameManager.getPlayerBehavior().playerLookAt(transform.position.x, transform.position.y, transform.position.z);
                 StartCoroutine(gatheringResources());
                 runLoop = false;
             }
@@ -112,7 +108,7 @@ public class ResourceAttributes : MonoBehaviour
                 progress += Time.deltaTime * progressSpeed;
                 progressbar.updateProgressBar(progress);
 
-                if(playerBehavior.getIsMovingToDestination()){
+                if(gameManager.getPlayerBehavior().getIsMovingToDestination()){
                     gatheringsResourcesRunning = false;
                     player.GetComponent<Animator>().SetBool("isGatheringResources" , false);
                     progressbar.resetProgressBar();
@@ -137,7 +133,7 @@ public class ResourceAttributes : MonoBehaviour
                 progress += Time.deltaTime * progressSpeed;
                 progressbar.updateProgressBar(progress);
 
-                if(playerBehavior.getIsMovingToDestination()){
+                if(gameManager.getPlayerBehavior().getIsMovingToDestination()){
                     gatheringsResourcesRunning = false;
                     player.GetComponent<Animator>().SetBool("isGatheringResources" , false);
                     progressbar.resetProgressBar();

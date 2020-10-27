@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3623348516486653365}
   m_Layer: 0
   m_Name: Furnace
-  m_TagString: Untagged
+  m_TagString: Industrial
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -47,6 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isOwnedByPlayer: 0
+  isRented: 0
   buildingTag: 
   buildingID: 0
   buildingName: 

@@ -14,7 +14,7 @@ public class Progressbar : MonoBehaviour
     void Update()
     {
         // Setting up progressbar, and that it will update each frame
-        progressBar = GameObject.Find("/UI Panel/LoadingBar/LoadingBarProgress").GetComponent<RectTransform>();
+        progressBar = GetComponent<RectTransform>();
     }
     public RectTransform getProgressBar(){
         return progressBar;

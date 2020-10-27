@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class CraftingButton : MonoBehaviour
 {
-    public int buttonId = 0;
+    GameManager gameManager;
+    public int buttonId;
 
     void Awake()
     {
-        GameManager gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
-        buttonId = gameManager.getCraftingButtonID();
-        gameManager.newCraftingButtonID();
+        gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+        buttonId = gameManager.getCraftingSystem().getCraftingButtonIDCounter();
+        gameManager.getCraftingSystem().updateCraftingButtonIDCounter();
     }
 
     public int getButtonId(){

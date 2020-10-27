@@ -7,12 +7,11 @@ using UnityEngine.UI;
 public class BuildingAttributes : MonoBehaviour
 {
     GameManager gameManager;
-    BuildingsCatalog buildingsCatalog;
     GameObject buildingMenu;
     GameObject thisBuilding;
-
     public bool isOwnedByPlayer;
     //public List<NPC> npcsAssignedHere;
+    public bool isRented;
     public string buildingTag;
     private int buildingValue;
     public int buildingID;
@@ -35,20 +34,20 @@ public class BuildingAttributes : MonoBehaviour
     {
         buildingMenu = GameObject.FindGameObjectWithTag("BuildingMenuUI");
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
-        buildingsCatalog = gameManager.getBuildingCatalog();
 
-        gameManager.increaseAmountOfBuildingsInGame(1);
+        gameManager.getBuildingCatalog().increaseAmountOfBuildingsInGame(1);
 
         buildingTag = gameObject.tag;
-        buildingID = gameManager.getAmountOfBuildingsInGame();
-        buildingName = buildingsCatalog.getBuildingByName(transform.name).getNameOfBuilding();
-        buildingDescription = buildingsCatalog.getBuildingByName(transform.name).getDescriptionOfBulding();
-        storageCapacity = buildingsCatalog.getBuildingByName(transform.name).getStorageCapacity();
+        buildingValue = gameManager.getBuildingCatalog().getBuildingByName(transform.name).getInitialValue();
+        buildingID = gameManager.getBuildingCatalog().getAmountOfBuildingsInGame();
+        buildingName = gameManager.getBuildingCatalog().getBuildingByName(transform.name).getNameOfBuilding();
+        buildingDescription = gameManager.getBuildingCatalog().getBuildingByName(transform.name).getDescriptionOfBulding();
+        storageCapacity = gameManager.getBuildingCatalog().getBuildingByName(transform.name).getStorageCapacity();
 
-        buildingUpKeep = buildingsCatalog.getBuildingByName(transform.name).getBuildingUpKeep();
-        itemsNeededForProduction = buildingsCatalog.getBuildingByName(transform.name).getNeededForProduction();
-        itemsProducedInBuilding = buildingsCatalog.getBuildingByName(transform.name).getBuildingProduction();
-        storageCapacity = buildingsCatalog.getBuildingByName(transform.name).getStorageCapacity();
+        buildingUpKeep = gameManager.getBuildingCatalog().getBuildingByName(transform.name).getBuildingUpKeep();
+        itemsNeededForProduction = gameManager.getBuildingCatalog().getBuildingByName(transform.name).getNeededForProduction();
+        itemsProducedInBuilding = gameManager.getBuildingCatalog().getBuildingByName(transform.name).getBuildingProduction();
+        storageCapacity = gameManager.getBuildingCatalog().getBuildingByName(transform.name).getStorageCapacity();
 
         
         positionX = transform.position.x;
@@ -92,7 +91,7 @@ public class BuildingAttributes : MonoBehaviour
 
     void OnMouseExit()
     {
-        if(!gameManager.getIsMouseOverUI()){
+        if(!gameManager.GetUI().getIsMouseOverUI()){
             closeBuildingUI();
         }
     }
@@ -199,43 +198,81 @@ public class BuildingAttributes : MonoBehaviour
 
     public void openBuildingUI(){
         buildingUIOpen = true;
-        gameManager.setBuildingLastClicked(thisBuilding);
-        buildingMenu.transform.Find("Background").Find("Headline").GetComponent<Text>().text = buildingName;
+        gameManager.getBuildingCatalog().setBuildingLastClicked(thisBuilding);
+        Transform background = buildingMenu.transform.Find("Background");
+        background.Find("Headline").GetComponent<Text>().text = buildingName;
 
-        if(!gameManager.getIsMouseOverUI() && !gameManager.getIsCrafting()){
+        if(!gameManager.GetUI().getIsMouseOverUI() && !gameManager.getCraftingSystem().getIsCrafting()){
 
-            // WHAT TO SHOW BY DEFAULT
-            buildingMenu.transform.Find("Background").Find("Visit").gameObject.SetActive(true);
-            buildingMenu.transform.Find("Background").Find("Stats").gameObject.SetActive(false);
-            buildingMenu.transform.Find("Background").Find("Set Workers").gameObject.SetActive(false);
-            buildingMenu.transform.Find("Background").Find("Open Inventory").gameObject.SetActive(false);
-            buildingMenu.transform.Find("Background").Find("Fill Bucket").gameObject.SetActive(false);
+            // BUTTONS TO SHOW BY DEFAULT
+            background.Find("Visit").gameObject.SetActive(false);                       // VISIT
+            background.Find("Stats").gameObject.SetActive(false);                       // STATS
+            background.Find("Set Workers").gameObject.SetActive(false);                 // SET WORKERS
+            background.Find("Open Inventory").gameObject.SetActive(false);              // OPEN INVENTORY
+            background.Find("Fill Bucket").gameObject.SetActive(false);                 // FILL BUCKET
+            background.Find("Open Gate").gameObject.SetActive(false);                   // OPEN GATE
+            background.Find("Close Gate").gameObject.SetActive(false);                   // CLOSE GATE
 
             buildingMenu.GetComponent<Canvas>().enabled = true;
-            buildingMenu.transform.Find("Background").position = new Vector3(Input.mousePosition.x + buildingMenu.transform.Find("Background").GetComponent<RectTransform>().sizeDelta.x/2 - 10, Input.mousePosition.y + buildingMenu.transform.Find("Background").GetComponent<RectTransform>().sizeDelta.y/2 - 10, 0);
+            background.position = new Vector3(Input.mousePosition.x + buildingMenu.transform.Find("Background").GetComponent<RectTransform>().sizeDelta.x/2 - 10, Input.mousePosition.y + buildingMenu.transform.Find("Background").GetComponent<RectTransform>().sizeDelta.y/2 - 10, 0);
 
-            if(isOwnedByPlayer){
+            if(isOwnedByPlayer && !isRented){
                 if(buildingName.Equals("Waterwell")){
-                    
-                    buildingMenu.transform.Find("Background").Find("Stats").gameObject.SetActive(true);
-                    buildingMenu.transform.Find("Background").Find("Fill Bucket").gameObject.SetActive(true);
+                    background.Find("Visit").gameObject.SetActive(true);                // VISIT
+                    background.Find("Stats").gameObject.SetActive(true);                // STATS
+                    background.Find("Fill Bucket").gameObject.SetActive(true);          // FILL BUCKET
                 }
-                if(buildingName.Equals("Furnace")){
-                    buildingMenu.transform.Find("Background").Find("Stats").gameObject.SetActive(true);
-                    buildingMenu.transform.Find("Background").Find("Set Workers").gameObject.SetActive(false);
-                    buildingMenu.transform.Find("Background").Find("Open Inventory").gameObject.SetActive(false);
-                }
-                if(buildingName.Equals("Sawmill")){
-                    buildingMenu.transform.Find("Background").Find("Stats").gameObject.SetActive(true);
-                    buildingMenu.transform.Find("Background").Find("Set Workers").gameObject.SetActive(false);
-                    buildingMenu.transform.Find("Background").Find("Open Inventory").gameObject.SetActive(false);
+                if(buildingTag.Equals("Industrial")){
+                    background.Find("Visit").gameObject.SetActive(true);                // VISIT
+                    background.Find("Stats").gameObject.SetActive(true);                // STATS
+                    background.Find("Set Workers").gameObject.SetActive(true);         // SET WORKERS
+                    background.Find("Open Inventory").gameObject.SetActive(true);      // OPEN INVENTORY
                 }
                 if(buildingName.Equals("Small Wood House")){
-                    buildingMenu.transform.Find("Background").Find("Stats").gameObject.SetActive(true);
+                    background.Find("Visit").gameObject.SetActive(true);                // VISIT
+                    background.Find("Stats").gameObject.SetActive(true);                // STATS
+                    background.Find("Open Inventory").gameObject.SetActive(false);      // OPEN INVENTORY
+                }
+                if(buildingName.Equals("Medium Wood House")){
+                    background.Find("Visit").gameObject.SetActive(true);                // VISIT
+                    background.Find("Stats").gameObject.SetActive(true);                // STATS
+                    background.Find("Open Inventory").gameObject.SetActive(false);      // OPEN INVENTORY
+                }
+                if(buildingName.Equals("Boarding House")){
+                    background.Find("Visit").gameObject.SetActive(true);                // VISIT
+                    background.Find("Stats").gameObject.SetActive(true);                // STATS
+                    background.Find("Open Inventory").gameObject.SetActive(false);      // OPEN INVENTORY
+                }
+                if(buildingName.Equals("Medium Stone Gate")){
+                    if(thisBuilding.GetComponent<Gate>().getGateOpen()){
+                        background.Find("Open Gate").gameObject.SetActive(false);        // OPEN GATE
+                        background.Find("Close Gate").gameObject.SetActive(true);        // CLOSE GATE
+                    } else {
+                        background.Find("Close Gate").gameObject.SetActive(false);       // CLOSE GATE
+                        background.Find("Open Gate").gameObject.SetActive(true);         // OPEN GATE
+                    }
                 }
             } else {
                 // THIS IS BUILDING IS NOT OWNED BY PLAYER
-                //buildingMenu.transform.Find("Background").Find("Visit").gameObject.SetActive(true);
+                if(buildingName.Equals("Waterwell")){
+                    background.Find("Visit").gameObject.SetActive(true);                // VISIT
+                    background.Find("Fill Bucket").gameObject.SetActive(true);          // FILL BUCKET
+                }
+                if(buildingName.Equals("Boarding House")){
+                    background.Find("Visit").gameObject.SetActive(true);                // VISIT
+                }
+                if(buildingName.Equals("Small Wood House")){
+                    background.Find("Visit").gameObject.SetActive(true);                // VISIT
+                }
+                if(buildingName.Equals("Medium Wood House")){
+                    background.Find("Visit").gameObject.SetActive(true);                // VISIT
+                }
+                if(buildingName.Equals("Sawmill")){
+                    background.Find("Visit").gameObject.SetActive(true);                // VISIT
+                }
+                if(buildingName.Equals("Furnace")){
+                    background.Find("Visit").gameObject.SetActive(true);                // VISIT
+                }
             }
         }
     }

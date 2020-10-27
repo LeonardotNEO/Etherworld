@@ -5,6 +5,8 @@ using UnityEngine;
 public class BuildingsCatalog : MonoBehaviour
 {   
     public List<Building> buildingCatalog = new List<Building>();
+    public int amountOfBuildingsInGame;
+    GameObject buildingLastClicked; // IMPORTANT
     public GameObject smallWoodHouse;
     public Sprite smallWoodHouseSprite;
     public GameObject mediumWoodHouse;
@@ -41,6 +43,7 @@ public class BuildingsCatalog : MonoBehaviour
                 /*Prefab*/              smallWoodHouse,
                 /*Sprite*/              smallWoodHouseSprite,
                 /*StorageCapcity*/      3,
+                /*Initial Value*/       200,
                 /*Name*/                "Small Wood House",
                 /*Description*/         "A house that can be used to store items and used as shelter"
             )
@@ -54,6 +57,7 @@ public class BuildingsCatalog : MonoBehaviour
                 /*Prefab*/              mediumWoodHouse,
                 /*Sprite*/              mediumWoodHouseSprite,
                 /*StorageCapcity*/      4,
+                /*Initial Value*/       200,
                 /*Name*/                "Medium Wood House",
                 /*Description*/         "A house that can be used to store items and used as shelter"
             )
@@ -67,6 +71,7 @@ public class BuildingsCatalog : MonoBehaviour
                 /*Prefab*/              boardingHouse,
                 /*Sprite*/              boardingHouseSprite,
                 /*StorageCapcity*/      2,
+                /*Initial Value*/       200,
                 /*Name*/                "Boarding House",
                 /*Descriptione*/        "Housing for those that dont have their own house"
             )
@@ -80,6 +85,7 @@ public class BuildingsCatalog : MonoBehaviour
                 /*Prefab*/              waterWell,
                 /*Sprite*/              waterWellSprite,
                 /*StorageCapcity*/      1,
+                /*Initial Value*/       200,
                 /*Name*/                "Waterwell",
                 /*Descriptione*/        "Can gather water here"
             )
@@ -93,6 +99,7 @@ public class BuildingsCatalog : MonoBehaviour
                 /*Prefab*/              woodFence,
                 /*Sprite*/              woodFenceSprite,
                 /*StorageCapcity*/      0,
+                /*Initial Value*/       200,
                 /*Name*/                "Wood Fence",
                 /*Descriptione*/        "Keeps things out"
             )
@@ -106,6 +113,7 @@ public class BuildingsCatalog : MonoBehaviour
                 /*Prefab*/              sawmill,
                 /*Sprite*/              sawmillSprite,
                 /*StorageCapcity*/      10,
+                /*Initial Value*/       200,
                 /*Name*/                "Sawmill",
                 /*Descriptione*/        "Sawmill produce planks"
             )
@@ -119,6 +127,7 @@ public class BuildingsCatalog : MonoBehaviour
                 /*Prefab*/              mediumStoneWall,
                 /*Sprite*/              mediumStoneWallSprite,
                 /*StorageCapcity*/      10,
+                /*Initial Value*/       200,
                 /*Name*/                "Medium Stone Wall",
                 /*Descriptione*/        "A medium sized stone wall used for protection"
             )
@@ -132,6 +141,7 @@ public class BuildingsCatalog : MonoBehaviour
                 /*Prefab*/              mediumStoneWallGate,
                 /*Sprite*/              mediumStoneWallGateSprite,
                 /*StorageCapcity*/      10,
+                /*Initial Value*/       200,
                 /*Name*/                "Medium Stone Gate",
                 /*Descriptione*/        "A gate for getting through to the other side of the wall"
             )
@@ -145,6 +155,7 @@ public class BuildingsCatalog : MonoBehaviour
                 /*Prefab*/              mediumStoneWallCorner,
                 /*Sprite*/              MediumStoneWallCornerSprite,
                 /*StorageCapcity*/      10,
+                /*Initial Value*/       200,
                 /*Name*/                "Medium Stone Wall Corner",
                 /*Descriptione*/        "A medium sized stone wall corner"
             )
@@ -158,6 +169,7 @@ public class BuildingsCatalog : MonoBehaviour
                 /*Prefab*/              smallStoneWall,
                 /*Sprite*/              smallStoneWallSprite,
                 /*StorageCapcity*/      10,
+                /*Initial Value*/       200,
                 /*Name*/                "Small Stone Wall",
                 /*Descriptione*/        "A small stone sized wall for keeping things out"
             )
@@ -171,6 +183,7 @@ public class BuildingsCatalog : MonoBehaviour
                 /*Prefab*/              furnace,
                 /*Sprite*/              furnaceSprite,
                 /*StorageCapcity*/      10,
+                /*Initial Value*/       200,
                 /*Name*/                "Furnace",
                 /*Descriptione*/        "A place where one can smelt ore to bars"
             )
@@ -192,24 +205,26 @@ public class BuildingsCatalog : MonoBehaviour
     public List<Building> getBuildingsCatalog(){
         return buildingCatalog;
     }
-
-    public string getBuildingsCatalogToString(){
-        string buildingsCatalogToString = "";
-        foreach(var building in buildingCatalog){
-            buildingsCatalogToString += 
-            "------------BUILDING------------- " 
-            + "\nHOUSE NAME:\n" + building.getNameOfBuilding() + "\n"
-            + "\nCOST TO CRAFT BUILDING:\n" + building.getCostToCraftBuildingToString() + "\n";
-        }
-        return buildingsCatalogToString;
-    }
-
     public int getAmountOfBuildingsInCatalog(){
         return buildingCatalog.Count;
     }
-
     public Building getBuilding(int buildingID){
         return buildingCatalog[buildingID];
+    }
+    public int getAmountOfBuildingsInGame(){
+        return amountOfBuildingsInGame;
+    }
+    public void increaseAmountOfBuildingsInGame(int amount){
+        amountOfBuildingsInGame += amount;
+    }
+    public void decreaseAmountOfBuildingsInGame(int amount){
+        amountOfBuildingsInGame -= amount;
+    }
+    public void setBuildingLastClicked(GameObject building){
+        buildingLastClicked = building;
+    }
+    public GameObject getBuildingLastClicked(){
+        return buildingLastClicked;
     }
 
     public Building getBuildingByName(string name){
@@ -219,5 +234,15 @@ public class BuildingsCatalog : MonoBehaviour
             }
         }
         return null; 
+    }
+    public string getBuildingsCatalogToString(){
+        string buildingsCatalogToString = "";
+        foreach(var building in buildingCatalog){
+            buildingsCatalogToString += 
+            "------------BUILDING------------- " 
+            + "\nHOUSE NAME:\n" + building.getNameOfBuilding() + "\n"
+            + "\nCOST TO CRAFT BUILDING:\n" + building.getCostToCraftBuildingToString() + "\n";
+        }
+        return buildingsCatalogToString;
     }
 }

@@ -4,25 +4,29 @@ using UnityEngine;
 
 public class ItemAttributes : MonoBehaviour
 {
-    PlayerBehavior playerBehavior;
-    GameManager gameManager;
-    Inventory mainInventory;
-    Collider player;
+    private GameManager gameManager;
+    private Collider player;
     public int itemAmount;
-    public string itemName;
-    public bool playerInBounds;
+    private string itemTag;
+    private bool playerInBounds;
 
 
     void Awake()
     {
-        itemName = this.tag;
+        itemTag = this.tag;
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
-        playerBehavior = gameManager.getPlayerBehavior();
+
+        if(itemTag == "Wood"){
+            itemAmount = 1;
+        }
+        if(itemTag == "Stone"){
+            itemAmount = 1;
+        }
     }
 
     void Update()
     {
-        mainInventory = gameManager.getInventoryCatalog().getMainInventory();
+        
     }
 
     void Start()
@@ -33,13 +37,13 @@ public class ItemAttributes : MonoBehaviour
     public int getItemAmount(){
         return itemAmount;
     }
-    public string getItemName(){
-        return itemName;
+    public string getItemTag(){
+        return itemTag;
     }
     
     public void OnMouseDown()
     {
-        if(!gameManager.getIsMouseOverUI()){
+        if(!gameManager.GetUI().getIsMouseOverUI()){
             StartCoroutine(walkingToItem()); 
         }
     }
@@ -69,18 +73,22 @@ public class ItemAttributes : MonoBehaviour
     }
 
     public void pickUpItem(){
-        mainInventory.addItemToInventory(new Dictionary<string, int>{{getItemName(), getItemAmount()}});
+        if(getItemAmount() != 0){
+            itemAmount = gameManager.getInventoryCatalog().getMainInventory().addItemToInventory(new Dictionary<string, int>{{getItemTag(), getItemAmount()}});
+        }
         player.GetComponent<Animator>().SetTrigger("pickingUpItem");
-        Destroy(this.gameObject);
+        if(itemAmount == 0){
+            Destroy(this.gameObject);
+        }
     }
 
     public IEnumerator walkingToItem(){
         bool runLoop = true;
-        playerBehavior.moveToPosition(this.transform.position);
+        gameManager.getPlayerBehavior().moveToPosition(this.transform.position);
         while(runLoop){
             if(playerInBounds){
-                playerBehavior.stopPlayer();
-                playerBehavior.playerLookAt(transform.position.x, transform.position.y, transform.position.z);
+                gameManager.getPlayerBehavior().stopPlayer();
+                gameManager.getPlayerBehavior().playerLookAt(transform.position.x, transform.position.y, transform.position.z);
                 pickUpItem();
                 runLoop = false;
             }
