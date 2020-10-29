@@ -8,6 +8,11 @@ public class InventoryCatalog : MonoBehaviour
 
     public int amountOfInventoriesInCatalog;
 
+    void Start()
+    {
+        
+    }
+
     void Update()
     {
         amountOfInventoriesInCatalog = getAmountOfInventoriesInCatalog();
@@ -15,6 +20,10 @@ public class InventoryCatalog : MonoBehaviour
 
     public void addInventoryToCatalog(Inventory inventory){
         inventoryCatalog.Add(inventory);
+    }
+
+    public void addInventoryToCatalogAtIndex(int index, Inventory inventory){
+        inventoryCatalog.Insert(index, inventory);
     }
 
     public void removeInventoryFromCatalog(Inventory inventory){

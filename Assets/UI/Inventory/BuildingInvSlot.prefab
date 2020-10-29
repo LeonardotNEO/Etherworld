@@ -11,10 +11,9 @@ GameObject:
   - component: {fileID: 3372654491190489579}
   - component: {fileID: 3372654491190489577}
   - component: {fileID: 3372654491190489578}
-  - component: {fileID: 7863830229833975238}
   - component: {fileID: 5057732394002306079}
   m_Layer: 5
-  m_Name: Slot 1
+  m_Name: BuildingInvSlot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -40,7 +39,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 127, y: 127}
+  m_SizeDelta: {x: 108, y: 108}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3372654491190489577
 CanvasRenderer:
@@ -79,23 +78,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &7863830229833975238
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3372654491190489572}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d235372d7e4caae48bae9db03df6ea5b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemInSlot: 
-  slotCapacity: 99
-  currentAmountInSlot: 0
-  itemSlotPlacement: 0
-  slotNumber: 0
 --- !u!223 &5057732394002306079
 Canvas:
   m_ObjectHideFlags: 0
@@ -151,8 +133,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -47.47, y: 47.75}
-  m_SizeDelta: {x: -94.93394, y: -95.49041}
+  m_AnchoredPosition: {x: -39.92, y: 41.03}
+  m_SizeDelta: {x: -79.84473, y: -82.052536}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4763713016632788864
 CanvasRenderer:
@@ -225,8 +207,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.50357, y: -9.7}
-  m_SizeDelta: {x: 122.10597, y: 95.99347}
+  m_AnchoredPosition: {x: 0.0012102, y: 0.0000059605}
+  m_SizeDelta: {x: 107.997574, y: 108}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8731264628416992856
 CanvasRenderer:
@@ -303,7 +285,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -47.56, y: 47.87}
+  m_AnchoredPosition: {x: -39.92, y: 40.076}
   m_SizeDelta: {x: 25.978838, y: 24.038471}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &681036799968757712
@@ -335,7 +317,7 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 21
+    m_FontSize: 18
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 1

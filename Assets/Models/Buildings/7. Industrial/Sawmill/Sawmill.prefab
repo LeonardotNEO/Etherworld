@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8473066453181369193}
   - component: {fileID: 977185787571935957}
+  - component: {fileID: 6311927600550669940}
   - component: {fileID: 3073137812316769609}
   - component: {fileID: 4349020946454369055}
   - component: {fileID: 7094237437406377294}
@@ -54,12 +55,26 @@ MonoBehaviour:
   buildingName: 
   buildingDescription: 
   storageCapacity: 0
+  buildingInventory: {fileID: 0}
   playerInBoundsBuilding: 0
   positionX: 0
   positionY: 0
   positionZ: 0
   collidingWithOtherObject: 0
   buildingUIOpen: 0
+--- !u!114 &6311927600550669940
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2415714753047737244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5d9bcdd57d60534e8cd3b7ba5cecd85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inventoryID: 0
 --- !u!54 &3073137812316769609
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -76,7 +76,7 @@ public class PlayerBehavior : MonoBehaviour
         agent.SetDestination(newPosition);
     }
 
-    public void playerLookAt(float x, float y, float z){
-        transform.LookAt(new Vector3(x, y, z));
+    public void playerLookAt(GameObject lookAt){
+        transform.LookAt(new Vector3(lookAt.transform.position.x, 0, lookAt.transform.position.z));
     }
 }

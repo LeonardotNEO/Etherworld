@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class InventorySlot : MonoBehaviour
+public class InventorySlot
 {
     public string itemInSlot = null;
     public int slotCapacity = 99;
@@ -15,22 +15,9 @@ public class InventorySlot : MonoBehaviour
         
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if(currentAmountInSlot == 0){
-            GetComponent<Canvas>().enabled = false;
-            itemInSlot = null;
-        } else {
-            GetComponent<Canvas>().enabled = true;
-        }
 
-        if(currentAmountInSlot != 0){
-            transform.Find("Text").GetComponent<Text>().text = currentAmountInSlot.ToString();
-        }
-        if(itemInSlot != null){
-            transform.Find("Text (1)").GetComponent<Text>().text = itemInSlot.ToString();
-        }
     }
 
     public int getslotCapacity(){

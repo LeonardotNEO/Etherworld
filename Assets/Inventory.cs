@@ -5,31 +5,32 @@ using UnityEngine.UI;
 
 public class Inventory : MonoBehaviour
 {
-    public Dictionary<string, int> inventory = new Dictionary<string, int>();
-    //public List<GameObject> inventory = new List<GameObject>();
+    public List<InventorySlot> inventorySlots = new List<InventorySlot>();
     private int inventoryCapacity = 12;
+    private string inventoryName;
     private GameManager gameManager;
-    public GameObject inventorySlotPrefab;
-    private GameObject inventorySlot;
     public int inventoryID;
-    string itemSaved;
     
     void Awake()
     {
         gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
+        inventoryName = transform.name;
 
-        // Instantiating inventory slots according to inventorycapacity
         for(int i = 0; i < inventoryCapacity; i++){
-            GameObject inventorySlot = Instantiate(inventorySlotPrefab, transform);
-            inventorySlot.GetComponent<InventorySlot>().setSlotNumber(i);
+            inventorySlots.Add(new InventorySlot());
         }
     }
 
     void Start()
     {
         // Gets the inventory catalog and add this inventory to it
-        gameManager.getInventoryCatalog().addInventoryToCatalog(this);
-        inventoryID = gameManager.getInventoryCatalog().getAmountOfInventoriesInCatalog();
+        if(transform.tag == "player"){
+            gameManager.getInventoryCatalog().addInventoryToCatalogAtIndex(0, this);
+            inventoryID = 0;
+        } else {
+            gameManager.getInventoryCatalog().addInventoryToCatalog(this);
+            inventoryID = gameManager.getInventoryCatalog().getAmountOfInventoriesInCatalog();
+        }   
     }
 
     
@@ -41,72 +42,63 @@ public class Inventory : MonoBehaviour
         return inventoryCapacity;
     }
 
+    public string getInventoryName(){
+        return inventoryName;
+    }
+
     public int addItemToInventory(Dictionary<string, int> itemsToAdd){
         foreach(var item in itemsToAdd){
             int amountLeftToAdd = item.Value;
+            List<InventorySlot> invSlotsWithItemAlready = new List<InventorySlot>();
 
-
-            // This for loop is for checking if the item already exists, if it does, we want to start with that item and not inventortslot0
-            bool firstiteration = true;
-            InventorySlot itemExistsSlotSaved = null;
-
-            for(int i = 0; i < transform.childCount; i++){
-                InventorySlot itemExistsSlot = transform.GetChild(i).GetComponent<InventorySlot>();
-                if(item.Key == itemExistsSlot.getItemInSlot()){
-                    itemExistsSlotSaved = transform.GetChild(i).GetComponent<InventorySlot>();
+            foreach(InventorySlot inventorySlot in inventorySlots){
+                if(inventorySlot.getItemInSlot() == item.Key && inventorySlot.getCurrentAmountInSlot() < 99){
+                    invSlotsWithItemAlready.Add(inventorySlot);
+                }
+            }
+            
+            foreach(InventorySlot inventorySlot in invSlotsWithItemAlready){
+                    if(amountLeftToAdd + inventorySlot.getCurrentAmountInSlot() <= inventorySlot.getslotCapacity()){
+                        int amountToAddToThisSlot = amountLeftToAdd;
+                        inventorySlot.increaseCurrentAmountInSlot(amountToAddToThisSlot);
+                        amountLeftToAdd -= amountToAddToThisSlot;
+                    } else {
+                        int amountToAddToThisSlot = inventorySlot.getslotCapacity() - inventorySlot.getCurrentAmountInSlot();
+                        inventorySlot.increaseCurrentAmountInSlot(amountToAddToThisSlot);
+                        amountLeftToAdd -= amountToAddToThisSlot;
+                    }
+                if(amountLeftToAdd == 0){
+                    break;
                 }
             }
 
-            for(int i = 0; i < transform.childCount; i++){
 
-                InventorySlot thisInventorySlot = transform.GetChild(i).GetComponent<InventorySlot>();
+            foreach(InventorySlot inventorySlot in inventorySlots){
 
-                // We include this so that if an item exists, we want to check that inventorySlot FIRST, then after that we check the rest.
-                if(itemExistsSlotSaved != null && firstiteration){
-                    thisInventorySlot = itemExistsSlotSaved;
-                    firstiteration = false;
-                    i--;
-                }
-
-
-                if(thisInventorySlot.getItemInSlot() == item.Key){
-
-                    if(amountLeftToAdd + thisInventorySlot.getCurrentAmountInSlot() <= thisInventorySlot.getslotCapacity()){
-
+                if(inventorySlot.getItemInSlot() == item.Key){
+                    if(amountLeftToAdd + inventorySlot.getCurrentAmountInSlot() <= inventorySlot.getslotCapacity()){
                         int amountToAddToThisSlot = amountLeftToAdd;
-                        thisInventorySlot.increaseCurrentAmountInSlot(amountToAddToThisSlot);
+                        inventorySlot.increaseCurrentAmountInSlot(amountToAddToThisSlot);
                         amountLeftToAdd -= amountToAddToThisSlot;
-                        
-
                     } else {
-
-                        int amountToAddToThisSlot = thisInventorySlot.getslotCapacity() - thisInventorySlot.getCurrentAmountInSlot();
-                        thisInventorySlot.increaseCurrentAmountInSlot(amountToAddToThisSlot);
+                        int amountToAddToThisSlot = inventorySlot.getslotCapacity() - inventorySlot.getCurrentAmountInSlot();
+                        inventorySlot.increaseCurrentAmountInSlot(amountToAddToThisSlot);
                         amountLeftToAdd -= amountToAddToThisSlot;
-
-                        }
-
-                } else {
-                            
-                    if(thisInventorySlot.getCurrentAmountInSlot() == 0){
-
-                        if(amountLeftToAdd + thisInventorySlot.getCurrentAmountInSlot() <= thisInventorySlot.getslotCapacity()){
-
-                            int amountToAddToThisSlot = amountLeftToAdd;
-                            thisInventorySlot.increaseCurrentAmountInSlot(amountToAddToThisSlot);
-                            thisInventorySlot.setItemInSlot(item.Key);
-                            amountLeftToAdd -= amountToAddToThisSlot;
-
-                        } else {
-
-                            int amountToAddToThisSlot = thisInventorySlot.getslotCapacity() - thisInventorySlot.getCurrentAmountInSlot();
-                            thisInventorySlot.increaseCurrentAmountInSlot(amountToAddToThisSlot);
-                            amountLeftToAdd -= amountToAddToThisSlot;
-
-                        }
-
                     }
-                }                   
+                } else {
+                    if(inventorySlot.getCurrentAmountInSlot() == 0){
+                        if(amountLeftToAdd + inventorySlot.getCurrentAmountInSlot() <= inventorySlot.getslotCapacity()){
+                            int amountToAddToThisSlot = amountLeftToAdd;
+                            inventorySlot.increaseCurrentAmountInSlot(amountToAddToThisSlot);
+                            inventorySlot.setItemInSlot(item.Key);
+                            amountLeftToAdd -= amountToAddToThisSlot;
+                        } else {
+                            int amountToAddToThisSlot = inventorySlot.getslotCapacity() - inventorySlot.getCurrentAmountInSlot();
+                            inventorySlot.increaseCurrentAmountInSlot(amountToAddToThisSlot);
+                            amountLeftToAdd -= amountToAddToThisSlot;
+                        }
+                    }
+                }
                 if(amountLeftToAdd == 0){
                     break;
                 }
@@ -115,27 +107,26 @@ public class Inventory : MonoBehaviour
                 gameManager.getMessageLogText().addMessageToLog("Inventory is full! " + amountLeftToAdd + " " + item.Key + " could not be added to the inventory.");
                 return amountLeftToAdd;
             }
-             
+           
         }
         return 0;
     }
 
+    
     public void removeItemFromInventory(Dictionary<string, int> itemsToRemove){
         foreach(var itemRemove in itemsToRemove){
             int amountToRemove = itemRemove.Value;
 
             for(int i = inventoryCapacity - 1; i > -1; i--){
-
-                InventorySlot thisInventorySlot = transform.GetChild(i).GetComponent<InventorySlot>();
                 
-                if(thisInventorySlot.getItemInSlot() == itemRemove.Key){
+                if(inventorySlots[i].getItemInSlot() == itemRemove.Key){
                     int amountToDecrease;
-                    if(amountToRemove >= thisInventorySlot.getCurrentAmountInSlot()){
-                        amountToDecrease = thisInventorySlot.getCurrentAmountInSlot();
+                    if(amountToRemove >= inventorySlots[i].getCurrentAmountInSlot()){
+                        amountToDecrease = inventorySlots[i].getCurrentAmountInSlot();
                     } else {
                         amountToDecrease = amountToRemove;
                     }
-                    thisInventorySlot.decreaseCurrentAmountInSlot(amountToDecrease);
+                    inventorySlots[i].decreaseCurrentAmountInSlot(amountToDecrease);
                     amountToRemove -= amountToDecrease;
                 }
                 if(amountToRemove == 0){
@@ -151,10 +142,8 @@ public class Inventory : MonoBehaviour
             int itemAmountFound = 0;
 
             for(int i = 0; i < inventoryCapacity; i++){
-                InventorySlot inventorySlot = transform.GetChild(i).GetComponent<InventorySlot>();
-
-                if(item.Key == inventorySlot.getItemInSlot()){
-                    itemAmountFound += inventorySlot.getCurrentAmountInSlot();
+                if(item.Key == inventorySlots[i].getItemInSlot()){
+                    itemAmountFound += inventorySlots[i].getCurrentAmountInSlot();
                 }
             }
             if(itemAmountFound >= item.Value){
@@ -168,5 +157,9 @@ public class Inventory : MonoBehaviour
         } else {
             return true;
         }
+    }
+
+    public List<InventorySlot> getInventorySlots(){
+        return inventorySlots;
     }
 }

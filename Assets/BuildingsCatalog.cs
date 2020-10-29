@@ -6,7 +6,7 @@ public class BuildingsCatalog : MonoBehaviour
 {   
     public List<Building> buildingCatalog = new List<Building>();
     public int amountOfBuildingsInGame;
-    GameObject buildingLastClicked; // IMPORTANT
+    public GameObject buildingLastClicked; // IMPORTANT
     public GameObject smallWoodHouse;
     public Sprite smallWoodHouseSprite;
     public GameObject mediumWoodHouse;

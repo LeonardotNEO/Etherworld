@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7529164382859875898}
   - component: {fileID: 5716938026439770534}
   - component: {fileID: 4119653516329598148}
+  - component: {fileID: 3898699808750474202}
   m_Layer: 0
   m_Name: Small Wood House
   m_TagString: ResidentialBuilding
@@ -47,11 +48,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isOwnedByPlayer: 0
+  isRented: 0
   buildingTag: 
   buildingID: 0
   buildingName: 
   buildingDescription: 
   storageCapacity: 0
+  buildingInventory: {fileID: 0}
   playerInBoundsBuilding: 0
   positionX: 0
   positionY: 0
@@ -87,6 +90,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.5418892, y: 2.6293054, z: 2.1918814}
   m_Center: {x: -3.0402327, y: 1.3272185, z: 0}
+--- !u!114 &3898699808750474202
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4932859491038232435}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5d9bcdd57d60534e8cd3b7ba5cecd85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inventoryID: 0
 --- !u!64 &2161968140191409772
 MeshCollider:
   m_ObjectHideFlags: 0

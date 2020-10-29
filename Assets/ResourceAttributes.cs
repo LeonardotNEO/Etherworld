@@ -87,7 +87,7 @@ public class ResourceAttributes : MonoBehaviour
         while(runLoop){
             if(playerInBounds){
                 gameManager.getPlayerBehavior().stopPlayer();
-                gameManager.getPlayerBehavior().playerLookAt(transform.position.x, transform.position.y, transform.position.z);
+                gameManager.getPlayerBehavior().playerLookAt(this.gameObject);
                 StartCoroutine(gatheringResources());
                 runLoop = false;
             }

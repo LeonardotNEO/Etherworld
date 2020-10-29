@@ -8,16 +8,18 @@ public class UI : MonoBehaviour
 {
     // GAMEMANAGER
     GameManager gameManager;
+    GameObject buildingMenu;
 
     // INVENTORY
-    private bool inventoryOpen;
-    private bool craftingOpen;
-    //private bool buildingStatsOpen;
-    private bool messageLogOpen;
+    public bool inventoryOpen;
+    public bool craftingOpen;
+    public bool messageLogOpen;
+    public bool buildingUIOpen;
 
     void Start()
     {
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+        buildingMenu = GameObject.FindGameObjectWithTag("BuildingMenuUI");
     }
     void Update()
     {
@@ -54,6 +56,11 @@ public class UI : MonoBehaviour
         }
         if(Input.GetKeyDown("5")){
             gameManager.getInventoryCatalog().getMainInventory().addItemToInventory(new Dictionary<string, int>{{"Wood", 35}, {"Stone", 35}, {"Bucket", 1}});
+        }
+        if(Input.GetKeyDown("6")){
+            if(gameManager.getBuildingCatalog().getBuildingLastClicked()){
+                gameManager.getBuildingCatalog().getBuildingLastClicked().GetComponent<Inventory>().addItemToInventory(new Dictionary<string, int>{{"Wood", 35}, {"Stone", 35}, {"Bucket", 1}});
+            }
         }
         if(Input.GetKeyDown("i") && getInventoryOpen() == false){
             setInventory(true);
@@ -125,18 +132,15 @@ public class UI : MonoBehaviour
         return EventSystem.current.IsPointerOverGameObject();
     }
 
-    public void visitBuildingOnClick(){
-        GameObject buildingSelected = gameManager.getBuildingCatalog().getBuildingLastClicked();
-        gameManager.getPlayerBehavior().moveToPosition(buildingSelected.GetComponent<Collider>().bounds.center);
-    }
 
+    // WATERWELL //
     public void fillBucketOnClick(){
         StartCoroutine(collectWaterFromWell());
     }
     public IEnumerator collectWaterFromWell(){
         bool runLoop = true;
         GameObject buildingSelected = gameManager.getBuildingCatalog().getBuildingLastClicked();
-        visitBuildingOnClick();
+        visitBuilding();
         while(runLoop){
             if(buildingSelected.GetComponent<BuildingAttributes>().getPlayerInBoundsBuilding()){
                 if(gameManager.getInventoryCatalog().getMainInventory().checkIfListOfItemsAreInInventory(new Dictionary<string, int>{{"Bucket", 1}})){
@@ -154,49 +158,141 @@ public class UI : MonoBehaviour
         yield return null;
     }
 
-    public void openBuildingInventoryOnClick(){
+    // BUILDING MENU UI //
+
+    public void openBuildingUI(GameObject thisBuilding){
+        buildingUIOpen = true;
+        gameManager.getBuildingCatalog().setBuildingLastClicked(thisBuilding);
+        BuildingAttributes buildingAttributes  = thisBuilding.GetComponent<BuildingAttributes>();
+        Transform background = buildingMenu.transform.Find("Background");
+
+        
+        background.Find("Headline").GetComponent<Text>().text = buildingAttributes.getBuildingName();
+
+        if(!gameManager.GetUI().getIsMouseOverUI() && !gameManager.getCraftingSystem().getIsCrafting()){
+
+            // BUTTONS TO SHOW BY DEFAULT
+            background.Find("Visit").gameObject.SetActive(false);                       // VISIT
+            background.Find("Open").gameObject.SetActive(false);                        // OPEN
+            background.Find("Fill Bucket").gameObject.SetActive(false);                 // FILL BUCKET
+            background.Find("Open Gate").gameObject.SetActive(false);                   // OPEN GATE
+            background.Find("Close Gate").gameObject.SetActive(false);                   // CLOSE GATE
+
+            buildingMenu.transform.Find("Background").gameObject.SetActive(true);
+            background.position = new Vector3(Input.mousePosition.x + buildingMenu.transform.Find("Background").GetComponent<RectTransform>().sizeDelta.x/2, Input.mousePosition.y + buildingMenu.transform.Find("Background").GetComponent<RectTransform>().sizeDelta.y/2, 0);
+
+            if(buildingAttributes.getIsOwnedByPlayer() && !buildingAttributes.getIsRented()){
+                if(buildingAttributes.getBuildingName().Equals("Waterwell")){
+                    background.Find("Visit").gameObject.SetActive(true);                // VISIT
+                    background.Find("Open").gameObject.SetActive(true);                 // OPEN
+                    background.Find("Fill Bucket").gameObject.SetActive(true);          // FILL BUCKET
+                }
+                if(buildingAttributes.getBuildingTag().Equals("Industrial")){
+                    background.Find("Visit").gameObject.SetActive(true);                // VISIT
+                    background.Find("Open").gameObject.SetActive(true);                 // OPEN
+                }
+                if(buildingAttributes.getBuildingName().Equals("Small Wood House")){
+                    background.Find("Visit").gameObject.SetActive(true);                // VISIT
+                    background.Find("Open").gameObject.SetActive(true);                 // OPEN
+                }
+                if(buildingAttributes.getBuildingName().Equals("Medium Wood House")){
+                    background.Find("Visit").gameObject.SetActive(true);                // VISIT
+                    background.Find("Open").gameObject.SetActive(true);                 // OPEN
+                }
+                if(buildingAttributes.getBuildingName().Equals("Boarding House")){
+                    background.Find("Visit").gameObject.SetActive(true);                // VISIT
+                    background.Find("Open").gameObject.SetActive(true);                 // OPEN
+                }
+                if(buildingAttributes.getBuildingName().Equals("Medium Stone Gate")){
+                    if(thisBuilding.GetComponent<Gate>().getGateOpen()){
+                        background.Find("Open Gate").gameObject.SetActive(false);        // OPEN GATE
+                        background.Find("Close Gate").gameObject.SetActive(true);        // CLOSE GATE
+                    } else {
+                        background.Find("Close Gate").gameObject.SetActive(false);       // CLOSE GATE
+                        background.Find("Open Gate").gameObject.SetActive(true);         // OPEN GATE
+                    }
+                }
+            } else {
+                // THIS IS BUILDING IS NOT OWNED BY PLAYER
+                if(buildingAttributes.getBuildingName().Equals("Waterwell")){
+                    background.Find("Visit").gameObject.SetActive(true);                // VISIT
+                    background.Find("Fill Bucket").gameObject.SetActive(true);          // FILL BUCKET
+                }
+                if(buildingAttributes.getBuildingName().Equals("Boarding House")){
+                    background.Find("Visit").gameObject.SetActive(true);                // VISIT
+                }
+                if(buildingAttributes.getBuildingName().Equals("Small Wood House")){
+                    background.Find("Visit").gameObject.SetActive(true);                // VISIT
+                }
+                if(buildingAttributes.getBuildingName().Equals("Medium Wood House")){
+                    background.Find("Visit").gameObject.SetActive(true);                // VISIT
+                }
+                if(buildingAttributes.getBuildingName().Equals("Sawmill")){
+                    background.Find("Visit").gameObject.SetActive(true);                // VISIT
+                }
+                if(buildingAttributes.getBuildingName().Equals("Furnace")){
+                    background.Find("Visit").gameObject.SetActive(true);                // VISIT
+                }
+            }
+        }
+    }
+    public void closeBuildingUI(){
+        buildingUIOpen = false;
+        buildingMenu.transform.Find("Background").gameObject.SetActive(false);
+    }
+    public void visitBuilding(){
+        GameObject buildingSelected = gameManager.getBuildingCatalog().getBuildingLastClicked();
+        gameManager.getPlayerBehavior().moveToPosition(buildingSelected.GetComponent<Collider>().bounds.center);
+    }
+
+
+    // BUILDING OPEN UI //
+    public void buildingOpen(){
+        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background").gameObject.SetActive(true);
+        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Production").gameObject.SetActive(true);
+
+        GameObject.FindGameObjectWithTag("BuildingMenuUI").transform.Find("Background").gameObject.SetActive(false);
+    }
+    public void buildingOpenClose(){
+        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background").gameObject.SetActive(false);
+        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Production").gameObject.SetActive(false);
+        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Inventory").gameObject.SetActive(false);
+        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Stats").gameObject.SetActive(false);
+    }
+
+
+    public void buildingProductionOpen(){
+        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Production").gameObject.SetActive(true);
+
+        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Stats").gameObject.SetActive(false);
+        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Inventory").gameObject.SetActive(false);
+    }
+    public void buildingWorkersOpen(){
+
+    }
+    public void buildingInventoryOpen(){
+        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Inventory").gameObject.SetActive(true);
+
+        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Production").gameObject.SetActive(false);
+        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Stats").gameObject.SetActive(false);
+    }
+    public void buildingStatsOpen(){
+        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Stats").gameObject.SetActive(true);
+
+        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Production").gameObject.SetActive(false);
+        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Inventory").gameObject.SetActive(false);
+    }
+    public void buildingDisassemble(){
 
     }
 
-    /*public void buildingStatsOnClick(){
-        //buildingStatsOpen = true;
-        GameObject.FindGameObjectWithTag("BuildingMenuUI").GetComponent<Canvas>().enabled = false;
-        GameObject.FindGameObjectWithTag("BuildingStatsUI").GetComponent<Canvas>().enabled = true;
-        BuildingAttributes buildingSelectedStats = gameManager.getBuildingCatalog().getBuildingLastClicked().GetComponent<BuildingAttributes>();
-
-        // HEADER //
-        GameObject.FindGameObjectWithTag("BuildingStatsUI").transform.Find("Background").Find("Headline").GetComponentInChildren<Text>().text = buildingSelectedStats.getBuildingName();
-
-        // LEFT SIDE //
-        GameObject.FindGameObjectWithTag("BuildingStatsUI").transform.Find("Background").Find("Stats").Find("InfoLeft").GetComponentInChildren<Text>().text = 
-        "Name: " + buildingSelectedStats.getBuildingName() + "\nType:\n" + buildingSelectedStats.getBuildingTag() + "\nDescription:\n" + buildingSelectedStats.getBuildingDescription() + 
-        "\nOwned by player:\n" + buildingSelectedStats.getIsOwnedByPlayer() + "\nStorage Capacity:\n" + buildingSelectedStats.getStorageCapacity();
-
-        // RIGHT SIDE //
-        GameObject.FindGameObjectWithTag("BuildingStatsUI").transform.Find("Background").Find("Stats").Find("InfoRight").GetComponentInChildren<Text>().text =
-        "Building Upkeep:\n" + gameManager.getInventoryCatalog().getListOfItemsToString(buildingSelectedStats.getBuildingUpKeep()) + 
-        "\nBuilding Inventory:\n" + gameManager.getInventoryCatalog().getListOfItemsToString(buildingSelectedStats.getItemsStoredInBuilding()) +
-        "\nItems Produced:\n" + gameManager.getInventoryCatalog().getListOfItemsToString(buildingSelectedStats.getItemsProducedInBuilding()) +
-        "\nItems Needed For Production:\n" + gameManager.getInventoryCatalog().getListOfItemsToString(buildingSelectedStats.getItemsNeededForBuildingProduction());
-    }*/
-    public void closeBuildingStatsOnCLick(){
-        //buildingStatsOpen = false;
-        GameObject.FindGameObjectWithTag("BuildingStatsUI").GetComponent<Canvas>().enabled = false;
-    }
-    public void OpenGateOnClick(){
+    // GATE UI //
+    public void OpenGate(){
         gameManager.getBuildingCatalog().getBuildingLastClicked().GetComponent<Gate>().setGateOpen(true);
         // PLAY ANIMATION
     }
-    public void closeGateOnClick(){
+    public void closeGate(){
         gameManager.getBuildingCatalog().getBuildingLastClicked().GetComponent<Gate>().setGateOpen(false);
         // PLAY ANIMATION
-    }
-
-    public void buildingOpenOnClick(){
-        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background").gameObject.SetActive(true);
-        GameObject.FindGameObjectWithTag("BuildingMenuUI").GetComponent<Canvas>().enabled = false;
-    }
-    public void buildingOpenCloseOnClick(){
-        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background").gameObject.SetActive(false);
     }
 }

@@ -88,7 +88,7 @@ public class ItemAttributes : MonoBehaviour
         while(runLoop){
             if(playerInBounds){
                 gameManager.getPlayerBehavior().stopPlayer();
-                gameManager.getPlayerBehavior().playerLookAt(transform.position.x, transform.position.y, transform.position.z);
+                gameManager.getPlayerBehavior().playerLookAt(this.gameObject);
                 pickUpItem();
                 runLoop = false;
             }
