@@ -9,11 +9,22 @@ public class ShowMainInventory : MonoBehaviour
     public GameObject slot;
 
     public Inventory inventory;
+    public bool inventoryOpen;
 
     // Start is called before the first frame update
     void Awake()
     {
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+    }
+
+    void OnEnable()
+    {
+        inventoryOpen = true;   
+    }
+
+    void OnDisable()
+    {
+        inventoryOpen = false;
     }
 
     void Start()
@@ -23,33 +34,27 @@ public class ShowMainInventory : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
-        changeSlot(0);
-        changeSlot(1);
-        changeSlot(2);
-        changeSlot(3);
-        changeSlot(4);
-        changeSlot(5);
-        changeSlot(6);
-        changeSlot(7);
-        changeSlot(8);
-        changeSlot(9);
-        changeSlot(10);
-        changeSlot(11);
+        if(inventoryOpen){
+            for(int i = 0; i < inventory.getInventoryCapacity(); i++){
+                changeSlot(i);
+            }
+        }
     }
     public void checkIfEmpty(int slotNumber){
         if(inventory.getInventorySlots()[slotNumber].getCurrentAmountInSlot() == 0){
-            transform.GetChild(slotNumber).gameObject.SetActive(false);
+            transform.GetChild(slotNumber).Find("Button/Text").gameObject.SetActive(false);
+            transform.GetChild(slotNumber).Find("Panel/Text").gameObject.SetActive(false);
         } else {
-            transform.GetChild(slotNumber).gameObject.SetActive(true);
+            transform.GetChild(slotNumber).Find("Button/Text").gameObject.SetActive(true);
+            transform.GetChild(slotNumber).Find("Panel/Text").gameObject.SetActive(true);
         }
     }
 
     public void changeSlot(int slotNumber){
+        transform.GetChild(slotNumber).Find("Button/Text").GetComponent<Text>().text = inventory.getInventorySlots()[slotNumber].getItemInSlot();
+        transform.GetChild(slotNumber).Find("Panel/Text").GetComponent<Text>().text = inventory.getInventorySlots()[slotNumber].getCurrentAmountInSlot().ToString();
         checkIfEmpty(slotNumber);
-        transform.GetChild(slotNumber).Find("Text (1)").GetComponent<Text>().text = inventory.getInventorySlots()[slotNumber].getItemInSlot();
-        transform.GetChild(slotNumber).Find("Text").GetComponent<Text>().text = inventory.getInventorySlots()[slotNumber].getCurrentAmountInSlot().ToString();
     }
 }

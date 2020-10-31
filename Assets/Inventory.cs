@@ -6,8 +6,8 @@ using UnityEngine.UI;
 public class Inventory : MonoBehaviour
 {
     public List<InventorySlot> inventorySlots = new List<InventorySlot>();
-    private int inventoryCapacity = 12;
-    private string inventoryName;
+    public int inventoryCapacity;
+    public string inventoryName;
     private GameManager gameManager;
     public int inventoryID;
     
@@ -16,13 +16,20 @@ public class Inventory : MonoBehaviour
         gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
         inventoryName = transform.name;
 
-        for(int i = 0; i < inventoryCapacity; i++){
-            inventorySlots.Add(new InventorySlot());
-        }
+        if(transform.tag == "player"){
+            inventoryCapacity = 30;
+        } 
     }
 
     void Start()
     {
+        if(transform.tag == "Residential" || transform.tag == "Industrial"){
+            inventoryCapacity = gameManager.getBuildingCatalog().getBuildingByName(transform.name).getStorageCapacity();
+        }
+        for(int i = 0; i < inventoryCapacity; i++){
+            inventorySlots.Add(new InventorySlot());
+        }
+
         // Gets the inventory catalog and add this inventory to it
         if(transform.tag == "player"){
             gameManager.getInventoryCatalog().addInventoryToCatalogAtIndex(0, this);
@@ -105,9 +112,10 @@ public class Inventory : MonoBehaviour
             }
             if(amountLeftToAdd != 0){
                 gameManager.getMessageLogText().addMessageToLog("Inventory is full! " + amountLeftToAdd + " " + item.Key + " could not be added to the inventory.");
+                Debug.Log(amountLeftToAdd);
                 return amountLeftToAdd;
             }
-           
+            Debug.Log(amountLeftToAdd);
         }
         return 0;
     }
@@ -159,7 +167,20 @@ public class Inventory : MonoBehaviour
         }
     }
 
+    public void sendItemsFromInventory1ToIventory2(Inventory inv1, Inventory inv2, Dictionary<string,int> items){
+        inv1.addItemToInventory(items);
+        inv2.removeItemFromInventory(items);
+    }
+
     public List<InventorySlot> getInventorySlots(){
         return inventorySlots;
+    }
+
+    public string getInventoryToString(){
+        string inventoryString = "";
+        foreach(InventorySlot inventorySlot in inventorySlots){
+            inventoryString += inventorySlot.getCurrentAmountInSlot() + " " + inventorySlot.getItemInSlot();
+        }
+        return inventoryString;
     }
 }

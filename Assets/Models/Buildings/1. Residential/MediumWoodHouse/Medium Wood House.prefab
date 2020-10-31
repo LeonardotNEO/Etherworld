@@ -177,7 +177,7 @@ GameObject:
   - component: {fileID: 3324205887036124279}
   m_Layer: 0
   m_Name: Medium Wood House
-  m_TagString: ResidentialBuilding
+  m_TagString: Residential
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -211,18 +211,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isOwnedByPlayer: 0
   isRented: 0
+  buildingIsProducing: 0
   buildingTag: 
   buildingID: 0
   buildingName: 
   buildingDescription: 
   storageCapacity: 0
+  productionProgress: 0
   buildingInventory: {fileID: 0}
   playerInBoundsBuilding: 0
   positionX: 0
   positionY: 0
   positionZ: 0
   collidingWithOtherObject: 0
-  buildingUIOpen: 0
 --- !u!54 &8401038936500650811
 Rigidbody:
   m_ObjectHideFlags: 0

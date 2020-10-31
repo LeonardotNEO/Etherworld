@@ -5,12 +5,11 @@ using UnityEngine;
 public class Progressbar : MonoBehaviour
 {
     RectTransform progressBar;
-    void Start()
+    void Awake()
     {
         
     }
 
-    // Update is called once per frame
     void Update()
     {
         // Setting up progressbar, and that it will update each frame

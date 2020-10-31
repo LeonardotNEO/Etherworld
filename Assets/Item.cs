@@ -40,4 +40,7 @@ public class Item
     public GameObject getItemPrefab(){
         return itemPrefab;
     }
+    public Dictionary<string, int> getCostToCraftItem(){
+        return costToCraftItem;
+    }
 }

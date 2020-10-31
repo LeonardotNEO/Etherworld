@@ -10,24 +10,19 @@ TagManager:
   - Tree
   - StoneDepot
   - MainCamera2
-  - MainMeshOfObject
-  - CraftingSprite
-  - CraftingItems
-  - npc
   - GameManager
   - UI
   - InventoryMenuUI
   - CraftingMenuUI
   - MessageLogUI
-  - Small Wood House
-  - ResidentialBuilding
   - BuildingMenuUI
   - MessageLogBarUI
   - Stone
   - Industrial
-  - InventoryContentUI
   - ProgressBar
   - BuildingOpenUI
+  - ProductionProgressBar
+  - Residential
   layers:
   - Default
   - TransparentFX

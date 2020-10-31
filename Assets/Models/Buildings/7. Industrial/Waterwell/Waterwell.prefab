@@ -253,9 +253,10 @@ GameObject:
   - component: {fileID: -1504935686762539357}
   - component: {fileID: -6974313391245275205}
   - component: {fileID: 2040396175730287376}
+  - component: {fileID: 5762672577559409769}
   m_Layer: 0
   m_Name: Waterwell
-  m_TagString: Untagged
+  m_TagString: Industrial
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -288,17 +289,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isOwnedByPlayer: 0
+  isRented: 0
+  buildingIsProducing: 0
   buildingTag: 
   buildingID: 0
   buildingName: 
   buildingDescription: 
   storageCapacity: 0
+  productionProgress: 0
+  buildingInventory: {fileID: 0}
   playerInBoundsBuilding: 0
   positionX: 0
   positionY: 0
   positionZ: 0
   collidingWithOtherObject: 0
-  buildingUIOpen: 0
 --- !u!54 &-6974313391245275205
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -328,3 +332,16 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2.370386, y: 5.2073236, z: 2.0277245}
   m_Center: {x: -0.40494406, y: 2.1036615, z: -3.8098998}
+--- !u!114 &5762672577559409769
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7997308053412777993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5d9bcdd57d60534e8cd3b7ba5cecd85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inventoryID: 0

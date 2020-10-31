@@ -45,21 +45,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68f52fa77d670d54aabebb22e233c2ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerBehavior: {fileID: 0}
   resourceMined: {fileID: 789738550749354686, guid: d2e73e34e76cb4c4580e232083bffc97,
     type: 3}
   progressbar: {fileID: 0}
-  playerInBounds: 0
-  amountLeft: 6
-  progress: 0
-  resourceTag: 
-  gatheringsResourcesRunning: 0
-  firstTriggered: 0
-  secondTriggered: 0
-  thirdTriggered: 0
-  fourthTriggered: 0
-  fifthTriggered: 0
-  sixtTriggered: 0
 --- !u!136 &1857265906
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -91,7 +79,7 @@ GameObject:
   - component: {fileID: 1304483364208889367}
   m_Layer: 13
   m_Name: StoneDepositModel
-  m_TagString: MainMeshOfObject
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

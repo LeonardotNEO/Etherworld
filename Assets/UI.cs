@@ -52,14 +52,36 @@ public class UI : MonoBehaviour
             Debug.Log(gameManager.getItemCatalog().itemCatalogToString());
         }
         if(Input.GetKeyDown("4")){
-            gameManager.getInventoryCatalog().getMainInventory().removeItemFromInventory(new Dictionary<string, int>{{"Wood", 3}, {"Stone", 3}});
+            gameManager.getInventoryCatalog().getMainInventory().removeItemFromInventory(new Dictionary<string, int>{{"Wood planks", 3}, {"Stone", 3}});
         }
         if(Input.GetKeyDown("5")){
-            gameManager.getInventoryCatalog().getMainInventory().addItemToInventory(new Dictionary<string, int>{{"Wood", 35}, {"Stone", 35}, {"Bucket", 1}});
+            gameManager.getInventoryCatalog().getMainInventory().addItemToInventory(new Dictionary<string, int>{
+                {"Wood planks", 35}, 
+                {"Stone", 35}, 
+                {"Wood", 10}, 
+                {"Bucket", 1},
+                {"Iron ore", 10},
+                {"Coal ore", 10},
+                {"Gold ore", 10},
+                {"Silver ore", 10},
+                {"Copper ore", 10},
+                {"Tin ore", 10}
+                });
         }
         if(Input.GetKeyDown("6")){
             if(gameManager.getBuildingCatalog().getBuildingLastClicked()){
-                gameManager.getBuildingCatalog().getBuildingLastClicked().GetComponent<Inventory>().addItemToInventory(new Dictionary<string, int>{{"Wood", 35}, {"Stone", 35}, {"Bucket", 1}});
+                gameManager.getBuildingCatalog().getBuildingLastClicked().GetComponent<Inventory>().addItemToInventory(new Dictionary<string, int>{
+                    {"Wood planks", 35}, 
+                    {"Stone", 35}, 
+                    {"Wood", 10}, 
+                    {"Bucket", 1},
+                    {"Iron ore", 10},
+                    {"Coal ore", 10},
+                    {"Gold ore", 10},
+                    {"Silver ore", 10},
+                    {"Copper ore", 10},
+                    {"Tin ore", 10}
+                    });
             }
         }
         if(Input.GetKeyDown("i") && getInventoryOpen() == false){
@@ -173,6 +195,8 @@ public class UI : MonoBehaviour
 
             // BUTTONS TO SHOW BY DEFAULT
             background.Find("Visit").gameObject.SetActive(false);                       // VISIT
+            background.Find("Enter").gameObject.SetActive(false);                       // ENTER
+            background.Find("Exit").gameObject.SetActive(false);                        // EXIT
             background.Find("Open").gameObject.SetActive(false);                        // OPEN
             background.Find("Fill Bucket").gameObject.SetActive(false);                 // FILL BUCKET
             background.Find("Open Gate").gameObject.SetActive(false);                   // OPEN GATE
@@ -187,22 +211,33 @@ public class UI : MonoBehaviour
                     background.Find("Open").gameObject.SetActive(true);                 // OPEN
                     background.Find("Fill Bucket").gameObject.SetActive(true);          // FILL BUCKET
                 }
+
                 if(buildingAttributes.getBuildingTag().Equals("Industrial")){
                     background.Find("Visit").gameObject.SetActive(true);                // VISIT
+                    if(gameManager.getPlayerBehavior().getPlayerEnteredBuilding()){
+                        background.Find("Enter").gameObject.SetActive(false);           // ENTER
+                        background.Find("Exit").gameObject.SetActive(true);             // EXIT
+                    } else {
+                        background.Find("Enter").gameObject.SetActive(true);            // ENTER
+                        background.Find("Exit").gameObject.SetActive(false);            // EXIT
+                    }
                     background.Find("Open").gameObject.SetActive(true);                 // OPEN
                 }
-                if(buildingAttributes.getBuildingName().Equals("Small Wood House")){
+
+                if(buildingAttributes.getBuildingTag().Equals("Residential")){
                     background.Find("Visit").gameObject.SetActive(true);                // VISIT
+
+                    if(gameManager.getPlayerBehavior().getPlayerEnteredBuilding()){
+                        background.Find("Enter").gameObject.SetActive(false);           // ENTER
+                        background.Find("Exit").gameObject.SetActive(true);             // EXIT
+                    } else {
+                        background.Find("Enter").gameObject.SetActive(true);            // ENTER
+                        background.Find("Exit").gameObject.SetActive(false);            // EXIT
+                    }
+
                     background.Find("Open").gameObject.SetActive(true);                 // OPEN
                 }
-                if(buildingAttributes.getBuildingName().Equals("Medium Wood House")){
-                    background.Find("Visit").gameObject.SetActive(true);                // VISIT
-                    background.Find("Open").gameObject.SetActive(true);                 // OPEN
-                }
-                if(buildingAttributes.getBuildingName().Equals("Boarding House")){
-                    background.Find("Visit").gameObject.SetActive(true);                // VISIT
-                    background.Find("Open").gameObject.SetActive(true);                 // OPEN
-                }
+
                 if(buildingAttributes.getBuildingName().Equals("Medium Stone Gate")){
                     if(thisBuilding.GetComponent<Gate>().getGateOpen()){
                         background.Find("Open Gate").gameObject.SetActive(false);        // OPEN GATE
@@ -236,24 +271,52 @@ public class UI : MonoBehaviour
             }
         }
     }
+    //---------------//
+    // BUILDING MENU //
+    //---------------//
     public void closeBuildingUI(){
         buildingUIOpen = false;
         buildingMenu.transform.Find("Background").gameObject.SetActive(false);
     }
     public void visitBuilding(){
+        closeBuildingUI();
         GameObject buildingSelected = gameManager.getBuildingCatalog().getBuildingLastClicked();
         gameManager.getPlayerBehavior().moveToPosition(buildingSelected.GetComponent<Collider>().bounds.center);
     }
 
+    public void enterBuilding(){
+        closeBuildingUI();
+        GameObject buildingSelected = gameManager.getBuildingCatalog().getBuildingLastClicked();
+        BuildingAttributes buildingAttributes = gameManager.getBuildingCatalog().getBuildingLastClicked().GetComponent<BuildingAttributes>();
 
+        if(buildingAttributes.getPlayerInBoundsBuilding()){
+            gameManager.getPlayerBehavior().setPlayerEnteredBuilding(true);
+            gameManager.getPlayerBehavior().hideBody(true);
+            gameManager.getPlayerBehavior().setMovementDisabled(true);
+        } else {
+            gameManager.getMessageLogText().addMessageToLog("You need to be at the entrance in order to enter the building");
+        }
+    }
+
+    public void exitBuilding(){
+        closeBuildingUI();
+        gameManager.getPlayerBehavior().setPlayerEnteredBuilding(false);
+        gameManager.getPlayerBehavior().hideBody(false);
+        gameManager.getPlayerBehavior().setMovementDisabled(false);
+    }
+
+    //------------------//
     // BUILDING OPEN UI //
+    //------------------//
     public void buildingOpen(){
+        closeBuildingUI();
         GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background").gameObject.SetActive(true);
         GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Production").gameObject.SetActive(true);
 
         GameObject.FindGameObjectWithTag("BuildingMenuUI").transform.Find("Background").gameObject.SetActive(false);
     }
     public void buildingOpenClose(){
+        resetSelectedItem();
         GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background").gameObject.SetActive(false);
         GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Production").gameObject.SetActive(false);
         GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Inventory").gameObject.SetActive(false);
@@ -281,9 +344,86 @@ public class UI : MonoBehaviour
 
         GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Production").gameObject.SetActive(false);
         GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Inventory").gameObject.SetActive(false);
+
+        BuildingAttributes building = gameManager.getBuildingCatalog().getBuildingLastClicked().GetComponent<BuildingAttributes>();
+        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Stats/InfoLeft/InfoLeftText").GetComponent<Text>().text =
+        "Name:\n" + building.getBuildingName() + "\n\nDescription:\n" + building.getBuildingDescription() + "\n\nStorage Capacity:\n" + building.getStorageCapacity() +
+        "\n\nValue:\n" + building.getBuildingValue() + "\n\nRented:\n" + building.getIsRented();
+
+        InventoryCatalog inventoryCatalog = gameManager.getInventoryCatalog();
+        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Stats/InfoRight/Viewport/Content/Text").GetComponent<Text>().text =
+        "Building upkeep:\n" + inventoryCatalog.getListOfItemsToString(building.getBuildingUpKeep()) + "\nItems Produced Here:\n" + inventoryCatalog.getListOfItemsToString(building.getItemsProducedInBuilding()) +
+        "\nItems needed for production:\n" + inventoryCatalog.getListOfItemsToString(building.getItemsNeededForBuildingProduction());
     }
     public void buildingDisassemble(){
 
+    }
+
+    //---------------//
+    // PRODUCTION UI //
+    //---------------//
+    public void selectItemButton(string item){
+        gameManager.getItemCatalog().setSelectedItem(gameManager.getItemCatalog().getItemByName(item));
+        Item selectedItem = gameManager.getItemCatalog().getSelectedItem();
+        GameObject rightPanel = GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Production/RightPanel").gameObject;
+        rightPanel.transform.Find("Selected Item Field").GetComponent<Text>().text = item;
+        rightPanel.transform.Find("Items Needed Field").GetComponent<Text>().text = gameManager.getInventoryCatalog().getListOfItemsToString(selectedItem.getCostToCraftItem());
+    }
+
+    public void resetSelectedItem(){
+        GameObject rightPanel = GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Production/RightPanel").gameObject;
+        rightPanel.transform.Find("Selected Item Field").GetComponent<Text>().text = "";
+        rightPanel.transform.Find("Items Needed Field").GetComponent<Text>().text = "";
+        gameManager.getItemCatalog().setSelectedItem(null);
+    }
+
+    public void produceItemButton(){
+        StartCoroutine(produceItem());
+    }
+
+    public IEnumerator produceItem(){
+        Item selectedItem = gameManager.getItemCatalog().getSelectedItem();
+        Inventory buildingInventory = gameManager.getBuildingCatalog().getBuildingLastClickedInventory();
+        BuildingAttributes buildingAttributes = gameManager.getBuildingCatalog().getBuildingLastClicked().GetComponent<BuildingAttributes>(); 
+        BuildingProgressBar progressbar = GameObject.FindGameObjectWithTag("ProductionProgressBar").GetComponent<BuildingProgressBar>();
+
+        float progressSpeed = 100;
+
+        if(selectedItem != null){
+            if(!buildingAttributes.getBuildingIsProducing()){
+                Debug.Log(gameManager.getInventoryCatalog().getListOfItemsToString(selectedItem.getCostToCraftItem()));
+
+                if(buildingInventory.checkIfListOfItemsAreInInventory(selectedItem.getCostToCraftItem())){
+                    buildingAttributes.setBuildingIsProducing(true);
+                    buildingAttributes.setItemCurrentlyProduced(selectedItem);
+
+                    while(buildingInventory.checkIfListOfItemsAreInInventory(selectedItem.getCostToCraftItem())){
+
+                        while(buildingAttributes.getProductionProgress() <= 360){
+                            buildingAttributes.setIncreaseProductionProgress(Time.deltaTime * progressSpeed);
+                            //progressbar.updateProgressBar(buildingAttributes.getProductionProgress());
+
+                            if(buildingAttributes.getProductionProgress() >= 360){
+                                buildingInventory.addItemToInventory(new Dictionary<string, int>{{selectedItem.getName(), 1}});
+                                buildingInventory.removeItemFromInventory(selectedItem.getCostToCraftItem());
+                                buildingAttributes.setResetProductionProgress();
+                                break;
+                            }
+                            yield return null;
+                        }
+                    }
+                    buildingAttributes.setBuildingIsProducing(false);
+                    buildingAttributes.setItemCurrentlyProduced(null);
+
+                } else {
+                    gameManager.getMessageLogText().addMessageToLog("You dont have enough items in the building inventory to produce that item");
+                }
+            }
+        } else {
+            gameManager.getMessageLogText().addMessageToLog("You need to select an item to produce");
+        }
+        
+        yield return null;
     }
 
     // GATE UI //

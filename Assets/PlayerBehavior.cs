@@ -15,6 +15,8 @@ public class PlayerBehavior : MonoBehaviour
     public bool reachedDestination;
     public bool touchingObstacle;
     public bool mouseOnItemResource;
+    public bool movementDisabled;
+    public bool playerEnteredBuilding;
     void Start()
     {
         stopPlayer();
@@ -73,10 +75,38 @@ public class PlayerBehavior : MonoBehaviour
     }
 
     public void moveToPosition(Vector3 newPosition){
-        agent.SetDestination(newPosition);
+        if(!movementDisabled){
+            agent.SetDestination(newPosition);
+        }
+    }
+
+    public void teleportToPosition(Vector3 newPosition){
+        agent.Warp(newPosition);
     }
 
     public void playerLookAt(GameObject lookAt){
         transform.LookAt(new Vector3(lookAt.transform.position.x, 0, lookAt.transform.position.z));
+    }
+    public bool getMovementDisabled(){
+        return movementDisabled;
+    }
+    public void setMovementDisabled(bool val){
+        movementDisabled = val;
+    }
+
+    public void hideBody(bool val){
+        if(val){
+            transform.GetChild(0).gameObject.SetActive(false);
+        } else {
+            transform.GetChild(0).gameObject.SetActive(true);
+        }
+        
+    }
+
+    public bool getPlayerEnteredBuilding(){
+        return playerEnteredBuilding;
+    }
+    public void setPlayerEnteredBuilding(bool val){
+        playerEnteredBuilding = val;
     }
 }

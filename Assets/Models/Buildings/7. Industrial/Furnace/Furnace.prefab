@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3370143844014409356}
   - component: {fileID: 1172283248971217606}
   - component: {fileID: 3623348516486653365}
+  - component: {fileID: 1505258560574111303}
   m_Layer: 0
   m_Name: Furnace
   m_TagString: Industrial
@@ -48,17 +49,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isOwnedByPlayer: 0
   isRented: 0
+  buildingIsProducing: 0
   buildingTag: 
   buildingID: 0
   buildingName: 
   buildingDescription: 
   storageCapacity: 0
+  productionProgress: 0
+  buildingInventory: {fileID: 0}
   playerInBoundsBuilding: 0
   positionX: 0
   positionY: 0
   positionZ: 0
   collidingWithOtherObject: 0
-  buildingUIOpen: 0
 --- !u!54 &1172283248971217606
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -88,6 +91,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.9267086, y: 2.7668617, z: 3.0196095}
   m_Center: {x: -1.9377512, y: 1.0270594, z: 0}
+--- !u!114 &1505258560574111303
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 201775190020943813}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5d9bcdd57d60534e8cd3b7ba5cecd85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inventoryID: 0
 --- !u!1 &3733494391469815494
 GameObject:
   m_ObjectHideFlags: 0

@@ -12,12 +12,15 @@ public class BuildingAttributes : MonoBehaviour
     public bool isOwnedByPlayer;
     //public List<NPC> npcsAssignedHere;
     public bool isRented;
+    public bool buildingIsProducing;
     public string buildingTag;
     private int buildingValue;
     public int buildingID;
     public string buildingName;
     public string buildingDescription;
     public int storageCapacity;
+    public float productionProgress;
+    public Item itemCurrentlyProduced;
 
     public Dictionary<string, int> buildingUpKeep;
     public Inventory buildingInventory;
@@ -29,7 +32,6 @@ public class BuildingAttributes : MonoBehaviour
     public float positionY;
     public float positionZ;
     public bool collidingWithOtherObject;
-    public bool buildingUIOpen;
     void Start()
     {
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
@@ -161,6 +163,15 @@ public class BuildingAttributes : MonoBehaviour
     public bool getIsRented(){
         return isRented;
     }
+    public bool getBuildingIsProducing(){
+        return buildingIsProducing;
+    }
+    public float getProductionProgress(){
+        return productionProgress;
+    }
+    public Item getItemCurrentlyProduced(){
+        return itemCurrentlyProduced;
+    }
 
     //SETTERS
     public void setItemsProducedInBuilding(Dictionary<string, int> newItemsProduced)
@@ -197,5 +208,20 @@ public class BuildingAttributes : MonoBehaviour
     }
     public void setIsRented(bool val){
         isRented = val;
+    }
+    public void setBuildingIsProducing(bool val){
+        buildingIsProducing = val;
+    }
+    public void setIncreaseProductionProgress(float progress){
+        productionProgress += progress;
+    }
+    public void setDecreaseProductionProgress(float progress){
+        productionProgress -= progress;
+    }
+    public void setResetProductionProgress(){
+        productionProgress = 0;
+    }
+    public void setItemCurrentlyProduced(Item item){
+        itemCurrentlyProduced = item;
     }
 }
