@@ -43,7 +43,7 @@ public class InventoryCatalog : MonoBehaviour
     }
     
     public Inventory getMainInventory(){
-        return inventoryCatalog[1];
+        return inventoryCatalog[0];
     }
 
 

@@ -21,6 +21,7 @@ TagManager:
   - Residential
   - BuildingInvSlot
   - MainInvSlot
+  - NPC
   layers:
   - Default
   - TransparentFX
