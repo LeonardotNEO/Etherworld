@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6469411810059685536}
   m_Layer: 9
   m_Name: Tree
-  m_TagString: Tree
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -62,17 +62,6 @@ MonoBehaviour:
   resourceMined: {fileID: 6277615705952907542, guid: ae8f45abfe7da8b43860067e5eb82e56,
     type: 3}
   progressbar: {fileID: 0}
-  playerInBounds: 0
-  amountLeft: 1
-  progress: 0
-  resourceTag: 
-  gatheringsResourcesRunning: 0
-  firstTriggered: 0
-  secondTriggered: 0
-  thirdTriggered: 0
-  fourthTriggered: 0
-  fifthTriggered: 0
-  sixtTriggered: 0
 --- !u!136 &6469411810059685536
 CapsuleCollider:
   m_ObjectHideFlags: 0

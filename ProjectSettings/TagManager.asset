@@ -6,9 +6,6 @@ TagManager:
   tags:
   - Ground
   - player
-  - Wood
-  - Tree
-  - StoneDepot
   - MainCamera2
   - GameManager
   - UI
@@ -17,12 +14,13 @@ TagManager:
   - MessageLogUI
   - BuildingMenuUI
   - MessageLogBarUI
-  - Stone
   - Industrial
   - ProgressBar
   - BuildingOpenUI
   - ProductionProgressBar
   - Residential
+  - BuildingInvSlot
+  - MainInvSlot
   layers:
   - Default
   - TransparentFX

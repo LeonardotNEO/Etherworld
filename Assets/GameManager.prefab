@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3342161661001408953}
   - component: {fileID: 3342161661001408954}
+  - component: {fileID: 4301099642311987071}
   - component: {fileID: 3342161661001408958}
   - component: {fileID: 3342161661001408959}
   - component: {fileID: 3342161661001408952}
@@ -49,6 +50,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbd84af297fa23c4fa1cfc96b3bd6770, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerBehavior: {fileID: 0}
+--- !u!114 &4301099642311987071
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3342161661001408955}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd989bea26b6dc44ca48b051560e7a7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clockSpeed: 1000
+  years: 0
+  months: 0
+  days: 0
+  hours: 0
+  minutes: 0
+  seconds: 0
+  rawTime: 0
+  time: 0
 --- !u!114 &3342161661001408958
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -75,7 +98,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d67672aac1f1f0545bf5fa3a33937aa3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buildingsInWorld: []
   amountOfBuildingsInGame: 0
+  buildingLastClicked: {fileID: 0}
   smallWoodHouse: {fileID: 4932859491038232435, guid: b661f47856557a34fb5ee3699ec4be7c,
     type: 3}
   smallWoodHouseSprite: {fileID: 0}
@@ -88,10 +113,12 @@ MonoBehaviour:
   waterWell: {fileID: 7997308053412777993, guid: 2857293bbd2f47348aad8f1231c99137,
     type: 3}
   waterWellSprite: {fileID: 0}
-  woodFence: {fileID: 15760311937558185, guid: 04cf90eabfd0a154ebd1ae3838bc6faa, type: 3}
-  woodFenceSprite: {fileID: 0}
   sawmill: {fileID: 2415714753047737244, guid: ffc0b1622cc190246890b23c2ce148f2, type: 3}
   sawmillSprite: {fileID: 0}
+  furnace: {fileID: 201775190020943813, guid: ca7ecf39c8151aa48bf4e862b565c2ba, type: 3}
+  furnaceSprite: {fileID: 0}
+  woodFence: {fileID: 15760311937558185, guid: 04cf90eabfd0a154ebd1ae3838bc6faa, type: 3}
+  woodFenceSprite: {fileID: 0}
   smallStoneWall: {fileID: 4067309664729466206, guid: dfa62ea7f908c604db93c985b16b4d57,
     type: 3}
   smallStoneWallSprite: {fileID: 0}
@@ -104,8 +131,14 @@ MonoBehaviour:
   mediumStoneWallCorner: {fileID: 8225029139522262820, guid: d93f1b719357e59459df73b7808b640b,
     type: 3}
   MediumStoneWallCornerSprite: {fileID: 0}
-  furnace: {fileID: 201775190020943813, guid: ca7ecf39c8151aa48bf4e862b565c2ba, type: 3}
-  furnaceSprite: {fileID: 0}
+  bigStoneWall: {fileID: 0}
+  bigStoneWallSprite: {fileID: 0}
+  bigStoneWallGate: {fileID: 0}
+  bigStoneWallGateSprite: {fileID: 0}
+  bigStoneWallCorner: {fileID: 0}
+  bigStoneWallCornerSprite: {fileID: 0}
+  bigStoneWallInvertedCorner: {fileID: 0}
+  bigStoneWallInvertedCornerSprite: {fileID: 0}
 --- !u!114 &3342161661001408952
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -161,3 +194,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71674b6548e430d47bfdbdae8a4f1c07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inventoryOpen: 0
+  craftingOpen: 0
+  messageLogOpen: 0
+  buildingMenuOpen: 0
+  buildingOpenOpen: 0
+  buildingInventoryOpenBool: 0

@@ -218,6 +218,7 @@ MonoBehaviour:
   buildingDescription: 
   storageCapacity: 0
   productionProgress: 0
+  playerEnteredBuilding: 0
   buildingInventory: {fileID: 0}
   playerInBoundsBuilding: 0
   positionX: 0
@@ -251,8 +252,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2.0288029, y: 3.1999226, z: 1.7547385}
-  m_Center: {x: -4.2755404, y: 1.0999613, z: -0.543889}
+  m_Size: {x: 2.3159642, y: 3.1999226, z: 1.7547385}
+  m_Center: {x: -4.419121, y: 1.0999613, z: -0.543889}
 --- !u!114 &3324205887036124279
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -265,4 +266,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5d9bcdd57d60534e8cd3b7ba5cecd85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inventoryCapacity: 0
+  inventoryName: 
   inventoryID: 0

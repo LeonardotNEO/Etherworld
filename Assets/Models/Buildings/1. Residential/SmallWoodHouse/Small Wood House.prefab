@@ -56,6 +56,7 @@ MonoBehaviour:
   buildingDescription: 
   storageCapacity: 0
   productionProgress: 0
+  playerEnteredBuilding: 0
   buildingInventory: {fileID: 0}
   playerInBoundsBuilding: 0
   positionX: 0
@@ -89,8 +90,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.5418892, y: 2.6293054, z: 2.1918814}
-  m_Center: {x: -3.0402327, y: 1.3272185, z: 0}
+  m_Size: {x: 1.8137674, y: 2.6293054, z: 2.1918814}
+  m_Center: {x: -3.1761718, y: 1.3272185, z: 0}
 --- !u!114 &3898699808750474202
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -103,6 +104,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5d9bcdd57d60534e8cd3b7ba5cecd85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inventoryCapacity: 0
+  inventoryName: 
   inventoryID: 0
 --- !u!64 &2161968140191409772
 MeshCollider:
