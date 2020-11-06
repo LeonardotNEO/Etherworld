@@ -7,32 +7,38 @@ using UnityEngine.UI;
 public class BuildingAttributes : MonoBehaviour
 {
     GameManager gameManager;
-    GameObject buildingMenu;
-    GameObject thisBuilding;
-    public bool isOwnedByPlayer;
-    //public List<NPC> npcsAssignedHere;
-    public bool isRented;
-    public bool buildingIsProducing;
-    public string buildingTag;
-    private int buildingValue;
-    public int buildingID;
-    public string buildingName;
-    public string buildingDescription;
-    public int storageCapacity;
-    public float productionProgress;
-    public Item itemCurrentlyProduced;
-    public bool playerEnteredBuilding;
-
-    public Dictionary<string, int> buildingUpKeep;
+    public GameObject buildingMenu;
+    public GameObject thisBuilding;
+    public Town apartOfTown;
+    public List<Citizen> workersInBuilding  = new List<Citizen>();
+    public List<Citizen> residentsInBuilding  = new List<Citizen>();
     public Inventory buildingInventory;
+    public Dictionary<string, int> buildingUpKeep;
     public Dictionary<string, int> itemsProducedInBuilding;
     public Dictionary<string, int> itemsNeededForProduction;
+    public Item itemCurrentlyProduced;
+    
+    public string buildingTag;
+    public string buildingName;
+    public string buildingDescription;
+    
+    private int buildingValue;
+    public int buildingID;
+    public int storageCapacity;
+    public float productionProgress;
+    public int residentialLimit;
 
-    public bool playerInBoundsBuilding;
     public float positionX;
     public float positionY;
     public float positionZ;
+
+    public bool isOwnedByPlayer;
+    public bool isRented;
+    public bool buildingIsProducing;
+    public bool playerEnteredBuilding;
+    public bool playerInBoundsBuilding;
     public bool collidingWithOtherObject;
+    
 
     void Awake()
     {
@@ -43,25 +49,25 @@ public class BuildingAttributes : MonoBehaviour
     {
         gameManager.getBuildingCatalog().increaseAmountOfBuildingsInGame(1);
         gameManager.getBuildingCatalog().addBuildingToWorld(this);
-
-        buildingTag = gameObject.tag;
-        buildingValue = gameManager.getBuildingCatalog().getBuildingByName(transform.name).getInitialValue();
-        buildingID = gameManager.getBuildingCatalog().getAmountOfBuildingsInGame();
-        transform.name += " " + buildingID;
-        buildingName = gameManager.getBuildingCatalog().getBuildingByName(transform.name).getNameOfBuilding();
-        buildingDescription = gameManager.getBuildingCatalog().getBuildingByName(transform.name).getDescriptionOfBulding();
-        storageCapacity = gameManager.getBuildingCatalog().getBuildingByName(transform.name).getStorageCapacity();
-
         buildingInventory = transform.GetComponent<Inventory>();
-        buildingUpKeep = gameManager.getBuildingCatalog().getBuildingByName(transform.name).getBuildingUpKeep();
-        itemsNeededForProduction = gameManager.getBuildingCatalog().getBuildingByName(transform.name).getNeededForProduction();
-        itemsProducedInBuilding = gameManager.getBuildingCatalog().getBuildingByName(transform.name).getBuildingProduction();
-        storageCapacity = gameManager.getBuildingCatalog().getBuildingByName(transform.name).getStorageCapacity();
+        buildingTag = gameObject.tag;
 
-        if(GetComponent<Collider>()){
-            positionX = GetComponent<Collider>().bounds.center.x;
-            positionY = GetComponent<Collider>().bounds.center.y;
-            positionZ = GetComponent<Collider>().bounds.center.z;
+        //setTownBuildingIsApartOf(null);
+        setBuildingValue(gameManager.getBuildingCatalog().getBuildingByName(transform.name).getInitialValue());
+        setBuildingID(gameManager.getBuildingCatalog().getAmountOfBuildingsInGame());
+        transform.name += " " + buildingID;
+        setBuildingName(gameManager.getBuildingCatalog().getBuildingByName(transform.name).getNameOfBuilding());
+        setBuildingDescription(gameManager.getBuildingCatalog().getBuildingByName(transform.name).getDescriptionOfBulding());
+        setBuildingStorageCapacity(gameManager.getBuildingCatalog().getBuildingByName(transform.name).getStorageCapacity());
+        residentialLimit = 4;
+        setBuildingUpKeep(gameManager.getBuildingCatalog().getBuildingByName(transform.name).getBuildingUpKeep());
+        setItemsNeededForBuildingProduction(gameManager.getBuildingCatalog().getBuildingByName(transform.name).getNeededForProduction());
+        setItemsProducedInBuilding(gameManager.getBuildingCatalog().getBuildingByName(transform.name).getBuildingProduction());
+
+        if(GetComponent<BoxCollider>()){
+            positionX = GetComponent<BoxCollider>().bounds.center.x;
+            positionY = GetComponent<BoxCollider>().bounds.center.y;
+            positionZ = GetComponent<BoxCollider>().bounds.center.z;
         } else {
             positionX = gameObject.transform.position.x;
             positionY = gameObject.transform.position.y;
@@ -77,7 +83,27 @@ public class BuildingAttributes : MonoBehaviour
         
     }
 
-    void OnTriggerStay(Collider other)
+    void OnDisable()
+    {
+        foreach(Citizen citizen in residentsInBuilding){
+            citizen.leaveBuilding();
+            citizen.setHouse(null);
+            citizen.setTownAlliegence(null);
+        }
+        foreach(Citizen citizen in workersInBuilding){
+            citizen.leaveBuilding();
+            citizen.setWork(null);
+        }
+        if(apartOfTown){
+            apartOfTown.removeBuildingFromTown(this);
+            apartOfTown.removeBoardingHouseFromTown(this);
+            apartOfTown.removeResidentialBuildingFromTown(this);
+            apartOfTown.removeResidentialBuildingFromTown(this);
+            apartOfTown.removeInventoryFromTown(buildingInventory);
+        }
+    }
+
+    void OnTriggerEnter(Collider other)
     {
         if(
             other.gameObject.layer == 12  || /*Layer 12 is BUILDINGS*/
@@ -88,11 +114,18 @@ public class BuildingAttributes : MonoBehaviour
             other.gameObject.layer == 15      /*Layer 15 is PLAYER*/
 
         ){setPlayerInBoundsBuilding(true);} 
+
+        if(other.gameObject.GetComponent<Town>()){
+            setTownBuildingIsApartOf(other.gameObject.GetComponent<Town>());
+        }
     }
     void OnTriggerExit(Collider other)
     {
         setCollidingWithOtherObject(false);
         setPlayerInBoundsBuilding(false);
+        if(other.gameObject.GetComponent<Town>()){
+            apartOfTown = null;
+        }
     }
 
     void OnMouseOver()
@@ -202,6 +235,21 @@ public class BuildingAttributes : MonoBehaviour
     public float getBuildingPositionZ(){
         return positionZ;
     }
+    public BuildingAttributes getBuildingAttributes(){
+        return this;
+    }
+    public List<Citizen> getWorkersInBuilding(){
+        return workersInBuilding;
+    }
+    public Town getTownBuildingIsApartOf(){
+        return apartOfTown;
+    }
+    public List<Citizen> getResidentsInBuilding(){
+        return residentsInBuilding;
+    }
+    public int getResidentialLimit(){
+        return residentialLimit;
+    }
     //SETTERS
     public void setItemsProducedInBuilding(Dictionary<string, int> newItemsProduced)
     {
@@ -214,13 +262,13 @@ public class BuildingAttributes : MonoBehaviour
     public void setBuildingID(int newBuildingID){
         buildingID = newBuildingID;
     }
-    public void setPositionX(int newPositionX){
+    public void setPositionX(float newPositionX){
         positionX = newPositionX;
     }
-    public void setPositionY(int newPositionY){
+    public void setPositionY(float newPositionY){
         positionY = newPositionY;
     }
-    public void setPositionZ(int newPositionZ){
+    public void setPositionZ(float newPositionZ){
         positionZ = newPositionZ;
     }
     public void setCollidingWithOtherObject(bool set){
@@ -255,5 +303,35 @@ public class BuildingAttributes : MonoBehaviour
     }
     public void setPlayerEnteredBuilding(bool val){
         playerEnteredBuilding = val;
+    }
+    public void addWorkerToBuilding(Citizen citizen){
+        workersInBuilding.Add(citizen);
+    }
+    public void removeWorkerFromBuilding(Citizen citizen){
+        workersInBuilding.Remove(citizen);
+    }
+    public void addResidentToBuilding(Citizen citizen){
+        residentsInBuilding.Add(citizen);
+    }
+    public void removeResidentFromBuilding(Citizen citizen){
+        residentsInBuilding.Remove(citizen);
+    }
+    public void setTownBuildingIsApartOf(Town town){
+        apartOfTown = town;
+    }
+    public void setBuildingValue(int val){
+        buildingValue = val;
+    }
+    public void setBuildingDescription(string description){
+        buildingDescription = description;
+    }
+    public void setBuildingStorageCapacity(int cap){
+        storageCapacity = cap;
+    }
+    public void setBuildingUpKeep(Dictionary<string, int> items){
+        buildingUpKeep = items;
+    }
+    public void setBuildingTag(string tag){
+        buildingTag = tag;
     }
 }

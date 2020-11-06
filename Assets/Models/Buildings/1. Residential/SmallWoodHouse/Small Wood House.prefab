@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5716938026439770534}
   - component: {fileID: 4119653516329598148}
   - component: {fileID: 3898699808750474202}
-  m_Layer: 0
+  m_Layer: 17
   m_Name: Small Wood House
   m_TagString: Residential
   m_Icon: {fileID: 0}
@@ -47,6 +47,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ab01802658e2b043b48037be475eee1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buildingMenu: {fileID: 0}
+  thisBuilding: {fileID: 0}
+  apartOfTown: {fileID: 0}
+  workersInBuilding: []
   isOwnedByPlayer: 0
   isRented: 0
   buildingIsProducing: 0

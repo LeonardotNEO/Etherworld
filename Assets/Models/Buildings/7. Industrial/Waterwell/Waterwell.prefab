@@ -254,7 +254,7 @@ GameObject:
   - component: {fileID: -6974313391245275205}
   - component: {fileID: 2040396175730287376}
   - component: {fileID: 5762672577559409769}
-  m_Layer: 0
+  m_Layer: 17
   m_Name: Waterwell
   m_TagString: Industrial
   m_Icon: {fileID: 0}
@@ -288,6 +288,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ab01802658e2b043b48037be475eee1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buildingMenu: {fileID: 0}
+  thisBuilding: {fileID: 0}
+  apartOfTown: {fileID: 0}
+  workersInBuilding: []
   isOwnedByPlayer: 0
   isRented: 0
   buildingIsProducing: 0
@@ -297,6 +301,7 @@ MonoBehaviour:
   buildingDescription: 
   storageCapacity: 0
   productionProgress: 0
+  playerEnteredBuilding: 0
   buildingInventory: {fileID: 0}
   playerInBoundsBuilding: 0
   positionX: 0
@@ -344,4 +349,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5d9bcdd57d60534e8cd3b7ba5cecd85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inventoryCapacity: 0
+  inventoryName: 
   inventoryID: 0

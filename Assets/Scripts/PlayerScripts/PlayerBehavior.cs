@@ -16,6 +16,9 @@ public class PlayerBehavior : MonoBehaviour
     public bool touchingObstacle;
     public bool mouseOnItemResource;
     public bool movementDisabled;
+
+    public GameObject npc; //for testing
+
     void Start()
     {
         stopPlayer();
@@ -23,6 +26,10 @@ public class PlayerBehavior : MonoBehaviour
     
     void Update()
     {
+        if(Input.GetKeyDown("r")){
+            Instantiate(npc, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity);
+        }
+
         playerPosition = transform.position;
 
         // Get gamemanager

@@ -6,26 +6,29 @@ using UnityEngine.AI;
 public class Citizen : MonoBehaviour
 {
     GameManager gameManager;
+    public Vector3 position;
     NavMeshAgent citizenAgent;
+    public List<Skill> skills = new List<Skill>();
+    public List<Citizen> relatives = new List<Citizen>();
+    public Inventory inventory;
+    public BuildingAttributes house = null;
+    public BuildingAttributes work = null;
+    public Town townAlliegence;
+    public Town townCurrentlyInsideOf;
     public string gender;
     public string citizenName;
+    public string status;
+    public string citizensLord;
+    public string job;
+
     public int age;
-    public List<Skill> skills;
-    public Inventory inventory;
     public int health;
     public int hunger;
     public int thirst;
     public int happiness;
-    public int houseID;
-    public int workplaceID;
     public int movementSpeed;
-    public string status;
-    public string townAlliegence;
-    public string citizensLord;
-    public string job;
     public int wealth;
-    public Vector3 position;
-    public List<Citizen> relatives;
+    public int taxPayment;
     //public List<Hobby> hobbies;
     //public List<Personalities> personalityTraits;
     //public List<Ambition> ambitions; 
@@ -33,10 +36,17 @@ public class Citizen : MonoBehaviour
     // BOOLS //
     public bool isMovingToDestination;
     public bool reachedDestination;
-    public bool isMovingToWork;
-    public bool movedToWork;
+    public bool isMovingToBuilding;
+    public bool movedToBuilding;
     public bool isMovingToHome;
     public bool movedToHome;
+    public bool isMovingToWork;
+    public bool movedToWork;
+    public bool isInsideBuilding;
+    public bool isLookingForWork;
+    public bool isLookingForHouse;
+
+
     public bool isResting;
     public bool isWorking;
     public bool isGatheringResources;
@@ -44,12 +54,10 @@ public class Citizen : MonoBehaviour
     public bool isHungry;
     public bool isThirsty;
     public bool isSleepy;
-    public bool isLookingForWork;
     public bool isLookingForPartner;
     public bool isDoingRandomAction;
     public bool isMating;
     public bool isInTheArmy;
-    public bool isInsideBuilding;
 
     void Awake()
     {
@@ -66,44 +74,34 @@ public class Citizen : MonoBehaviour
     {
         //make switch statement
         if(gameManager.getClock().getHours() == 2 && gameManager.getClock().getMinutes() == 0){
-            movedToHome = false;
-            StartCoroutine(goToWork());
+            StartCoroutine(goToBuilding(work));
         }
         if(gameManager.getClock().getHours() == 4 && gameManager.getClock().getMinutes() == 0){
-            movedToWork = false;
-            StartCoroutine(goHome());
+            StartCoroutine(goToBuilding(house));
         }
         if(gameManager.getClock().getHours() == 6 && gameManager.getClock().getMinutes() == 0){
-            movedToHome = false;
-            StartCoroutine(goToWork());
+            StartCoroutine(goToBuilding(work));
         }
         if(gameManager.getClock().getHours() == 8 && gameManager.getClock().getMinutes() == 0){
-            movedToWork = false;
-            StartCoroutine(goHome());
+            StartCoroutine(goToBuilding(house));
         }
         if(gameManager.getClock().getHours() == 10 && gameManager.getClock().getMinutes() == 0){
-            movedToHome = false;
-            StartCoroutine(goToWork());
+            StartCoroutine(goToBuilding(work));
         }
         if(gameManager.getClock().getHours() == 12 && gameManager.getClock().getMinutes() == 0){
-            movedToWork = false;
-            StartCoroutine(goHome());
+            StartCoroutine(goToBuilding(house));
         }
         if(gameManager.getClock().getHours() == 14 && gameManager.getClock().getMinutes() == 0){
-            movedToHome = false;
-            StartCoroutine(goToWork());
+            StartCoroutine(goToBuilding(work));
         }
         if(gameManager.getClock().getHours() == 16 && gameManager.getClock().getMinutes() == 0){
-            movedToWork = false;
-            StartCoroutine(goHome());
+            StartCoroutine(goToBuilding(house));
         }
         if(gameManager.getClock().getHours() == 18 && gameManager.getClock().getMinutes() == 0){
-            movedToHome = false;
-            StartCoroutine(goToWork());
+            StartCoroutine(goToBuilding(work));
         }
         if(gameManager.getClock().getHours() == 20 && gameManager.getClock().getMinutes() == 0){
-            movedToWork = false;
-            StartCoroutine(goHome());
+            StartCoroutine(goToBuilding(house));
         }
 
         if(GetComponent<NavMeshAgent>().enabled == true){
@@ -116,7 +114,41 @@ public class Citizen : MonoBehaviour
                 reachedDestination = false;
                 GetComponent<Animator>().SetBool("isMoving" , true);
             }
-        }   
+        }
+
+        if(work == null){ //Checks for time because npc needs time to load startwork and starthome
+            lookForWork();
+        }
+        if(house == null){
+            lookForHousing();
+        }
+    }
+
+    void OnTriggerEnter(Collider other){
+        if(other.gameObject.GetComponent<Town>()){
+            setTownCurrentlyInsideOf(other.gameObject.GetComponent<Town>());
+            StartCoroutine(waitForCitizenToLoadThenAdd(other));
+        }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if(other.gameObject.GetComponent<Town>()){
+            setTownCurrentlyInsideOf(null);
+        }
+    }
+
+    void OnDisable()
+    {
+        if(house){
+            house.removeResidentFromBuilding(this);
+        }
+        if(work){
+            work.removeWorkerFromBuilding(this);
+        }
+        if(townAlliegence){
+            townAlliegence.removeInventoryFromTown(inventory);
+        }
     }
 
     public IEnumerator initialisingCitizen(){
@@ -141,88 +173,88 @@ public class Citizen : MonoBehaviour
         thirst = 100;
         happiness = 100;
 
-        if(houseID == 0){
-            List<BuildingAttributes> houses = gameManager.getBuildingCatalog().getBuildingInWorldByTag("Residential");
-            houseID = houses[Random.Range(1, houses.Count)].getBuildingID();
-        }
-
-        if(workplaceID == 0){
-            List<BuildingAttributes> workplaces = gameManager.getBuildingCatalog().getBuildingInWorldByTag("Industrial");
-            workplaceID = workplaces[Random.Range(1, workplaces.Count)].getBuildingID();
-        }
-
         movementSpeed = Random.Range(5,12); 
         citizenAgent.speed = movementSpeed;
 
         status = null;
-        townAlliegence = null;
+        if(house == null){
+            townAlliegence = null;
+        } else {
+            if(house.getTownBuildingIsApartOf()){
+                townAlliegence = house.getTownBuildingIsApartOf();
+            }
+        }
         citizensLord = null;
         wealth = Random.Range(0,100);
         position = transform.position;
         relatives = null;
+
+    }
+
+    public IEnumerator waitForCitizenToLoadThenAdd(Collider other){
+        Town town = other.gameObject.GetComponent<Town>();
+        yield return new WaitForSeconds(0.3f);
+
+        if(house){
+            foreach(BuildingAttributes building in town.getBuildingsInTown()){
+                if(getCitizenHouse().getBuildingID() == building.getBuildingID()){
+                    town.addCitizenToTown(this);
+                    town.addInventoryToTown(inventory);
+                }
+            }
+        }
+    }
+
+    public IEnumerator waitForCitizenToLoadThenRemove(Collider other){
+        Town town = other.gameObject.GetComponent<Town>();
+        yield return new WaitForSeconds(0.3f);
+
+        if(house){
+            foreach(BuildingAttributes building in town.getBuildingsInTown()){
+                if(getCitizenHouse().getBuildingID() == building.getBuildingID()){
+                    town.removeCitizenFromTown(this);
+                    town.removeInventoryFromTown(inventory);
+                }
+            }
+        }
     }
 
     public void goToDestination(){
 
     }
-    public IEnumerator goToWork(){
-        if(!movedToWork){
-            isMovingToWork = true;
-            BuildingAttributes workPlace = gameManager.getBuildingCatalog().getBuildingInWorldByID(workplaceID);
-            Vector3 positionWork = new Vector3(workPlace.getPositionX(), workPlace.getPositionY(), workPlace.getPositionZ());
+    public IEnumerator goToBuilding(BuildingAttributes building){
+        if(building != null){
+            isMovingToBuilding = true;
+            movedToBuilding = false;
+            Vector3 buildingPosition = new Vector3(building.getPositionX(), building.getPositionY(), building.getPositionZ());
 
             if(isInsideBuilding == true){
                 leaveBuilding();
             }
 
-            citizenAgent.SetDestination(positionWork);
+            citizenAgent.SetDestination(buildingPosition);
 
+            while(isMovingToBuilding){
+                if(citizenAgent.hasPath){
+                    if(citizenAgent.remainingDistance <= 0.6){
+                        movedToBuilding = true;
+                        citizenAgent.ResetPath();
+                        goInsideBuilding();
+                        break;
+                    }
+                }
+                yield return null;
+            }
+            isMovingToBuilding = false;
+        } else {
+            if(isInsideBuilding == true){
+                leaveBuilding();
+            }
+            if(townCurrentlyInsideOf){
+                citizenAgent.SetDestination(new Vector3(townCurrentlyInsideOf.getTownCenter().x + Random.Range(-8.0f, 8.0f), 0, townCurrentlyInsideOf.getTownCenter().z + Random.Range(-8.0f, 8.0f)));
+            }
+        }
         
-            while(isMovingToWork){
-                if(citizenAgent.hasPath){
-                    if(citizenAgent.remainingDistance <= 0.4){
-                        movedToWork = true;
-                        citizenAgent.ResetPath();
-                        goInsideBuilding();
-                        break;
-                    }
-                }
-                if(isMovingToHome){
-                    break;
-                }
-                yield return null;
-            }
-            isMovingToWork = false;
-        }
-    }
-    public IEnumerator goHome(){
-        if(!movedToHome){
-            isMovingToHome = true;
-            BuildingAttributes home = gameManager.getBuildingCatalog().getBuildingInWorldByID(houseID);
-            Vector3 positionHome = new Vector3(home.getPositionX(), home.getPositionY(), home.getPositionZ());
-
-            if(isInsideBuilding == true){
-                leaveBuilding();
-            }
-
-            citizenAgent.SetDestination(positionHome);
-
-            while(isMovingToHome){
-                if(citizenAgent.hasPath){
-                    if(citizenAgent.remainingDistance <= 0.4){
-                        movedToHome = true;
-                        citizenAgent.ResetPath();
-                        goInsideBuilding();
-                        break;
-                    }
-                }
-                if(isMovingToWork){
-                    break;
-                }
-                yield return null;
-            }
-            isMovingToHome = false;
-        }
     }
 
     public void goInsideBuilding(){
@@ -251,7 +283,37 @@ public class Citizen : MonoBehaviour
 
     }
     public void lookForWork(){
-
+        if(townAlliegence && !isLookingForWork){
+            setIsLookingForWork(true);
+            townAlliegence.addAvailableWorkerToTown(this);
+        }
+    }
+    public void foundWork(){
+        setIsLookingForWork(false);
+        if(townAlliegence){
+            townAlliegence.removeAvailableWorkerFromTown(this);
+        }
+    }
+    public void lookForHousing(){
+        if(!isLookingForHouse){
+            
+        }
+        setIsLookingForHousing(true);
+        if(getTownCurrentlyInsideOf()){
+            if(getTownCurrentlyInsideOf().getTownAttractivnes() > 20){
+                if(getTownCurrentlyInsideOf().getAvailableResidentialBuildingsInTown().Count != 0){
+                    setHouse(getTownCurrentlyInsideOf().getAvailableResidentialBuildingsInTown()[Random.Range(0, getTownCurrentlyInsideOf().getAvailableResidentialBuildingsInTown().Count)]);
+                    setIsLookingForHousing(false);    
+                    house.addResidentToBuilding(this);
+                    setTownAlliegence(house.getTownBuildingIsApartOf());
+                } else {
+                    //Debug.Log("No more housing");
+                }
+            }
+        }
+    }
+    public void foundHousing(){
+        
     }
     public void lookForPartner(){
 
@@ -319,4 +381,42 @@ public class Citizen : MonoBehaviour
     public void moveItemToWorkplace(){
 
     }
+
+    // GETTERS
+    public string getName(){
+        return citizenName;
+    }
+    public BuildingAttributes getCitizenHouse(){
+        return house;
+    }
+    public Town getTownAlliegence(){
+        return townAlliegence;
+    }
+    public Town getTownCurrentlyInsideOf(){
+        return townCurrentlyInsideOf;
+    }
+    public bool getIsLookingForWork(){
+        return isLookingForWork;
+    }
+
+    // SETTERS
+    public void setHouse(BuildingAttributes building){
+        house = building;
+    }
+    public void setWork(BuildingAttributes building){
+        work = building;
+    }
+    public void setTownAlliegence(Town town){
+        townAlliegence = town;
+    }
+    public void setTownCurrentlyInsideOf(Town town){
+        townCurrentlyInsideOf = town;
+    }
+    public void setIsLookingForWork(bool val){
+        isLookingForWork = val;
+    }
+    public void setIsLookingForHousing(bool val){
+        isLookingForHouse = val;
+    }
+    
 }

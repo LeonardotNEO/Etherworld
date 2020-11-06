@@ -22,6 +22,8 @@ TagManager:
   - BuildingInvSlot
   - MainInvSlot
   - NPC
+  - BoardingHouse
+  - Placeholder
   layers:
   - Default
   - TransparentFX
@@ -39,10 +41,10 @@ TagManager:
   - ResourcesMesh
   - ItemsMesh
   - Player
-  - 
-  - 
-  - 
-  - 
+  - Citizens
+  - Buildings
+  - Town
+  - Placeholder
   - 
   - 
   - 

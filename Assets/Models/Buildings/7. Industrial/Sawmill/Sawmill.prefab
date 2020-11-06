@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3073137812316769609}
   - component: {fileID: 4349020946454369055}
   - component: {fileID: 7094237437406377294}
-  m_Layer: 0
+  m_Layer: 17
   m_Name: Sawmill
   m_TagString: Industrial
   m_Icon: {fileID: 0}
@@ -48,20 +48,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ab01802658e2b043b48037be475eee1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buildingMenu: {fileID: 0}
+  thisBuilding: {fileID: 0}
+  apartOfTown: {fileID: 0}
+  workersInBuilding: []
   isOwnedByPlayer: 0
   isRented: 0
+  buildingIsProducing: 0
   buildingTag: 
   buildingID: 0
   buildingName: 
   buildingDescription: 
   storageCapacity: 0
+  productionProgress: 0
+  playerEnteredBuilding: 0
   buildingInventory: {fileID: 0}
   playerInBoundsBuilding: 0
   positionX: 0
   positionY: 0
   positionZ: 0
   collidingWithOtherObject: 0
-  buildingUIOpen: 0
 --- !u!114 &6311927600550669940
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -74,6 +80,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5d9bcdd57d60534e8cd3b7ba5cecd85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inventoryCapacity: 0
+  inventoryName: 
   inventoryID: 0
 --- !u!54 &3073137812316769609
 Rigidbody:

@@ -175,7 +175,8 @@ GameObject:
   - component: {fileID: 4896788529211625904}
   - component: {fileID: 8787158482037301017}
   - component: {fileID: 9001296288659013652}
-  m_Layer: 0
+  - component: {fileID: 7740259620071012598}
+  m_Layer: 17
   m_Name: Boarding House
   m_TagString: Residential
   m_Icon: {fileID: 0}
@@ -209,21 +210,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ab01802658e2b043b48037be475eee1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isOwnedByPlayer: 0
-  isRented: 0
-  buildingIsProducing: 0
+  buildingMenu: {fileID: 0}
+  thisBuilding: {fileID: 0}
+  apartOfTown: {fileID: 0}
+  workersInBuilding: []
+  residentsInBuilding: []
+  buildingInventory: {fileID: 0}
   buildingTag: 
-  buildingID: 0
   buildingName: 
   buildingDescription: 
+  buildingID: 0
   storageCapacity: 0
   productionProgress: 0
-  playerEnteredBuilding: 0
-  buildingInventory: {fileID: 0}
-  playerInBoundsBuilding: 0
   positionX: 0
   positionY: 0
   positionZ: 0
+  isOwnedByPlayer: 0
+  isRented: 0
+  buildingIsProducing: 0
+  playerEnteredBuilding: 0
+  playerInBoundsBuilding: 0
   collidingWithOtherObject: 0
 --- !u!54 &4896788529211625904
 Rigidbody:
@@ -252,8 +258,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.5664754, y: 2.517776, z: 1.7620101}
-  m_Center: {x: -3.5040839, y: 1.1831048, z: 0}
+  m_Size: {x: 3.3541155, y: 2.517776, z: 15.103389}
+  m_Center: {x: -4.3979034, y: 1.1831048, z: 0.14907694}
 --- !u!114 &9001296288659013652
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -269,3 +275,15 @@ MonoBehaviour:
   inventoryCapacity: 0
   inventoryName: 
   inventoryID: 0
+--- !u!114 &7740259620071012598
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6089689720214339309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b60d06a8344f84b4bbf358ad0c3291cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

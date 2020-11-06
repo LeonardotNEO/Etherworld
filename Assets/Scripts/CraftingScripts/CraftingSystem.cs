@@ -13,6 +13,8 @@ public class CraftingSystem : MonoBehaviour
     public int craftingButtonsIDCounter;
     private Ray movementRay;
     private RaycastHit hit;
+    private string craftingSavedTag;
+    private string craftingSavedLayer;
 
     void Awake()
     {
@@ -45,7 +47,24 @@ public class CraftingSystem : MonoBehaviour
                 } else if(!currentlyCraftedBuilding.GetComponentInChildren<MeshCollider>()){
                     currentlyCraftedBuilding.GetComponentInChildren<BoxCollider>().isTrigger = false;
                 }
-                currentlyCraftedBuilding.GetComponent<BuildingAttributes>().setIsOwnedByPlayer(true);
+                BuildingAttributes buildingAttributes = currentlyCraftedBuilding.GetComponent<BuildingAttributes>();
+                // PLAYER OWNED
+                buildingAttributes.setIsOwnedByPlayer(true);
+
+                // POSITION
+                buildingAttributes.setPositionX(currentlyCraftedBuilding.transform.GetComponent<BoxCollider>().bounds.center.x);
+                buildingAttributes.setPositionY(currentlyCraftedBuilding.transform.GetComponent<BoxCollider>().bounds.center.y);
+                buildingAttributes.setPositionZ(currentlyCraftedBuilding.transform.GetComponent<BoxCollider>().bounds.center.z);
+
+                // TAGS AND LAYERS
+                currentlyCraftedBuilding.tag = craftingSavedTag;
+                buildingAttributes.setBuildingTag(craftingSavedTag);
+                currentlyCraftedBuilding.layer = LayerMask.NameToLayer(craftingSavedLayer);
+
+                // ADD BUILDING TO TOWN, ACTIVATE ONTRIGGER FOR TOWN
+                currentlyCraftedBuilding.SetActive(false);
+                currentlyCraftedBuilding.SetActive(true);
+
                 gameManager.getInventoryCatalog().getMainInventory().removeItemFromInventory(itemsToRemoveFromInventory);
                 currentlyCraftedBuilding = null;
                 setIsCrafting(false);
@@ -82,6 +101,10 @@ public class CraftingSystem : MonoBehaviour
             craftedBuilding.name = buildingSelected.getNameOfBuilding();
             gameManager.GetComponent<CraftingSystem>().setItemsToRemoveFromInventory(itemsNeededToCraft);
             gameManager.GetComponent<CraftingSystem>().setCraftedBuilding(craftedBuilding);
+            gameManager.GetComponent<CraftingSystem>().setCraftingSavedTag(craftedBuilding.tag);
+            gameManager.GetComponent<CraftingSystem>().setCraftingSavedLayer(LayerMask.LayerToName(craftedBuilding.layer));
+            craftedBuilding.tag = "Placeholder";
+            craftedBuilding.layer = LayerMask.NameToLayer("Placeholder");
             gameManager.GetComponent<CraftingSystem>().setIsCrafting(true);
         } else {
             gameManager.getMessageLogText().addMessageToLog("You don't have enough items to craft that building");
@@ -124,5 +147,11 @@ public class CraftingSystem : MonoBehaviour
     }
     public void updateCraftingButtonIDCounter(){
         craftingButtonsIDCounter++;
+    }
+    public void setCraftingSavedTag(string tag){
+        craftingSavedTag = tag;
+    }
+    public void setCraftingSavedLayer(string layer){
+        craftingSavedLayer = layer;
     }
 }

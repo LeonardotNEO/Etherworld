@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2348210499788677434}
   - component: {fileID: -6413297632847255652}
   - component: {fileID: 4924671072168187606}
-  m_Layer: 0
+  m_Layer: 17
   m_Name: Wood Fence
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45,15 +45,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ab01802658e2b043b48037be475eee1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buildingMenu: {fileID: 0}
+  thisBuilding: {fileID: 0}
+  apartOfTown: {fileID: 0}
+  workersInBuilding: []
   isOwnedByPlayer: 0
+  isRented: 0
+  buildingIsProducing: 0
   buildingTag: 
   buildingID: 0
   buildingName: 
+  buildingDescription: 
+  storageCapacity: 0
+  productionProgress: 0
+  playerEnteredBuilding: 0
+  buildingInventory: {fileID: 0}
+  playerInBoundsBuilding: 0
   positionX: 0
   positionY: 0
   positionZ: 0
   collidingWithOtherObject: 0
-  buildingUIOpen: 0
 --- !u!54 &4924671072168187606
 Rigidbody:
   m_ObjectHideFlags: 0

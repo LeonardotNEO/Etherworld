@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 436267360484872255}
   - component: {fileID: 28156364399990425}
   - component: {fileID: 7119234331692328915}
-  m_Layer: 0
+  m_Layer: 17
   m_Name: Big Stone Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45,20 +45,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ab01802658e2b043b48037be475eee1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buildingMenu: {fileID: 0}
+  thisBuilding: {fileID: 0}
+  apartOfTown: {fileID: 0}
+  workersInBuilding: []
   isOwnedByPlayer: 0
   isRented: 0
+  buildingIsProducing: 0
   buildingTag: 
   buildingID: 0
   buildingName: 
   buildingDescription: 
   storageCapacity: 0
+  productionProgress: 0
+  playerEnteredBuilding: 0
   buildingInventory: {fileID: 0}
   playerInBoundsBuilding: 0
   positionX: 0
   positionY: 0
   positionZ: 0
   collidingWithOtherObject: 0
-  buildingUIOpen: 0
 --- !u!54 &7119234331692328915
 Rigidbody:
   m_ObjectHideFlags: 0

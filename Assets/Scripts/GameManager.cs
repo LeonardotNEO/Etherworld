@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     private BuildingsCatalog buildingCatalog;
     private ItemCatalog itemCatalog;
     private InventoryCatalog inventoryCatalog;
+    private TownCatalog townCatalog;
     private UI UI;
     private MessageLogText messageLogText;
     private Clock clock;
@@ -22,6 +23,7 @@ public class GameManager : MonoBehaviour
         buildingCatalog = GetComponent<BuildingsCatalog>();
         itemCatalog = GetComponent<ItemCatalog>();
         inventoryCatalog = GetComponent<InventoryCatalog>();
+        townCatalog = GetComponent<TownCatalog>();
         UI = GetComponent<UI>();
         messageLogText = GameObject.FindGameObjectWithTag("MessageLogBarUI").GetComponentInChildren<MessageLogText>();
         clock = GetComponent<Clock>();
@@ -36,6 +38,9 @@ public class GameManager : MonoBehaviour
     }
     public InventoryCatalog getInventoryCatalog(){
         return inventoryCatalog;
+    }
+    public TownCatalog GetTownCatalog(){
+        return townCatalog;
     }
     public PlayerBehavior getPlayerBehavior(){
         return playerBehavior;
@@ -52,4 +57,5 @@ public class GameManager : MonoBehaviour
     public Clock getClock(){
         return clock;
     }
+
 }
