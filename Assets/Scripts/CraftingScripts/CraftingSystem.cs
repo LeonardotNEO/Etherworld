@@ -47,14 +47,29 @@ public class CraftingSystem : MonoBehaviour
                 } else if(!currentlyCraftedBuilding.GetComponentInChildren<MeshCollider>()){
                     currentlyCraftedBuilding.GetComponentInChildren<BoxCollider>().isTrigger = false;
                 }
+
                 BuildingAttributes buildingAttributes = currentlyCraftedBuilding.GetComponent<BuildingAttributes>();
+
+                // STORAGE CAPACITY
+                if(buildingAttributes.gameObject.GetComponent<Inventory>()){
+                    buildingAttributes.GetComponent<Inventory>().setInventoryCapacity(buildingAttributes.getStorageCapacity());
+                    buildingAttributes.gameObject.GetComponent<Inventory>().instatiateInventory();
+                }
+
                 // PLAYER OWNED
                 buildingAttributes.setIsOwnedByPlayer(true);
 
                 // POSITION
-                buildingAttributes.setPositionX(currentlyCraftedBuilding.transform.GetComponent<BoxCollider>().bounds.center.x);
-                buildingAttributes.setPositionY(currentlyCraftedBuilding.transform.GetComponent<BoxCollider>().bounds.center.y);
-                buildingAttributes.setPositionZ(currentlyCraftedBuilding.transform.GetComponent<BoxCollider>().bounds.center.z);
+                if(buildingAttributes.gameObject.GetComponent<BoxCollider>()){
+                    buildingAttributes.setPositionX(currentlyCraftedBuilding.transform.GetComponent<BoxCollider>().bounds.center.x);
+                    buildingAttributes.setPositionY(currentlyCraftedBuilding.transform.GetComponent<BoxCollider>().bounds.center.y);
+                    buildingAttributes.setPositionZ(currentlyCraftedBuilding.transform.GetComponent<BoxCollider>().bounds.center.z);
+                } else {
+                    buildingAttributes.setPositionX(buildingAttributes.transform.position.x);
+                    buildingAttributes.setPositionY(buildingAttributes.transform.position.y);
+                    buildingAttributes.setPositionZ(buildingAttributes.transform.position.z);
+                }
+        
 
                 // TAGS AND LAYERS
                 currentlyCraftedBuilding.tag = craftingSavedTag;
@@ -65,7 +80,9 @@ public class CraftingSystem : MonoBehaviour
                 currentlyCraftedBuilding.SetActive(false);
                 currentlyCraftedBuilding.SetActive(true);
 
-                gameManager.getInventoryCatalog().getMainInventory().removeItemFromInventory(itemsToRemoveFromInventory);
+                foreach(var item in itemsToRemoveFromInventory){
+                    gameManager.getInventoryCatalog().getMainInventory().removeItemFromInventory(item.Key, item.Value);
+                }
                 currentlyCraftedBuilding = null;
                 setIsCrafting(false);
             }

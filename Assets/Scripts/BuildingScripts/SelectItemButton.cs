@@ -9,7 +9,13 @@ public class SelectItemButton : MonoBehaviour
 
     void Start()
     {
-        item = GetComponentInChildren<Text>().text;
         transform.GetComponent<Button>().onClick.AddListener(delegate {GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().GetUI().selectItemButton(item); });
+    }
+
+    public void setItem(string itemos){
+        item = itemos;
+    }
+    public string getItem(){
+        return item;
     }
 }

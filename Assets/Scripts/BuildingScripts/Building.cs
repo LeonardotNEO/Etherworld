@@ -13,11 +13,13 @@ public class Building
     private int storageCapacity;
     private int initialValue;
     private int buildingID;
+    private int residentialLimit;
+    private int workerLimit;
     private string nameOfBuilding;
     private string buildingDescription;
 
     //CONSTRUCTOR
-    public Building(Dictionary<string, int> costToCraftBuilding, Dictionary<string, int> buildingUpkeep, Dictionary<string, int> buildingProduction, Dictionary<string, int> neededForProduction, GameObject  buildingPrefab, Sprite buildingSprite, int storageCapacity, int initialValue, string nameOfBuilding, string buildingDescription){
+    public Building(Dictionary<string, int> costToCraftBuilding, Dictionary<string, int> buildingUpkeep, Dictionary<string, int> buildingProduction, Dictionary<string, int> neededForProduction, GameObject  buildingPrefab, Sprite buildingSprite, int storageCapacity, int initialValue, int residentialLimit, int workerLimit, string nameOfBuilding, string buildingDescription){
         this.costToCraftBuilding = costToCraftBuilding;
         this.buildingUpkeep = buildingUpkeep;
         this.buildingProduction = buildingProduction;
@@ -29,6 +31,8 @@ public class Building
         this.nameOfBuilding = nameOfBuilding;
         this.buildingDescription = buildingDescription;
         this.buildingID++;
+        this.workerLimit = workerLimit;
+        this.residentialLimit = residentialLimit;
     }
 
     //GETTERS
@@ -81,4 +85,11 @@ public class Building
         }
         return costToCraftBuildingToString;
     } 
+
+    public int getResidentialLimit(){
+        return residentialLimit;
+    }
+    public int getWorkerLimit(){
+        return workerLimit;
+    }
 }

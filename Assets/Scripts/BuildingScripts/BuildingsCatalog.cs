@@ -71,6 +71,8 @@ public class BuildingsCatalog : MonoBehaviour
                 /*Sprite*/              smallWoodHouseSprite,
                 /*StorageCapcity*/      3,
                 /*Initial Value*/       200,
+                /*Residential Limit*/   3,
+                /*Worker Limit*/        0,
                 /*Name*/                "Small Wood House",
                 /*Description*/         "A house that can be used to store items and used as shelter"
             )
@@ -85,6 +87,8 @@ public class BuildingsCatalog : MonoBehaviour
                 /*Sprite*/              mediumWoodHouseSprite,
                 /*StorageCapcity*/      4,
                 /*Initial Value*/       200,
+                /*Residential Limit*/   4,
+                /*Worker Limit*/        0,
                 /*Name*/                "Medium Wood House",
                 /*Description*/         "A house that can be used to store items and used as shelter"
             )
@@ -99,6 +103,8 @@ public class BuildingsCatalog : MonoBehaviour
                 /*Sprite*/              boardingHouseSprite,
                 /*StorageCapcity*/      5,
                 /*Initial Value*/       200,
+                /*Residential Limit*/   20,
+                /*Worker Limit*/        0,
                 /*Name*/                "Boarding House",
                 /*Descriptione*/        "Housing for those that dont have their own house"
             )
@@ -115,8 +121,10 @@ public class BuildingsCatalog : MonoBehaviour
                 /*NeededForProduction*/ new Dictionary<string, int>(){ {"Bucket", 1}},
                 /*Prefab*/              waterWell,
                 /*Sprite*/              waterWellSprite,
-                /*StorageCapcity*/      3,
+                /*StorageCapcity*/      2,
                 /*Initial Value*/       200,
+                /*Residential Limit*/   0,
+                /*Worker Limit*/        2,
                 /*Name*/                "Waterwell",
                 /*Descriptione*/        "Can gather water here"
             )
@@ -131,6 +139,8 @@ public class BuildingsCatalog : MonoBehaviour
                 /*Sprite*/              sawmillSprite,
                 /*StorageCapcity*/      10,
                 /*Initial Value*/       200,
+                /*Residential Limit*/   0,
+                /*Worker Limit*/        10,
                 /*Name*/                "Sawmill",
                 /*Descriptione*/        "Sawmill produce planks"
             )
@@ -145,6 +155,8 @@ public class BuildingsCatalog : MonoBehaviour
                 /*Sprite*/              furnaceSprite,
                 /*StorageCapcity*/      10,
                 /*Initial Value*/       200,
+                /*Residential Limit*/   0,
+                /*Worker Limit*/        5,
                 /*Name*/                "Furnace",
                 /*Descriptione*/        "A place where one can smelt ore to bars"
             )
@@ -163,6 +175,8 @@ public class BuildingsCatalog : MonoBehaviour
                 /*Sprite*/              woodFenceSprite,
                 /*StorageCapcity*/      0,
                 /*Initial Value*/       200,
+                /*Residential Limit*/   0,
+                /*Worker Limit*/        0,
                 /*Name*/                "Wood Fence",
                 /*Descriptione*/        "Keeps things out"
             )
@@ -177,6 +191,8 @@ public class BuildingsCatalog : MonoBehaviour
                 /*Sprite*/              smallStoneWallSprite,
                 /*StorageCapcity*/      0,
                 /*Initial Value*/       200,
+                /*Residential Limit*/   0,
+                /*Worker Limit*/        0,
                 /*Name*/                "Small Stone Wall",
                 /*Descriptione*/        "A small stone sized wall for keeping things out"
             )
@@ -191,6 +207,8 @@ public class BuildingsCatalog : MonoBehaviour
                 /*Sprite*/              mediumStoneWallSprite,
                 /*StorageCapcity*/      0,
                 /*Initial Value*/       200,
+                /*Residential Limit*/   0,
+                /*Worker Limit*/        0,
                 /*Name*/                "Medium Stone Wall",
                 /*Descriptione*/        "A medium sized stone wall used for protection"
             )
@@ -205,6 +223,8 @@ public class BuildingsCatalog : MonoBehaviour
                 /*Sprite*/              mediumStoneWallGateSprite,
                 /*StorageCapcity*/      0,
                 /*Initial Value*/       200,
+                /*Residential Limit*/   0,
+                /*Worker Limit*/        0,
                 /*Name*/                "Medium Stone Gate",
                 /*Descriptione*/        "A gate for getting through to the other side of the wall"
             )
@@ -219,6 +239,8 @@ public class BuildingsCatalog : MonoBehaviour
                 /*Sprite*/              MediumStoneWallCornerSprite,
                 /*StorageCapcity*/      0,
                 /*Initial Value*/       200,
+                /*Residential Limit*/   0,
+                /*Worker Limit*/        0,
                 /*Name*/                "Medium Stone Wall Corner",
                 /*Descriptione*/        "A medium sized stone wall corner"
             )
@@ -233,6 +255,8 @@ public class BuildingsCatalog : MonoBehaviour
                 /*Sprite*/              bigStoneWallSprite,
                 /*StorageCapcity*/      0,
                 /*Initial Value*/       200,
+                /*Residential Limit*/   0,
+                /*Worker Limit*/        0,
                 /*Name*/                "Big Stone Wall",
                 /*Descriptione*/        "A big sized stone wall used for protection"
             )
@@ -247,6 +271,8 @@ public class BuildingsCatalog : MonoBehaviour
                 /*Sprite*/              bigStoneWallGateSprite,
                 /*StorageCapcity*/      0,
                 /*Initial Value*/       200,
+                /*Residential Limit*/   0,
+                /*Worker Limit*/        0,
                 /*Name*/                "Big Stone Gate",
                 /*Descriptione*/        "A gate for getting through to the other side of the wall"
             )
@@ -261,6 +287,8 @@ public class BuildingsCatalog : MonoBehaviour
                 /*Sprite*/              bigStoneWallCornerSprite,
                 /*StorageCapcity*/      0,
                 /*Initial Value*/       200,
+                /*Residential Limit*/   0,
+                /*Worker Limit*/        0,
                 /*Name*/                "Big Stone Wall Corner",
                 /*Descriptione*/        "A big sized stone wall corner"
             )
@@ -275,6 +303,8 @@ public class BuildingsCatalog : MonoBehaviour
                 /*Sprite*/              bigStoneWallInvertedCornerSprite,
                 /*StorageCapcity*/      0,
                 /*Initial Value*/       200,
+                /*Residential Limit*/   0,
+                /*Worker Limit*/        0,
                 /*Name*/                "Big Stone Wall Inverted Corner",
                 /*Descriptione*/        "A big sized stone wall inverted corner"
             )
@@ -379,4 +409,5 @@ public class BuildingsCatalog : MonoBehaviour
         }
         return buildingsCatalogToString;
     }
+
 }

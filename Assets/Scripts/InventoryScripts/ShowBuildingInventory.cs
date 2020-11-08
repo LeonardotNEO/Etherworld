@@ -8,60 +8,46 @@ public class ShowBuildingInventory : MonoBehaviour
     GameManager gameManager;
     public GameObject slot;
     Inventory inventory;
-    bool inventoryInstansiatet;
 
     void Awake()
     {
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
-
     }
 
     void Update()
     {
-        if(gameManager.getBuildingCatalog().getBuildingLastClicked()){
+
+    }
+
+    void OnEnable()
+    {
+        updateInventory();
+    }
+
+
+    public void updateInventory(){
+
+        if(gameManager.getBuildingCatalog().getBuildingLastClicked() != null){
             if(gameManager.getBuildingCatalog().getBuildingLastClicked().GetComponent<Inventory>()){
                 inventory = gameManager.getBuildingCatalog().getBuildingLastClicked().GetComponent<Inventory>();
 
-                if(!inventoryInstansiatet){
-                    for(int i = 0; i < inventory.getInventoryCapacity(); i++){
-                        GameObject slot1 = Instantiate(slot, transform);
-                        slot1.GetComponentInChildren<InventorySlotButton>().setInventorySlotID(i);
-                    }
-                    inventoryInstansiatet = true;
+                foreach(Transform child in transform){
+                    Destroy(child.gameObject);
                 }
-                inventory = gameManager.getBuildingCatalog().getBuildingLastClicked().GetComponent<Inventory>();
+
                 for(int i = 0; i < inventory.getInventoryCapacity(); i++){
-                    changeSlot(i);
+                    GameObject slot1 = Instantiate(slot, transform);
+                    slot1.GetComponentInChildren<InventorySlotButton>().setInventorySlotID(i);
+
+                    if(inventory.getInventorySlots()[i].getCurrentAmountInSlot() != 0){
+                        slot1.transform.Find("Button/Text").GetComponent<Text>().text = inventory.getInventorySlots()[i].getItemInSlot();
+                        slot1.transform.Find("Panel/Text").GetComponent<Text>().text = inventory.getInventorySlots()[i].getCurrentAmountInSlot().ToString();
+                    } else {
+                        slot1.transform.Find("Button/Text").GetComponent<Text>().text = "";
+                        slot1.transform.Find("Panel/Text").GetComponent<Text>().text = "";
+                    }
                 }
             }
         }
-    }
-
-    void OnDisable()
-    {
-        for(int i = 0; i < transform.childCount; i++){
-            Destroy(transform.GetChild(i).gameObject);
-        }
-        inventoryInstansiatet = false;
-    }
-    public void checkIfEmpty(int slotNumber){
-        if(inventory.getInventorySlots()[slotNumber].getCurrentAmountInSlot() == 0){
-            transform.GetChild(slotNumber).Find("Button/Text").gameObject.SetActive(false);
-            transform.GetChild(slotNumber).Find("Panel/Text").gameObject.SetActive(false);
-        } else {
-            transform.GetChild(slotNumber).Find("Button/Text").gameObject.SetActive(true);
-            transform.GetChild(slotNumber).Find("Panel/Text").gameObject.SetActive(true);
-        }
-    }
-
-    public void changeSlot(int slotNumber){
-        checkIfEmpty(slotNumber);
-        transform.GetChild(slotNumber).Find("Button/Text").GetComponent<Text>().text = inventory.getInventorySlots()[slotNumber].getItemInSlot();
-        transform.GetChild(slotNumber).Find("Panel/Text").GetComponent<Text>().text = inventory.getInventorySlots()[slotNumber].getCurrentAmountInSlot().ToString();
-    }
-
-    public void resetSlot(int slotNumber){
-        transform.GetChild(slotNumber).Find("Button/Text").gameObject.SetActive(false);
-        transform.GetChild(slotNumber).Find("Panel/Text").gameObject.SetActive(false);
     }
 }

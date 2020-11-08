@@ -27,6 +27,10 @@ public class TownCatalog : MonoBehaviour
     public void removeTownFromAllTown(Town town){
         allTowns.Remove(town);
     }
-
+    public Town getNearestTown(){
+        Town nearestTown = null;
+        // ALGORYTME FOR Å FINNE NÆRMESTE BY
+        return nearestTown;
+    }
 
 }

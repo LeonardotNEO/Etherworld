@@ -11,11 +11,19 @@ public class PlayerBehavior : MonoBehaviour
     public Vector3 hitGround;
     public Vector3 playerPosition;
     public NavMeshAgent agent;
+    public BuildingAttributes buildingInsideOf;
+
     public bool isMovingToDestination;
     public bool reachedDestination;
+
     public bool touchingObstacle;
     public bool mouseOnItemResource;
     public bool movementDisabled;
+
+    public bool isMovingToBuilding;
+    public bool movedToBuilding;
+
+    public bool playerInsideBuilding;
 
     public GameObject npc; //for testing
 
@@ -45,15 +53,7 @@ public class PlayerBehavior : MonoBehaviour
                 moveToPosition(hit.point);
             }
         } 
-        if(agent.remainingDistance <= 0.2){
-            isMovingToDestination = false;
-            reachedDestination = true;
-            GetComponent<Animator>().SetBool("isMoving" , false);
-        } else {
-            isMovingToDestination = true;
-            reachedDestination = false;
-            GetComponent<Animator>().SetBool("isMoving" , true);
-        }
+        checkMovement();
     }
     void OnTriggerStay(Collider colliderInfo){
         
@@ -107,5 +107,75 @@ public class PlayerBehavior : MonoBehaviour
             transform.GetChild(0).gameObject.SetActive(true);
         }
         
+    }
+
+    public void goToBuilding(BuildingAttributes building){
+        StartCoroutine(goToBuildingCourentine(building));
+    }
+    public IEnumerator goToBuildingCourentine(BuildingAttributes building){
+        if(building != null){
+            isMovingToBuilding = true;
+            movedToBuilding = false;
+            Vector3 buildingPosition = new Vector3(building.getPositionX(), building.getPositionY(), building.getPositionZ());
+
+            if(playerInsideBuilding == true){
+                leaveBuilding();
+            }
+
+            agent.SetDestination(buildingPosition);
+
+            while(isMovingToBuilding){
+                if(agent.hasPath){
+                    if(agent.remainingDistance <= 0.6){
+                        movedToBuilding = true;
+                        agent.ResetPath();
+                        goInsideBuilding(building);
+                        break;
+                    }
+                }
+                yield return null;
+            }
+            isMovingToBuilding = false;
+        }
+    }
+
+    public void goInsideBuilding(BuildingAttributes building){
+        setBuildingIsInsideOf(building);
+        building.setPlayerEnteredBuilding(true);
+        gameManager.GetUI().buildingOpen();
+        hideBody(true);
+
+        setMovementDisabled(true);
+        playerInsideBuilding = true;
+    }
+    public void leaveBuilding(){
+        gameManager.GetUI().buildingOpenClose();
+        buildingInsideOf.setPlayerEnteredBuilding(false);
+        setBuildingIsInsideOf(null);
+        hideBody(false);
+
+        setMovementDisabled(false);
+        playerInsideBuilding = false;
+    }
+    public void setBuildingIsInsideOf(BuildingAttributes building){
+        buildingInsideOf = building;
+    }
+
+    public void checkMovement(){
+        if(GetComponent<NavMeshAgent>().enabled == true){
+            if(agent.remainingDistance <= 0.2){
+                isMovingToDestination = false;
+                reachedDestination = true;
+                GetComponent<Animator>().SetBool("isMoving" , false);
+            } else {
+                isMovingToDestination = true;
+                reachedDestination = false;
+                GetComponent<Animator>().SetBool("isMoving" , true);
+            }
+        }
+    }
+
+    public bool getPlayerInsideBuilding(){
+        return playerInsideBuilding;
     }
 }

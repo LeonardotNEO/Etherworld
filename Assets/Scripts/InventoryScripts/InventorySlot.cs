@@ -30,12 +30,21 @@ public class InventorySlot
 
     public void updateCurrentAmountInSlot(int amount){
         currentAmountInSlot = amount;
+        if(currentAmountInSlot == 0){
+            itemInSlot = null;
+        }
     }
     public void increaseCurrentAmountInSlot(int amount){
         currentAmountInSlot += amount;
+        if(currentAmountInSlot == 0){
+            itemInSlot = null;
+        }
     }
     public void decreaseCurrentAmountInSlot(int amount){
         currentAmountInSlot -= amount;
+        if(currentAmountInSlot == 0){
+            itemInSlot = null;
+        }
     }
     public void setItemInSlot(string nameOfItem){
         itemInSlot = nameOfItem;

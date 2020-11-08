@@ -9,15 +9,17 @@ public class ItemsThatCanBeProduced : MonoBehaviour
     BuildingAttributes buildingAttributes;
     public GameObject itemButton;
 
-    void Update()
+    void Awake()
     {
-        
+        gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
     }
 
     void OnEnable()
     {
-        gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+        updateItemsThatCanBeProducedList();
+    }
 
+    public void updateItemsThatCanBeProducedList(){
         if(gameManager.getBuildingCatalog().getBuildingLastClicked()){
             buildingAttributes = gameManager.getBuildingCatalog().getBuildingLastClicked().GetComponent<BuildingAttributes>();
         }
@@ -25,9 +27,27 @@ public class ItemsThatCanBeProduced : MonoBehaviour
         foreach(Transform child in transform){
             Destroy(child.gameObject);
         }
-        foreach(var item in buildingAttributes.getItemsProducedInBuilding()){
-            GameObject newButton = Instantiate(itemButton, transform);
-            newButton.GetComponentInChildren<Text>().text = item.Key; 
+        if(buildingAttributes){
+            foreach(var item in buildingAttributes.getItemsProducedInBuilding()){
+                GameObject newButton = Instantiate(itemButton, transform);
+                newButton.GetComponentInChildren<Text>().text = item.Key;
+                newButton.GetComponent<SelectItemButton>().setItem(item.Key);
+
+
+                if(gameManager.getItemCatalog().getSelectedItem() != null){
+                    if(gameManager.getItemCatalog().getSelectedItem().getName() == item.Key){
+                        Button button = newButton.GetComponent<Button>();
+                        ColorBlock block = button.colors;
+                        block.normalColor = Color.green; //new Color(159, 12, 255);
+                        button.colors = block;
+                    } else {
+                        Button button = newButton.GetComponent<Button>();
+                        ColorBlock block = button.colors;
+                        block.normalColor = new Color(255, 255, 255);
+                        button.colors = block;
+                    }
+                }
+            }
         }
     }
 }

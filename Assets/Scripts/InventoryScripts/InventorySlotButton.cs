@@ -7,6 +7,7 @@ public class InventorySlotButton : MonoBehaviour
 {
     public int inventorySlotID;
     GameManager gameManager;
+    
     void Start()
     {
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();

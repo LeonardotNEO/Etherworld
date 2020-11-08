@@ -13,6 +13,7 @@ public class Citizen : MonoBehaviour
     public Inventory inventory;
     public BuildingAttributes house = null;
     public BuildingAttributes work = null;
+    public BuildingAttributes buildingInsideOf = null;
     public Town townAlliegence;
     public Town townCurrentlyInsideOf;
     public string gender;
@@ -29,11 +30,13 @@ public class Citizen : MonoBehaviour
     public int movementSpeed;
     public int wealth;
     public int taxPayment;
+    public int citizenID;
     //public List<Hobby> hobbies;
     //public List<Personalities> personalityTraits;
     //public List<Ambition> ambitions; 
 
     // BOOLS //
+    public bool initalizedCitizen;
     public bool isMovingToDestination;
     public bool reachedDestination;
     public bool isMovingToBuilding;
@@ -47,17 +50,43 @@ public class Citizen : MonoBehaviour
     public bool isLookingForHouse;
 
 
+
     public bool isResting;
     public bool isWorking;
     public bool isGatheringResources;
     public bool isSick;
-    public bool isHungry;
-    public bool isThirsty;
+
     public bool isSleepy;
     public bool isLookingForPartner;
     public bool isDoingRandomAction;
     public bool isMating;
     public bool isInTheArmy;
+
+    public bool hour0;
+    public bool hour1;
+    public bool hour2;
+    public bool hour3;
+    public bool hour4;
+    public bool hour5;
+    public bool hour6;
+    public bool hour7;
+    public bool hour8;
+    public bool hour9;
+    public bool hour10;
+    public bool hour11;
+    public bool hour12;
+    public bool hour13;
+    public bool hour14;
+    public bool hour15;
+    public bool hour16;
+    public bool hour17;
+    public bool hour18;
+    public bool hour19;
+    public bool hour20;
+    public bool hour21;
+    public bool hour22;
+    public bool hour23;
+
 
     void Awake()
     {
@@ -72,55 +101,86 @@ public class Citizen : MonoBehaviour
 
     void Update()
     {
-        //make switch statement
-        if(gameManager.getClock().getHours() == 2 && gameManager.getClock().getMinutes() == 0){
-            StartCoroutine(goToBuilding(work));
-        }
-        if(gameManager.getClock().getHours() == 4 && gameManager.getClock().getMinutes() == 0){
-            StartCoroutine(goToBuilding(house));
-        }
-        if(gameManager.getClock().getHours() == 6 && gameManager.getClock().getMinutes() == 0){
-            StartCoroutine(goToBuilding(work));
-        }
-        if(gameManager.getClock().getHours() == 8 && gameManager.getClock().getMinutes() == 0){
-            StartCoroutine(goToBuilding(house));
-        }
-        if(gameManager.getClock().getHours() == 10 && gameManager.getClock().getMinutes() == 0){
-            StartCoroutine(goToBuilding(work));
-        }
-        if(gameManager.getClock().getHours() == 12 && gameManager.getClock().getMinutes() == 0){
-            StartCoroutine(goToBuilding(house));
-        }
-        if(gameManager.getClock().getHours() == 14 && gameManager.getClock().getMinutes() == 0){
-            StartCoroutine(goToBuilding(work));
-        }
-        if(gameManager.getClock().getHours() == 16 && gameManager.getClock().getMinutes() == 0){
-            StartCoroutine(goToBuilding(house));
-        }
-        if(gameManager.getClock().getHours() == 18 && gameManager.getClock().getMinutes() == 0){
-            StartCoroutine(goToBuilding(work));
-        }
-        if(gameManager.getClock().getHours() == 20 && gameManager.getClock().getMinutes() == 0){
-            StartCoroutine(goToBuilding(house));
-        }
+        if(initalizedCitizen){
+            checkCitizenMovement();
 
-        if(GetComponent<NavMeshAgent>().enabled == true){
-            if(citizenAgent.remainingDistance <= 0.2){
-                isMovingToDestination = false;
-                reachedDestination = true;
-                GetComponent<Animator>().SetBool("isMoving" , false);
-            } else {
-                isMovingToDestination = true;
-                reachedDestination = false;
-                GetComponent<Animator>().SetBool("isMoving" , true);
+            switch(gameManager.getClock().getHours()){
+                case 0:
+                    if(gameManager.getClock().getMinutes() == 0 && !hour0){
+                        goToBuilding(work); 
+                        degenerateHunger();
+                        degenerateThirst();
+                        hour0 = true;
+                    }
+                    break;
+                case 1:
+                    resetHourTriggers();
+                    break;
+                case 3:
+                    if(gameManager.getClock().getMinutes() == 0 && !hour3){ 
+                        goToBuilding(house); 
+                        degenerateHunger();
+                        degenerateThirst();
+                        hour3 = true;
+                    }
+                    break;
+                case 6:
+                    if(gameManager.getClock().getMinutes() == 0 && !hour6){ 
+                        goToBuilding(work); 
+                        degenerateHunger();
+                        degenerateThirst();
+                        hour6 = true;
+                    }
+                    break;
+                case 9:
+                    if(gameManager.getClock().getMinutes() == 0 && !hour9){ 
+                        goToBuilding(house); 
+                        degenerateHunger();
+                        degenerateThirst();
+                        hour9 = true;
+                    }
+                    break;
+                case 12:
+                    if(gameManager.getClock().getMinutes() == 0 && !hour12){
+                        goToBuilding(work); 
+                        degenerateHunger();
+                        degenerateThirst();
+                        hour12 = true;
+                    }
+                    break;
+                case 15:
+                    if(gameManager.getClock().getMinutes() == 0 && !hour15){ 
+                        goToBuilding(house); 
+                        degenerateHunger();
+                        degenerateThirst();
+                        hour15 = true;
+                    }
+                    break;
+                case 18:
+                    if(gameManager.getClock().getMinutes() == 0 && !hour18){ 
+                        goToBuilding(work); 
+                        degenerateHunger();
+                        degenerateThirst();
+                        hour18 = true;
+                    }
+                    break;
+                case 21:
+                    if(gameManager.getClock().getMinutes() == 0 && !hour21){ 
+                        goToBuilding(house); 
+                        degenerateHunger();
+                        degenerateThirst();
+                        hour21 = true;
+                    }
+                    break;
+                default:
+                    break;
             }
-        }
-
-        if(work == null){ //Checks for time because npc needs time to load startwork and starthome
-            lookForWork();
-        }
-        if(house == null){
-            lookForHousing();
+            if(work == null){
+                lookForWork();
+            }
+            if(house == null){
+                lookForHousing();
+            }
         }
     }
 
@@ -149,14 +209,21 @@ public class Citizen : MonoBehaviour
         if(townAlliegence){
             townAlliegence.removeInventoryFromTown(inventory);
         }
+        gameManager.getCitizenCatalog().removeCitizenFromAllCitizens(this);
     }
 
     public IEnumerator initialisingCitizen(){
         yield return new WaitForSeconds(0.1f);
 
+        // GAMEMANAGER AND ID
+        citizenID = gameManager.getCitizenCatalog().getAmountOfCitizens();
+        gameManager.getCitizenCatalog().addCitizenToAllCitizens(this);
+
+        // GENDER
         List<string> genders = new List<string>{"Male", "Female"};
         gender = genders[Random.Range(0,genders.Count)];
 
+        // NAME
         List<string> maleNames = new List<string>{"Hans","Peter","Ole","Leonard","Fredrik","Markus","Chad","Rick","Morty","Erlend","James","Bertil"};
         List<string> femaleNames = new List<string>{"Siri","Grete","Karen","Martha","Marte","Monica"};
         if(gender == "Male"){
@@ -164,19 +231,30 @@ public class Citizen : MonoBehaviour
         } else {
             citizenName = femaleNames[Random.Range(0, femaleNames.Count)];
         }
+        transform.name = citizenName + " " + citizenID;
 
+        // AGE
         age = Random.Range(16,60);
-        //skills
+
+        // SKILLS
+
+        // INVENTORY
         inventory = transform.GetComponent<Inventory>();
+
+        // MODIFIERS
         health = 100;
         hunger = 100;
         thirst = 100;
         happiness = 100;
 
+        // MOVEMENTSPEED
         movementSpeed = Random.Range(5,12); 
         citizenAgent.speed = movementSpeed;
 
+        // STATUS
         status = null;
+
+        // TOWN ALLIEGENCE AND LORD ALLIEGENCE
         if(house == null){
             townAlliegence = null;
         } else {
@@ -184,11 +262,22 @@ public class Citizen : MonoBehaviour
                 townAlliegence = house.getTownBuildingIsApartOf();
             }
         }
-        citizensLord = null;
+        if(townAlliegence){
+            citizensLord = townAlliegence.getTownOwner();
+        } else {
+            citizensLord = null;
+        }
+        
+        // WEALTH
         wealth = Random.Range(0,100);
+
+        // POSITION
         position = transform.position;
+
+
         relatives = null;
 
+        initalizedCitizen = true;
     }
 
     public IEnumerator waitForCitizenToLoadThenAdd(Collider other){
@@ -219,10 +308,55 @@ public class Citizen : MonoBehaviour
         }
     }
 
+    public void checkCitizenMovement(){
+        if(GetComponent<NavMeshAgent>().enabled == true){
+            if(citizenAgent.remainingDistance <= 0.2){
+                isMovingToDestination = false;
+                reachedDestination = true;
+                GetComponent<Animator>().SetBool("isMoving" , false);
+            } else {
+                isMovingToDestination = true;
+                reachedDestination = false;
+                GetComponent<Animator>().SetBool("isMoving" , true);
+            }
+        }
+    }
+
+    public void resetHourTriggers(){
+        hour0 = false;
+        hour1 = false;
+        hour2 = false;
+        hour3 = false;
+        hour4 = false;
+        hour5 = false;
+        hour6 = false;
+        hour7 = false;
+        hour8 = false;
+        hour9 = false;
+        hour10 = false;
+        hour11 = false;
+        hour12 = false;
+        hour13 = false;
+        hour14 = false;
+        hour15 = false;
+        hour16 = false;
+        hour17 = false;
+        hour18 = false;
+        hour19 = false;
+        hour20 = false;
+        hour21 = false;
+        hour22 = false;
+        hour23 = false;
+    }
+
     public void goToDestination(){
 
     }
-    public IEnumerator goToBuilding(BuildingAttributes building){
+
+    public void goToBuilding(BuildingAttributes building){
+        StartCoroutine(goToBuildingCourentine(building));
+    }
+    public IEnumerator goToBuildingCourentine(BuildingAttributes building){
         if(building != null){
             isMovingToBuilding = true;
             movedToBuilding = false;
@@ -239,7 +373,7 @@ public class Citizen : MonoBehaviour
                     if(citizenAgent.remainingDistance <= 0.6){
                         movedToBuilding = true;
                         citizenAgent.ResetPath();
-                        goInsideBuilding();
+                        goInsideBuilding(building);
                         break;
                     }
                 }
@@ -257,21 +391,55 @@ public class Citizen : MonoBehaviour
         
     }
 
-    public void goInsideBuilding(){
+    public void goInsideBuilding(BuildingAttributes building){
+        setBuildingIsInsideOf(building);
+        building.addCitizenToInsideBuilding(this);
         transform.GetChild(0).gameObject.SetActive(false);
-        GetComponent<NavMeshAgent>().enabled = false;
         isInsideBuilding = true;
     }
     public void leaveBuilding(){
+        buildingInsideOf.removeCitizenFromInsideBuilding(this);
+        setBuildingIsInsideOf(null);
         transform.GetChild(0).gameObject.SetActive(true);
-        GetComponent<NavMeshAgent>().enabled = true;
         isInsideBuilding = false;
     }
     public void goToHangoutDestination(){
 
     }
+    public void degenerateThirst(){
+        if(thirst > 0){
+            thirst-=4;   
+        }
+        if(thirst <= 0){
+            takeDamage(2);
+        }
+    }
+    public void degenerateHunger(){
+        if(hunger > 0){
+            hunger-=2;
+        }  
+        if(hunger <= 0){
+            takeDamage(4);
+        }      
+    }
+    public void takeDamage(int damage){
+        if(health > 0){
+            health -= damage;
+        }
+        if(health <= 0){
+            die();
+        }  
+
+    }
+    public void die(){
+        Destroy(gameObject);
+    }
+    
     public void gatherResources(){
 
+    }
+    public void gatherFromStorage(){
+        
     }
     public void eatFood(){
 
@@ -310,6 +478,9 @@ public class Citizen : MonoBehaviour
                     //Debug.Log("No more housing");
                 }
             }
+        } else {
+            gameManager.GetTownCatalog().getNearestTown();
+            // Get nearest town with attractivnes over 20?
         }
     }
     public void foundHousing(){
@@ -398,6 +569,9 @@ public class Citizen : MonoBehaviour
     public bool getIsLookingForWork(){
         return isLookingForWork;
     }
+    public int getCitizenID(){
+        return citizenID;
+    }
 
     // SETTERS
     public void setHouse(BuildingAttributes building){
@@ -417,6 +591,9 @@ public class Citizen : MonoBehaviour
     }
     public void setIsLookingForHousing(bool val){
         isLookingForHouse = val;
+    }
+    public void setBuildingIsInsideOf(BuildingAttributes building){
+        buildingInsideOf = building;
     }
     
 }

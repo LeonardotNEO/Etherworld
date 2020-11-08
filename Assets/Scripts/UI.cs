@@ -10,7 +10,10 @@ public class UI : MonoBehaviour
     GameManager gameManager;
     GameObject buildingMenu;
 
-    // INVENTORY
+    // CONFIRMATION MENU
+    public string situation;
+
+    // MENU BOOLS
     public bool inventoryOpen;
     public bool craftingOpen;
     public bool messageLogOpen;
@@ -25,24 +28,6 @@ public class UI : MonoBehaviour
     }
     void Update()
     {
-        if(inventoryOpen){
-            GameObject.FindGameObjectWithTag("InventoryMenuUI").transform.Find("Background").gameObject.SetActive(true);                                                               
-        } else {
-            GameObject.FindGameObjectWithTag("InventoryMenuUI").transform.Find("Background").gameObject.SetActive(false);  
-        }
-
-        if(craftingOpen){
-            GameObject.FindGameObjectWithTag("CraftingMenuUI").transform.Find("Background").gameObject.SetActive(true); 
-        } else {
-            GameObject.FindGameObjectWithTag("CraftingMenuUI").transform.Find("Background").gameObject.SetActive(false); 
-        }
-
-        if(messageLogOpen){
-            GameObject.FindGameObjectWithTag("MessageLogBarUI").GetComponent<Canvas>().enabled = true;
-        } else {
-            GameObject.FindGameObjectWithTag("MessageLogBarUI").GetComponent<Canvas>().enabled = false;
-        }
-
         // INPUTS //
         if(Input.GetKeyDown("1")){
             Debug.Log(gameManager.getBuildingCatalog().getBuildingsCatalogToString());
@@ -54,10 +39,35 @@ public class UI : MonoBehaviour
             Debug.Log(gameManager.getItemCatalog().itemCatalogToString());
         }
         if(Input.GetKeyDown("4")){
-            gameManager.getInventoryCatalog().getMainInventory().removeItemFromInventory(new Dictionary<string, int>{{"Wood planks", 3}, {"Stone", 3}});
+            Dictionary<string,int> listOfItems = new Dictionary<string, int>{
+                {"Wood planks", 3}, 
+                {"Stone", 3}};
+
+            foreach(var item in listOfItems){
+                gameManager.getInventoryCatalog().getMainInventory().removeItemFromInventory(item.Key, item.Value);
+            }
         }
         if(Input.GetKeyDown("5")){
-            gameManager.getInventoryCatalog().getMainInventory().addItemToInventory(new Dictionary<string, int>{
+            Dictionary<string,int> listOfItems = new Dictionary<string, int>{
+            {"Wood plank", 35}, 
+            {"Stone", 35}, 
+            {"Wood log", 10}, 
+            {"Bucket", 1},
+            {"Iron ore", 10},
+            {"Coal ore", 10},
+            {"Gold ore", 10},
+            {"Silver ore", 10},
+            {"Copper ore", 10},
+            {"Tin ore", 10}
+            };
+
+            foreach(var item in listOfItems){
+                gameManager.getInventoryCatalog().getMainInventory().addItemToInventory(item.Key, item.Value);
+            }
+        }
+        if(Input.GetKeyDown("6")){
+            if(gameManager.getBuildingCatalog().getBuildingLastClicked()){
+                Dictionary<string,int> listOfItems = new Dictionary<string, int>{
                 {"Wood plank", 35}, 
                 {"Stone", 35}, 
                 {"Wood log", 10}, 
@@ -68,38 +78,37 @@ public class UI : MonoBehaviour
                 {"Silver ore", 10},
                 {"Copper ore", 10},
                 {"Tin ore", 10}
-                });
-        }
-        if(Input.GetKeyDown("6")){
-            if(gameManager.getBuildingCatalog().getBuildingLastClicked()){
-                gameManager.getBuildingCatalog().getBuildingLastClicked().GetComponent<Inventory>().addItemToInventory(new Dictionary<string, int>{
-                    {"Wood plank", 35}, 
-                    {"Stone", 35}, 
-                    {"Wood log", 10}, 
-                    {"Bucket", 1},
-                    {"Iron ore", 10},
-                    {"Coal ore", 10},
-                    {"Gold ore", 10},
-                    {"Silver ore", 10},
-                    {"Copper ore", 10},
-                    {"Tin ore", 10}
-                    });
+                };
+                
+                foreach(var item in listOfItems){
+                    gameManager.getBuildingCatalog().getBuildingLastClicked().GetComponent<Inventory>().addItemToInventory(item.Key, item.Value);
+                }
             }
         }
-        if(Input.GetKeyDown("i") && getInventoryOpen() == false){
-            setInventory(true);
-            setCrafting(false);
-            setMessageLog(false);
-        } else if(Input.GetKeyDown("i") && getInventoryOpen() == true){
-            setInventory(false);
+        if(Input.GetKeyDown("x")){
+            Time.timeScale = 0;
         }
-        if(Input.GetKeyDown("tab") && getCraftingOpen() == false){
-            setCrafting(true);
-            setInventory(false);
-            setMessageLog(false);
-        } else if(Input.GetKeyDown("tab") && getCraftingOpen() == true) {
-            setCrafting(false);
+        if(Input.GetKeyDown("c")){
+            Time.timeScale = 1;
         }
+        if(Input.GetKeyDown("v")){
+            Time.timeScale = 2f;
+        }
+        if(Input.GetKeyDown("b")){
+            Time.timeScale = 4;
+        }
+        if(Input.GetKeyDown("n")){
+            Time.timeScale = 8;
+        }
+        if(Input.GetKeyDown("i")){
+            openInventory();
+        }
+        if(Input.GetKeyDown("m")){
+            openMessageLog();
+        } 
+        if(Input.GetKeyDown("tab")){
+            openCrafting();
+        } 
         if(gameManager.getCraftingSystem().getIsCrafting()){
             if(Input.GetKey("q")){
                 gameManager.getCraftingSystem().rotateBuildingLeft();
@@ -107,14 +116,6 @@ public class UI : MonoBehaviour
             if(Input.GetKey("e")){
                 gameManager.getCraftingSystem().rotateBuildingRight();
             }
-        }
-        if(Input.GetKeyDown("m") && getMessageLogOpen() == false){
-            setMessageLog(true);
-            setInventory(false);
-            setCrafting(false);
-            
-        } else if(Input.GetKeyDown("m") && getInventoryOpen() == true){
-            setMessageLog(false);
         }
         if(Input.GetKeyDown("g")){
             //inventorySystem.spawnNPC(); Doesnt exist anymore, add new if u want
@@ -132,6 +133,11 @@ public class UI : MonoBehaviour
         }
 
     }
+
+    //---------//
+    // GETTERS //
+    //---------//
+
     public bool getInventoryOpen(){
         return inventoryOpen;
     }
@@ -151,6 +157,9 @@ public class UI : MonoBehaviour
         return buildingInventoryOpenBool;
     }
 
+    //---------//
+    // SETTERS //
+    //---------//
     public void setInventory(bool openClosed){
         inventoryOpen = openClosed;
     }
@@ -174,8 +183,9 @@ public class UI : MonoBehaviour
         return EventSystem.current.IsPointerOverGameObject();
     }
 
-
+    //-----------//
     // WATERWELL //
+    //-----------//
     public void fillBucketOnClick(){
         StartCoroutine(collectWaterFromWell());
     }
@@ -186,8 +196,8 @@ public class UI : MonoBehaviour
         while(runLoop){
             if(buildingSelected.GetComponent<BuildingAttributes>().getPlayerInBoundsBuilding()){
                 if(gameManager.getInventoryCatalog().getMainInventory().checkIfListOfItemsAreInInventory(new Dictionary<string, int>{{"Bucket", 1}})){
-                    gameManager.getInventoryCatalog().getMainInventory().removeItemFromInventory(new Dictionary<string, int>{{"Bucket", 1}});
-                    gameManager.getInventoryCatalog().getMainInventory().addItemToInventory(new Dictionary<string, int>{{"Bucket Of Water", 1}});
+                    gameManager.getInventoryCatalog().getMainInventory().removeItemFromInventory("Bucket", 1);
+                    gameManager.getInventoryCatalog().getMainInventory().addItemToInventory("Bucket Of Water", 1);
                     gameManager.getMessageLogText().addMessageToLog("You filled a bucket with water");
                 } else {
                     gameManager.getMessageLogText().addMessageToLog("You need a bucket to fetch water");
@@ -308,46 +318,14 @@ public class UI : MonoBehaviour
     }
 
     public void enterBuilding(){
-        GameObject buildingSelected = gameManager.getBuildingCatalog().getBuildingLastClicked();
-        BuildingAttributes buildingAttributes = gameManager.getBuildingCatalog().getBuildingLastClicked().GetComponent<BuildingAttributes>();
-
         closeBuildingUI();
-        if(buildingAttributes.getPlayerInBoundsBuilding()){
-            gameManager.getBuildingCatalog().getBuildingLastClickedAttributes().setPlayerEnteredBuilding(true);
-            gameManager.getPlayerBehavior().hideBody(true);
-            gameManager.getPlayerBehavior().setMovementDisabled(true);   
-            } else {
-                gameManager.getMessageLogText().addMessageToLog("You need to be at the entrance in order to enter the building");
-            }
-    }
-
-    public IEnumerator enterBuildingRunning(){
-        GameObject buildingSelected = gameManager.getBuildingCatalog().getBuildingLastClicked();
-        BuildingAttributes buildingAttributes = gameManager.getBuildingCatalog().getBuildingLastClicked().GetComponent<BuildingAttributes>();
-        bool walkingToDestination = true;
-
-        while(walkingToDestination){
-            visitBuilding();
-            if(buildingAttributes.getPlayerInBoundsBuilding()){
-                gameManager.getBuildingCatalog().getBuildingLastClickedAttributes().setPlayerEnteredBuilding(true);
-                gameManager.getPlayerBehavior().hideBody(true);
-                gameManager.getPlayerBehavior().setMovementDisabled(true);
-                walkingToDestination = false;
-                break;
-            } 
-            //else {
-            //    gameManager.getMessageLogText().addMessageToLog("You need to be at the entrance in order to enter the building");
-            //}
-            yield return null;
-        }
-        
+        gameManager.getPlayerBehavior().goToBuilding(gameManager.getBuildingCatalog().getBuildingLastClickedAttributes());
     }
 
     public void exitBuilding(){
         closeBuildingUI();
-        gameManager.getBuildingCatalog().getBuildingLastClickedAttributes().setPlayerEnteredBuilding(false);
-        gameManager.getPlayerBehavior().hideBody(false);
-        gameManager.getPlayerBehavior().setMovementDisabled(false);
+        buildingOpenClose();
+        gameManager.getPlayerBehavior().leaveBuilding();
     }
 
     //------------------//
@@ -401,6 +379,9 @@ public class UI : MonoBehaviour
         GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Stats").gameObject.SetActive(false);
     }
     public void buildingInventoryOpen(){
+        // OPEN PLAYER INVENTORY
+        gameManager.GetUI().openInventory();
+
         //OPEN
         buildingInventoryOpenBool = true;
         GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Inventory").gameObject.SetActive(true);
@@ -432,16 +413,31 @@ public class UI : MonoBehaviour
         "\nItems needed for production:\n" + inventoryCatalog.getListOfItemsToString(building.getItemsNeededForBuildingProduction());
     }
     public void buildingDisassemble(){
-        confirmationUI("disassemble");
+        confirmationUIOpen("disassemble");
     }
 
-    public void confirmationUI(string situation){
-        //POPUP UI
+    //------------------//
+    // CONFIRMATIONMENU //
+    //------------------//
 
+    public void confirmationUIOpen(string currentSituation){
+        GameObject.FindGameObjectWithTag("UI").transform.Find("ConfirmationMenu/Background").gameObject.SetActive(true);
+        situation = currentSituation;
+    }
+
+    public void confirmationUIClose(){
+        GameObject.FindGameObjectWithTag("UI").transform.Find("ConfirmationMenu/Background").gameObject.SetActive(false);
+    }
+
+    public void yesButton(){
         if(situation == "disassemble"){
-            // ON BUTTON CLICK YES
-            // destroy current selected gameobject
+            Destroy(gameManager.getBuildingCatalog().getBuildingLastClicked());
+            buildingOpenClose();
+            confirmationUIClose();
         }
+    }
+    public void noButton(){
+        confirmationUIClose();
     }
 
     //---------------//
@@ -453,6 +449,7 @@ public class UI : MonoBehaviour
         GameObject rightPanel = GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Production/RightPanel").gameObject;
         rightPanel.transform.Find("Selected Item Field").GetComponent<Text>().text = item;
         rightPanel.transform.Find("Items Needed Field").GetComponent<Text>().text = gameManager.getInventoryCatalog().getListOfItemsToString(selectedItem.getCostToCraftItem());
+        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Production/Options/Viewport/Content").GetComponent<ItemsThatCanBeProduced>().updateItemsThatCanBeProducedList();
     }
 
     public void resetSelectedItem(){
@@ -472,7 +469,6 @@ public class UI : MonoBehaviour
         BuildingAttributes buildingAttributes = gameManager.getBuildingCatalog().getBuildingLastClicked().GetComponent<BuildingAttributes>(); 
         BuildingProgressBar progressbar = GameObject.FindGameObjectWithTag("ProductionProgressBar").GetComponent<BuildingProgressBar>();
 
-        float progressSpeed = 100;
         bool inventoryIsFull = false;
 
         if(selectedItem != null){
@@ -483,20 +479,27 @@ public class UI : MonoBehaviour
                     buildingAttributes.setItemCurrentlyProduced(selectedItem);
 
                     while(buildingInventory.checkIfListOfItemsAreInInventory(selectedItem.getCostToCraftItem()) && !inventoryIsFull){
+                        if(buildingAttributes.getWorkersInBuilding().Count == 0){
+                            gameManager.getMessageLogText().addMessageToLog("Production could not start since theres no workers assigned in the building!");
+                            break;
+                        }
 
                         while(buildingAttributes.getProductionProgress() <= 360 && !inventoryIsFull){
+                            float progressSpeed = buildingAttributes.getCitizensInsideBuilding().Count * 10;
                             buildingAttributes.setIncreaseProductionProgress(Time.deltaTime * progressSpeed);
                             //progressbar.updateProgressBar(buildingAttributes.getProductionProgress());
 
                             if(buildingAttributes.getProductionProgress() >= 360){
-                                int itemsThatCouldNotBeAdded = buildingInventory.addItemToInventory(new Dictionary<string, int>{{selectedItem.getName(), 1}});
+                                int itemsThatCouldNotBeAdded = buildingInventory.addItemToInventory(selectedItem.getName(), 1);
 
                                 if(itemsThatCouldNotBeAdded == 0){
-                                    buildingInventory.removeItemFromInventory(selectedItem.getCostToCraftItem());
+                                    foreach(var item in selectedItem.getCostToCraftItem()){
+                                        buildingInventory.removeItemFromInventory(item.Key, item.Value);
+                                    }
                                     buildingAttributes.setResetProductionProgress();
                                     break;
                                 } else {
-                                    gameManager.getMessageLogText().addMessageToLog("Production is cancelled");
+                                    gameManager.getMessageLogText().addMessageToLog("Buildinginventory is full. Production is cancelled");
                                     buildingAttributes.setResetProductionProgress();
                                     inventoryIsFull = true;
                                     break;
@@ -519,8 +522,42 @@ public class UI : MonoBehaviour
         
         yield return null;
     }
+    //------------//
+    // WORKERS UI //
+    //------------//
+    public void MoveAvailableToWorker(){
+        Citizen selectedCitizen = gameManager.getCitizenCatalog().getSelectedCitizen();
+        BuildingAttributes selectedBuilding = gameManager.getBuildingCatalog().getBuildingLastClickedAttributes();
+        if(selectedBuilding.getWorkersInBuilding().Count < selectedBuilding.getWorkerLimit()){
+            if(!selectedBuilding.getWorkersInBuilding().Contains(selectedCitizen)){
+                selectedCitizen.getTownAlliegence().removeAvailableWorkerFromTown(selectedCitizen);
+                selectedBuilding.addWorkerToBuilding(selectedCitizen);
+                GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Workers/Workers Here/Scroll View/Viewport/Content").GetComponent<ShowWorkersInBuilding>().updateAvailableWorkersList();
+                GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Workers/Available workers/Scroll View/Viewport/Content").GetComponent<ShowAvailableWorkers>().updateAvailableWorkersList();
+            }
+        } else {
+            gameManager.getMessageLogText().addMessageToLog("You cant add more workers since the limit is reached");
+        }
+    }
+    public void MoveWorkerToAvailable(){
+        Citizen selectedCitizen = gameManager.getCitizenCatalog().getSelectedCitizen();
+        BuildingAttributes selectedBuilding = gameManager.getBuildingCatalog().getBuildingLastClickedAttributes();
+        if(!selectedCitizen.getTownAlliegence().getAvailableWorkersInTown().Contains(selectedCitizen)){
+            selectedCitizen.getTownAlliegence().addAvailableWorkerToTown(selectedCitizen);
+            selectedBuilding.removeWorkerFromBuilding(selectedCitizen);
+            GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Workers/Workers Here/Scroll View/Viewport/Content").GetComponent<ShowWorkersInBuilding>().updateAvailableWorkersList();
+            GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Workers/Available workers/Scroll View/Viewport/Content").GetComponent<ShowAvailableWorkers>().updateAvailableWorkersList();
+        }
+    }   
+    public void selectWorkerButton(int citizenID){
+        gameManager.getCitizenCatalog().setSelectedCitizen(gameManager.getCitizenCatalog().getCitizenByID(citizenID));
+        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Workers/Workers Here/Scroll View/Viewport/Content").GetComponent<ShowWorkersInBuilding>().updateAvailableWorkersList();
+        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Workers/Available workers/Scroll View/Viewport/Content").GetComponent<ShowAvailableWorkers>().updateAvailableWorkersList();
+    }
 
+    //---------//
     // GATE UI //
+    //---------//
     public void OpenGate(){
         gameManager.getBuildingCatalog().getBuildingLastClicked().GetComponent<Gate>().setGateOpen(true);
         // PLAY ANIMATION
@@ -528,5 +565,50 @@ public class UI : MonoBehaviour
     public void closeGate(){
         gameManager.getBuildingCatalog().getBuildingLastClicked().GetComponent<Gate>().setGateOpen(false);
         // PLAY ANIMATION
+    }
+
+    //-------------//
+    // MESSAGE LOG //
+    //-------------//
+    public void openMessageLog(){
+        messageLogOpen = true;
+        GameObject.FindGameObjectWithTag("MessageLogBarUI").GetComponent<Canvas>().enabled = true;
+
+        GameObject.FindGameObjectWithTag("InventoryMenuUI").transform.Find("Background").gameObject.SetActive(false); 
+        GameObject.FindGameObjectWithTag("CraftingMenuUI").transform.Find("Background").gameObject.SetActive(false); 
+    }
+    public void closeMessageLog(){
+        messageLogOpen = false;
+        GameObject.FindGameObjectWithTag("MessageLogBarUI").GetComponent<Canvas>().enabled = false;
+    }
+
+    //------------------//
+    // PLAYER INVENTORY //
+    //------------------//
+    public void openInventory(){
+        inventoryOpen = true;
+        GameObject.FindGameObjectWithTag("InventoryMenuUI").transform.Find("Background").gameObject.SetActive(true);
+
+        GameObject.FindGameObjectWithTag("CraftingMenuUI").transform.Find("Background").gameObject.SetActive(false); 
+        GameObject.FindGameObjectWithTag("MessageLogBarUI").GetComponent<Canvas>().enabled = false;
+    }
+    public void closeInventory(){
+        inventoryOpen = false;
+        GameObject.FindGameObjectWithTag("InventoryMenuUI").transform.Find("Background").gameObject.SetActive(false); 
+    }
+
+    //--------------//
+    // CRAFTINGMENU //
+    //--------------//
+    public void openCrafting(){
+        craftingOpen = true;
+        GameObject.FindGameObjectWithTag("CraftingMenuUI").transform.Find("Background").gameObject.SetActive(true); 
+
+        GameObject.FindGameObjectWithTag("InventoryMenuUI").transform.Find("Background").gameObject.SetActive(false); 
+        GameObject.FindGameObjectWithTag("MessageLogBarUI").GetComponent<Canvas>().enabled = false;
+    }
+    public void closeCrafting(){
+        craftingOpen = false;
+        GameObject.FindGameObjectWithTag("CraftingMenuUI").transform.Find("Background").gameObject.SetActive(false); 
     }
 }

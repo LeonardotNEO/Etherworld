@@ -52,21 +52,23 @@ MonoBehaviour:
   thisBuilding: {fileID: 0}
   apartOfTown: {fileID: 0}
   workersInBuilding: []
-  isOwnedByPlayer: 0
-  isRented: 0
-  buildingIsProducing: 0
+  residentsInBuilding: []
+  buildingInventory: {fileID: 0}
   buildingTag: 
-  buildingID: 0
   buildingName: 
   buildingDescription: 
+  buildingID: 0
   storageCapacity: 0
   productionProgress: 0
-  playerEnteredBuilding: 0
-  buildingInventory: {fileID: 0}
-  playerInBoundsBuilding: 0
+  residentialLimit: 0
   positionX: 0
   positionY: 0
   positionZ: 0
+  isOwnedByPlayer: 0
+  isRented: 0
+  buildingIsProducing: 0
+  playerEnteredBuilding: 0
+  playerInBoundsBuilding: 0
   collidingWithOtherObject: 0
 --- !u!114 &6311927600550669940
 MonoBehaviour:
@@ -139,6 +141,7 @@ GameObject:
   - component: {fileID: 4082024550032915855}
   - component: {fileID: 1852547905610435218}
   - component: {fileID: 6380236976240563341}
+  - component: {fileID: 1497995475753653340}
   m_Layer: 12
   m_Name: pCube21
   m_TagString: Untagged
@@ -207,6 +210,19 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!65 &1497995475753653340
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4378314864715923286}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 4.9052153, y: 11.373238, z: 4.5767145}
+  m_Center: {x: -3.123279, y: -3.1991425, z: 0.02022171}
 --- !u!1 &5740876476903697950
 GameObject:
   m_ObjectHideFlags: 0
@@ -303,8 +319,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 11.051535, y: 11.548203, z: 5.4444523}
-  m_Center: {x: 0.24875736, y: -0.0035529137, z: -4.8840275}
+  m_Size: {x: 6.265005, y: 6.0466013, z: 5.4444523}
+  m_Center: {x: -2.0147114, y: -2.754354, z: -4.8840275}
 --- !u!1 &7584429996649146241
 GameObject:
   m_ObjectHideFlags: 0
@@ -393,7 +409,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8671571911968698519}
-  - component: {fileID: 7980598853129177777}
   - component: {fileID: 7980598853129177776}
   m_Layer: 0
   m_Name: Sawmill
@@ -420,19 +435,6 @@ Transform:
   m_Father: {fileID: 8473066453181369193}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &7980598853129177777
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8294588285504088621}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 4.266241, y: 6.277691, z: 9.461902}
-  m_Center: {x: -0.013411522, y: 2.8753567, z: 7.008902}
 --- !u!208 &7980598853129177776
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -460,6 +462,7 @@ GameObject:
   - component: {fileID: 6746032078838894985}
   - component: {fileID: 172787272927253861}
   - component: {fileID: 336556251380798182}
+  - component: {fileID: 4753972885932941532}
   m_Layer: 12
   m_Name: pCube23
   m_TagString: Untagged
@@ -528,3 +531,16 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!65 &4753972885932941532
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8557000511373751004}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 4.4593945, y: 5.9555044, z: 9.903562}
+  m_Center: {x: -0.06604099, y: 0.8900008, z: -1.1113029}

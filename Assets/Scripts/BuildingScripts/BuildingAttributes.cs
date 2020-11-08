@@ -10,8 +10,9 @@ public class BuildingAttributes : MonoBehaviour
     public GameObject buildingMenu;
     public GameObject thisBuilding;
     public Town apartOfTown;
-    public List<Citizen> workersInBuilding  = new List<Citizen>();
-    public List<Citizen> residentsInBuilding  = new List<Citizen>();
+    public List<Citizen> citizensWorkingInBuilding  = new List<Citizen>();
+    public List<Citizen> citizensLivingInBuilding  = new List<Citizen>();
+    public List<Citizen> citizensInBuilding = new List<Citizen>();
     public Inventory buildingInventory;
     public Dictionary<string, int> buildingUpKeep;
     public Dictionary<string, int> itemsProducedInBuilding;
@@ -27,6 +28,7 @@ public class BuildingAttributes : MonoBehaviour
     public int storageCapacity;
     public float productionProgress;
     public int residentialLimit;
+    public int workerLimit;
 
     public float positionX;
     public float positionY;
@@ -59,7 +61,8 @@ public class BuildingAttributes : MonoBehaviour
         setBuildingName(gameManager.getBuildingCatalog().getBuildingByName(transform.name).getNameOfBuilding());
         setBuildingDescription(gameManager.getBuildingCatalog().getBuildingByName(transform.name).getDescriptionOfBulding());
         setBuildingStorageCapacity(gameManager.getBuildingCatalog().getBuildingByName(transform.name).getStorageCapacity());
-        residentialLimit = 4;
+        setResidentialLimit(gameManager.getBuildingCatalog().getBuildingByName(transform.name).getResidentialLimit());
+        setWorkerLimit(gameManager.getBuildingCatalog().getBuildingByName(transform.name).getWorkerLimit());
         setBuildingUpKeep(gameManager.getBuildingCatalog().getBuildingByName(transform.name).getBuildingUpKeep());
         setItemsNeededForBuildingProduction(gameManager.getBuildingCatalog().getBuildingByName(transform.name).getNeededForProduction());
         setItemsProducedInBuilding(gameManager.getBuildingCatalog().getBuildingByName(transform.name).getBuildingProduction());
@@ -85,13 +88,13 @@ public class BuildingAttributes : MonoBehaviour
 
     void OnDisable()
     {
-        foreach(Citizen citizen in residentsInBuilding){
-            citizen.leaveBuilding();
+        foreach(Citizen citizen in citizensLivingInBuilding){
+            citizen.goToBuilding(null);
             citizen.setHouse(null);
             citizen.setTownAlliegence(null);
         }
-        foreach(Citizen citizen in workersInBuilding){
-            citizen.leaveBuilding();
+        foreach(Citizen citizen in citizensWorkingInBuilding){
+            citizen.goToBuilding(null);
             citizen.setWork(null);
         }
         if(apartOfTown){
@@ -239,16 +242,22 @@ public class BuildingAttributes : MonoBehaviour
         return this;
     }
     public List<Citizen> getWorkersInBuilding(){
-        return workersInBuilding;
+        return citizensWorkingInBuilding;
     }
     public Town getTownBuildingIsApartOf(){
         return apartOfTown;
     }
     public List<Citizen> getResidentsInBuilding(){
-        return residentsInBuilding;
+        return citizensLivingInBuilding;
     }
     public int getResidentialLimit(){
         return residentialLimit;
+    }
+    public int getWorkerLimit(){
+        return workerLimit;
+    }
+    public List<Citizen> getCitizensInsideBuilding(){
+        return citizensInBuilding;
     }
     //SETTERS
     public void setItemsProducedInBuilding(Dictionary<string, int> newItemsProduced)
@@ -305,16 +314,20 @@ public class BuildingAttributes : MonoBehaviour
         playerEnteredBuilding = val;
     }
     public void addWorkerToBuilding(Citizen citizen){
-        workersInBuilding.Add(citizen);
+        citizensWorkingInBuilding.Add(citizen);
+        citizen.setWork(this);
     }
     public void removeWorkerFromBuilding(Citizen citizen){
-        workersInBuilding.Remove(citizen);
+        citizensWorkingInBuilding.Remove(citizen);
+        citizen.setWork(null);
     }
     public void addResidentToBuilding(Citizen citizen){
-        residentsInBuilding.Add(citizen);
+        citizensLivingInBuilding.Add(citizen);
+        citizen.setHouse(this);
     }
     public void removeResidentFromBuilding(Citizen citizen){
-        residentsInBuilding.Remove(citizen);
+        citizensLivingInBuilding.Remove(citizen);
+        citizen.setHouse(null);
     }
     public void setTownBuildingIsApartOf(Town town){
         apartOfTown = town;
@@ -333,5 +346,17 @@ public class BuildingAttributes : MonoBehaviour
     }
     public void setBuildingTag(string tag){
         buildingTag = tag;
+    }
+    public void addCitizenToInsideBuilding(Citizen citizen){
+        citizensInBuilding.Add(citizen);
+    }
+    public void removeCitizenFromInsideBuilding(Citizen citizen){
+        citizensInBuilding.Remove(citizen);
+    }
+    public void setResidentialLimit(int limit){
+        residentialLimit = limit;
+    }
+    public void setWorkerLimit(int limit){
+        workerLimit = limit;
     }
 }

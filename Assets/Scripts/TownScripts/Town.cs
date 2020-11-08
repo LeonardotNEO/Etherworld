@@ -54,6 +54,7 @@ public class Town : MonoBehaviour
         List<string> townNames = new List<string>(){"Stardew", "Mountain Peak", "Rusty Valley", "Woodshore", "Brotown"};
         townName = townNames[Random.Range(0, townNames.Count)];
         gameObject.name = townName;
+        
         townCenter = transform.GetComponent<BoxCollider>().bounds.center;
         townAttractivnes = 40;
         gameManager.GetTownCatalog().addTownToAllTown(this);
@@ -154,6 +155,10 @@ public class Town : MonoBehaviour
     public List<Citizen> getCitizensInTown(){
         return citizensInTown;
     }
+    public string getTownOwner(){
+        return townOwner;
+    }
+
 
     // SETTERS
     public void setTownName(string name){
@@ -200,5 +205,8 @@ public class Town : MonoBehaviour
     }
     public void removeResidentialBuildingFromTown(BuildingAttributes building){
         residentialBuildingsInTown.Remove(building);
+    }
+    public void setTownOwner(string name){
+        townOwner = name;
     }
 }

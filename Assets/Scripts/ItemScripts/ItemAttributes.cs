@@ -13,16 +13,19 @@ public class ItemAttributes : MonoBehaviour
 
     void Start()
     {
-        itemName = this.transform.name;
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
 
-        if(itemName == "Wood log"){
+        if(this.transform.name.Contains("Wood log")){
+            itemName = "Wood log";
             itemAmount = 1;
-        } else if(itemName == "Stone"){
+        } else if(this.transform.name.Contains("Stone")){
+            itemName = "Stone";
             itemAmount = 1;
         } else {
             itemAmount = 1;
         }
+
+        this.transform.name = itemName;
     }
 
     void Update()
@@ -70,7 +73,7 @@ public class ItemAttributes : MonoBehaviour
 
     public void pickUpItem(){
         if(getItemAmount() != 0){
-            itemAmount = gameManager.getInventoryCatalog().getMainInventory().addItemToInventory(new Dictionary<string, int>{{getItemName(), getItemAmount()}});
+            itemAmount = gameManager.getInventoryCatalog().getMainInventory().addItemToInventory(getItemName(), getItemAmount());
         }
         player.GetComponent<Animator>().SetTrigger("pickingUpItem");
         if(itemAmount == 0){
