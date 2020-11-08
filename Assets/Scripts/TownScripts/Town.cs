@@ -32,6 +32,7 @@ public class Town : MonoBehaviour
     public string townName;
     public string townCurrentDisaster;
 
+    public int townID;
     public int townHappiness;
     public int townAttractivnes;
     public int townAmountOfHousing;
@@ -91,18 +92,36 @@ public class Town : MonoBehaviour
                     addResidentialBuildingToTown(other.gameObject.GetComponent<BuildingAttributes>());
                 }
             }
-            if(other.gameObject.GetComponent<BuildingAttributes>().getTownBuildingIsApartOf() == this || other.gameObject.GetComponent<Citizen>().townAlliegence == this){
-                if(other.gameObject.GetComponent<Inventory>()){
-                    addInventoryToTown(other.gameObject.GetComponent<Inventory>());
-                }
-            }
+            StartCoroutine(waitForBuildingInventoryToLoad(other));
             
+        }
+        if(other.gameObject.layer == LayerMask.NameToLayer("Citizens")){
+            StartCoroutine(waitForCitizenInventoryToLoad(other));
         }
     }
 
     void OnTriggerExit(Collider other)
     {
 
+    }
+
+    public IEnumerator waitForCitizenInventoryToLoad(Collider other){
+        yield return new WaitForSeconds(0.5f);
+
+        if(other.gameObject.GetComponent<Citizen>().getTownAlliegence() == this){
+            if(other.gameObject.GetComponent<Inventory>()){
+                addInventoryToTown(other.gameObject.GetComponent<Inventory>());
+            }
+        }
+        yield return null;
+    }
+    public IEnumerator waitForBuildingInventoryToLoad(Collider other){
+        yield return new WaitForSeconds(0.5f);
+
+        if(other.gameObject.GetComponent<BuildingAttributes>().getTownBuildingIsApartOf() == this){
+            addInventoryToTown(other.gameObject.GetComponent<Inventory>());
+        }
+        yield return null;
     }
 
     // GETTERS
