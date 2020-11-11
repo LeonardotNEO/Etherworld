@@ -91,6 +91,9 @@ public class Town : MonoBehaviour
                 if(other.gameObject.GetComponent<BuildingAttributes>().getBuildingTag() == "Residential"){
                     addResidentialBuildingToTown(other.gameObject.GetComponent<BuildingAttributes>());
                 }
+                if(other.gameObject.GetComponent<BuildingAttributes>().getBuildingTag() == "Storage"){
+                    addStorageBuildingToTown(other.gameObject.GetComponent<BuildingAttributes>());
+                }
             }
             StartCoroutine(waitForBuildingInventoryToLoad(other));
             
@@ -170,6 +173,39 @@ public class Town : MonoBehaviour
     public List<BuildingAttributes> getBuildingsInTown(){
         return buildingsInTown;
     }
+    public List<BuildingAttributes> getStorageBuildingsInTown(){
+        return storageBuildingsInTown;
+    }
+    public BuildingAttributes getClosestStoragetBuildingWithFreeSpace(Vector3 fromPosition, string itemName, int amount){
+        List<BuildingAttributes> storageArrangeAfterDistance = new List<BuildingAttributes>();
+
+        foreach(BuildingAttributes building in storageBuildingsInTown){
+            if(!building.getBuildingInventory().checkIfInventoryHasSpaceForItem(itemName, amount)){
+                continue;
+            } 
+
+            float distance1 = Vector3.Distance(fromPosition, building.transform.position);
+            float distance2 = 0;
+
+            if(storageArrangeAfterDistance.Count != 0){
+                distance2 = Vector3.Distance(fromPosition, storageArrangeAfterDistance[storageArrangeAfterDistance.Count - 1].transform.position);
+            } else {
+                storageArrangeAfterDistance.Add(building);
+            }
+
+            if(distance1 < distance2){
+                storageArrangeAfterDistance.Add(building);
+            }
+        }
+        
+        // smallest element appears first
+        storageArrangeAfterDistance.Reverse();
+        if(storageArrangeAfterDistance.Count > 0){
+            return storageArrangeAfterDistance[0];
+        } else {
+            return null;
+        }
+    }
 
     public List<Citizen> getCitizensInTown(){
         return citizensInTown;
@@ -224,6 +260,12 @@ public class Town : MonoBehaviour
     }
     public void removeResidentialBuildingFromTown(BuildingAttributes building){
         residentialBuildingsInTown.Remove(building);
+    }
+    public void addStorageBuildingToTown(BuildingAttributes building){
+        storageBuildingsInTown.Add(building);
+    }
+    public void removeStorageBuildingFromTown(BuildingAttributes building){
+        storageBuildingsInTown.Remove(building);
     }
     public void setTownOwner(string name){
         townOwner = name;

@@ -12,6 +12,10 @@ public class ShowBuildingInventory : MonoBehaviour
     void Awake()
     {
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+        for(int i = 0; i < 100; i++){
+                GameObject slot1 = Instantiate(slot, transform);
+                slot1.GetComponentInChildren<InventorySlotButton>().setInventorySlotID(i);
+        }
     }
 
     void Update()
@@ -26,28 +30,25 @@ public class ShowBuildingInventory : MonoBehaviour
 
 
     public void updateInventory(){
-
         if(gameManager.getBuildingCatalog().getBuildingLastClicked() != null){
             if(gameManager.getBuildingCatalog().getBuildingLastClicked().GetComponent<Inventory>()){
                 inventory = gameManager.getBuildingCatalog().getBuildingLastClicked().GetComponent<Inventory>();
 
-                foreach(Transform child in transform){
-                    Destroy(child.gameObject);
+                for(int i = 0; i < inventory.getInventoryCapacity(); i++){
+                    transform.GetChild(i).gameObject.SetActive(true);
                 }
 
                 for(int i = 0; i < inventory.getInventoryCapacity(); i++){
-                    GameObject slot1 = Instantiate(slot, transform);
-                    slot1.GetComponentInChildren<InventorySlotButton>().setInventorySlotID(i);
-
                     if(inventory.getInventorySlots()[i].getCurrentAmountInSlot() != 0){
-                        slot1.transform.Find("Button/Text").GetComponent<Text>().text = inventory.getInventorySlots()[i].getItemInSlot();
-                        slot1.transform.Find("Panel/Text").GetComponent<Text>().text = inventory.getInventorySlots()[i].getCurrentAmountInSlot().ToString();
+                        transform.GetChild(i).transform.Find("Button/Text").GetComponent<Text>().text = inventory.getInventorySlots()[i].getItemInSlot();
+                        transform.GetChild(i).transform.Find("Panel/Text").GetComponent<Text>().text = inventory.getInventorySlots()[i].getCurrentAmountInSlot().ToString();
                     } else {
-                        slot1.transform.Find("Button/Text").GetComponent<Text>().text = "";
-                        slot1.transform.Find("Panel/Text").GetComponent<Text>().text = "";
+                        transform.GetChild(i).transform.Find("Button/Text").GetComponent<Text>().text = "";
+                        transform.GetChild(i).transform.Find("Panel/Text").GetComponent<Text>().text = "";
                     }
                 }
             }
         }
+
     }
 }

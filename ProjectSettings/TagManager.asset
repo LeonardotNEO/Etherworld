@@ -24,6 +24,7 @@ TagManager:
   - NPC
   - BoardingHouse
   - Placeholder
+  - Storage
   layers:
   - Default
   - TransparentFX

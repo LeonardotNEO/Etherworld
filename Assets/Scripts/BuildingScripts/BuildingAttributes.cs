@@ -105,11 +105,17 @@ public class BuildingAttributes : MonoBehaviour
             apartOfTown.removeInventoryFromTown(buildingInventory);
         }
     }
-
     void OnTriggerEnter(Collider other)
     {
+        if(other.gameObject.GetComponent<Town>()){
+            setTownBuildingIsApartOf(other.gameObject.GetComponent<Town>());
+        }
+    }
+
+    void OnTriggerStay(Collider other)
+    {
         if(
-            other.gameObject.layer == 12  || /*Layer 12 is BUILDINGS*/
+            other.gameObject.layer == 12  || /*Layer 12 is BUILDINGSMESH*/
             other.gameObject.layer == 13  || /*Layer 13 is RESOURCESMESH*/
             other.gameObject.layer == 14     /*Layer 14 is ITEMSMESH*/
         ){setCollidingWithOtherObject(true);} 
@@ -117,10 +123,6 @@ public class BuildingAttributes : MonoBehaviour
             other.gameObject.layer == 15      /*Layer 15 is PLAYER*/
 
         ){setPlayerInBoundsBuilding(true);} 
-
-        if(other.gameObject.GetComponent<Town>()){
-            setTownBuildingIsApartOf(other.gameObject.GetComponent<Town>());
-        }
     }
     void OnTriggerExit(Collider other)
     {

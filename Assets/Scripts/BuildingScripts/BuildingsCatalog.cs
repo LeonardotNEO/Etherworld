@@ -29,6 +29,12 @@ public class BuildingsCatalog : MonoBehaviour
     public GameObject furnace;
     public Sprite furnaceSprite;
 
+    //---------//
+    // STORAGE //
+    //---------//
+    public GameObject warehouse;
+    public Sprite warehouseSprite;
+
     //---------------//
     // FORTIFICATION //
     //---------------//
@@ -137,7 +143,7 @@ public class BuildingsCatalog : MonoBehaviour
                 /*NeededForProduction*/ new Dictionary<string, int>(){ {"Wood log", 1}, {"Spruce log", 1}, {"Pine log", 1}, {"Yew log", 1}, {"Birch log", 1}, {"Oak log", 1}, {"Ash log", 1}},
                 /*Prefab*/              sawmill,
                 /*Sprite*/              sawmillSprite,
-                /*StorageCapcity*/      10,
+                /*StorageCapcity*/      8,
                 /*Initial Value*/       200,
                 /*Residential Limit*/   0,
                 /*Worker Limit*/        10,
@@ -153,12 +159,32 @@ public class BuildingsCatalog : MonoBehaviour
                 /*NeededForProduction*/ new Dictionary<string, int>(){ {"Copper ore", 1}, {"Tin ore", 1}, {"Iron ore", 1}, {"Coal ore", 1}, {"Silver ore", 1}, {"Gold ore", 1}, {"Kimberlite", 1}, {"Neonium", 1}, {"Ethereum", 1}},
                 /*Prefab*/              furnace,
                 /*Sprite*/              furnaceSprite,
-                /*StorageCapcity*/      10,
+                /*StorageCapcity*/      8,
                 /*Initial Value*/       200,
                 /*Residential Limit*/   0,
                 /*Worker Limit*/        5,
                 /*Name*/                "Furnace",
                 /*Descriptione*/        "A place where one can smelt ore to bars"
+            )
+        );
+
+        //-------------------//
+        // STORAGE BUILDINGS //
+        //-------------------//
+        addBuildingToCatalog(
+            new Building(
+                /*Cost to craft*/       new Dictionary<string, int>(){ {"Wood plank", 150}, {"Stone", 50}},
+                /*Upkeep*/              new Dictionary<string, int>(){ {"Wood plank", 4}, {"Stone", 1}},
+                /*Production*/          new Dictionary<string, int>(){},
+                /*NeededForProduction*/ new Dictionary<string, int>(){},
+                /*Prefab*/              warehouse,
+                /*Sprite*/              warehouseSprite,
+                /*StorageCapcity*/      50,
+                /*Initial Value*/       200,
+                /*Residential Limit*/   0,
+                /*Worker Limit*/        0,
+                /*Name*/                "Warehouse",
+                /*Descriptione*/        "A place for storing items"
             )
         );
 

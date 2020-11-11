@@ -264,6 +264,20 @@ public class UI : MonoBehaviour
 
                     background.Find("Open").gameObject.SetActive(true);                 // OPEN
                 }
+
+                if(buildingAttributes.getBuildingTag().Equals("Storage")){
+                    background.Find("Visit").gameObject.SetActive(true);                // VISIT
+
+                    if(buildingAttributes.getPlayerEnteredBuilding()){
+                        background.Find("Enter").gameObject.SetActive(false);           // ENTER
+                        background.Find("Exit").gameObject.SetActive(true);             // EXIT
+                    } else {
+                        background.Find("Enter").gameObject.SetActive(true);            // ENTER
+                        background.Find("Exit").gameObject.SetActive(false);            // EXIT
+                    }
+
+                    background.Find("Open").gameObject.SetActive(true);                 // OPEN
+                }
                 //-------------------//
                 // BUILDINGS BY NAME //
                 //-------------------//

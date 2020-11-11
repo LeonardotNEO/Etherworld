@@ -18,9 +18,6 @@ public class Inventory : MonoBehaviour
         gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
         inventoryName = transform.name;
 
-        if(transform.tag == "player"){
-            inventoryCapacity = 30;
-        }
         showMainInv = GameObject.FindGameObjectWithTag("InventoryMenuUI").transform.Find("Background/Scroll View/Viewport/MainInventory").GetComponent<ShowMainInventory>();
         showbuildingInv = GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Inventory/Scroll View/Viewport/BuildingInventory").GetComponent<ShowBuildingInventory>();
     }
@@ -31,9 +28,16 @@ public class Inventory : MonoBehaviour
     }
 
     public void instatiateInventory(){
-        if(transform.tag == "Residential" || transform.tag == "Industrial"){
+        if(transform.gameObject.layer == LayerMask.NameToLayer("Buildings")){
             inventoryCapacity = gameManager.getBuildingCatalog().getBuildingByName(transform.name).getStorageCapacity();
         }
+        if(transform.gameObject.layer == LayerMask.NameToLayer("Citizens")){
+            inventoryCapacity = 10;
+        }
+        if(transform.tag == "player"){
+            inventoryCapacity = 30;
+        }
+
         for(int i = 0; i < inventoryCapacity; i++){
             inventorySlots.Add(new InventorySlot());
         }
@@ -191,9 +195,50 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    public void sendItemsFromInventory1ToIventory2(Inventory inv1, Inventory inv2, InventorySlot inventorySlot){
-        inv2.addItemToInventory(inventorySlot.getItemInSlot(), inventorySlot.getCurrentAmountInSlot());
-        inv1.removeItemFromInventory(inventorySlot.getItemInSlot(), inventorySlot.getCurrentAmountInSlot());
+    public List<InventorySlot> getFreeInventorySlotsForItem(string itemName, int amount){
+        List<InventorySlot> freeInventorySlots = new List<InventorySlot>();
+
+        foreach(InventorySlot inventorySlot in inventorySlots){
+            if(inventorySlot.getCurrentAmountInSlot() == 0 || ((inventorySlot.getCurrentAmountInSlot() + amount) <= 99 && inventorySlot.getItemInSlot().Equals(itemName))){
+                freeInventorySlots.Add(inventorySlot);
+            }
+        }
+
+        return freeInventorySlots;
+    }
+    public bool checkIfInventoryHasSpaceForItem(string itemName, int amount){
+        int totalFreeSpace = 0;
+
+        foreach(InventorySlot inventorySlot in inventorySlots){
+            if(inventorySlot.getCurrentAmountInSlot() == 0){
+                totalFreeSpace += 99;
+                continue;
+            }
+
+            if(inventorySlot.getItemInSlot() == itemName){
+                totalFreeSpace += 99 - inventorySlot.getCurrentAmountInSlot();
+            }
+        }
+
+        if(totalFreeSpace >= amount){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public void sendItemsFromThisToOther(Inventory inv2, string itemName, int amount){
+        if(inv2.checkIfInventoryHasSpaceForItem(itemName, amount)){
+            if(this.checkIfListOfItemsAreInInventory(new Dictionary<string, int>{{itemName, amount}})){
+                inv2.addItemToInventory(itemName, amount);
+                this.removeItemFromInventory(itemName, amount);
+            } else {
+                gameManager.getMessageLogText().addMessageToLog("Cant send item from inventory 1 to inventory 2, because inv1 doesnt have the");
+                Debug.Log(this.getInventorySlots()[0].getItemInSlot() + this.getInventorySlots()[0].getCurrentAmountInSlot());
+            }
+        } else {
+            gameManager.getMessageLogText().addMessageToLog("Could not transfer item to inventory, since its not enough space");
+        }
     }
 
     public List<InventorySlot> getInventorySlots(){

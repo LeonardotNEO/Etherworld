@@ -48,8 +48,8 @@ public class Citizen : MonoBehaviour
     public bool isInsideBuilding;
     public bool isLookingForWork;
     public bool isLookingForHouse;
-
-
+    public bool puttingItemInStorage;
+    public bool newAction;
 
     public bool isResting;
     public bool isWorking;
@@ -107,7 +107,7 @@ public class Citizen : MonoBehaviour
             switch(gameManager.getClock().getHours()){
                 case 0:
                     if(gameManager.getClock().getMinutes() == 0 && !hour0){
-                        goToBuilding(work); 
+                        StartCoroutine(goToBuilding(work)); 
                         degenerateHunger();
                         degenerateThirst();
                         hour0 = true;
@@ -118,7 +118,7 @@ public class Citizen : MonoBehaviour
                     break;
                 case 3:
                     if(gameManager.getClock().getMinutes() == 0 && !hour3){ 
-                        goToBuilding(house); 
+                        StartCoroutine(putItemInStorage("Wood plank", 20)); 
                         degenerateHunger();
                         degenerateThirst();
                         hour3 = true;
@@ -126,7 +126,7 @@ public class Citizen : MonoBehaviour
                     break;
                 case 6:
                     if(gameManager.getClock().getMinutes() == 0 && !hour6){ 
-                        goToBuilding(work); 
+                        StartCoroutine(goToBuilding(house)); 
                         degenerateHunger();
                         degenerateThirst();
                         hour6 = true;
@@ -134,7 +134,7 @@ public class Citizen : MonoBehaviour
                     break;
                 case 9:
                     if(gameManager.getClock().getMinutes() == 0 && !hour9){ 
-                        goToBuilding(house); 
+                        StartCoroutine(putItemInStorage("Stone", 20));  
                         degenerateHunger();
                         degenerateThirst();
                         hour9 = true;
@@ -142,7 +142,7 @@ public class Citizen : MonoBehaviour
                     break;
                 case 12:
                     if(gameManager.getClock().getMinutes() == 0 && !hour12){
-                        goToBuilding(work); 
+                        StartCoroutine(goToBuilding(work));  
                         degenerateHunger();
                         degenerateThirst();
                         hour12 = true;
@@ -150,7 +150,7 @@ public class Citizen : MonoBehaviour
                     break;
                 case 15:
                     if(gameManager.getClock().getMinutes() == 0 && !hour15){ 
-                        goToBuilding(house); 
+                        StartCoroutine(putItemInStorage("Wood log", 20)); 
                         degenerateHunger();
                         degenerateThirst();
                         hour15 = true;
@@ -158,7 +158,7 @@ public class Citizen : MonoBehaviour
                     break;
                 case 18:
                     if(gameManager.getClock().getMinutes() == 0 && !hour18){ 
-                        goToBuilding(work); 
+                        StartCoroutine(goToBuilding(work)); 
                         degenerateHunger();
                         degenerateThirst();
                         hour18 = true;
@@ -166,7 +166,7 @@ public class Citizen : MonoBehaviour
                     break;
                 case 21:
                     if(gameManager.getClock().getMinutes() == 0 && !hour21){ 
-                        goToBuilding(house); 
+                        StartCoroutine(putItemInStorage("Iron", 20)); 
                         degenerateHunger();
                         degenerateThirst();
                         hour21 = true;
@@ -274,6 +274,18 @@ public class Citizen : MonoBehaviour
         // POSITION
         position = transform.position;
 
+        // ADD ITEMS TO INVENTORY
+        Dictionary<string,int> listOfItems = new Dictionary<string, int>{
+        {"Wood plank", 99}, 
+        {"Stone", 99}, 
+        {"Wood log", 99}, 
+        {"Iron ore", 99}
+        };
+            
+        foreach(var item in listOfItems){
+            getCitizenInventory().addItemToInventory(item.Key, item.Value);
+        }
+
 
         relatives = null;
 
@@ -349,35 +361,40 @@ public class Citizen : MonoBehaviour
         hour23 = false;
     }
 
-    public void goToDestination(){
-
+    public void goToDestination(Vector3 position){
+        citizenAgent.SetDestination(position);
     }
 
-    public void goToBuilding(BuildingAttributes building){
-        StartCoroutine(goToBuildingCourentine(building));
+    public IEnumerator newActionTrigger(){
+        newAction = true;
+        yield return new WaitForSeconds(0.1f);
+        newAction = false;
     }
-    public IEnumerator goToBuildingCourentine(BuildingAttributes building){
+
+    public IEnumerator goToBuilding(BuildingAttributes building){
         if(building != null){
-            isMovingToBuilding = true;
-            movedToBuilding = false;
-            Vector3 buildingPosition = new Vector3(building.getPositionX(), building.getPositionY(), building.getPositionZ());
+            if(!isMovingToBuilding){
+                isMovingToBuilding = true;
+                movedToBuilding = false;
+                Vector3 buildingPosition = new Vector3(building.getPositionX(), building.getPositionY(), building.getPositionZ());
 
-            if(isInsideBuilding == true){
-                leaveBuilding();
-            }
-
-            citizenAgent.SetDestination(buildingPosition);
-
-            while(isMovingToBuilding){
-                if(citizenAgent.hasPath){
-                    if(citizenAgent.remainingDistance <= 0.6){
-                        movedToBuilding = true;
-                        citizenAgent.ResetPath();
-                        goInsideBuilding(building);
-                        break;
-                    }
+                if(isInsideBuilding == true){
+                    leaveBuilding();
                 }
-                yield return null;
+
+                citizenAgent.SetDestination(buildingPosition);
+
+                while(isMovingToBuilding){
+                    if(citizenAgent.hasPath){
+                        if(citizenAgent.remainingDistance <= 0.6){
+                            movedToBuilding = true;
+                            citizenAgent.ResetPath();
+                            goInsideBuilding(building);
+                            break;
+                        }
+                    }
+                    yield return null;
+                }
             }
             isMovingToBuilding = false;
         } else {
@@ -388,9 +405,12 @@ public class Citizen : MonoBehaviour
                 citizenAgent.SetDestination(new Vector3(townCurrentlyInsideOf.getTownCenter().x + Random.Range(-8.0f, 8.0f), 0, townCurrentlyInsideOf.getTownCenter().z + Random.Range(-8.0f, 8.0f)));
             }
         }
-        
     }
 
+
+    public BuildingAttributes getBuildingInsideOf(){
+        return buildingInsideOf;
+    }
     public void goInsideBuilding(BuildingAttributes building){
         setBuildingIsInsideOf(building);
         building.addCitizenToInsideBuilding(this);
@@ -403,6 +423,8 @@ public class Citizen : MonoBehaviour
         transform.GetChild(0).gameObject.SetActive(true);
         isInsideBuilding = false;
     }
+
+
     public void goToHangoutDestination(){
 
     }
@@ -437,6 +459,52 @@ public class Citizen : MonoBehaviour
     
     public void gatherResources(){
 
+    }
+
+    public void putItemDown(){
+        //play animation
+    }
+    public Inventory getCitizenInventory(){
+        return inventory;
+    }
+
+    public IEnumerator putItemInStorage(string itemName, int amount){
+        puttingItemInStorage = true;
+        BuildingAttributes targetBuilding = null;
+        IEnumerator courentine = null;
+
+        if((targetBuilding = townAlliegence.getClosestStoragetBuildingWithFreeSpace(this.transform.position, itemName, amount)) != null){
+            
+            StartCoroutine(courentine = goToBuilding(targetBuilding));
+
+            while(puttingItemInStorage){
+
+                if(townAlliegence.getClosestStoragetBuildingWithFreeSpace(this.transform.position, itemName, amount) != targetBuilding){
+                    targetBuilding = townAlliegence.getClosestStoragetBuildingWithFreeSpace(this.transform.position, itemName, amount);
+
+                    if(targetBuilding == null){
+                        StopCoroutine(courentine);
+                        stopMovement();
+                        puttingItemInStorage = false;
+                        break;
+                    }
+                    StopCoroutine(courentine);
+                    isMovingToBuilding = false;
+                    StartCoroutine(courentine = goToBuilding(targetBuilding));
+                }
+
+                if(getBuildingInsideOf()){
+                    Debug.Log(buildingInsideOf.transform.name);
+                    Debug.Log(targetBuilding.transform.name);
+                    if(getBuildingInsideOf().Equals(targetBuilding)){
+                        getCitizenInventory().sendItemsFromThisToOther(targetBuilding.getBuildingInventory(), itemName, amount);
+                        puttingItemInStorage = false;
+                        break;
+                    }
+                }
+                yield return null;
+            }
+        }
     }
     public void gatherFromStorage(){
         
@@ -538,7 +606,7 @@ public class Citizen : MonoBehaviour
 
     }
     public void stopMovement(){
-
+        citizenAgent.ResetPath();
     }
     public void teleportToPosition(){
         
