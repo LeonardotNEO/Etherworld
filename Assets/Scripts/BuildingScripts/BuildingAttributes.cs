@@ -320,6 +320,12 @@ public class BuildingAttributes : MonoBehaviour
         citizen.setWork(this);
     }
     public void removeWorkerFromBuilding(Citizen citizen){
+        if(citizen.getBuildingInsideOf()){
+            if(citizen.getBuildingInsideOf().Equals(this)){
+                citizen.leaveBuilding();
+            }
+        }
+
         citizensWorkingInBuilding.Remove(citizen);
         citizen.setWork(null);
     }
@@ -328,6 +334,12 @@ public class BuildingAttributes : MonoBehaviour
         citizen.setHouse(this);
     }
     public void removeResidentFromBuilding(Citizen citizen){
+        if(citizen.getBuildingInsideOf()){
+            if(citizen.getBuildingInsideOf().Equals(this)){
+                citizen.leaveBuilding();
+            }
+        }
+
         citizensLivingInBuilding.Remove(citizen);
         citizen.setHouse(null);
     }

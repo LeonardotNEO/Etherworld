@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class Town : MonoBehaviour
 {
@@ -43,6 +44,8 @@ public class Town : MonoBehaviour
     public int townAmountOfCitizenWithoutWork;
     public float townTaxIncome;
     public float townExpenditure;
+    public int worktimeStart = 6;
+    public int worktimeEnd = 18;
 
     void Awake()
     {
@@ -176,35 +179,39 @@ public class Town : MonoBehaviour
     public List<BuildingAttributes> getStorageBuildingsInTown(){
         return storageBuildingsInTown;
     }
-    public BuildingAttributes getClosestStoragetBuildingWithFreeSpace(Vector3 fromPosition, string itemName, int amount){
+
+    public List<BuildingAttributes> getListOfClosestStorageBuildingsSorted(Vector3 fromPosition){
         List<BuildingAttributes> storageArrangeAfterDistance = new List<BuildingAttributes>();
+        Dictionary<BuildingAttributes, float> storageAfterDistance = new Dictionary<BuildingAttributes, float>();
 
         foreach(BuildingAttributes building in storageBuildingsInTown){
-            if(!building.getBuildingInventory().checkIfInventoryHasSpaceForItem(itemName, amount)){
-                continue;
-            } 
+            storageAfterDistance.Add(building, Vector3.Distance(fromPosition, building.transform.position));
+        }
+        foreach(KeyValuePair<BuildingAttributes, float> building in storageAfterDistance.OrderBy(key => key.Value)){
+            storageArrangeAfterDistance.Add(building.Key);
+        }
+        // MIGHT CHANGE VECTOR3.DISTANCE TO ACTUAL PATH
 
-            float distance1 = Vector3.Distance(fromPosition, building.transform.position);
-            float distance2 = 0;
+        return storageArrangeAfterDistance;
+    }
 
-            if(storageArrangeAfterDistance.Count != 0){
-                distance2 = Vector3.Distance(fromPosition, storageArrangeAfterDistance[storageArrangeAfterDistance.Count - 1].transform.position);
-            } else {
-                storageArrangeAfterDistance.Add(building);
-            }
-
-            if(distance1 < distance2){
-                storageArrangeAfterDistance.Add(building);
+    public BuildingAttributes getClosestStoragetBuildingWithFreeSpace(Vector3 fromPosition, string itemName, int amount){     
+        foreach(BuildingAttributes building in getListOfClosestStorageBuildingsSorted(fromPosition)){
+            if(building.getBuildingInventory().checkIfInventoryHasSpaceForItem(itemName, amount)){
+                return building;
             }
         }
-        
-        // smallest element appears first
-        storageArrangeAfterDistance.Reverse();
-        if(storageArrangeAfterDistance.Count > 0){
-            return storageArrangeAfterDistance[0];
-        } else {
-            return null;
+        return null;
+    }
+
+    public BuildingAttributes getClosestStorageBuildingWithItem(Vector3 fromPosition, string itemName, int amount){
+        foreach(BuildingAttributes building in getListOfClosestStorageBuildingsSorted(fromPosition)){
+            if(building.getBuildingInventory().checkIfListOfItemsAreInInventory(new Dictionary<string, int>(){{itemName, amount}})){
+                
+                return building;
+            }
         }
+        return null;
     }
 
     public List<Citizen> getCitizensInTown(){
@@ -212,6 +219,12 @@ public class Town : MonoBehaviour
     }
     public string getTownOwner(){
         return townOwner;
+    }
+    public int getWorktimeStart(){
+        return worktimeStart;
+    }
+    public int getWorktimeEnd(){
+        return worktimeEnd;
     }
 
 
@@ -269,5 +282,11 @@ public class Town : MonoBehaviour
     }
     public void setTownOwner(string name){
         townOwner = name;
+    }
+    public void setWorktimeStart(int time){
+        worktimeStart = time;
+    }
+    public void setWorktimeEnd(int time){
+        worktimeEnd = time;
     }
 }

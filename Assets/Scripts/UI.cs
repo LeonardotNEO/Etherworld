@@ -482,53 +482,50 @@ public class UI : MonoBehaviour
         Inventory buildingInventory = gameManager.getBuildingCatalog().getBuildingLastClickedInventory();
         BuildingAttributes buildingAttributes = gameManager.getBuildingCatalog().getBuildingLastClicked().GetComponent<BuildingAttributes>(); 
         BuildingProgressBar progressbar = GameObject.FindGameObjectWithTag("ProductionProgressBar").GetComponent<BuildingProgressBar>();
-
+        bool producing = true;
         bool inventoryIsFull = false;
 
         if(selectedItem != null){
             if(!buildingAttributes.getBuildingIsProducing()){
 
-                if(buildingInventory.checkIfListOfItemsAreInInventory(selectedItem.getCostToCraftItem())){
-                    buildingAttributes.setBuildingIsProducing(true);
-                    buildingAttributes.setItemCurrentlyProduced(selectedItem);
+                buildingAttributes.setBuildingIsProducing(true);
+                buildingAttributes.setItemCurrentlyProduced(selectedItem);
 
-                    while(buildingInventory.checkIfListOfItemsAreInInventory(selectedItem.getCostToCraftItem()) && !inventoryIsFull){
-                        if(buildingAttributes.getWorkersInBuilding().Count == 0){
-                            gameManager.getMessageLogText().addMessageToLog("Production could not start since theres no workers assigned in the building!");
-                            break;
-                        }
-
-                        while(buildingAttributes.getProductionProgress() <= 360 && !inventoryIsFull){
-                            float progressSpeed = buildingAttributes.getCitizensInsideBuilding().Count * 10;
-                            buildingAttributes.setIncreaseProductionProgress(Time.deltaTime * progressSpeed);
-                            //progressbar.updateProgressBar(buildingAttributes.getProductionProgress());
-
-                            if(buildingAttributes.getProductionProgress() >= 360){
-                                int itemsThatCouldNotBeAdded = buildingInventory.addItemToInventory(selectedItem.getName(), 1);
-
-                                if(itemsThatCouldNotBeAdded == 0){
-                                    foreach(var item in selectedItem.getCostToCraftItem()){
-                                        buildingInventory.removeItemFromInventory(item.Key, item.Value);
-                                    }
-                                    buildingAttributes.setResetProductionProgress();
-                                    break;
-                                } else {
-                                    gameManager.getMessageLogText().addMessageToLog("Buildinginventory is full. Production is cancelled");
-                                    buildingAttributes.setResetProductionProgress();
-                                    inventoryIsFull = true;
-                                    break;
-                                }
-                                
-                            }
-                            yield return null;
-                        }
+                while(producing){
+                    if(buildingAttributes.getWorkersInBuilding().Count == 0){
+                        gameManager.getMessageLogText().addMessageToLog("Production could not start since theres no workers assigned in the building!");
+                        break;
                     }
-                    buildingAttributes.setBuildingIsProducing(false);
-                    buildingAttributes.setItemCurrentlyProduced(null);
 
-                } else {
-                    gameManager.getMessageLogText().addMessageToLog("You dont have enough items in the building inventory to produce that item");
+                    while(buildingAttributes.getProductionProgress() <= 360 && !inventoryIsFull && buildingInventory.checkIfListOfItemsAreInInventory(selectedItem.getCostToCraftItem())){
+                        float progressSpeed = buildingAttributes.getCitizensInsideBuilding().Count * 100;
+                        buildingAttributes.setIncreaseProductionProgress(Time.deltaTime * progressSpeed);
+                        //progressbar.updateProgressBar(buildingAttributes.getProductionProgress());
+
+                        if(buildingAttributes.getProductionProgress() >= 360){
+                            int itemsThatCouldNotBeAdded = buildingInventory.addItemToInventory(selectedItem.getName(), 1);
+
+                            if(itemsThatCouldNotBeAdded == 0){
+                                foreach(var item in selectedItem.getCostToCraftItem()){
+                                    buildingInventory.removeItemFromInventory(item.Key, item.Value);
+                                }
+                                buildingAttributes.setResetProductionProgress();
+                                break;
+                            } else {
+                                gameManager.getMessageLogText().addMessageToLog("Buildinginventory is full. Production is cancelled");
+                                buildingAttributes.setResetProductionProgress();
+                                inventoryIsFull = true;
+                                break;
+                            }
+                            
+                        }
+                        yield return null;
+                    }
+                    yield return null;
                 }
+                buildingAttributes.setBuildingIsProducing(false);
+                //buildingAttributes.setItemCurrentlyProduced(null);
+
             }
         } else {
             gameManager.getMessageLogText().addMessageToLog("You need to select an item to produce");

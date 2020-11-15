@@ -71,12 +71,13 @@ public class Inventory : MonoBehaviour
 
                 int amountToRemove = toInventory.addItemToInventory(this.getInventorySlot(slotnumber).getItemInSlot() , this.getInventorySlot(slotnumber).getCurrentAmountInSlot());
                 removeAmountFromSpecificSlot(this.getInventorySlot(slotnumber), this.getInventorySlot(slotnumber).getCurrentAmountInSlot() - amountToRemove);
+                updateInventoryInterface();
 
             } else {
                 gameManager.getMessageLogText().addMessageToLog("The player needs to be inside the building in order to transfer items to building inventory");
             }
         }
-        updateInventoryInterface();
+        
     }
 
     public void removeAmountFromSpecificSlot(InventorySlot inventorySlotSpecific, int amount){
@@ -172,6 +173,16 @@ public class Inventory : MonoBehaviour
         updateInventoryInterface();
     }
 
+    public int getAmountOfSpecificItem(string itemName){
+        int totalAmount = 0;
+        foreach(InventorySlot inventorySlot in inventorySlots){
+            if(inventorySlot.Equals(itemName)){
+                totalAmount += inventorySlot.getCurrentAmountInSlot();
+            }
+        }
+        return totalAmount; 
+    }
+
     public bool checkIfListOfItemsAreInInventory(Dictionary<string, int> checkList){
         string trueOrFalse = "";
         foreach(var item in checkList){
@@ -195,7 +206,7 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    public List<InventorySlot> getFreeInventorySlotsForItem(string itemName, int amount){
+    public List<InventorySlot> getFreeInventorySpaceForItem(string itemName, int amount){
         List<InventorySlot> freeInventorySlots = new List<InventorySlot>();
 
         foreach(InventorySlot inventorySlot in inventorySlots){
@@ -206,6 +217,21 @@ public class Inventory : MonoBehaviour
 
         return freeInventorySlots;
     }
+
+    public int getFreeInventorySpaceForSpecificItem(string itemName){
+        int freeSpace = 0;
+        foreach(InventorySlot inventorySlot in inventorySlots){
+            if(inventorySlot.getCurrentAmountInSlot() == 0){
+                freeSpace += 99;
+            }
+            if(inventorySlot.getItemInSlot() != null)
+                if(inventorySlot.getItemInSlot().Equals(itemName)){
+                    freeSpace += 99 - inventorySlot.getCurrentAmountInSlot();
+                }
+        }
+        return freeSpace;
+    }
+
     public bool checkIfInventoryHasSpaceForItem(string itemName, int amount){
         int totalFreeSpace = 0;
 
@@ -215,7 +241,7 @@ public class Inventory : MonoBehaviour
                 continue;
             }
 
-            if(inventorySlot.getItemInSlot() == itemName){
+            if(inventorySlot.getItemInSlot() == itemName && inventorySlot.getCurrentAmountInSlot() + amount <= 99){
                 totalFreeSpace += 99 - inventorySlot.getCurrentAmountInSlot();
             }
         }

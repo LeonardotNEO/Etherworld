@@ -13,6 +13,7 @@ public class Clock : MonoBehaviour
     public float seconds;
     public float rawTime;   
     public float time;
+    public float startExtra;
 
     public bool hour0;
     public bool hour1;
@@ -47,7 +48,7 @@ public class Clock : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        rawTime = Time.time;
+        rawTime = Time.time + startExtra;
         time = rawTime * clockSpeed;
         years = time / 31104000;
         months = years % 1 * 12;

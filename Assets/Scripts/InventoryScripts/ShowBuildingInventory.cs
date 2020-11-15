@@ -27,6 +27,12 @@ public class ShowBuildingInventory : MonoBehaviour
     {
         updateInventory();
     }
+    void OnDisable()
+    {
+        for(int i = 0; i < 100; i++){
+            transform.GetChild(i).gameObject.SetActive(false);
+        }
+    }
 
 
     public void updateInventory(){
@@ -37,6 +43,7 @@ public class ShowBuildingInventory : MonoBehaviour
                 for(int i = 0; i < inventory.getInventoryCapacity(); i++){
                     transform.GetChild(i).gameObject.SetActive(true);
                 }
+                
 
                 for(int i = 0; i < inventory.getInventoryCapacity(); i++){
                     if(inventory.getInventorySlots()[i].getCurrentAmountInSlot() != 0){
