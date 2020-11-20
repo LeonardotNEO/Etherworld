@@ -20,7 +20,8 @@ public class ShowAvailableWorkers : MonoBehaviour
     }
 
     public void updateAvailableWorkersList(){
-        if(gameManager.getBuildingCatalog().getBuildingLastClicked()){
+        gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+        if(gameManager.getBuildingCatalog().getBuildingLastClicked() != null){
             town = gameManager.getBuildingCatalog().getBuildingLastClicked().GetComponent<BuildingAttributes>().getTownBuildingIsApartOf();
         }
 
@@ -30,7 +31,7 @@ public class ShowAvailableWorkers : MonoBehaviour
         if(town){
             foreach(Citizen citizen in town.getAvailableWorkersInTown()){
                 GameObject newButton = Instantiate(citizenButton, transform);
-                newButton.GetComponentInChildren<Text>().text = citizen.getName();
+                newButton.GetComponentInChildren<Text>().text = citizen.getFirstName() + " " + citizen.getLastName();
                 newButton.GetComponent<WorkersButton>().setCitizenID(citizen.getCitizenID());
 
                 if(gameManager.getCitizenCatalog().getSelectedCitizen()){

@@ -41,7 +41,7 @@ public class MessageLogText : MonoBehaviour
             stringSeconds = "0" + stringSeconds;
         }
 
-        GetComponent<Text>().text += stringHours + "." + stringMinutes + "." + stringSeconds + ": " + message + "\n";
-        GameObject.FindGameObjectWithTag("MessageLogBarUI").transform.Find("Scroll View/Scrollbar Vertical").GetComponent<Scrollbar>().value = 0;
+        GameObject.FindGameObjectWithTag("MessageLogBarUI").transform.Find("Background/Scroll View/Viewport/Content/Text").GetComponent<Text>().text += stringHours + "." + stringMinutes + "." + stringSeconds + ": " + message + "\n";
+        GameObject.FindGameObjectWithTag("MessageLogBarUI").transform.Find("Background/Scroll View/Scrollbar Vertical").GetComponent<Scrollbar>().value = 0;
     }
 }

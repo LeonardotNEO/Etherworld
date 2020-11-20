@@ -12,6 +12,13 @@ public class PlayerBehavior : MonoBehaviour
     public Vector3 playerPosition;
     public NavMeshAgent agent;
     public BuildingAttributes buildingInsideOf;
+    public List<Town> ownedTowns;
+    public Inventory inventory;
+    public Skills skills;
+
+    public string playerFirstName;
+    public string playerLastName;
+    public string gender;
 
     public bool isMovingToDestination;
     public bool reachedDestination;
@@ -27,6 +34,14 @@ public class PlayerBehavior : MonoBehaviour
 
     public GameObject npc; //for testing
 
+    void Awake()
+    {
+        // Get gamemanager
+        gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+        inventory = GetComponent<Inventory>();
+        skills = GetComponent<Skills>();
+    }
+
     void Start()
     {
         stopPlayer();
@@ -39,9 +54,6 @@ public class PlayerBehavior : MonoBehaviour
         }
 
         playerPosition = transform.position;
-
-        // Get gamemanager
-        gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
 
         // PLAYER MOVEMENT
         // Move player to new position when pressing mouse click
@@ -177,5 +189,18 @@ public class PlayerBehavior : MonoBehaviour
 
     public bool getPlayerInsideBuilding(){
         return playerInsideBuilding;
+    }
+
+    public Skills getSkills(){
+        return skills;
+    }
+    public Inventory getInventory(){
+        return inventory;
+    }
+    public string getPlayerFirstName(){
+        return playerFirstName;
+    }
+    public string getPlayerLastName(){
+        return playerLastName;
     }
 }

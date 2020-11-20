@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+[System.Serializable]
 public class Inventory : MonoBehaviour
 {
     public List<InventorySlot> inventorySlots = new List<InventorySlot>();
@@ -144,6 +145,7 @@ public class Inventory : MonoBehaviour
             gameManager.getMessageLogText().addMessageToLog("Inventory is full! " + amountLeftToAdd + " " + item + " could not be added to the inventory.");
         }
         updateInventoryInterface();
+        
         return amountLeftToAdd;
     }
 
@@ -176,8 +178,10 @@ public class Inventory : MonoBehaviour
     public int getAmountOfSpecificItem(string itemName){
         int totalAmount = 0;
         foreach(InventorySlot inventorySlot in inventorySlots){
-            if(inventorySlot.Equals(itemName)){
-                totalAmount += inventorySlot.getCurrentAmountInSlot();
+            if(inventorySlot.getItemInSlot() != null){
+                if(inventorySlot.getItemInSlot().Equals(itemName)){
+                    totalAmount += inventorySlot.getCurrentAmountInSlot();
+                }
             }
         }
         return totalAmount; 
@@ -253,18 +257,20 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    public void sendItemsFromThisToOther(Inventory inv2, string itemName, int amount){
+    public bool sendItemFromThisToOther(Inventory inv2, string itemName, int amount){
         if(inv2.checkIfInventoryHasSpaceForItem(itemName, amount)){
             if(this.checkIfListOfItemsAreInInventory(new Dictionary<string, int>{{itemName, amount}})){
                 inv2.addItemToInventory(itemName, amount);
                 this.removeItemFromInventory(itemName, amount);
+                return true;
             } else {
-                gameManager.getMessageLogText().addMessageToLog("Cant send item from inventory 1 to inventory 2, because inv1 doesnt have the");
-                Debug.Log(this.getInventorySlots()[0].getItemInSlot() + this.getInventorySlots()[0].getCurrentAmountInSlot());
+                gameManager.getMessageLogText().addMessageToLog("Cant send item from inventory 1 to inventory 2, because inv1 doesnt have the item");
+                Debug.Log(this.getInventorySlots()[0].getItemInSlot() + this.getInventorySlots()[0].getCurrentAmountInSlot() + " " + this.transform.name + " " + inv2.transform.name);
             }
         } else {
             gameManager.getMessageLogText().addMessageToLog("Could not transfer item to inventory, since its not enough space");
         }
+        return false;
     }
 
     public List<InventorySlot> getInventorySlots(){
@@ -290,7 +296,7 @@ public class Inventory : MonoBehaviour
         if(GameObject.FindGameObjectWithTag("InventoryMenuUI").transform.Find("Background").gameObject.activeSelf){
             showMainInv.updateInventory();
         }
-        if(GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background").gameObject.activeSelf){
+        if(GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Inventory").gameObject.activeSelf){
             showbuildingInv.updateInventory();
         }
     }

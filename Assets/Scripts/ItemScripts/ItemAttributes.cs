@@ -8,7 +8,9 @@ public class ItemAttributes : MonoBehaviour
     private Collider player;
     public int itemAmount;
     private string itemName;
+
     private bool playerInBounds;
+    private bool citizenInBounds;
 
 
     void Start()
@@ -57,11 +59,17 @@ public class ItemAttributes : MonoBehaviour
         //GetComponentInChildren<Outline>().eraseRenderer = true;
     }
     
-    void OnTriggerStay(Collider other)
+    void OnTriggerEnter(Collider other)
     {
         if(other.tag == "player"){
             player = other;
             playerInBounds = true;
+        }
+        if(other is BoxCollider){
+            if(other.tag == "Citizen"){
+                player = other;
+                citizenInBounds = true;
+            }
         }
     }
     void OnTriggerExit(Collider other)
@@ -69,15 +77,31 @@ public class ItemAttributes : MonoBehaviour
         if(other.tag == "player"){
             playerInBounds = false;
         }
+        if(other is BoxCollider){
+            if(other.tag == "Citizen"){
+                citizenInBounds = false;
+            }
+        }
     }
 
     public void pickUpItem(){
-        if(getItemAmount() != 0){
-            itemAmount = gameManager.getInventoryCatalog().getMainInventory().addItemToInventory(getItemName(), getItemAmount());
+        if(player.tag == "player"){
+            if(getItemAmount() != 0){
+                itemAmount = gameManager.getInventoryCatalog().getMainInventory().addItemToInventory(getItemName(), getItemAmount());
+            }
+            player.GetComponent<Animator>().SetTrigger("pickingUpItem");
+            if(itemAmount == 0){
+                Destroy(this.gameObject);
+            }
         }
-        player.GetComponent<Animator>().SetTrigger("pickingUpItem");
-        if(itemAmount == 0){
-            Destroy(this.gameObject);
+        if(player.tag == "Citizen"){
+            if(getItemAmount() != 0){
+                itemAmount = player.GetComponent<Citizen>().getInventory().addItemToInventory(getItemName(), getItemAmount());
+            }
+            player.GetComponent<Animator>().SetTrigger("pickingUpItem");
+            if(itemAmount == 0){
+                Destroy(this.gameObject);
+            }
         }
     }
 
@@ -88,6 +112,19 @@ public class ItemAttributes : MonoBehaviour
             if(playerInBounds){
                 gameManager.getPlayerBehavior().stopPlayer();
                 gameManager.getPlayerBehavior().playerLookAt(this.gameObject);
+                pickUpItem();
+                runLoop = false;
+            }
+            yield return null;
+        }
+    }
+    public IEnumerator walkingToItem(Citizen citizen){
+        bool runLoop = true;
+        citizen.goToDestination(this.transform.position);
+        while(runLoop){
+            if(citizenInBounds){
+                citizen.stopMovement();
+                citizen.lookAt(this.gameObject);
                 pickUpItem();
                 runLoop = false;
             }

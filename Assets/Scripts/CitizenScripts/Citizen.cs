@@ -2,22 +2,32 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using System.Linq;
 
 public class Citizen : MonoBehaviour
 {
     GameManager gameManager;
     public Vector3 position;
     NavMeshAgent citizenAgent;
-    public List<Skill> skills = new List<Skill>();
+    public Skills skills;
+
     public List<Citizen> relatives = new List<Citizen>();
+    public List<ResourceAttributes> stoneDepotsInRange = new List<ResourceAttributes>();
+    public List<ResourceAttributes> treesInRange = new List<ResourceAttributes>();
+
+    IEnumerator goToBuildingCourentine = null;
+
     public Inventory inventory;
     public BuildingAttributes house = null;
     public BuildingAttributes work = null;
     public BuildingAttributes buildingInsideOf = null;
+    public BuildingAttributes closestStorageBuilding = null;
+    public BuildingAttributes closestStorageBuildingWithFreeSpace = null;
     public Town townAlliegence;
     public Town townCurrentlyInsideOf;
     public string gender;
-    public string citizenName;
+    public string citizenFirstName;
+    public string citizenLastName;
     public string status;
     public string citizensLord;
     public string job;
@@ -36,58 +46,32 @@ public class Citizen : MonoBehaviour
     //public List<Ambition> ambitions; 
 
     // BOOLS //
+    // CITIZEN
     public bool initalizedCitizen;
     public bool isMovingToDestination;
-    public bool reachedDestination;
+
+    // BUILDING
+    public bool isInsideBuilding;
     public bool isMovingToBuilding;
     public bool movedToBuilding;
-    public bool isMovingToHome;
-    public bool movedToHome;
-    public bool isMovingToWork;
-    public bool movedToWork;
-    public bool isInsideBuilding;
-    public bool isLookingForWork;
+
+    // HOUSE
     public bool isLookingForHouse;
-    public bool puttingItemInStorage;
-    public bool newAction;
 
-    public bool isResting;
 
+    //WORK
+    public bool isLookingForWork;
     public bool isWorking;
+    public bool isMovingToWork;
+    public bool morningMeetingStarted;
+    public bool morningMeetingFinished;
+    public bool gatheringItemFromBuilding;
+    public bool movingItemToBuilding;
+    public bool puttingItemInStorage;
 
-    public bool isGatheringResources;
-    public bool isSick;
+    // REMOVE HUNGER/THIRST
+    public bool degenerating;
 
-    public bool isSleepy;
-    public bool isLookingForPartner;
-    public bool isDoingRandomAction;
-    public bool isMating;
-    public bool isInTheArmy;
-
-    public bool hour0;
-    public bool hour1;
-    public bool hour2;
-    public bool hour3;
-    public bool hour4;
-    public bool hour5;
-    public bool hour6;
-    public bool hour7;
-    public bool hour8;
-    public bool hour9;
-    public bool hour10;
-    public bool hour11;
-    public bool hour12;
-    public bool hour13;
-    public bool hour14;
-    public bool hour15;
-    public bool hour16;
-    public bool hour17;
-    public bool hour18;
-    public bool hour19;
-    public bool hour20;
-    public bool hour21;
-    public bool hour22;
-    public bool hour23;
 
 
     void Awake()
@@ -104,79 +88,21 @@ public class Citizen : MonoBehaviour
     void Update()
     {
         if(initalizedCitizen){
+            // MOVEMENT
             checkCitizenMovement();
 
-            switch(gameManager.getClock().getHours()){
-                case 0:
-                    // Dont reset while testing working()
-                    resetHourTriggers();
-                    break;
-                case 3:
-                    if(gameManager.getClock().getMinutes() == 0 && !hour3){ 
-                        degenerateHunger();
-                        degenerateThirst();
-                        hour3 = true;
-                    }
-                    break;
-                case 2:
-                    if(gameManager.getClock().getMinutes() == 0 && !hour6){ 
-                        degenerateHunger();
-                        degenerateThirst();
-                        hour6 = true;
-                    }
-                    break;
-                case 9:
-                    /*if(gameManager.getClock().getMinutes() == 0 && !hour9){ 
-                        StartCoroutine(putItemInStorage("Stone", 20));  
-                        degenerateHunger();
-                        degenerateThirst();
-                        hour9 = true;
-                    }*/
-                    break;
-                case 12:
-                    /*if(gameManager.getClock().getMinutes() == 0 && !hour12){
-                        StartCoroutine(goToBuilding(work));  
-                        degenerateHunger();
-                        degenerateThirst();
-                        hour12 = true;
-                    }*/
-                    break;
-                case 15:
-                    /*if(gameManager.getClock().getMinutes() == 0 && !hour15){ 
-                        StartCoroutine(putItemInStorage("Wood log", 20)); 
-                        degenerateHunger();
-                        degenerateThirst();
-                        hour15 = true;
-                    }*/
-                    break;
-                case 18:
-                    /*if(gameManager.getClock().getMinutes() == 0 && !hour18){ 
-                        StartCoroutine(goToBuilding(work)); 
-                        degenerateHunger();
-                        degenerateThirst();
-                        hour18 = true;
-                    }*/
-                    break;
-                case 21:
-                    /*if(gameManager.getClock().getMinutes() == 0 && !hour21){ 
-                        StartCoroutine(putItemInStorage("Iron", 20)); 
-                        degenerateHunger();
-                        degenerateThirst();
-                        hour21 = true;
-                    }*/
-                    break;
-                default:
-                    break;
-            }
-
-            StartCoroutine(working()); 
+            // WORK
+            StartCoroutine(working());
 
             if(work == null){
                 lookForWork();
             } else {
                 foundWork();
             }
+            // THIRST HUNGER
+            StartCoroutine(degenerateThirstHunger()); 
 
+            // HOUSE
             if(house == null){
                 lookForHousing();
             }
@@ -188,12 +114,25 @@ public class Citizen : MonoBehaviour
             setTownCurrentlyInsideOf(other.gameObject.GetComponent<Town>());
             StartCoroutine(waitForCitizenToLoadThenAdd(other));
         }
+        if(other.gameObject.name.Contains("StoneDepot")){
+            stoneDepotsInRange.Add(other.GetComponent<ResourceAttributes>());
+        }
+        if(other.gameObject.name.Contains("Tree")){
+            treesInRange.Add(other.GetComponent<ResourceAttributes>());
+        }
+        
     }
 
     void OnTriggerExit(Collider other)
     {
         if(other.gameObject.GetComponent<Town>()){
             setTownCurrentlyInsideOf(null);
+        }
+        if(other.gameObject.name.Contains("StoneDepot")){
+            stoneDepotsInRange.Remove(other.GetComponent<ResourceAttributes>());
+        }
+        if(other.gameObject.name.Contains("Tree")){
+            treesInRange.Remove(other.GetComponent<ResourceAttributes>());
         }
     }
 
@@ -223,19 +162,22 @@ public class Citizen : MonoBehaviour
         gender = genders[Random.Range(0,genders.Count)];
 
         // NAME
-        List<string> maleNames = new List<string>{"Hans","Peter","Ole","Leonard","Fredrik","Markus","Chad","Rick","Morty","Erlend","James","Bertil"};
-        List<string> femaleNames = new List<string>{"Siri","Grete","Karen","Martha","Marte","Monica"};
+        List<string> maleFirstNames = new List<string>{"Hans","Peter","Ole","Leonard","Fredrik","Markus","Chad","Rick","Morty","Erlend","James","Bertil"};
+        List<string> femaleFirstNames = new List<string>{"Siri","Grete","Karen","Martha","Marte","Monica"};
+        List<string> lastNames = new List<string>{"Hansen","Peterson","Trump","Opsal","Taklo","Berge","Iversen","Jakobsen","Storeide","Gaard","Fiska","Bush"};
         if(gender == "Male"){
-            citizenName = maleNames[Random.Range(0, maleNames.Count)];
+            citizenFirstName = maleFirstNames[Random.Range(0, maleFirstNames.Count)];
         } else {
-            citizenName = femaleNames[Random.Range(0, femaleNames.Count)];
+            citizenFirstName = femaleFirstNames[Random.Range(0, femaleFirstNames.Count)];
         }
-        transform.name = citizenName + " " + citizenID;
+        citizenLastName = lastNames[Random.Range(0, lastNames.Count)];
+        transform.name = citizenFirstName + " " + citizenLastName + " " + citizenID;
 
         // AGE
         age = Random.Range(16,60);
 
         // SKILLS
+        skills = GetComponent<Skills>();
 
         // INVENTORY
         inventory = transform.GetComponent<Inventory>();
@@ -274,16 +216,15 @@ public class Citizen : MonoBehaviour
         position = transform.position;
 
         // ADD ITEMS TO INVENTORY
-        Dictionary<string,int> listOfItems = new Dictionary<string, int>{
+        /*Dictionary<string,int> listOfItems = new Dictionary<string, int>{
         {"Wood plank", 99}, 
         {"Stone", 99}, 
         {"Wood log", 99}, 
         {"Iron ore", 99}
         };
-            
         foreach(var item in listOfItems){
             getCitizenInventory().addItemToInventory(item.Key, item.Value);
-        }
+        }*/
 
 
         relatives = null;
@@ -322,52 +263,44 @@ public class Citizen : MonoBehaviour
     public void checkCitizenMovement(){
         if(GetComponent<NavMeshAgent>().enabled == true){
             if(citizenAgent.remainingDistance <= 0.2){
-                isMovingToDestination = false;
-                reachedDestination = true;
                 GetComponent<Animator>().SetBool("isMoving" , false);
+                isMovingToDestination = false;
             } else {
                 isMovingToDestination = true;
-                reachedDestination = false;
                 GetComponent<Animator>().SetBool("isMoving" , true);
             }
         }
     }
 
-    public void resetHourTriggers(){
-        hour0 = false;
-        hour1 = false;
-        hour2 = false;
-        hour3 = false;
-        hour4 = false;
-        hour5 = false;
-        hour6 = false;
-        hour7 = false;
-        hour8 = false;
-        hour9 = false;
-        hour10 = false;
-        hour11 = false;
-        hour12 = false;
-        hour13 = false;
-        hour14 = false;
-        hour15 = false;
-        hour16 = false;
-        hour17 = false;
-        hour18 = false;
-        hour19 = false;
-        hour20 = false;
-        hour21 = false;
-        hour22 = false;
-        hour23 = false;
-    }
+    public IEnumerator degenerateThirstHunger(){
+        if(!degenerating){
+            degenerating = true;
+            float initialTime = Time.time;
 
+            while(degenerating){
+                if(Time.time > initialTime + 240){
+                    degenerateHunger();
+                    degenerateThirst();
+                    break;
+                }
+                yield return null;
+            }
+            degenerating = false;
+        }
+    }
+    
     public void goToDestination(Vector3 position){
+        if(buildingInsideOf){
+            leaveBuilding();
+        }
+        stopMovement();
         citizenAgent.SetDestination(position);
     }
 
-    public IEnumerator newActionTrigger(){
-        newAction = true;
-        yield return new WaitForSeconds(0.1f);
-        newAction = false;
+    public void goToTownCenter(){
+        if(townCurrentlyInsideOf){
+            goToDestination(new Vector3(townCurrentlyInsideOf.getTownCenter().x + Random.Range(-8.0f, 8.0f), 0, townCurrentlyInsideOf.getTownCenter().z + Random.Range(-8.0f, 8.0f)));
+        }
     }
 
     public IEnumerator goToBuilding(BuildingAttributes building){
@@ -375,6 +308,8 @@ public class Citizen : MonoBehaviour
             if(!isMovingToBuilding){
                 isMovingToBuilding = true;
                 movedToBuilding = false;
+
+                //Debug.Log("goToBuilding har started");
                 Vector3 buildingPosition = new Vector3(building.getPositionX(), building.getPositionY(), building.getPositionZ());
 
                 if(isInsideBuilding == true){
@@ -385,17 +320,18 @@ public class Citizen : MonoBehaviour
 
                 while(isMovingToBuilding){
                     if(citizenAgent.hasPath){
-                        if(citizenAgent.remainingDistance <= 0.6){
+                        if(citizenAgent.remainingDistance <= 0.6 && !movedToBuilding){
                             movedToBuilding = true;
-                            citizenAgent.ResetPath();
                             goInsideBuilding(building);
+                            //Debug.Log("reached destination");
+                            citizenAgent.ResetPath();
                             break;
                         }
                     }
                     yield return null;
                 }
+                isMovingToBuilding = false;
             }
-            isMovingToBuilding = false;
         } else {
             if(isInsideBuilding == true){
                 leaveBuilding();
@@ -410,318 +346,423 @@ public class Citizen : MonoBehaviour
         return buildingInsideOf;
     }
     public void goInsideBuilding(BuildingAttributes building){
+        //Debug.Log("went inside building");
         setBuildingIsInsideOf(building);
         building.addCitizenToInsideBuilding(this);
         transform.GetChild(0).gameObject.SetActive(false);
         isInsideBuilding = true;
     }
     public void leaveBuilding(){
-        buildingInsideOf.removeCitizenFromInsideBuilding(this);
-        setBuildingIsInsideOf(null);
-        transform.GetChild(0).gameObject.SetActive(true);
-        isInsideBuilding = false;
+        if(buildingInsideOf){
+            //Debug.Log("left building");
+            buildingInsideOf.removeCitizenFromInsideBuilding(this);
+            setBuildingIsInsideOf(null);
+            transform.GetChild(0).gameObject.SetActive(true);
+            isInsideBuilding = false;
+        } else {
+            stopMovement();
+        } 
     }
 
 
-    public void putItemInBuildingInventory(string itemName, int amount){
+    public bool putItemInBuildingInventory(BuildingAttributes targetBuilding, string itemName, int amount){
+        bool result = false;
         if(buildingInsideOf){
-            getCitizenInventory().sendItemsFromThisToOther(buildingInsideOf.getBuildingAttributes().getBuildingInventory(), itemName, amount);
+            result = getCitizenInventory().sendItemFromThisToOther(targetBuilding.getBuildingInventory(), itemName, amount);
         } else {
             gameManager.getMessageLogText().addMessageToLog("Citizen is not inside a building");
         }
+        return result;
     }
-    public void gatherFromBuildingInventory(string itemName, int amount){
+    public bool getItemFromBuildingInventory(BuildingAttributes targetBuilding, string itemName, int amount){
+        bool result = false;
         if(buildingInsideOf){
-            buildingInsideOf.getBuildingAttributes().getBuildingInventory().sendItemsFromThisToOther(getCitizenInventory(), itemName, amount);
+            result = targetBuilding.getBuildingAttributes().getBuildingInventory().sendItemFromThisToOther(getCitizenInventory(), itemName, amount);
         } else {
             gameManager.getMessageLogText().addMessageToLog("Citizen is not inside a building");
         }
+        return result;
     }
 
-    public IEnumerator working(){
+    public bool notifyWhenWorkReached(){
+        if(buildingInsideOf){
+            if(buildingInsideOf.Equals(work.getBuildingName())){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public bool notifyWhenStorageBuildingChange(Dictionary<string, int> listOfItems){
+        // IF CHANGING FROM SOMETHING TO NULL
+        if(closestStorageBuilding != null && townAlliegence.getClosestStorageBuildingWithListOfItems(this.transform.position, listOfItems) == null){
+            //Debug.Log("closest storage building went from something to null");
+            closestStorageBuilding = null;
+            return true;
+        }
+
+        // IF CHANGING FROM NULL TO SOMETHING
         if(townAlliegence){
-            if(work && !isWorking && gameManager.getClock().getHours() >= townAlliegence.getWorktimeStart() && gameManager.getClock().getHours() <= townAlliegence.getWorktimeEnd()){
-                //Debug.Log("Workday has started");
-                isWorking = true;
-                bool movedToWorkplace = false;
-                bool gatheringItem = false;
-                bool movingItemToStorage = false;
-                bool morningMeetingStarted = false;
-                bool morningMeetingFinished = false;
-                BuildingAttributes closestStorageBuilding = null;
-                IEnumerator goToBuildingCourentine = null;
+            if(closestStorageBuilding == null && townAlliegence.getClosestStorageBuildingWithListOfItems(this.transform.position, listOfItems) != null){
+                //Debug.Log("closest storage building went from null to something");
+                closestStorageBuilding = townAlliegence.getClosestStorageBuildingWithListOfItems(this.transform.position, listOfItems);
+                return true;
+            }
+        }
 
-                while(isWorking && work){
-                    if(work.getBuildingName().Equals("Sawmill") || work.getBuildingName().Equals("Furnace") || work.getBuildingName().Equals("Waterwell")){
-                        //--------------//
-                        // STOP WORKING //
-                        //--------------//
-                        if(gameManager.getClock().getHours() >= townAlliegence.getWorktimeEnd()){
-                            //Debug.Log("Workday has endend");
+        // IF CHANGE TO NEW BUILDING
+        if(closestStorageBuilding && townAlliegence.getClosestStorageBuildingWithListOfItems(this.transform.position, listOfItems)){
+            if(!closestStorageBuilding.Equals(townAlliegence.getClosestStorageBuildingWithListOfItems(this.transform.position, listOfItems))){
+                //Debug.Log("Closest storage building changed from something to other");
+                closestStorageBuilding = townAlliegence.getClosestStorageBuildingWithListOfItems(this.transform.position, listOfItems);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public bool notifyWhenStorageBuildingWithFreeSpaceChange(string itemName, int amount){
+        // IF CHANGING FROM SOMETHING TO NULL
+        if(closestStorageBuildingWithFreeSpace != null && townAlliegence.getClosestStoragetBuildingWithFreeSpace(this.transform.position, itemName, amount) == null){
+            //Debug.Log("closest storage building with freespace went from something to null");
+            closestStorageBuildingWithFreeSpace = null;
+            return true;
+        }
+
+        // IF CHANGING FROM NULL TO SOMETHING
+        if(townAlliegence){
+            if(closestStorageBuildingWithFreeSpace == null && townAlliegence.getClosestStoragetBuildingWithFreeSpace(this.transform.position, itemName, amount) != null){
+                //Debug.Log("closest storage building with freespace went from null to something");
+                closestStorageBuildingWithFreeSpace = townAlliegence.getClosestStoragetBuildingWithFreeSpace(this.transform.position, itemName, amount);
+                return true;
+            }
+        }
+
+        // IF CHANGE TO NEW BUILDING
+        if(closestStorageBuildingWithFreeSpace && townAlliegence.getClosestStoragetBuildingWithFreeSpace(this.transform.position, itemName, amount)){
+            if(!closestStorageBuildingWithFreeSpace.Equals(townAlliegence.getClosestStoragetBuildingWithFreeSpace(this.transform.position, itemName, amount))){
+                //Debug.Log("Closest storage building with freespace changed from something to other");
+                closestStorageBuildingWithFreeSpace = townAlliegence.getClosestStoragetBuildingWithFreeSpace(this.transform.position, itemName, amount);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public bool notifyWhenWorkplaceReached(){
+        if(buildingInsideOf){
+            if(buildingInsideOf.Equals(work)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public bool notifyWhenStorageReached(){
+        if(buildingInsideOf){
+            if(buildingInsideOf.Equals(closestStorageBuilding)){
+                //Debug.Log("citizen is inside closest storagebuilding with item " + this.transform.name);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public bool notifyIfWorkTime(){
+        if(townAlliegence && work){
+            if(gameManager.getClock().getHours() >= townAlliegence.getWorktimeStart()){
+                if(gameManager.getClock().getHours() <= townAlliegence.getWorktimeEnd()){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public bool notifyWhenWorkInventoryRunningLow(){
+        if(work){
+            if(work.getItemCurrentlyProduced() != null){
+                Dictionary<string,int> itemsNeeded = getListOfProductionItemsBasedOnTransferThresholds();
+                
+                if(!work.getBuildingInventory().checkIfListOfItemsAreInInventory(itemsNeeded)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public bool notifyWhenCitizenInventoryHasWorkItems(){
+        if(work){
+            if(work.getItemCurrentlyProduced() != null){
+                if(inventory.checkIfListOfItemsAreInInventory(work.getItemCurrentlyProduced().getCostToCraftItem())){
+                    //Debug.Log("citizen has work producing items " + this.transform.name);
+                    return true;
+                } 
+            }
+        }
+        return false;
+    }
+    public bool notifyWhenCitizenInventoryHasProductionItem(){
+        if(work){
+            if(work.getItemCurrentlyProduced() != null){
+                if(inventory.checkIfListOfItemsAreInInventory(new Dictionary<string, int>(){{work.getItemCurrentlyProduced().getName(), work.getPutItemInStorageThreshold()}})){
+                    //Debug.Log("citizen has work producing items " + this.transform.name);
+                    return true;
+                } 
+            }
+        }
+        return false;
+    }
+
+    public bool notifyWhenWorkItemProducedThresholdReached(){
+        if(work){
+            if(work.getItemCurrentlyProduced() != null){
+                if(work.getBuildingInventory().getAmountOfSpecificItem(work.getItemCurrentlyProduced().getName()) > work.getPutItemInStorageThreshold()){
+                    //Debug.Log("produced threshold reached " + work.name);
+                    return true;
+                } 
+            }
+        }
+        return false;
+    }
+
+    public bool notifyWhenTargetBuildingReached(BuildingAttributes targetBuilding){
+        if(buildingInsideOf){
+            if(buildingInsideOf.Equals(targetBuilding)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public IEnumerator morningMeeting(){
+        if(buildingInsideOf){
+            if(buildingInsideOf.Equals(work) && !morningMeetingStarted){
+                //Debug.Log("Is having morning meeting");
+                morningMeetingStarted = true;
+                yield return new WaitForSeconds(10);
+                morningMeetingFinished = true;
+                //Debug.Log("Morning meeting finished");
+            }
+        }
+    }
+
+    public IEnumerator getItemFromBuilding(Dictionary<string, int> listOfItems, BuildingAttributes targetBuilding){
+        if(work){
+            if(work.getItemCurrentlyProduced() != null && !gatheringItemFromBuilding){
+                gatheringItemFromBuilding = true;
+                //Debug.Log("started get item from building");
+                while(gatheringItemFromBuilding){
+                    if(notifyWhenTargetBuildingReached(targetBuilding)){
+                        //Debug.Log("reched targetbuilding with lsit of items");
+
+                        foreach(var item in listOfItems){
+                            getItemFromBuildingInventory(targetBuilding ,item.Key, item.Value);
+                            //Debug.Log("item transferred  from building to citizen");
+                        }
+                        yield return new WaitForSeconds(2);
+                        break;
+                    } else {
+                        if(targetBuilding != null){
+                            StartCoroutine(goToBuildingCourentine = goToBuilding(targetBuilding));
+                        } else {
+                            //Debug.Log("targetbuilding not found");
                             break;
                         }
-
-                        //--------------------------//
-                        // FIRST GO TO WORKBUILDING //
-                        //--------------------------//
-                        if(!movedToWorkplace && !isMovingToWork){
-                            //Debug.Log("Is moving to work");
-                            isMovingToWork = true;
-                            StartCoroutine(goToBuildingCourentine = goToBuilding(work));
+                    }
+                    if(notifyWhenStorageBuildingChange(listOfItems)){
+                        //Debug.Log("storage building changed");
+                        targetBuilding = closestStorageBuilding;
+                        if(targetBuilding == null){
+                            break;
                         }
-
-                        //-----------------------------//
-                        // NOTIFY WHEN WORK IS REACHED //
-                        //-----------------------------//
-                        if(buildingInsideOf && !movedToWorkplace){
-                            if(buildingInsideOf.getBuildingAttributes().getBuildingName().Equals(work.getBuildingName())){
-                                //Debug.Log("Reached work");
-                                movedToWorkplace = true;
-                                isMovingToWork = false;
-                            }
-                        }
-
-                        //------------------------//
-                        // HAVING MORNING MEETING //
-                        //------------------------//
-                        if(!morningMeetingStarted && movedToWorkplace){
-                            //Debug.Log("Is having morning meeting");
-                            morningMeetingStarted = true;
-                            yield return new WaitForSeconds(10);
-                            morningMeetingFinished = true;
-                        }
-
-                        // LUNCH BREAK?
-
-                        //-----------------------------------------------------------------//
-                        // GETTING RESOURCES IF WORKINVENTORY IS DONT HAVE PRODUCTION ITEM //
-                        //-----------------------------------------------------------------//
-                        if(work.getItemCurrentlyProduced() != null){
-                            if(!gatheringItem && !movingItemToStorage && morningMeetingFinished && movedToWorkplace && !work.getBuildingInventory().checkIfListOfItemsAreInInventory(work.getItemCurrentlyProduced().getCostToCraftItem())){
-                                gatheringItem = true;
-                                //Debug.Log("Gathering item from storage");
-                                
-                                bool isWalkingToStorage = false;
-                                bool isWalkingToWork = false;
-
-                                bool movingBackToWork = false;
-
-                                bool transferringItem = false;
-                                bool transferedItem = false;
-
-                                bool findAmountToGather = false;
-                                Dictionary<string, int> itemsToGather = work.getItemCurrentlyProduced().getCostToCraftItem();
-                                string itemName = null;
-                                int amountToGather = 10;
-                                
-                                
-
-                                while(gatheringItem){
-                                    
-
-                                    // TODO: finn ut hvor mye som skal hentes
-                                    if(!findAmountToGather){
-                                        findAmountToGather = true;
-                                        List<int> lowestNumber = new List<int>();
-                                        foreach(var item in itemsToGather){
-                                            lowestNumber.Add(work.getBuildingInventory().getFreeInventorySpaceForSpecificItem(item.Key));
-                                            lowestNumber.Add(this.inventory.getFreeInventorySpaceForSpecificItem(item.Key));
-                                            itemName = item.Key;
-
-                                            foreach(int number in lowestNumber){
-                                                if(number == 1){
-                                                    amountToGather = number;
-                                                }
-                                                if(number <= amountToGather){
-                                                    amountToGather = number;
-                                                }
-                                            }
-                                            if(amountToGather > 99){
-                                                amountToGather = 99;
-                                            }
-                                        }
-                                        closestStorageBuilding = townAlliegence.getClosestStorageBuildingWithItem(this.transform.position, itemName, amountToGather);
-                                    }
-                                    
-                                    // IF THERE IS NO STORAGE WITH ITEM, BREAK
-                                    if(townAlliegence.getClosestStorageBuildingWithItem(this.transform.position, itemName, amountToGather) == null && !transferedItem){
-                                        //Debug.Log("found no storage with item");
-                                        if(!buildingInsideOf && !movingBackToWork){
-                                            movingBackToWork = true;
-                                            isMovingToBuilding = false;
-                                            StartCoroutine(goToBuildingCourentine = goToBuilding(work));
-                                        }
-                                        break;
-                                    }
-
-                                    // IF THERE IS STORAGE, BUT IT HAS CHANGED TO ANOTHER BUILDING
-                                    if(townAlliegence.getClosestStorageBuildingWithItem(this.transform.position, itemName, amountToGather)){
-                                        if(!(closestStorageBuilding.name).Equals(townAlliegence.getClosestStorageBuildingWithItem(this.transform.position, itemName, amountToGather).name) && townAlliegence.getClosestStorageBuildingWithItem(this.transform.position, itemName, amountToGather) != null && !transferedItem){
-                                            //Debug.Log(closestStorageBuilding.name);
-                                            //Debug.Log(townAlliegence.getClosestStorageBuildingWithItem(this.transform.position, itemName, amountToGather).name);
-                                            Debug.Log("found new storage building");
-                                            if(work.getBuildingInventory().checkIfListOfItemsAreInInventory(work.getItemCurrentlyProduced().getCostToCraftItem())){
-                                                isWalkingToStorage = false;
-                                            } else {
-                                                break;
-                                            }
-                                            
-                                        }
-                                    }
-                                    
-                                        
-
-
-                                    // WALK TO STORAGE
-                                    if(!isWalkingToStorage && closestStorageBuilding != null){
-                                        StopCoroutine(goToBuildingCourentine);
-                                        isWalkingToStorage = true;
-                                        isMovingToBuilding = false;
-                                        //Debug.Log("is walking to storage");
-                                        //Debug.Log(closestStorageBuilding.name);
-                                        
-                                        // GO TO CLOSEST STORAGEBUILDING WITH ITEM
-                                        closestStorageBuilding = townAlliegence.getClosestStorageBuildingWithItem(this.transform.position, itemName, amountToGather);
-                                        StartCoroutine(goToBuildingCourentine = goToBuilding(closestStorageBuilding));
-                                    }
-
-                                    // WHEN INSIDE STORAGE, PICK UP ITEM
-                                    if(buildingInsideOf){
-                                        if(buildingInsideOf.Equals(closestStorageBuilding) && !transferringItem){
-                                            //Debug.Log("picking up item");
-                                            transferringItem = true;
-                                            foreach(var item in itemsToGather){
-                                                buildingInsideOf.getBuildingAttributes().getBuildingInventory().sendItemsFromThisToOther(this.inventory, item.Key, amountToGather);
-                                            }
-
-                                            yield return new WaitForSeconds(2);
-                                            transferedItem = true;
-                                        }
-                                    }
-
-                                    // WHEN ITEM IS PICKED UP, GO BACK TO WORK
-                                    if(transferedItem && !isWalkingToWork){
-                                        //Debug.Log("returning to work");
-                                        isWalkingToWork = true;
-                                        StartCoroutine(goToBuildingCourentine = goToBuilding(work));
-                                    }
-
-                                    // IF ITEM IS SUCCESFULLY TRANSFERED AND CITIZEN IS BACK IN WORKBUILDING, TRANSFER THEN STOP GATHERING ITEM
-                                    if(buildingInsideOf){
-                                        if(buildingInsideOf.Equals(work) && transferedItem){
-                                            foreach(var item in itemsToGather){
-                                                this.inventory.sendItemsFromThisToOther(work.getBuildingInventory(), item.Key, amountToGather);
-                                            }
-                                            //Debug.Log("items transfered to work");
-                                            break;
-                                        }
-                                    }
-                                    yield return null;
-                                }
-                                // RESET BOOLS WHEN DONE GETTING ITEM
-                                gatheringItem = false;
-                            }
-                        }
-                        //-------------------------------------//
-                        // MOVE RESOURCES FROM WORK TO STORAGE //
-                        //-------------------------------------//
-                        if(work.getItemCurrentlyProduced() != null){
-                            if(!movingItemToStorage && !gatheringItem && morningMeetingFinished && movedToWorkplace && work.getBuildingInventory().checkIfListOfItemsAreInInventory(new Dictionary<string, int>(){{work.getItemCurrentlyProduced().getName(), 20}})){
-                                movingItemToStorage = true;
-                                bool isWalkingToStorage = false;
-                                bool isWalkingToWork = false;
-
-                                bool movingBackToWork = false;
-
-                                bool transferedItem = false;
-
-                                bool pickedUpItem = false;
-
-                                string itemName = work.getItemCurrentlyProduced().getName();
-                                int itemAmount = 20;
-                                closestStorageBuilding = townAlliegence.getClosestStoragetBuildingWithFreeSpace(this.transform.position, itemName, itemAmount);
-
-                                while(movingItemToStorage){
-                                    // IF THERE IS NO FREE STORAGE, BREAK
-                                    if(townAlliegence.getClosestStoragetBuildingWithFreeSpace(this.transform.position, itemName, itemAmount) == null && !pickedUpItem){
-                                        //Debug.Log("found no storage with item");
-                                        if(!buildingInsideOf && !movingBackToWork){
-                                            movingBackToWork = true;
-                                            isMovingToBuilding = false;
-                                            StartCoroutine(goToBuildingCourentine = goToBuilding(work));
-                                        }
-                                        break;
-                                    }
-                                    // IF THERE IS STORAGE, BUT IT HAS CHANGED TO ANOTHER BUILDING
-                                    if(townAlliegence.getClosestStoragetBuildingWithFreeSpace(this.transform.position, itemName, itemAmount)){
-                                        if(!(closestStorageBuilding.name).Equals(townAlliegence.getClosestStoragetBuildingWithFreeSpace(this.transform.position, itemName, itemAmount).name) && townAlliegence.getClosestStoragetBuildingWithFreeSpace(this.transform.position, itemName, itemAmount) != null && !transferedItem){
-                                            //Debug.Log(closestStorageBuilding.name);
-                                            //Debug.Log(townAlliegence.getClosestStorageBuildingWithItem(this.transform.position, itemName, amountToGather).name);
-                                            //Debug.Log("found new storage building");
-                                            closestStorageBuilding = townAlliegence.getClosestStoragetBuildingWithFreeSpace(this.transform.position, itemName, itemAmount);
-                                            isWalkingToStorage = false;
-                                            
-                                        }
-                                    }
-
-                                    // WHEN INSIDE WORKPLACE, PICK UP ITEM
-                                    if(buildingInsideOf){
-                                        if(buildingInsideOf.Equals(work) && !pickedUpItem){
-                                            //Debug.Log("picking up item");
-                                            pickedUpItem = true;
-                                            buildingInsideOf.getBuildingAttributes().getBuildingInventory().sendItemsFromThisToOther(this.inventory, itemName, itemAmount);
-                                            
-                                        }
-                                    }
-                                    // WALK TO STORAGE
-                                    if(!isWalkingToStorage && pickedUpItem && closestStorageBuilding != null){
-                                        StopCoroutine(goToBuildingCourentine);
-                                        isWalkingToStorage = true;
-                                        isMovingToBuilding = false;
-                                        //Debug.Log("is walking to storage");
-                                        //Debug.Log(closestStorageBuilding.name);
-                                        
-                                        // GO TO CLOSEST STORAGEBUILDING WITH FREE SPACE
-                                        StartCoroutine(goToBuildingCourentine = goToBuilding(closestStorageBuilding));
-                                    }
-                                    // WHEN INSIDE STORAGE, DROP OFF ITEM
-                                    if(buildingInsideOf){
-                                        if(buildingInsideOf.Equals(closestStorageBuilding) && !transferedItem){
-                                            //Debug.Log("transfered item to storage");
-                                            transferedItem = true;
-                                            this.inventory.sendItemsFromThisToOther(buildingInsideOf.getBuildingAttributes().getBuildingInventory(), itemName, itemAmount);
-                                            yield return new WaitForSeconds(2f);
-                                        }
-                                    }
-                                    // WALK BACK TO WORK
-                                    if(transferedItem && !isWalkingToWork){
-                                        StopCoroutine(goToBuildingCourentine);
-                                        isWalkingToWork = true;
-                                        isMovingToBuilding = false;
-                                        //Debug.Log("is walking to back to work");
-                                        //Debug.Log(closestStorageBuilding.name);
-                                        
-                                        // GO TO CLOSEST STORAGEBUILDING WITH FREE SPACE
-                                        StartCoroutine(goToBuildingCourentine = goToBuilding(work));
-                                    }
-                                    // IF ITEM IS SUCCESFULLY TRANSFERED AND CITIZEN IS BACK IN WORKBUILDING, BREAK
-                                    if(buildingInsideOf){
-                                        if(buildingInsideOf.Equals(work) && transferedItem){
-                                            //Debug.Log("reached workbuilding");
-                                            break;
-                                        }
-                                    }
-                                    yield return null;
-                                }
-                            }
-                            movingItemToStorage = false;
-                        }
-
                     }
                     yield return null;
-                }            
-                isWorking = false;
+                }
+                StopCoroutine(goToBuildingCourentine);
+                stopMovement();
+                gatheringItemFromBuilding = false;
             }
+        }
+    }
+
+    public IEnumerator putItemInBuilding(Dictionary<string, int> listOfItems, BuildingAttributes targetBuilding){
+        if(!movingItemToBuilding){
+            movingItemToBuilding = true;
+            //Debug.Log("started put item in building");
+            while(movingItemToBuilding){
+                if(notifyWhenTargetBuildingReached(targetBuilding)){
+                    //Debug.Log("reched targetbuilding with lsit of items");
+
+                    foreach(var item in listOfItems){
+                        putItemInBuildingInventory(targetBuilding, item.Key, item.Value);
+                        //Debug.Log("item transferred  from building to citizen");
+                    }
+                    yield return new WaitForSeconds(2);
+                    break;
+                } else {
+                    if(targetBuilding != null){
+                        StartCoroutine(goToBuildingCourentine = goToBuilding(targetBuilding));
+                    } else {
+                        //Debug.Log("targetbuilding not found");
+                        break;
+                    }
+                }
+                foreach(var item in listOfItems){
+                    notifyWhenStorageBuildingWithFreeSpaceChange(item.Key, item.Value);
+                    if(notifyWhenStorageBuildingWithFreeSpaceChange(item.Key, item.Value)){
+                        targetBuilding = closestStorageBuildingWithFreeSpace;
+                        stopMovement();
+                    }
+                    if(targetBuilding == null){
+                        break;
+                    }
+                }
+                
+                yield return null;
+            }
+            StopCoroutine(goToBuildingCourentine);
+            stopMovement();
+            movingItemToBuilding = false;
+        }
+        
+    }
+    
+    // MOVE THIS TO BUILDINGATTRBITUTES
+    public Dictionary<string, int> getListOfProductionItemsBasedOnTransferThresholds(){
+        Dictionary<string, int> productionItems = null;
+        Dictionary<string, int> productionItemsBasedOnThreshold = new Dictionary<string, int>();
+
+        if(work){
+            if(work.getItemCurrentlyProduced() != null){
+                productionItems = work.getItemCurrentlyProduced().getCostToCraftItem();
+
+                foreach(var item in productionItems){
+                    productionItemsBasedOnThreshold.Add(item.Key, item.Value * work.getAmountToTransfer());
+                }
+            } 
+        }
+        return productionItemsBasedOnThreshold;
+    }
+
+    
+
+    public IEnumerator goToWorkbuilding(){
+        if(buildingInsideOf){
+            if(!buildingInsideOf.Equals(work) && !isMovingToWork){
+                //Debug.Log("Is moving to work");
+                isMovingToWork = true;
+                while(isMovingToWork && work){
+                    if(notifyWhenWorkplaceReached()){
+                        //Debug.Log("workplace reached");
+                        break;
+                    } else {
+                        StartCoroutine(goToBuildingCourentine = goToBuilding(work));
+                    }
+                    yield return null;
+                }
+                isMovingToWork = false;
+                stopMovement();
+            }
+        } else if(!isMovingToWork){
+            //Debug.Log("Is moving to work");
+            isMovingToWork = true;
+            while(isMovingToWork && work){
+                if(notifyWhenWorkplaceReached()){
+                    //Debug.Log("workplace reached");
+                    break;
+                }  else {
+                    StartCoroutine(goToBuildingCourentine = goToBuilding(work));
+                }
+                yield return null;
+            }
+            isMovingToWork = false;
+            stopMovement();
+        }
+    }
+    
+
+    public IEnumerator working(){
+        if(work && !isWorking && notifyIfWorkTime()){
+            //Debug.Log("work started");
+            isWorking = true;
+            morningMeetingStarted = false;
+            morningMeetingFinished = false;
+
+            while(isWorking && work){
+                if(work.getBuildingName().Equals("Sawmill") || work.getBuildingName().Equals("Furnace") || work.getBuildingName().Equals("Waterwell")){
+                    if(!notifyIfWorkTime()){
+                        goToTownCenter();
+                        Debug.Log("work is done for the day");
+                        break;
+                    }
+
+                    // GO TO WORKBUILDING //
+                    if(notifyIfWorkTime()){
+                        do{
+                            StartCoroutine(goToWorkbuilding());
+                            Debug.Log("moving to workplace");
+                            yield return null;
+                        } while(isMovingToWork && work);
+                    }
+
+                    // HAVING MORNING MEETING //
+                    StartCoroutine(morningMeeting());
+                    
+                    // GETTING RESOURCES IF WORKINVENTORY DONT HAVE PRODUCTION ITEM //
+                    if(notifyWhenWorkInventoryRunningLow() && !notifyWhenCitizenInventoryHasWorkItems() && morningMeetingFinished && !movingItemToBuilding){
+                        do{
+                            StartCoroutine(getItemFromBuilding(getListOfProductionItemsBasedOnTransferThresholds(), townAlliegence.getClosestStorageBuildingWithListOfItems(this.transform.position, getListOfProductionItemsBasedOnTransferThresholds())));
+                            Debug.Log("gathering item from storage");
+                            yield return null;
+                        } while (gatheringItemFromBuilding && work);
+                    }
+                    
+                    // MOVE RESOURCES BACK TO WORKPLACE //
+                    if(notifyWhenCitizenInventoryHasWorkItems() && morningMeetingFinished && !gatheringItemFromBuilding){
+                        do{
+                            StartCoroutine(putItemInBuilding(getListOfProductionItemsBasedOnTransferThresholds(), work));
+                            Debug.Log("putting item in workbuilding");
+                            yield return null;
+                        } while (movingItemToBuilding  && work);
+                    }
+
+                    // GET RESOURCE THRESHOLD ITEM FROM WORKBUILDING
+                    if(notifyWhenWorkItemProducedThresholdReached() && morningMeetingFinished && !movingItemToBuilding){
+                        do{
+                            StartCoroutine(getItemFromBuilding(new Dictionary<string, int>(){{work.getItemCurrentlyProduced().getName(), work.getPutItemInStorageThreshold()}}, work));
+                            Debug.Log("gathering item from workbuilding");
+                            yield return null;
+                        } while(gatheringItemFromBuilding && work);
+                    }
+
+                    // MOVE RESOURCES TO STORAGE IF THRESHOLD REACHED
+                    if(notifyWhenCitizenInventoryHasProductionItem() && morningMeetingFinished && !gatheringItemFromBuilding){
+                        do{
+                            StartCoroutine(putItemInBuilding(new Dictionary<string, int>(){{work.getItemCurrentlyProduced().getName(), work.getPutItemInStorageThreshold()}}, townAlliegence.getClosestStoragetBuildingWithFreeSpace(this.transform.position, work.getItemCurrentlyProduced().getName(), work.getPutItemInStorageThreshold())));
+                            Debug.Log("putting item in storage");
+                            yield return null;
+                        } while(movingItemToBuilding && work);
+                    }
+
+                }
+                yield return null;
+            }   
+
+            if(goToBuildingCourentine != null){
+                StopCoroutine(goToBuildingCourentine);  
+            }     
+
+            if(!work){
+                //stopMovement();
+                goToTownCenter();
+            }
+            morningMeetingStarted = false;
+            morningMeetingFinished = false;
+            isWorking = false;
         }
     }
     
@@ -758,8 +799,33 @@ public class Citizen : MonoBehaviour
         Destroy(gameObject);
     }
     
-    public void gatherResources(){
+    public void gatherResources(string resourceName){
+        if(resourceName.Equals("StoneDepot") && findClosestResource(stoneDepotsInRange) != null){
+            StartCoroutine(findClosestResource(stoneDepotsInRange).walkingToResource(this)); 
+        }
 
+    }
+
+    public ResourceAttributes findClosestResource(List<ResourceAttributes> resourceList){
+
+        List<ResourceAttributes> resourceArrangeAfterDistance = new List<ResourceAttributes>();
+        Dictionary<ResourceAttributes, float> resourceAfterDistance = new Dictionary<ResourceAttributes, float>();
+
+        foreach(ResourceAttributes resource in resourceList){
+            if(resource != null){
+                resourceAfterDistance.Add(resource, Vector3.Distance(this.transform.position, resource.transform.position));
+            }
+        }
+
+        foreach(KeyValuePair<ResourceAttributes, float> resource in resourceAfterDistance.OrderBy(key => key.Value)){
+            resourceArrangeAfterDistance.Add(resource.Key);
+        }
+
+        if(resourceArrangeAfterDistance.Count > 0){
+            return resourceArrangeAfterDistance[0];
+        } else {
+            return null;
+        }
     }
 
     public void putItemDown(){
@@ -788,13 +854,11 @@ public class Citizen : MonoBehaviour
         if(townAlliegence && !isLookingForWork){
             setIsLookingForWork(true);
             townAlliegence.addAvailableWorkerToTown(this);
-
         }
     }
     public void foundWork(){
-        setIsLookingForWork(false);
-        if(townAlliegence){
-            townAlliegence.removeAvailableWorkerFromTown(this);
+        if(townAlliegence && isLookingForWork){
+            setIsLookingForWork(false);
         }
     }
     public void lookForHousing(){
@@ -869,11 +933,12 @@ public class Citizen : MonoBehaviour
             transform.GetChild(0).gameObject.SetActive(true);
         }
     }
-    public void lookAt(){
-
+    public void lookAt(GameObject lookAt){
+        transform.LookAt(new Vector3(lookAt.transform.position.x, 0, lookAt.transform.position.z));
     }
     public void stopMovement(){
         citizenAgent.ResetPath();
+        isMovingToBuilding = false;
     }
     public void teleportToPosition(){
         
@@ -889,9 +954,12 @@ public class Citizen : MonoBehaviour
     }
 
     // GETTERS
-    public string getName(){
-        return citizenName;
+    public string getFirstName(){
+        return citizenFirstName;
     }
+    public string getLastName(){
+        return citizenLastName;
+    } 
     public BuildingAttributes getCitizenHouse(){
         return house;
     }
@@ -906,6 +974,15 @@ public class Citizen : MonoBehaviour
     }
     public int getCitizenID(){
         return citizenID;
+    }
+    public Skills getSkills(){
+        return skills;
+    }
+    public Inventory getInventory(){
+        return inventory;
+    }
+    public bool getIsMovingToDestination(){
+        return isMovingToDestination;
     }
 
     // SETTERS

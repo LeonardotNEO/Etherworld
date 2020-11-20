@@ -36,7 +36,8 @@ public class ShowBuildingInventory : MonoBehaviour
 
 
     public void updateInventory(){
-        if(gameManager.getBuildingCatalog().getBuildingLastClicked() != null){
+        gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+        if(gameManager.getBuildingCatalog().getBuildingLastClicked() != null && this.gameObject.activeSelf){
             if(gameManager.getBuildingCatalog().getBuildingLastClicked().GetComponent<Inventory>()){
                 inventory = gameManager.getBuildingCatalog().getBuildingLastClicked().GetComponent<Inventory>();
 

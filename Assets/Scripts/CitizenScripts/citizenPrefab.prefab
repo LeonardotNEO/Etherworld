@@ -33,13 +33,14 @@ GameObject:
   - component: {fileID: 6638775970507256269}
   - component: {fileID: 6638775970507256268}
   - component: {fileID: 6638775970507256271}
+  - component: {fileID: 7081908790912091062}
   - component: {fileID: 6638775970507256266}
   - component: {fileID: 6638775970507256270}
   - component: {fileID: 6638775970507256257}
   - component: {fileID: 6638775970507256256}
   - component: {fileID: 6638775970507256259}
   m_Layer: 16
-  m_Name: citizen
+  m_Name: citizenPrefab
   m_TagString: NPC
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -97,6 +98,18 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &7081908790912091062
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6638775970507256258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc27dd40deb184a4ab0fe1ef3fe35916, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &6638775970507256266
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -110,11 +123,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   position: {x: 0, y: 0, z: 0}
-  skills: []
+  skills: {fileID: 0}
   relatives: []
   inventory: {fileID: 0}
   house: {fileID: 0}
   work: {fileID: 0}
+  buildingInsideOf: {fileID: 0}
   townAlliegence: {fileID: 0}
   townCurrentlyInsideOf: {fileID: 0}
   gender: 
@@ -130,6 +144,8 @@ MonoBehaviour:
   movementSpeed: 0
   wealth: 0
   taxPayment: 0
+  citizenID: 0
+  initalizedCitizen: 0
   isMovingToDestination: 0
   reachedDestination: 0
   isMovingToBuilding: 0
@@ -141,17 +157,41 @@ MonoBehaviour:
   isInsideBuilding: 0
   isLookingForWork: 0
   isLookingForHouse: 0
+  puttingItemInStorage: 0
+  newAction: 0
   isResting: 0
   isWorking: 0
   isGatheringResources: 0
   isSick: 0
-  isHungry: 0
-  isThirsty: 0
   isSleepy: 0
   isLookingForPartner: 0
   isDoingRandomAction: 0
   isMating: 0
   isInTheArmy: 0
+  hour0: 0
+  hour1: 0
+  hour2: 0
+  hour3: 0
+  hour4: 0
+  hour5: 0
+  hour6: 0
+  hour7: 0
+  hour8: 0
+  hour9: 0
+  hour10: 0
+  hour11: 0
+  hour12: 0
+  hour13: 0
+  hour14: 0
+  hour15: 0
+  hour16: 0
+  hour17: 0
+  hour18: 0
+  hour19: 0
+  hour20: 0
+  hour21: 0
+  hour22: 0
+  hour23: 0
 --- !u!114 &6638775970507256270
 MonoBehaviour:
   m_ObjectHideFlags: 0

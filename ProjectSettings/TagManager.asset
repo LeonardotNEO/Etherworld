@@ -21,10 +21,13 @@ TagManager:
   - Residential
   - BuildingInvSlot
   - MainInvSlot
-  - NPC
   - BoardingHouse
   - Placeholder
   - Storage
+  - Skills
+  - Citizen
+  - NPC
+  - TownMenuUI
   layers:
   - Default
   - TransparentFX

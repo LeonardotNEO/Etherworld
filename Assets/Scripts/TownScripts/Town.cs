@@ -101,9 +101,12 @@ public class Town : MonoBehaviour
             StartCoroutine(waitForBuildingInventoryToLoad(other));
             
         }
-        if(other.gameObject.layer == LayerMask.NameToLayer("Citizens")){
-            StartCoroutine(waitForCitizenInventoryToLoad(other));
+        if(other is BoxCollider){
+            if(other.gameObject.layer == LayerMask.NameToLayer("Citizens")){
+                StartCoroutine(waitForCitizenInventoryToLoad(other));
+            }
         }
+        
     }
 
     void OnTriggerExit(Collider other)
@@ -213,6 +216,14 @@ public class Town : MonoBehaviour
         }
         return null;
     }
+    public BuildingAttributes getClosestStorageBuildingWithListOfItems(Vector3 fromPosition, Dictionary<string, int> items){
+        foreach(BuildingAttributes building in getListOfClosestStorageBuildingsSorted(fromPosition)){
+            if(building.getBuildingInventory().checkIfListOfItemsAreInInventory(items)){       
+                return building;
+            }
+        }
+        return null;
+    }
 
     public List<Citizen> getCitizensInTown(){
         return citizensInTown;
@@ -252,9 +263,13 @@ public class Town : MonoBehaviour
     }
     public void addAvailableWorkerToTown(Citizen citizen){
         availableWorkersInTown.Add(citizen);
+        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Workers/Workers Here/Scroll View/Viewport/Content").GetComponent<ShowWorkersInBuilding>().updateWorkersInBuildingList();
+        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Workers/Available workers/Scroll View/Viewport/Content").GetComponent<ShowAvailableWorkers>().updateAvailableWorkersList();
     }
     public void removeAvailableWorkerFromTown(Citizen citizen){
         availableWorkersInTown.Remove(citizen);
+        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Workers/Workers Here/Scroll View/Viewport/Content").GetComponent<ShowWorkersInBuilding>().updateWorkersInBuildingList();
+        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Workers/Available workers/Scroll View/Viewport/Content").GetComponent<ShowAvailableWorkers>().updateAvailableWorkersList();
     }
     public void addBoardingHouseToTown(BuildingAttributes building){
         boardingHousesInTown.Add(building);

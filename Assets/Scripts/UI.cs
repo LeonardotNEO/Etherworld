@@ -17,6 +17,7 @@ public class UI : MonoBehaviour
     public bool inventoryOpen;
     public bool craftingOpen;
     public bool messageLogOpen;
+    public bool skillsOpen;
     public bool buildingMenuOpen;
     public bool buildingOpenOpen;
     public bool buildingInventoryOpenBool;                                                                                                          
@@ -29,16 +30,28 @@ public class UI : MonoBehaviour
     void Update()
     {
         // INPUTS //
+        if(Input.GetKeyDown("|")){
+            Time.timeScale = 0;
+        }
         if(Input.GetKeyDown("1")){
-            Debug.Log(gameManager.getBuildingCatalog().getBuildingsCatalogToString());
+            Time.timeScale = 1;
         }
         if(Input.GetKeyDown("2")){
-            Debug.Log(gameManager.getInventoryCatalog().inventoryCatalogToString());
+            Time.timeScale = 2f;
         }
         if(Input.GetKeyDown("3")){
-            Debug.Log(gameManager.getItemCatalog().itemCatalogToString());
+            Time.timeScale = 4;
         }
         if(Input.GetKeyDown("4")){
+            Time.timeScale = 8;
+        }
+        if(Input.GetKeyDown("5")){
+            gameManager.getPlayerBehavior().getSkills().getSkillByName("Woodcutting").increaseExperience(100000);
+        }
+        if(Input.GetKeyDown("6")){
+
+        }
+        if(Input.GetKeyDown("7")){
             Dictionary<string,int> listOfItems = new Dictionary<string, int>{
                 {"Wood planks", 3}, 
                 {"Stone", 3}};
@@ -47,7 +60,7 @@ public class UI : MonoBehaviour
                 gameManager.getInventoryCatalog().getMainInventory().removeItemFromInventory(item.Key, item.Value);
             }
         }
-        if(Input.GetKeyDown("5")){
+        if(Input.GetKeyDown("8")){
             Dictionary<string,int> listOfItems = new Dictionary<string, int>{
             {"Wood plank", 35}, 
             {"Stone", 35}, 
@@ -65,13 +78,10 @@ public class UI : MonoBehaviour
                 gameManager.getInventoryCatalog().getMainInventory().addItemToInventory(item.Key, item.Value);
             }
         }
-        if(Input.GetKeyDown("6")){
+        if(Input.GetKeyDown("9")){
             if(gameManager.getBuildingCatalog().getBuildingLastClicked()){
                 Dictionary<string,int> listOfItems = new Dictionary<string, int>{
-                {"Wood plank", 35}, 
-                {"Stone", 35}, 
                 {"Wood log", 10}, 
-                {"Bucket", 1},
                 {"Iron ore", 10},
                 {"Coal ore", 10},
                 {"Gold ore", 10},
@@ -85,29 +95,18 @@ public class UI : MonoBehaviour
                 }
             }
         }
-        if(Input.GetKeyDown("x")){
-            Time.timeScale = 0;
-        }
-        if(Input.GetKeyDown("c")){
-            Time.timeScale = 1;
-        }
-        if(Input.GetKeyDown("v")){
-            Time.timeScale = 2f;
-        }
-        if(Input.GetKeyDown("b")){
-            Time.timeScale = 4;
-        }
-        if(Input.GetKeyDown("n")){
-            Time.timeScale = 8;
-        }
-        if(Input.GetKeyDown("i")){
+        
+        if(Input.GetKeyDown("tab")){
             openInventory();
-        }
-        if(Input.GetKeyDown("m")){
+        } 
+        if(Input.GetKeyDown("z")){
             openMessageLog();
         } 
-        if(Input.GetKeyDown("tab")){
+        if(Input.GetKeyDown("c")){
             openCrafting();
+        } 
+        if(Input.GetKeyDown("x")){
+            openSkills();
         } 
         if(gameManager.getCraftingSystem().getIsCrafting()){
             if(Input.GetKey("q")){
@@ -346,20 +345,22 @@ public class UI : MonoBehaviour
     // BUILDING OPEN UI //
     //------------------//
     public void buildingOpen(){
-        buildingOpenOpen = true;
-        BuildingAttributes building = gameManager.getBuildingCatalog().getBuildingLastClicked().GetComponent<BuildingAttributes>();
-        closeBuildingUI();
+        if(!gameManager.getCraftingSystem().getIsCrafting()){
+            buildingOpenOpen = true;
+            BuildingAttributes building = gameManager.getBuildingCatalog().getBuildingLastClicked().GetComponent<BuildingAttributes>();
+            closeBuildingUI();
 
-        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background").gameObject.SetActive(true);
-        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Production").gameObject.SetActive(true);
+            GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background").gameObject.SetActive(true);
+            GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Production").gameObject.SetActive(true);
 
-        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Inventory").gameObject.SetActive(false);
-        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Stats").gameObject.SetActive(false);
-        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Workers").gameObject.SetActive(false);
+            GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Inventory").gameObject.SetActive(false);
+            GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Stats").gameObject.SetActive(false);
+            GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Workers").gameObject.SetActive(false);
 
-        GameObject.FindGameObjectWithTag("BuildingMenuUI").transform.Find("Background").gameObject.SetActive(false);
+            GameObject.FindGameObjectWithTag("BuildingMenuUI").transform.Find("Background").gameObject.SetActive(false);
 
-        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Headline/HeadlineText").GetComponent<Text>().text = building.getBuildingName();
+            GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Headline/HeadlineText").GetComponent<Text>().text = building.getBuildingName();
+        }
     }
     public void buildingOpenClose(){
         buildingOpenOpen = false;
@@ -484,6 +485,7 @@ public class UI : MonoBehaviour
         BuildingProgressBar progressbar = GameObject.FindGameObjectWithTag("ProductionProgressBar").GetComponent<BuildingProgressBar>();
         bool producing = true;
         bool inventoryIsFull = false;
+        int playerProduction = 0;
 
         if(selectedItem != null){
             if(!buildingAttributes.getBuildingIsProducing()){
@@ -492,13 +494,18 @@ public class UI : MonoBehaviour
                 buildingAttributes.setItemCurrentlyProduced(selectedItem);
 
                 while(producing){
-                    if(buildingAttributes.getWorkersInBuilding().Count == 0){
+                    if(buildingAttributes.getWorkersInBuilding().Count == 0 && !buildingAttributes.getPlayerEnteredBuilding()){
                         gameManager.getMessageLogText().addMessageToLog("Production could not start since theres no workers assigned in the building!");
                         break;
                     }
 
                     while(buildingAttributes.getProductionProgress() <= 360 && !inventoryIsFull && buildingInventory.checkIfListOfItemsAreInInventory(selectedItem.getCostToCraftItem())){
-                        float progressSpeed = buildingAttributes.getCitizensInsideBuilding().Count * 100;
+                        if(buildingAttributes.getPlayerEnteredBuilding()){
+                            playerProduction = 1;
+                        } else {
+                            playerProduction = 0;
+                        }
+                        float progressSpeed = (buildingAttributes.getCitizensInsideBuilding().Count + playerProduction) * 100;
                         buildingAttributes.setIncreaseProductionProgress(Time.deltaTime * progressSpeed);
                         //progressbar.updateProgressBar(buildingAttributes.getProductionProgress());
 
@@ -541,10 +548,10 @@ public class UI : MonoBehaviour
         BuildingAttributes selectedBuilding = gameManager.getBuildingCatalog().getBuildingLastClickedAttributes();
         if(selectedBuilding.getWorkersInBuilding().Count < selectedBuilding.getWorkerLimit()){
             if(!selectedBuilding.getWorkersInBuilding().Contains(selectedCitizen)){
-                selectedCitizen.getTownAlliegence().removeAvailableWorkerFromTown(selectedCitizen);
-                selectedBuilding.addWorkerToBuilding(selectedCitizen);
-                GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Workers/Workers Here/Scroll View/Viewport/Content").GetComponent<ShowWorkersInBuilding>().updateAvailableWorkersList();
-                GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Workers/Available workers/Scroll View/Viewport/Content").GetComponent<ShowAvailableWorkers>().updateAvailableWorkersList();
+                if(selectedCitizen){
+                    selectedCitizen.getTownAlliegence().removeAvailableWorkerFromTown(selectedCitizen);
+                    selectedBuilding.addWorkerToBuilding(selectedCitizen);
+                }
             }
         } else {
             gameManager.getMessageLogText().addMessageToLog("You cant add more workers since the limit is reached");
@@ -553,16 +560,15 @@ public class UI : MonoBehaviour
     public void MoveWorkerToAvailable(){
         Citizen selectedCitizen = gameManager.getCitizenCatalog().getSelectedCitizen();
         BuildingAttributes selectedBuilding = gameManager.getBuildingCatalog().getBuildingLastClickedAttributes();
-        if(!selectedCitizen.getTownAlliegence().getAvailableWorkersInTown().Contains(selectedCitizen)){
-            selectedCitizen.getTownAlliegence().addAvailableWorkerToTown(selectedCitizen);
-            selectedBuilding.removeWorkerFromBuilding(selectedCitizen);
-            GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Workers/Workers Here/Scroll View/Viewport/Content").GetComponent<ShowWorkersInBuilding>().updateAvailableWorkersList();
-            GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Workers/Available workers/Scroll View/Viewport/Content").GetComponent<ShowAvailableWorkers>().updateAvailableWorkersList();
+        if(selectedCitizen){
+            if(!selectedCitizen.getTownAlliegence().getAvailableWorkersInTown().Contains(selectedCitizen)){
+                selectedBuilding.removeWorkerFromBuilding(selectedCitizen);
+            }
         }
     }   
     public void selectWorkerButton(int citizenID){
         gameManager.getCitizenCatalog().setSelectedCitizen(gameManager.getCitizenCatalog().getCitizenByID(citizenID));
-        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Workers/Workers Here/Scroll View/Viewport/Content").GetComponent<ShowWorkersInBuilding>().updateAvailableWorkersList();
+        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Workers/Workers Here/Scroll View/Viewport/Content").GetComponent<ShowWorkersInBuilding>().updateWorkersInBuildingList();
         GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Workers/Available workers/Scroll View/Viewport/Content").GetComponent<ShowAvailableWorkers>().updateAvailableWorkersList();
     }
 
@@ -583,10 +589,11 @@ public class UI : MonoBehaviour
     //-------------//
     public void openMessageLog(){
         messageLogOpen = true;
-        GameObject.FindGameObjectWithTag("MessageLogBarUI").GetComponent<Canvas>().enabled = true;
+        GameObject.FindGameObjectWithTag("MessageLogBarUI").transform.Find("Background").gameObject.SetActive(true); 
 
         GameObject.FindGameObjectWithTag("InventoryMenuUI").transform.Find("Background").gameObject.SetActive(false); 
         GameObject.FindGameObjectWithTag("CraftingMenuUI").transform.Find("Background").gameObject.SetActive(false); 
+        GameObject.FindGameObjectWithTag("Skills").transform.Find("Background").gameObject.SetActive(false); 
     }
     public void closeMessageLog(){
         messageLogOpen = false;
@@ -601,7 +608,8 @@ public class UI : MonoBehaviour
         GameObject.FindGameObjectWithTag("InventoryMenuUI").transform.Find("Background").gameObject.SetActive(true);
 
         GameObject.FindGameObjectWithTag("CraftingMenuUI").transform.Find("Background").gameObject.SetActive(false); 
-        GameObject.FindGameObjectWithTag("MessageLogBarUI").GetComponent<Canvas>().enabled = false;
+        GameObject.FindGameObjectWithTag("MessageLogBarUI").transform.Find("Background").gameObject.SetActive(false); 
+        GameObject.FindGameObjectWithTag("Skills").transform.Find("Background").gameObject.SetActive(false); 
     }
     public void closeInventory(){
         inventoryOpen = false;
@@ -616,10 +624,27 @@ public class UI : MonoBehaviour
         GameObject.FindGameObjectWithTag("CraftingMenuUI").transform.Find("Background").gameObject.SetActive(true); 
 
         GameObject.FindGameObjectWithTag("InventoryMenuUI").transform.Find("Background").gameObject.SetActive(false); 
-        GameObject.FindGameObjectWithTag("MessageLogBarUI").GetComponent<Canvas>().enabled = false;
+        GameObject.FindGameObjectWithTag("MessageLogBarUI").transform.Find("Background").gameObject.SetActive(false); 
+        GameObject.FindGameObjectWithTag("Skills").transform.Find("Background").gameObject.SetActive(false); 
     }
     public void closeCrafting(){
         craftingOpen = false;
         GameObject.FindGameObjectWithTag("CraftingMenuUI").transform.Find("Background").gameObject.SetActive(false); 
+    }
+
+    //--------//
+    // SKILLS //
+    //--------//
+    public void openSkills(){
+        skillsOpen = true;
+        GameObject.FindGameObjectWithTag("Skills").transform.Find("Background").gameObject.SetActive(true); 
+
+        GameObject.FindGameObjectWithTag("CraftingMenuUI").transform.Find("Background").gameObject.SetActive(false); 
+        GameObject.FindGameObjectWithTag("InventoryMenuUI").transform.Find("Background").gameObject.SetActive(false); 
+        GameObject.FindGameObjectWithTag("MessageLogBarUI").transform.Find("Background").gameObject.SetActive(false); 
+    }
+    public void closeSkills(){
+        skillsOpen = false;
+        GameObject.FindGameObjectWithTag("Skills").transform.Find("Background").gameObject.SetActive(false); 
     }
 }

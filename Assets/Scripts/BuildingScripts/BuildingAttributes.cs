@@ -13,6 +13,7 @@ public class BuildingAttributes : MonoBehaviour
     public List<Citizen> citizensWorkingInBuilding  = new List<Citizen>();
     public List<Citizen> citizensLivingInBuilding  = new List<Citizen>();
     public List<Citizen> citizensInBuilding = new List<Citizen>();
+    public List<Citizen> citizensGatheringResources = new List<Citizen>();
     public Inventory buildingInventory;
     public Dictionary<string, int> buildingUpKeep;
     public Dictionary<string, int> itemsProducedInBuilding;
@@ -26,10 +27,15 @@ public class BuildingAttributes : MonoBehaviour
     private int buildingValue;
     public int buildingID;
     public int storageCapacity;
-    public float productionProgress;
     public int residentialLimit;
     public int workerLimit;
+    public int gatherResourcesThreshold = 10;
+    public int putItemInStorageThreshold = 20;
+    public int amountToTransfer = 10;
+    public int taxIncome;
+    public int buildingAgeHours;
 
+    public float productionProgress;
     public float positionX;
     public float positionY;
     public float positionZ;
@@ -37,6 +43,7 @@ public class BuildingAttributes : MonoBehaviour
     public bool isOwnedByPlayer;
     public bool isRented;
     public bool buildingIsProducing;
+    public bool someoneIsMovingFromWorkToStorage;
     public bool playerEnteredBuilding;
     public bool playerInBoundsBuilding;
     public bool collidingWithOtherObject;
@@ -94,7 +101,8 @@ public class BuildingAttributes : MonoBehaviour
             citizen.setTownAlliegence(null);
         }
         foreach(Citizen citizen in citizensWorkingInBuilding){
-            citizen.goToBuilding(null);
+            citizen.leaveBuilding();
+            citizen.goToTownCenter();
             citizen.setWork(null);
         }
         if(apartOfTown){
@@ -261,6 +269,22 @@ public class BuildingAttributes : MonoBehaviour
     public List<Citizen> getCitizensInsideBuilding(){
         return citizensInBuilding;
     }
+    public int getGatherResourcesThreshold(){
+        return gatherResourcesThreshold;
+    }
+    public int getPutItemInStorageThreshold(){
+        return putItemInStorageThreshold;
+    }
+    public int getAmountToTransfer(){
+        return amountToTransfer;
+    }
+    public List<Citizen> getCitizensGatheringResources(){
+        return citizensGatheringResources;
+    }
+    public bool getSomeoneIsMovingFromWorkToStorage(){
+        return someoneIsMovingFromWorkToStorage;
+    }
+
     //SETTERS
     public void setItemsProducedInBuilding(Dictionary<string, int> newItemsProduced)
     {
@@ -318,16 +342,21 @@ public class BuildingAttributes : MonoBehaviour
     public void addWorkerToBuilding(Citizen citizen){
         citizensWorkingInBuilding.Add(citizen);
         citizen.setWork(this);
+        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Workers/Workers Here/Scroll View/Viewport/Content").GetComponent<ShowWorkersInBuilding>().updateWorkersInBuildingList();
+        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Workers/Available workers/Scroll View/Viewport/Content").GetComponent<ShowAvailableWorkers>().updateAvailableWorkersList();
     }
     public void removeWorkerFromBuilding(Citizen citizen){
         if(citizen.getBuildingInsideOf()){
             if(citizen.getBuildingInsideOf().Equals(this)){
                 citizen.leaveBuilding();
+                citizen.goToTownCenter();
             }
         }
 
         citizensWorkingInBuilding.Remove(citizen);
         citizen.setWork(null);
+        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Workers/Workers Here/Scroll View/Viewport/Content").GetComponent<ShowWorkersInBuilding>().updateWorkersInBuildingList();
+        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Workers/Available workers/Scroll View/Viewport/Content").GetComponent<ShowAvailableWorkers>().updateAvailableWorkersList();
     }
     public void addResidentToBuilding(Citizen citizen){
         citizensLivingInBuilding.Add(citizen);
@@ -372,5 +401,14 @@ public class BuildingAttributes : MonoBehaviour
     }
     public void setWorkerLimit(int limit){
         workerLimit = limit;
+    }
+    public void addCitizenToGatheringResources(Citizen citizen){
+        citizensGatheringResources.Add(citizen);
+    }
+    public void removeCitizenFromGatheringResources(Citizen citizen){
+        citizensGatheringResources.Remove(citizen);
+    }
+    public void setSomeoneIsMovingFromWorkToStorage(bool val){
+        someoneIsMovingFromWorkToStorage = val;
     }
 }

@@ -16,21 +16,36 @@ public class ShowWorkersInBuilding : MonoBehaviour
 
     void OnEnable()
     {
-        updateAvailableWorkersList();
+        
+        updateWorkersInBuildingList();
     }
 
-    public void updateAvailableWorkersList(){
-        if(gameManager.getBuildingCatalog().getBuildingLastClicked()){
+    public void updateWorkersInBuildingList(){
+        gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+        if(gameManager.getBuildingCatalog().getBuildingLastClicked() != null){
             buildingAttributes = gameManager.getBuildingCatalog().getBuildingLastClicked().GetComponent<BuildingAttributes>();
         }
+        
 
         foreach(Transform child in transform){
             Destroy(child.gameObject);
         }
         if(buildingAttributes){
+            // SHOWING PLAYER IF INSIDE BUILDING
+            if(buildingAttributes.getPlayerEnteredBuilding()){
+                GameObject newButton = Instantiate(citizenButton, transform);
+                newButton.GetComponentInChildren<Text>().text = gameManager.getPlayerBehavior().getPlayerFirstName() + " " + gameManager.getPlayerBehavior().getPlayerLastName();
+                newButton.GetComponent<WorkersButton>().setCitizenID(9999);
+                Button button = newButton.GetComponent<Button>();
+                ColorBlock block = button.colors;
+                block.normalColor = Color.yellow; //new Color(159, 12, 255);
+                button.colors = block;
+            }
+
+            // SHOWING CITIZENS
             foreach(Citizen citizen in buildingAttributes.getWorkersInBuilding()){
                 GameObject newButton = Instantiate(citizenButton, transform);
-                newButton.GetComponentInChildren<Text>().text = citizen.getName();
+                newButton.GetComponentInChildren<Text>().text = citizen.getFirstName() + " " + citizen.getLastName();
                 newButton.GetComponent<WorkersButton>().setCitizenID(citizen.getCitizenID());
 
                 if(gameManager.getCitizenCatalog().getSelectedCitizen()){
