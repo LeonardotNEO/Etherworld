@@ -1,4 +1,4 @@
-# Medieval Times
+# Kingdomworld
 Medieva City Builder/Leveling/Combat game.
 The player starts with nothing and has to go from rags to riches. Start off doing everything himself (gathering supplies, crafting, building). After generating wealth through resources and trade with other settlements, one can hire npc to do work for them. This truly means that one starts with nothing, and can grow to become a ruler. 
 
