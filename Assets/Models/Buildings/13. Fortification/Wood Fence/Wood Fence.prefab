@@ -11,9 +11,10 @@ GameObject:
   - component: {fileID: 2348210499788677434}
   - component: {fileID: -6413297632847255652}
   - component: {fileID: 4924671072168187606}
+  - component: {fileID: 3954413497316706424}
   m_Layer: 17
   m_Name: Wood Fence
-  m_TagString: Untagged
+  m_TagString: Fortification
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -48,22 +49,36 @@ MonoBehaviour:
   buildingMenu: {fileID: 0}
   thisBuilding: {fileID: 0}
   apartOfTown: {fileID: 0}
-  workersInBuilding: []
-  isOwnedByPlayer: 0
-  isRented: 0
-  buildingIsProducing: 0
+  citizensWorkingInBuilding: []
+  citizensLivingInBuilding: []
+  citizensInBuilding: []
+  citizensGatheringResources: []
+  buildingInventory: {fileID: 0}
   buildingTag: 
-  buildingID: 0
   buildingName: 
   buildingDescription: 
+  jobName: 
+  buildingID: 0
   storageCapacity: 0
+  residentialLimit: 0
+  workerLimit: 0
+  gatherResourcesThreshold: 10
+  putItemInStorageThreshold: 20
+  amountToTransfer: 10
+  taxIncome: 0
+  buildingAgeHours: 0
+  buildingMaxHealth: 0
+  buildingHealth: 0
   productionProgress: 0
-  playerEnteredBuilding: 0
-  buildingInventory: {fileID: 0}
-  playerInBoundsBuilding: 0
   positionX: 0
   positionY: 0
   positionZ: 0
+  isOwnedByPlayer: 0
+  isRented: 0
+  buildingIsProducing: 0
+  someoneIsMovingFromWorkToStorage: 0
+  playerEnteredBuilding: 0
+  playerInBoundsBuilding: 0
   collidingWithOtherObject: 0
 --- !u!54 &4924671072168187606
 Rigidbody:
@@ -81,6 +96,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!65 &3954413497316706424
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 15760311937558185}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 3.5708227, y: 1.5361366, z: 0.25617784}
+  m_Center: {x: 1.4961534, y: 0.7599579, z: -0.009610623}
 --- !u!1 &3091114125152852161
 GameObject:
   m_ObjectHideFlags: 0
@@ -123,7 +151,6 @@ GameObject:
   - component: {fileID: 3296051941312900941}
   - component: {fileID: 2884375673205752303}
   - component: {fileID: 141102375711719499}
-  - component: {fileID: 99010242421222545}
   - component: {fileID: 6745191997732625338}
   - component: {fileID: 7070307347201001921}
   m_Layer: 12
@@ -194,20 +221,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &99010242421222545
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8239012333558118444}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fbf3575480402db40813e763382412fb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  color: 0
-  eraseRenderer: 1
 --- !u!208 &6745191997732625338
 NavMeshObstacle:
   m_ObjectHideFlags: 0

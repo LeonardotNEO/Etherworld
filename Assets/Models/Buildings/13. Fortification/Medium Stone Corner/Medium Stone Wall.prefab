@@ -32,7 +32,7 @@ Transform:
   m_LocalScale: {x: 3, y: 4, z: 3}
   m_Children: []
   m_Father: {fileID: 2753136040801021905}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &1945349618186727300
 MeshFilter:
@@ -110,50 +110,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.58050376, y: 1.2055068, z: 1.2529687}
   m_Center: {x: -0.22316283, y: 0.09498966, z: -0.10782838}
---- !u!1 &4947086190444154704
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6240693572656910064}
-  - component: {fileID: 6767858705747773220}
-  m_Layer: 0
-  m_Name: Entrance
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &6240693572656910064
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4947086190444154704}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.798, y: 1.16, z: -0.039}
-  m_LocalScale: {x: 1, y: 2.4341, z: 1}
-  m_Children: []
-  m_Father: {fileID: 2753136040801021905}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &6767858705747773220
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4947086190444154704}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8225029139522262820
 GameObject:
   m_ObjectHideFlags: 0
@@ -165,9 +121,10 @@ GameObject:
   - component: {fileID: 2753136040801021905}
   - component: {fileID: 6786030613450964589}
   - component: {fileID: 8720799731184626161}
+  - component: {fileID: 7111574795015404563}
   m_Layer: 17
   m_Name: Medium Stone Wall
-  m_TagString: Untagged
+  m_TagString: Fortification
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -183,7 +140,6 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 6240693572656910064}
   - {fileID: 3265284272985546785}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -203,22 +159,34 @@ MonoBehaviour:
   buildingMenu: {fileID: 0}
   thisBuilding: {fileID: 0}
   apartOfTown: {fileID: 0}
-  workersInBuilding: []
-  isOwnedByPlayer: 0
-  isRented: 0
-  buildingIsProducing: 0
+  citizensWorkingInBuilding: []
+  citizensLivingInBuilding: []
+  citizensInBuilding: []
+  citizensGatheringResources: []
+  buildingInventory: {fileID: 0}
   buildingTag: 
-  buildingID: 0
   buildingName: 
   buildingDescription: 
+  jobName: 
+  buildingID: 0
   storageCapacity: 0
+  residentialLimit: 0
+  workerLimit: 0
+  gatherResourcesThreshold: 10
+  putItemInStorageThreshold: 20
+  amountToTransfer: 10
+  taxIncome: 0
+  buildingAgeHours: 0
   productionProgress: 0
-  playerEnteredBuilding: 0
-  buildingInventory: {fileID: 0}
-  playerInBoundsBuilding: 0
   positionX: 0
   positionY: 0
   positionZ: 0
+  isOwnedByPlayer: 0
+  isRented: 0
+  buildingIsProducing: 0
+  someoneIsMovingFromWorkToStorage: 0
+  playerEnteredBuilding: 0
+  playerInBoundsBuilding: 0
   collidingWithOtherObject: 0
 --- !u!54 &8720799731184626161
 Rigidbody:
@@ -236,3 +204,16 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!65 &7111574795015404563
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8225029139522262820}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2.0254605, y: 4.8926997, z: 3.9855285}
+  m_Center: {x: -0.5642215, y: 2.3595712, z: -0.3764062}

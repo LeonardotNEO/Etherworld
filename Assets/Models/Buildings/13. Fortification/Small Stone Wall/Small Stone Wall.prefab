@@ -55,9 +55,10 @@ GameObject:
   - component: {fileID: 7809745742494809515}
   - component: {fileID: 1474931180475984919}
   - component: {fileID: 3698108254112742283}
+  - component: {fileID: 5137594829616544223}
   m_Layer: 17
   m_Name: Small Stone Wall
-  m_TagString: Untagged
+  m_TagString: Fortification
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -93,22 +94,34 @@ MonoBehaviour:
   buildingMenu: {fileID: 0}
   thisBuilding: {fileID: 0}
   apartOfTown: {fileID: 0}
-  workersInBuilding: []
-  isOwnedByPlayer: 0
-  isRented: 0
-  buildingIsProducing: 0
+  citizensWorkingInBuilding: []
+  citizensLivingInBuilding: []
+  citizensInBuilding: []
+  citizensGatheringResources: []
+  buildingInventory: {fileID: 0}
   buildingTag: 
-  buildingID: 0
   buildingName: 
   buildingDescription: 
+  jobName: 
+  buildingID: 0
   storageCapacity: 0
+  residentialLimit: 0
+  workerLimit: 0
+  gatherResourcesThreshold: 10
+  putItemInStorageThreshold: 20
+  amountToTransfer: 10
+  taxIncome: 0
+  buildingAgeHours: 0
   productionProgress: 0
-  playerEnteredBuilding: 0
-  buildingInventory: {fileID: 0}
-  playerInBoundsBuilding: 0
   positionX: 0
   positionY: 0
   positionZ: 0
+  isOwnedByPlayer: 0
+  isRented: 0
+  buildingIsProducing: 0
+  someoneIsMovingFromWorkToStorage: 0
+  playerEnteredBuilding: 0
+  playerInBoundsBuilding: 0
   collidingWithOtherObject: 0
 --- !u!54 &3698108254112742283
 Rigidbody:
@@ -126,6 +139,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!65 &5137594829616544223
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4067309664729466206}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 3.0006618, y: 2.4629817, z: 0.6130659}
+  m_Center: {x: 1.2463341, y: 1.244611, z: -0.006890565}
 --- !u!65 &6919621833084537042
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UnityEngine.AI;
 
 public class BuildingAttributes : MonoBehaviour
 {
@@ -23,6 +24,7 @@ public class BuildingAttributes : MonoBehaviour
     public string buildingTag;
     public string buildingName;
     public string buildingDescription;
+    public string jobName;
     
     private int buildingValue;
     public int buildingID;
@@ -33,7 +35,9 @@ public class BuildingAttributes : MonoBehaviour
     public int putItemInStorageThreshold = 20;
     public int amountToTransfer = 10;
     public int taxIncome;
-    public int buildingAgeHours;
+    public int buildingAgeHours; 
+    public int buildingMaxHealth;
+    public int buildingHealth;
 
     public float productionProgress;
     public float positionX;
@@ -73,7 +77,22 @@ public class BuildingAttributes : MonoBehaviour
         setBuildingUpKeep(gameManager.getBuildingCatalog().getBuildingByName(transform.name).getBuildingUpKeep());
         setItemsNeededForBuildingProduction(gameManager.getBuildingCatalog().getBuildingByName(transform.name).getNeededForProduction());
         setItemsProducedInBuilding(gameManager.getBuildingCatalog().getBuildingByName(transform.name).getBuildingProduction());
+        setJobName(gameManager.getBuildingCatalog().getBuildingByName(transform.name).getJobName());
 
+        // SET OBJECT INDICATOR TO PROPER WITH AND DEPTH
+        if(transform.Find("Object Indicator")){
+            if(GetComponentInChildren<MeshRenderer>().transform.parent.GetComponent<BoxCollider>()){
+                transform.Find("Object Indicator/Green indicator").GetComponent<SpriteRenderer>().size = new Vector2(GetComponentInChildren<MeshRenderer>().transform.parent.GetComponent<BoxCollider>().size.x, GetComponentInChildren<MeshRenderer>().transform.parent.GetComponent<BoxCollider>().size.z);
+                transform.Find("Object Indicator/Red indicator").GetComponent<SpriteRenderer>().size = new Vector2(GetComponentInChildren<MeshRenderer>().transform.parent.GetComponent<BoxCollider>().size.x, GetComponentInChildren<MeshRenderer>().transform.parent.GetComponent<BoxCollider>().size.z);
+            } else {
+                transform.Find("Object Indicator/Green indicator").GetComponent<SpriteRenderer>().size = new Vector2(GetComponentInChildren<NavMeshObstacle>().size.x * GetComponentInChildren<NavMeshObstacle>().transform.localScale.x, GetComponentInChildren<NavMeshObstacle>().size.z  * GetComponentInChildren<NavMeshObstacle>().transform.localScale.z);
+                transform.Find("Object Indicator/Red indicator").GetComponent<SpriteRenderer>().size = new Vector2(GetComponentInChildren<NavMeshObstacle>().size.x * GetComponentInChildren<NavMeshObstacle>().transform.localScale.x, GetComponentInChildren<NavMeshObstacle>().size.z  * GetComponentInChildren<NavMeshObstacle>().transform.localScale.z);
+            }
+            
+            buildingIndicator(false);
+        }
+
+        // POSITION
         if(GetComponent<BoxCollider>()){
             positionX = GetComponent<BoxCollider>().bounds.center.x;
             positionY = GetComponent<BoxCollider>().bounds.center.y;
@@ -126,7 +145,13 @@ public class BuildingAttributes : MonoBehaviour
             other.gameObject.layer == 12  || /*Layer 12 is BUILDINGSMESH*/
             other.gameObject.layer == 13  || /*Layer 13 is RESOURCESMESH*/
             other.gameObject.layer == 14     /*Layer 14 is ITEMSMESH*/
-        ){setCollidingWithOtherObject(true);} 
+        )
+        {
+            setCollidingWithOtherObject(true);
+            if(other.transform.gameObject.GetComponent<BuildingAttributes>()){
+                other.transform.gameObject.GetComponent<BuildingAttributes>().setCollidingWithOtherObject(true);
+            }
+        } 
         if(
             other.gameObject.layer == 15      /*Layer 15 is PLAYER*/
 
@@ -135,6 +160,10 @@ public class BuildingAttributes : MonoBehaviour
     void OnTriggerExit(Collider other)
     {
         setCollidingWithOtherObject(false);
+        if(other.transform.GetComponent<BuildingAttributes>()){
+            other.transform.GetComponent<BuildingAttributes>().setCollidingWithOtherObject(false);
+        }
+
         setPlayerInBoundsBuilding(false);
         if(other.gameObject.GetComponent<Town>()){
             apartOfTown = null;
@@ -155,12 +184,26 @@ public class BuildingAttributes : MonoBehaviour
                 gameManager.GetUI().buildingOpen();
             }
         }
+
+       if(collidingWithOtherObject){
+            buildingIndicator(true);
+            buildingIndicatorMode(false);
+        } else {
+            buildingIndicator(true);
+            buildingIndicatorMode(true);
+        }
     }
 
     void OnMouseExit()
     {
         if(!gameManager.GetUI().getIsMouseOverUI()){
             gameManager.GetUI().closeBuildingUI();
+        }
+        /*
+        buildingIndicator(false);*/
+        if(!collidingWithOtherObject){
+            buildingIndicator(false);
+            buildingIndicatorMode(true);
         }
     }
 
@@ -284,6 +327,16 @@ public class BuildingAttributes : MonoBehaviour
     public bool getSomeoneIsMovingFromWorkToStorage(){
         return someoneIsMovingFromWorkToStorage;
     }
+    public int getBuildingTotalTaxPaymentDaily(){
+        int totalAmount = 0;
+        foreach(Citizen citizen in getResidentsInBuilding()){
+            totalAmount += citizen.getAmountToPayInTax();
+        }
+        return totalAmount;
+    }
+    public string getJobName(){
+        return jobName;
+    }
 
     //SETTERS
     public void setItemsProducedInBuilding(Dictionary<string, int> newItemsProduced)
@@ -308,6 +361,13 @@ public class BuildingAttributes : MonoBehaviour
     }
     public void setCollidingWithOtherObject(bool set){
         collidingWithOtherObject = set;
+        if(collidingWithOtherObject){
+            buildingIndicator(true);
+            buildingIndicatorMode(false);
+        } else {
+            buildingIndicator(false);
+            buildingIndicatorMode(true);
+        }
     }
     public void setIsOwnedByPlayer(bool value){
         isOwnedByPlayer = value;
@@ -410,5 +470,24 @@ public class BuildingAttributes : MonoBehaviour
     }
     public void setSomeoneIsMovingFromWorkToStorage(bool val){
         someoneIsMovingFromWorkToStorage = val;
+    }
+    public void setJobName(string name){
+        jobName = name;
+    }
+    public void buildingIndicator(bool val){
+        if(transform.Find("Object Indicator")){
+            transform.Find("Object Indicator").transform.gameObject.SetActive(val);
+        }
+    }
+    public void buildingIndicatorMode(bool val){
+        if(transform.Find("Object Indicator")){
+            if(val == false){
+                transform.Find("Object Indicator/Red indicator").transform.gameObject.SetActive(true);
+                transform.Find("Object Indicator/Green indicator").transform.gameObject.SetActive(false);
+            } else {
+                transform.Find("Object Indicator/Red indicator").transform.gameObject.SetActive(false);
+                transform.Find("Object Indicator/Green indicator").transform.gameObject.SetActive(true);
+            }
+        }
     }
 }

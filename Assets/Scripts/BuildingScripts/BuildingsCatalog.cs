@@ -80,7 +80,9 @@ public class BuildingsCatalog : MonoBehaviour
                 /*Residential Limit*/   3,
                 /*Worker Limit*/        0,
                 /*Name*/                "Small Wood House",
-                /*Description*/         "A house that can be used to store items and used as shelter"
+                /*Tag*/                 "Residential",
+                /*Description*/         "A house that can be used to store items and used as shelter",
+                /*Job Name*/            null
             )
         );
         addBuildingToCatalog(
@@ -96,7 +98,9 @@ public class BuildingsCatalog : MonoBehaviour
                 /*Residential Limit*/   4,
                 /*Worker Limit*/        0,
                 /*Name*/                "Medium Wood House",
-                /*Description*/         "A house that can be used to store items and used as shelter"
+                /*Tag*/                 "Residential",
+                /*Description*/         "A house that can be used to store items and used as shelter",
+                /*Job Name*/            null
             )
         );
         addBuildingToCatalog(
@@ -112,7 +116,9 @@ public class BuildingsCatalog : MonoBehaviour
                 /*Residential Limit*/   20,
                 /*Worker Limit*/        0,
                 /*Name*/                "Boarding House",
-                /*Descriptione*/        "Housing for those that dont have their own house"
+                /*Tag*/                 "Residential",
+                /*Descriptione*/        "Housing for those that dont have their own house",
+                /*Job Name*/            null
             )
         );
         
@@ -132,7 +138,9 @@ public class BuildingsCatalog : MonoBehaviour
                 /*Residential Limit*/   0,
                 /*Worker Limit*/        2,
                 /*Name*/                "Waterwell",
-                /*Descriptione*/        "Can gather water here"
+                /*Tag*/                 "Industrial",
+                /*Descriptione*/        "Can gather water here",
+                /*Job Name*/            "Water gatherer"
             )
         );
         addBuildingToCatalog(
@@ -148,7 +156,9 @@ public class BuildingsCatalog : MonoBehaviour
                 /*Residential Limit*/   0,
                 /*Worker Limit*/        10,
                 /*Name*/                "Sawmill",
-                /*Descriptione*/        "Sawmill produce planks"
+                /*Tag*/                 "Industrial",
+                /*Descriptione*/        "Sawmill produce planks",
+                /*Job Name*/            "Sawmiller"
             )
         );
         addBuildingToCatalog(
@@ -164,7 +174,9 @@ public class BuildingsCatalog : MonoBehaviour
                 /*Residential Limit*/   0,
                 /*Worker Limit*/        5,
                 /*Name*/                "Furnace",
-                /*Descriptione*/        "A place where one can smelt ore to bars"
+                /*Tag*/                 "Industrial",
+                /*Descriptione*/        "A place where one can smelt ore to bars",
+                /*Job Name*/            "Smelter"
             )
         );
 
@@ -184,7 +196,9 @@ public class BuildingsCatalog : MonoBehaviour
                 /*Residential Limit*/   0,
                 /*Worker Limit*/        0,
                 /*Name*/                "Warehouse",
-                /*Descriptione*/        "A place for storing items"
+                /*Tag*/                 "Storage",
+                /*Descriptione*/        "A place for storing items",
+                /*Job Name*/            null
             )
         );
 
@@ -204,7 +218,9 @@ public class BuildingsCatalog : MonoBehaviour
                 /*Residential Limit*/   0,
                 /*Worker Limit*/        0,
                 /*Name*/                "Wood Fence",
-                /*Descriptione*/        "Keeps things out"
+                /*Tag*/                 "Fortification",
+                /*Descriptione*/        "Keeps things out",
+                /*Job Name*/            null
             )
         );
         addBuildingToCatalog(
@@ -220,7 +236,9 @@ public class BuildingsCatalog : MonoBehaviour
                 /*Residential Limit*/   0,
                 /*Worker Limit*/        0,
                 /*Name*/                "Small Stone Wall",
-                /*Descriptione*/        "A small stone sized wall for keeping things out"
+                /*Tag*/                 "Fortification",
+                /*Descriptione*/        "A small stone sized wall for keeping things out",
+                /*Job Name*/            null
             )
         );
         addBuildingToCatalog(
@@ -236,7 +254,9 @@ public class BuildingsCatalog : MonoBehaviour
                 /*Residential Limit*/   0,
                 /*Worker Limit*/        0,
                 /*Name*/                "Medium Stone Wall",
-                /*Descriptione*/        "A medium sized stone wall used for protection"
+                /*Tag*/                 "Fortification",
+                /*Descriptione*/        "A medium sized stone wall used for protection",
+                /*Job Name*/            null
             )
         );
         addBuildingToCatalog(
@@ -252,7 +272,9 @@ public class BuildingsCatalog : MonoBehaviour
                 /*Residential Limit*/   0,
                 /*Worker Limit*/        0,
                 /*Name*/                "Medium Stone Gate",
-                /*Descriptione*/        "A gate for getting through to the other side of the wall"
+                /*Tag*/                 "Fortification",
+                /*Descriptione*/        "A gate for getting through to the other side of the wall",
+                /*Job Name*/            null
             )
         );
         addBuildingToCatalog(
@@ -268,7 +290,9 @@ public class BuildingsCatalog : MonoBehaviour
                 /*Residential Limit*/   0,
                 /*Worker Limit*/        0,
                 /*Name*/                "Medium Stone Wall Corner",
-                /*Descriptione*/        "A medium sized stone wall corner"
+                /*Tag*/                 "Fortification",
+                /*Descriptione*/        "A medium sized stone wall corner",
+                /*Job Name*/            null
             )
         );
         addBuildingToCatalog(
@@ -284,7 +308,9 @@ public class BuildingsCatalog : MonoBehaviour
                 /*Residential Limit*/   0,
                 /*Worker Limit*/        0,
                 /*Name*/                "Big Stone Wall",
-                /*Descriptione*/        "A big sized stone wall used for protection"
+                /*Tag*/                 "Fortification",
+                /*Descriptione*/        "A big sized stone wall used for protection",
+                /*Job Name*/            null
             )
         );
         addBuildingToCatalog(
@@ -300,7 +326,9 @@ public class BuildingsCatalog : MonoBehaviour
                 /*Residential Limit*/   0,
                 /*Worker Limit*/        0,
                 /*Name*/                "Big Stone Gate",
-                /*Descriptione*/        "A gate for getting through to the other side of the wall"
+                /*Tag*/                 "Fortification",
+                /*Descriptione*/        "A gate for getting through to the other side of the wall",
+                /*Job Name*/            null
             )
         );
         addBuildingToCatalog(
@@ -316,7 +344,9 @@ public class BuildingsCatalog : MonoBehaviour
                 /*Residential Limit*/   0,
                 /*Worker Limit*/        0,
                 /*Name*/                "Big Stone Wall Corner",
-                /*Descriptione*/        "A big sized stone wall corner"
+                /*Tag*/                 "Fortification",
+                /*Descriptione*/        "A big sized stone wall corner",
+                /*Job Name*/            null
             )
         );
         addBuildingToCatalog(
@@ -332,7 +362,9 @@ public class BuildingsCatalog : MonoBehaviour
                 /*Residential Limit*/   0,
                 /*Worker Limit*/        0,
                 /*Name*/                "Big Stone Wall Inverted Corner",
-                /*Descriptione*/        "A big sized stone wall inverted corner"
+                /*Tag*/                 "Fortification",
+                /*Descriptione*/        "A big sized stone wall inverted corner",
+                /*Job Name*/            null
             )
         );
   
@@ -434,6 +466,18 @@ public class BuildingsCatalog : MonoBehaviour
             + "\nCOST TO CRAFT BUILDING:\n" + building.getCostToCraftBuildingToString() + "\n";
         }
         return buildingsCatalogToString;
+    }
+
+    public List<Building> getBuildingsByTag(string tag){
+        List<Building> buildingsByTag = new List<Building>();
+
+        foreach(Building building in buildingCatalog){
+            if(building.getTag().Equals(tag)){
+                buildingsByTag.Add(building);
+                //Debug.Log(building.getNameOfBuilding());
+            }
+        }
+        return buildingsByTag;
     }
 
 }

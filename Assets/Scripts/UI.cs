@@ -8,7 +8,6 @@ public class UI : MonoBehaviour
 {
     // GAMEMANAGER
     GameManager gameManager;
-    GameObject buildingMenu;
 
     // CONFIRMATION MENU
     public string situation;
@@ -20,12 +19,17 @@ public class UI : MonoBehaviour
     public bool skillsOpen;
     public bool buildingMenuOpen;
     public bool buildingOpenOpen;
-    public bool buildingInventoryOpenBool;                                                                                                          
+    public bool buildingInventoryOpenBool;
+    public bool townOpen;    
+
+    // UI ELEMENT PREFABS
+    public GameObject building;  // FOR TOWN BUILDINGS
+    public GameObject citizen; // FOR TOWN CITIZENS 
+    public GameObject item; // FOR TOWN ITEM                                                                                                  
 
     void Start()
     {
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
-        buildingMenu = GameObject.FindGameObjectWithTag("BuildingMenuUI");
     }
     void Update()
     {
@@ -102,22 +106,26 @@ public class UI : MonoBehaviour
         if(Input.GetKeyDown("z")){
             openMessageLog();
         } 
-        if(Input.GetKeyDown("c")){
-            openCrafting();
-        } 
         if(Input.GetKeyDown("x")){
             openSkills();
         } 
+        if(Input.GetKeyDown("c")){
+            openCrafting();
+        } 
+        if(Input.GetKeyDown("v")){
+            openTown();
+        }
         if(gameManager.getCraftingSystem().getIsCrafting()){
-            if(Input.GetKey("q")){
+            if(Input.GetKeyDown("q")){
                 gameManager.getCraftingSystem().rotateBuildingLeft();
             }
-            if(Input.GetKey("e")){
+            if(Input.GetKeyDown("e")){
                 gameManager.getCraftingSystem().rotateBuildingRight();
             }
         }
         if(Input.GetKeyDown("g")){
             //inventorySystem.spawnNPC(); Doesnt exist anymore, add new if u want
+            // MOVED TO PLAYERBEHAVIOR
         }
         if(Input.GetKeyDown("h")){
             RaycastHit mouseButtonPressed;
@@ -177,7 +185,6 @@ public class UI : MonoBehaviour
     public void setBuildingInventoryOpen(bool openClosed){
         buildingInventoryOpenBool = openClosed;
     }
-
     public bool getIsMouseOverUI(){
         return EventSystem.current.IsPointerOverGameObject();
     }
@@ -215,7 +222,7 @@ public class UI : MonoBehaviour
     public void openBuildingUI(GameObject thisBuilding){
         buildingMenuOpen = true;
         BuildingAttributes buildingAttributes  = thisBuilding.GetComponent<BuildingAttributes>();
-        Transform background = buildingMenu.transform.Find("Background");
+        Transform background = GameObject.FindGameObjectWithTag("BuildingMenuUI").transform.Find("Background");
 
         
         background.Find("Headline").GetComponent<Text>().text = buildingAttributes.getBuildingName();
@@ -231,8 +238,8 @@ public class UI : MonoBehaviour
             background.Find("Open Gate").gameObject.SetActive(false);                   // OPEN GATE
             background.Find("Close Gate").gameObject.SetActive(false);                   // CLOSE GATE
 
-            buildingMenu.transform.Find("Background").gameObject.SetActive(true);
-            background.position = new Vector3(Input.mousePosition.x + buildingMenu.transform.Find("Background").GetComponent<RectTransform>().sizeDelta.x/2, Input.mousePosition.y + buildingMenu.transform.Find("Background").GetComponent<RectTransform>().sizeDelta.y/2, 0);
+            background.gameObject.SetActive(true);
+            background.position = new Vector3(Input.mousePosition.x + background.GetComponent<RectTransform>().sizeDelta.x/2, Input.mousePosition.y + background.GetComponent<RectTransform>().sizeDelta.y/2, 0);
 
             if(buildingAttributes.getIsOwnedByPlayer() && !buildingAttributes.getIsRented()){       
                 //------------------//
@@ -322,7 +329,7 @@ public class UI : MonoBehaviour
     
     public void closeBuildingUI(){
         buildingMenuOpen = false;
-        buildingMenu.transform.Find("Background").gameObject.SetActive(false);
+        GameObject.FindGameObjectWithTag("BuildingMenuUI").transform.Find("Background").gameObject.SetActive(false);
     }
     public void visitBuilding(){
         closeBuildingUI();
@@ -351,71 +358,54 @@ public class UI : MonoBehaviour
             closeBuildingUI();
 
             GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background").gameObject.SetActive(true);
-            GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Production").gameObject.SetActive(true);
 
-            GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Inventory").gameObject.SetActive(false);
-            GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Stats").gameObject.SetActive(false);
-            GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Workers").gameObject.SetActive(false);
-
-            GameObject.FindGameObjectWithTag("BuildingMenuUI").transform.Find("Background").gameObject.SetActive(false);
-
+            //HEADER
             GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Headline/HeadlineText").GetComponent<Text>().text = building.getBuildingName();
         }
     }
     public void buildingOpenClose(){
         buildingOpenOpen = false;
-        buildingInventoryOpenBool = false;
         resetSelectedItem();
         GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background").gameObject.SetActive(false);
-        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Production").gameObject.SetActive(false);
-        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Inventory").gameObject.SetActive(false);
-        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Workers").gameObject.SetActive(false);
-        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Stats").gameObject.SetActive(false);
     }
 
-
+    // PRODCTION
     public void buildingProductionOpen(){
-        //OPEN
+        closeAllBuildingOptions();
         GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Production").gameObject.SetActive(true);
-
-        //CLOSE
-        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Stats").gameObject.SetActive(false);
-        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Inventory").gameObject.SetActive(false);
-        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Workers").gameObject.SetActive(false);
-        buildingInventoryOpenBool = false;
     }
-    public void buildingWorkersOpen(){
-        //OPEN
-        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Workers").gameObject.SetActive(true);
-
-        //CLOSE
+    public void closeBuildingProduction(){
         GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Production").gameObject.SetActive(false);
-        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Inventory").gameObject.SetActive(false);
-        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Stats").gameObject.SetActive(false);
     }
+
+    // WORKERS
+    public void buildingWorkersOpen(){
+        closeAllBuildingOptions();
+        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Workers").gameObject.SetActive(true);
+    }
+    public void closeBuildingWorkers(){
+        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Workers").gameObject.SetActive(false);
+    }
+
+    // INVENTORY
     public void buildingInventoryOpen(){
         // OPEN PLAYER INVENTORY
+        setBuildingInventoryOpen(true);
         gameManager.GetUI().openInventory();
 
         //OPEN
-        buildingInventoryOpenBool = true;
+        closeAllBuildingOptions();
         GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Inventory").gameObject.SetActive(true);
-
-        //CLOSE
-        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Production").gameObject.SetActive(false);
-        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Stats").gameObject.SetActive(false);
-        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Workers").gameObject.SetActive(false);
+    }
+    public void closeBuildingInventory(){
+        setBuildingInventoryOpen(false);
+        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Inventory").gameObject.SetActive(false);
     }
 
+    // STATS
     public void buildingStatsOpen(){
-        //OPEN
+        closeAllBuildingOptions();
         GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Stats").gameObject.SetActive(true);
-
-        //CLOSE
-        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Production").gameObject.SetActive(false);
-        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Inventory").gameObject.SetActive(false);
-        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Workers").gameObject.SetActive(false);
-        buildingInventoryOpenBool = false;
 
         BuildingAttributes building = gameManager.getBuildingCatalog().getBuildingLastClicked().GetComponent<BuildingAttributes>();
         GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Stats/InfoLeft/InfoLeftText").GetComponent<Text>().text =
@@ -427,6 +417,17 @@ public class UI : MonoBehaviour
         "Building upkeep:\n" + inventoryCatalog.getListOfItemsToString(building.getBuildingUpKeep()) + "\nItems Produced Here:\n" + inventoryCatalog.getListOfItemsToString(building.getItemsProducedInBuilding()) +
         "\nItems needed for production:\n" + inventoryCatalog.getListOfItemsToString(building.getItemsNeededForBuildingProduction());
     }
+    public void closeBuildingStats(){
+        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Stats").gameObject.SetActive(false);
+    }
+
+    public void closeAllBuildingOptions(){
+        closeBuildingProduction();
+        closeBuildingWorkers();
+        closeBuildingInventory();
+        closeBuildingStats();
+    }
+  
     public void buildingDisassemble(){
         confirmationUIOpen("disassemble");
     }
@@ -434,7 +435,6 @@ public class UI : MonoBehaviour
     //------------------//
     // CONFIRMATIONMENU //
     //------------------//
-
     public void confirmationUIOpen(string currentSituation){
         GameObject.FindGameObjectWithTag("UI").transform.Find("ConfirmationMenu/Background").gameObject.SetActive(true);
         situation = currentSituation;
@@ -511,6 +511,7 @@ public class UI : MonoBehaviour
 
                         if(buildingAttributes.getProductionProgress() >= 360){
                             int itemsThatCouldNotBeAdded = buildingInventory.addItemToInventory(selectedItem.getName(), 1);
+                            updateTownInventory();
 
                             if(itemsThatCouldNotBeAdded == 0){
                                 foreach(var item in selectedItem.getCostToCraftItem()){
@@ -584,32 +585,47 @@ public class UI : MonoBehaviour
         // PLAY ANIMATION
     }
 
+    //------------//
+    // MAIN MENUS //
+    //------------//
+    public void closeAllMainMenus(){
+        closeMessageLog();
+        closeSkills();
+        closeInventory();
+        closeCrafting();
+        closeTown();
+    }
+
     //-------------//
     // MESSAGE LOG //
     //-------------//
     public void openMessageLog(){
-        messageLogOpen = true;
-        GameObject.FindGameObjectWithTag("MessageLogBarUI").transform.Find("Background").gameObject.SetActive(true); 
+        if(GameObject.FindGameObjectWithTag("MessageLogBarUI").transform.Find("Background").gameObject.activeSelf == true){
+            closeMessageLog();
+            return;
+        }
 
-        GameObject.FindGameObjectWithTag("InventoryMenuUI").transform.Find("Background").gameObject.SetActive(false); 
-        GameObject.FindGameObjectWithTag("CraftingMenuUI").transform.Find("Background").gameObject.SetActive(false); 
-        GameObject.FindGameObjectWithTag("Skills").transform.Find("Background").gameObject.SetActive(false); 
+        messageLogOpen = true;
+        closeAllMainMenus();
+        GameObject.FindGameObjectWithTag("MessageLogBarUI").transform.Find("Background").gameObject.SetActive(true); 
     }
     public void closeMessageLog(){
         messageLogOpen = false;
-        GameObject.FindGameObjectWithTag("MessageLogBarUI").GetComponent<Canvas>().enabled = false;
+        GameObject.FindGameObjectWithTag("MessageLogBarUI").transform.Find("Background").gameObject.SetActive(false); 
     }
 
     //------------------//
     // PLAYER INVENTORY //
     //------------------//
     public void openInventory(){
-        inventoryOpen = true;
-        GameObject.FindGameObjectWithTag("InventoryMenuUI").transform.Find("Background").gameObject.SetActive(true);
+        if(GameObject.FindGameObjectWithTag("InventoryMenuUI").transform.Find("Background").gameObject.activeSelf == true){
+            closeInventory();
+            return;
+        }
 
-        GameObject.FindGameObjectWithTag("CraftingMenuUI").transform.Find("Background").gameObject.SetActive(false); 
-        GameObject.FindGameObjectWithTag("MessageLogBarUI").transform.Find("Background").gameObject.SetActive(false); 
-        GameObject.FindGameObjectWithTag("Skills").transform.Find("Background").gameObject.SetActive(false); 
+        inventoryOpen = true;
+        closeAllMainMenus();
+        GameObject.FindGameObjectWithTag("InventoryMenuUI").transform.Find("Background").gameObject.SetActive(true);
     }
     public void closeInventory(){
         inventoryOpen = false;
@@ -620,12 +636,14 @@ public class UI : MonoBehaviour
     // CRAFTINGMENU //
     //--------------//
     public void openCrafting(){
-        craftingOpen = true;
-        GameObject.FindGameObjectWithTag("CraftingMenuUI").transform.Find("Background").gameObject.SetActive(true); 
+        if(GameObject.FindGameObjectWithTag("CraftingMenuUI").transform.Find("Background").gameObject.activeSelf == true){
+            closeCrafting();
+            return;
+        }
 
-        GameObject.FindGameObjectWithTag("InventoryMenuUI").transform.Find("Background").gameObject.SetActive(false); 
-        GameObject.FindGameObjectWithTag("MessageLogBarUI").transform.Find("Background").gameObject.SetActive(false); 
-        GameObject.FindGameObjectWithTag("Skills").transform.Find("Background").gameObject.SetActive(false); 
+        craftingOpen = true;
+        closeAllMainMenus();
+        GameObject.FindGameObjectWithTag("CraftingMenuUI").transform.Find("Background").gameObject.SetActive(true); 
     }
     public void closeCrafting(){
         craftingOpen = false;
@@ -636,15 +654,274 @@ public class UI : MonoBehaviour
     // SKILLS //
     //--------//
     public void openSkills(){
-        skillsOpen = true;
-        GameObject.FindGameObjectWithTag("Skills").transform.Find("Background").gameObject.SetActive(true); 
+        if(GameObject.FindGameObjectWithTag("Skills").transform.Find("Background").gameObject.activeSelf == true){
+            closeSkills();
+            return;
+        }
 
-        GameObject.FindGameObjectWithTag("CraftingMenuUI").transform.Find("Background").gameObject.SetActive(false); 
-        GameObject.FindGameObjectWithTag("InventoryMenuUI").transform.Find("Background").gameObject.SetActive(false); 
-        GameObject.FindGameObjectWithTag("MessageLogBarUI").transform.Find("Background").gameObject.SetActive(false); 
+        skillsOpen = true;
+        closeAllMainMenus();
+        GameObject.FindGameObjectWithTag("Skills").transform.Find("Background").gameObject.SetActive(true); 
     }
     public void closeSkills(){
         skillsOpen = false;
         GameObject.FindGameObjectWithTag("Skills").transform.Find("Background").gameObject.SetActive(false); 
+    }
+
+    //------//
+    // TOWN //
+    //------//
+    public void openTown(){
+        if(GameObject.FindGameObjectWithTag("TownMenuUI").transform.Find("Background").gameObject.activeSelf == true){
+            closeTown();
+            return;
+        }
+
+        // DROPDOWN OF TOWNS
+        GameObject.FindGameObjectWithTag("TownMenuUI").transform.Find("Background/TownList").GetComponent<Dropdown>().ClearOptions();
+        List<Dropdown.OptionData> options = new List<Dropdown.OptionData>();
+        foreach(Town town in gameManager.getPlayerBehavior().getTownsOwned()){
+            options.Add(new Dropdown.OptionData(town.getTownName()));
+        }
+        GameObject.FindGameObjectWithTag("TownMenuUI").transform.Find("Background/TownList").GetComponent<Dropdown>().AddOptions(options);
+
+
+        townOpen = true;
+        closeAllMainMenus();
+        GameObject.FindGameObjectWithTag("TownMenuUI").transform.Find("Background").gameObject.SetActive(true);
+    }  
+    public void closeTown(){
+        GameObject.FindGameObjectWithTag("TownMenuUI").transform.Find("Background").gameObject.SetActive(false);
+    }
+
+    // BUILDINGS
+    public void openTownBuildings(){
+        
+        closeAllTownOptions();
+        GameObject.FindGameObjectWithTag("TownMenuUI").transform.Find("Background/Buildings").gameObject.SetActive(true);  
+
+        showAllBuildings();
+    }
+    public void showBuildings(List<BuildingAttributes> list){
+        GameObject buildingList = GameObject.FindGameObjectWithTag("TownMenuUI").transform.Find("Background/Buildings/Show Buildings/Viewport/Content").gameObject; 
+        GameObject.FindGameObjectWithTag("TownMenuUI").transform.Find("Background/Buildings/Show Number/Text").GetComponent<Text>().text = list.Count.ToString(); 
+
+        removeAllBuildings();
+
+        foreach(BuildingAttributes buildingInTown in list){
+            GameObject instantiateBuilding = Instantiate(building, buildingList.transform);
+            instantiateBuilding.transform.Find("Name").GetComponent<Text>().text = buildingInTown.getBuildingName();
+            instantiateBuilding.transform.Find("Residents").GetComponent<Text>().text = buildingInTown.getResidentsInBuilding().Count.ToString() + "/" + buildingInTown.getResidentialLimit().ToString();
+            instantiateBuilding.transform.Find("Workers").GetComponent<Text>().text = buildingInTown.getWorkersInBuilding().Count.ToString() + "/" + buildingInTown.getWorkerLimit().ToString();
+            instantiateBuilding.transform.Find("Value").GetComponent<Text>().text = buildingInTown.getBuildingValue().ToString();
+            instantiateBuilding.transform.Find("Tax income").GetComponent<Text>().text = buildingInTown.getBuildingTotalTaxPaymentDaily().ToString();
+            instantiateBuilding.transform.Find("Type").GetComponent<Text>().text = buildingInTown.getBuildingTag();
+
+            if(instantiateBuilding.transform.Find("Residents").GetComponent<Text>().text.Equals("0/0")){
+                instantiateBuilding.transform.Find("Residents").GetComponent<Text>().text = "";
+            }
+            if(instantiateBuilding.transform.Find("Workers").GetComponent<Text>().text.Equals("0/0")){
+                instantiateBuilding.transform.Find("Workers").GetComponent<Text>().text = "";
+            }
+            if(buildingInTown.getBuildingTag().Equals("Fortification")){
+                instantiateBuilding.transform.Find("Tax income").GetComponent<Text>().text = "";
+            }
+        }
+    }
+    public void closeTownBuildings(){
+        GameObject.FindGameObjectWithTag("TownMenuUI").transform.Find("Background/Buildings").gameObject.SetActive(false);
+    }
+    public void showAllBuildings(){
+        showBuildings(getPlayerOwnedSelectedTown().getBuildingsInTown());
+    }
+    public void showAvailableResidential(){
+        showBuildings(getPlayerOwnedSelectedTown().getAvailableResidentialBuildingsInTown());
+    }
+    public void showAvailableWorkplace(){
+        showBuildings(getPlayerOwnedSelectedTown().getAvailableWorkplacesInTown());
+    }
+    public void showBuildingWithTag(string tag){
+        showBuildings(getPlayerOwnedSelectedTown().getBuildingsInTownWithTag(tag));
+    }
+    public void removeAllBuildings(){
+        GameObject buildingList = GameObject.FindGameObjectWithTag("TownMenuUI").transform.Find("Background/Buildings/Show Buildings/Viewport/Content").gameObject; 
+
+        foreach(Transform child in buildingList.transform){
+            Destroy(child.gameObject);
+        }
+    }
+
+    // CITIZENS
+    public void openTownCitizens(){
+
+        closeAllTownOptions();
+        GameObject.FindGameObjectWithTag("TownMenuUI").transform.Find("Background/Citizens").gameObject.SetActive(true);
+
+        showAllCitizens();
+    }
+    public void closeTownCitizens(){
+        GameObject.FindGameObjectWithTag("TownMenuUI").transform.Find("Background/Citizens").gameObject.SetActive(false);
+    }
+    public void showCitizens(List<Citizen> list){
+        GameObject citizenList = GameObject.FindGameObjectWithTag("TownMenuUI").transform.Find("Background/Citizens/Show Citizens/Viewport/Content").gameObject; 
+        GameObject.FindGameObjectWithTag("TownMenuUI").transform.Find("Background/Citizens/Show Number/Text").GetComponent<Text>().text = list.Count.ToString(); 
+
+        removeAllCitizens();
+
+        foreach(Citizen citizenInTown in list){
+            GameObject instantiateCitizen = Instantiate(citizen, citizenList.transform);
+            instantiateCitizen.transform.Find("Name").GetComponent<Text>().text = citizenInTown.getFirstName() + " " + citizenInTown.getLastName();
+            instantiateCitizen.transform.Find("Gender").GetComponent<Text>().text = citizenInTown.getGender();
+            instantiateCitizen.transform.Find("Age").GetComponent<Text>().text = citizenInTown.getAge().ToString();
+            instantiateCitizen.transform.Find("Job").GetComponent<Text>().text = citizenInTown.getJob();
+            instantiateCitizen.transform.Find("Happiness").GetComponent<Text>().text = citizenInTown.getHappiness().ToString();
+            instantiateCitizen.transform.Find("Wealth").GetComponent<Text>().text = citizenInTown.getWealth().ToString();
+        }
+    }
+    /*public void updateCitizens(){
+        GameObject citizenList = GameObject.FindGameObjectWithTag("TownMenuUI").transform.Find("Background/Citizens/Show Citizens/Viewport/Content").gameObject; 
+        GameObject.FindGameObjectWithTag("TownMenuUI").transform.Find("Background/Citizens/Show Number/Text").GetComponent<Text>().text = list.Count.ToString(); 
+
+        foreach(Transform child in citizenList.transform){
+            Citizen citizen = child.GetComponent<Citizen>();
+            child.transform.Find("Name").GetComponent<Text>().text = citizen.getFirstName() + " " + citizen.getLastName();
+            child.transform.Find("Gender").GetComponent<Text>().text = citizen.getGender();
+            child.transform.Find("Age").GetComponent<Text>().text = citizen.getAge().ToString();
+            child.transform.Find("Job").GetComponent<Text>().text = citizen.getJob();
+            child.transform.Find("Happiness").GetComponent<Text>().text = citizen.getHappiness().ToString();
+            child.transform.Find("Wealth").GetComponent<Text>().text = citizen.getWealth().ToString();
+        }
+    }*/
+    public void showAllCitizens(){
+        showCitizens(getPlayerOwnedSelectedTown().getCitizensInTown());
+    }
+    public void showUnemployedCitizens(){
+        showCitizens(getPlayerOwnedSelectedTown().getUnemployedInTown());
+    }
+    public void showHomelessCitizens(){
+        showCitizens(getPlayerOwnedSelectedTown().getHomelessInTown());
+    }
+    public void removeAllCitizens(){
+        GameObject citizenList = GameObject.FindGameObjectWithTag("TownMenuUI").transform.Find("Background/Citizens/Show Citizens/Viewport/Content").gameObject; 
+
+        foreach(Transform child in citizenList.transform){
+            Destroy(child.gameObject);
+        }
+    }
+
+    // INVENTORY
+    public void openTownInventory(){
+        closeAllTownOptions();
+        showAllItemsInTownInventory();
+        GameObject.FindGameObjectWithTag("TownMenuUI").transform.Find("Background/Inventory").gameObject.SetActive(true);
+    }
+    public void closeTownInventory(){
+        GameObject.FindGameObjectWithTag("TownMenuUI").transform.Find("Background/Inventory").gameObject.SetActive(false);
+    }
+    public void showItemsInTownInventory(List<Item> list){
+        removeAllItemsTownInventory();
+        GameObject inventoryList = GameObject.FindGameObjectWithTag("TownMenuUI").transform.Find("Background/Inventory/Show Inventory/Viewport/Content").gameObject; 
+
+        foreach(Item itemInList in list){
+            GameObject stuff = Instantiate(item, inventoryList.transform);
+            stuff.transform.name = itemInList.getName();
+            stuff.transform.Find("Item").GetComponent<Text>().text = itemInList.getName();
+            stuff.transform.Find("Amount").GetComponent<Text>().text = 0.ToString();
+            foreach(var item in getPlayerOwnedSelectedTown().getTownInventory()){
+                if(item.Key.Equals(itemInList.getName())){
+                    stuff.transform.Find("Amount").GetComponent<Text>().text = item.Value.ToString();
+                    break;
+                } 
+            } 
+        }
+        foreach(Transform child in inventoryList.transform){
+            foreach(var item in getPlayerOwnedSelectedTown().getTownInventory()){
+                if(item.Key.Equals(child.transform.name)){
+                    child.transform.Find("Amount").GetComponent<Text>().text = item.Value.ToString();
+                    break;
+                }  
+            }
+        }
+    }
+    public void showAllItemsInTownInventory(){
+        showItemsInTownInventory(gameManager.getItemCatalog().getItemCatalog());
+    }
+    public void showItemWithTypeTownInventory(string type){
+        showItemsInTownInventory(gameManager.getItemCatalog().getItemByType(type));
+    }
+    public void updateTownInventory(){
+        GameObject inventoryList = GameObject.FindGameObjectWithTag("TownMenuUI").transform.Find("Background/Inventory/Show Inventory/Viewport/Content").gameObject; 
+
+        GameObject.FindGameObjectWithTag("TownMenuUI").transform.Find("Background/Inventory/Show Number/Text").GetComponent<Text>().text = getPlayerOwnedSelectedTown().getTownInventory().Count.ToString();
+
+        foreach(Transform child in inventoryList.transform){
+            foreach(var item in getPlayerOwnedSelectedTown().getTownInventory()){
+                if(item.Key.Equals(child.transform.name)){
+                    child.transform.Find("Amount").GetComponent<Text>().text = item.Value.ToString();
+                    break;
+                }  
+            }
+        }
+    }
+    public void removeAllItemsTownInventory(){
+        GameObject inventoryList = GameObject.FindGameObjectWithTag("TownMenuUI").transform.Find("Background/Inventory/Show Inventory/Viewport/Content").gameObject; 
+
+        foreach(Transform child in inventoryList.transform){
+            Destroy(child.gameObject);
+        }
+    }
+
+    // MILITARY
+    public void openTownMilitary(){
+
+    }
+    public void closeTownMilitary(){
+
+    }
+
+    // ECONOMY
+    public void openTownEconomy(){
+
+    }
+    public void closeTownEconomy(){
+
+    }
+
+    // COMMANDS
+    public void openTownCommands(){
+
+    }
+    public void closeTownCommands(){
+
+    }
+
+    // STATS
+    public void openTownStats(){
+
+    }
+    public void closeTownStats(){
+
+    }
+
+    // COUNCIL
+    public void openTownCouncil(){
+
+    }
+    public void closeTownCouncil(){
+
+    }
+    public void closeAllTownOptions(){
+        closeTownBuildings();
+        closeTownCitizens();
+        closeTownInventory();
+        closeTownMilitary();
+        closeTownEconomy();
+        closeTownCommands();
+        closeTownStats();
+        closeTownCouncil();
+    }
+    public Town getPlayerOwnedSelectedTown(){
+        int townSelectedValue = GameObject.FindGameObjectWithTag("TownMenuUI").transform.Find("Background/TownList").GetComponent<Dropdown>().value;
+        return gameManager.getPlayerBehavior().getTownOwnedByIndex(townSelectedValue);
     }
 }

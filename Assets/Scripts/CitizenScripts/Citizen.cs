@@ -18,7 +18,7 @@ public class Citizen : MonoBehaviour
     IEnumerator goToBuildingCourentine = null;
 
     public Inventory inventory;
-    public BuildingAttributes house = null;
+    public BuildingAttributes home = null;
     public BuildingAttributes work = null;
     public BuildingAttributes buildingInsideOf = null;
     public BuildingAttributes closestStorageBuilding = null;
@@ -39,6 +39,7 @@ public class Citizen : MonoBehaviour
     public int happiness;
     public int movementSpeed;
     public int wealth;
+    public int income;
     public int taxPayment;
     public int citizenID;
     //public List<Hobby> hobbies;
@@ -103,8 +104,10 @@ public class Citizen : MonoBehaviour
             StartCoroutine(degenerateThirstHunger()); 
 
             // HOUSE
-            if(house == null){
-                lookForHousing();
+            if(home == null){
+                lookForHome();
+            } else {
+                foundHome();
             }
         }
     }
@@ -138,8 +141,8 @@ public class Citizen : MonoBehaviour
 
     void OnDisable()
     {
-        if(house){
-            house.removeResidentFromBuilding(this);
+        if(home){
+            home.removeResidentFromBuilding(this);
         }
         if(work){
             work.removeWorkerFromBuilding(this);
@@ -196,11 +199,11 @@ public class Citizen : MonoBehaviour
         status = null;
 
         // TOWN ALLIEGENCE AND LORD ALLIEGENCE
-        if(house == null){
+        if(home == null){
             townAlliegence = null;
         } else {
-            if(house.getTownBuildingIsApartOf()){
-                townAlliegence = house.getTownBuildingIsApartOf();
+            if(home.getTownBuildingIsApartOf()){
+                townAlliegence = home.getTownBuildingIsApartOf();
             }
         }
         if(townAlliegence){
@@ -233,6 +236,7 @@ public class Citizen : MonoBehaviour
     }
 
     public IEnumerator waitForCitizenToLoadThenAdd(Collider other){
+        /*
         Town town = other.gameObject.GetComponent<Town>();
         yield return new WaitForSeconds(0.3f);
 
@@ -244,13 +248,15 @@ public class Citizen : MonoBehaviour
                 }
             }
         }
+        */ // THE CITIZEN IS ADDED IN THE ONTRIGGER IN TOWNALLIEGENCE
+        yield return null;
     }
 
     public IEnumerator waitForCitizenToLoadThenRemove(Collider other){
         Town town = other.gameObject.GetComponent<Town>();
         yield return new WaitForSeconds(0.3f);
 
-        if(house){
+        if(home){
             foreach(BuildingAttributes building in town.getBuildingsInTown()){
                 if(getCitizenHouse().getBuildingID() == building.getBuildingID()){
                     town.removeCitizenFromTown(this);
@@ -853,15 +859,19 @@ public class Citizen : MonoBehaviour
     public void lookForWork(){
         if(townAlliegence && !isLookingForWork){
             setIsLookingForWork(true);
+            job = "Unemployed";
             townAlliegence.addAvailableWorkerToTown(this);
+            townAlliegence.updateAvailableWorkplacesInTown();
         }
     }
     public void foundWork(){
         if(townAlliegence && isLookingForWork){
             setIsLookingForWork(false);
+            job = work.getJobName();
+            townAlliegence.updateAvailableWorkplacesInTown();
         }
     }
-    public void lookForHousing(){
+    public void lookForHome(){
         if(!isLookingForHouse){
             
         }
@@ -871,8 +881,11 @@ public class Citizen : MonoBehaviour
                 if(getTownCurrentlyInsideOf().getAvailableResidentialBuildingsInTown().Count != 0){
                     setHouse(getTownCurrentlyInsideOf().getAvailableResidentialBuildingsInTown()[Random.Range(0, getTownCurrentlyInsideOf().getAvailableResidentialBuildingsInTown().Count)]);
                     setIsLookingForHousing(false);    
-                    house.addResidentToBuilding(this);
-                    setTownAlliegence(house.getTownBuildingIsApartOf());
+                    home.addResidentToBuilding(this);
+                    setTownAlliegence(home.getTownBuildingIsApartOf());
+
+                    townAlliegence.updateAvailableResidentialBuildingsInTown();
+                    townAlliegence.updateHomelessInTown();
                 } else {
                     //Debug.Log("No more housing");
                 }
@@ -882,8 +895,11 @@ public class Citizen : MonoBehaviour
             // Get nearest town with attractivnes over 20?
         }
     }
-    public void foundHousing(){
-        
+    public void foundHome(){
+        if(townAlliegence && isLookingForHouse){
+            townAlliegence.updateAvailableResidentialBuildingsInTown();
+            townAlliegence.updateHomelessInTown();
+        }
     }
     public void lookForPartner(){
 
@@ -961,7 +977,7 @@ public class Citizen : MonoBehaviour
         return citizenLastName;
     } 
     public BuildingAttributes getCitizenHouse(){
-        return house;
+        return home;
     }
     public Town getTownAlliegence(){
         return townAlliegence;
@@ -984,10 +1000,34 @@ public class Citizen : MonoBehaviour
     public bool getIsMovingToDestination(){
         return isMovingToDestination;
     }
+    public int getAmountToPayInTax(){
+        return (int)((float)income * townAlliegence.getTaxPercentage()) + (int)(wealth * townAlliegence.getPropertyTaxPercentage());
+    }
+    public string getGender(){
+        return gender;
+    }
+    public int getAge(){
+        return age;
+    }
+    public string getJob(){
+        return job;
+    }
+    public int getHappiness(){
+        return happiness;
+    }
+    public int getWealth(){
+        return wealth;
+    }
+    public BuildingAttributes getWork(){
+        return work;
+    }
+    public BuildingAttributes getHome(){
+        return home;
+    }
 
     // SETTERS
     public void setHouse(BuildingAttributes building){
-        house = building;
+        home = building;
     }
     public void setWork(BuildingAttributes building){
         work = building;
@@ -1006,6 +1046,9 @@ public class Citizen : MonoBehaviour
     }
     public void setBuildingIsInsideOf(BuildingAttributes building){
         buildingInsideOf = building;
+    }
+    public void setJob(string name){
+        job = name;
     }
     
 }

@@ -10,7 +10,7 @@ public class Item
     Dictionary<string, int> costToCraftItem;
     private GameObject itemPrefab;
     private Sprite itemSprite;
-    private List<string> itemTypesAvailable = new List<string>{"Weapon", "Resource", "Tool", "Food"};
+    private List<string> itemTypesAvailable = new List<string>{"Weapon", "Tool", "Food", "Mineral", "Armor", "Misc", "Wood", "Stone", "Ore", "Bar"};
 
     public Item(string itemName, string itemDescription, string itemType, Dictionary<string, int> costToCraftItem, GameObject itemPrefab, Sprite itemSprite){
         this.itemName = itemName;
@@ -27,6 +27,9 @@ public class Item
 
     public string getName(){
         return itemName;
+    }
+    public string getType(){
+        return itemType;
     }
     public string getItemDescription(){
         return itemDescription;

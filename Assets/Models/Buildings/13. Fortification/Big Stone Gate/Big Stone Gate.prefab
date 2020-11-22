@@ -315,9 +315,10 @@ GameObject:
   - component: {fileID: 7455341491266368640}
   - component: {fileID: 6998408399559832102}
   - component: {fileID: 267901143003988844}
+  - component: {fileID: 8641956277155076208}
   m_Layer: 17
   m_Name: Big Stone Gate
-  m_TagString: Untagged
+  m_TagString: Fortification
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -352,22 +353,34 @@ MonoBehaviour:
   buildingMenu: {fileID: 0}
   thisBuilding: {fileID: 0}
   apartOfTown: {fileID: 0}
-  workersInBuilding: []
-  isOwnedByPlayer: 0
-  isRented: 0
-  buildingIsProducing: 0
+  citizensWorkingInBuilding: []
+  citizensLivingInBuilding: []
+  citizensInBuilding: []
+  citizensGatheringResources: []
+  buildingInventory: {fileID: 0}
   buildingTag: 
-  buildingID: 0
   buildingName: 
   buildingDescription: 
+  jobName: 
+  buildingID: 0
   storageCapacity: 0
+  residentialLimit: 0
+  workerLimit: 0
+  gatherResourcesThreshold: 10
+  putItemInStorageThreshold: 20
+  amountToTransfer: 10
+  taxIncome: 0
+  buildingAgeHours: 0
   productionProgress: 0
-  playerEnteredBuilding: 0
-  buildingInventory: {fileID: 0}
-  playerInBoundsBuilding: 0
   positionX: 0
   positionY: 0
   positionZ: 0
+  isOwnedByPlayer: 0
+  isRented: 0
+  buildingIsProducing: 0
+  someoneIsMovingFromWorkToStorage: 0
+  playerEnteredBuilding: 0
+  playerInBoundsBuilding: 0
   collidingWithOtherObject: 0
 --- !u!54 &267901143003988844
 Rigidbody:
@@ -385,6 +398,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!65 &8641956277155076208
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5176827846550680339}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 8.105686, y: 7.9341316, z: 2.767521}
+  m_Center: {x: 0.46008492, y: 3.9329114, z: -1.1886778}
 --- !u!1 &5226479270852536403
 GameObject:
   m_ObjectHideFlags: 0

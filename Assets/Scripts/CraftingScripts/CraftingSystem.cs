@@ -41,6 +41,8 @@ public class CraftingSystem : MonoBehaviour
             Physics.Raycast(movementRay, out hit, Mathf.Infinity, LayerMask.GetMask("Ground"));
             currentlyCraftedBuilding.transform.position = hit.point;
 
+            currentlyCraftedBuilding.GetComponent<BuildingAttributes>().buildingIndicator(true);
+
             if(isCrafting && Input.GetMouseButtonDown(0) && !currentlyCraftedBuilding.GetComponent<BuildingAttributes>().getCollidingWithOtherObject()){
                 if(currentlyCraftedBuilding.GetComponentInChildren<MeshCollider>()){
                     currentlyCraftedBuilding.GetComponentInChildren<MeshCollider>().isTrigger = false;
@@ -130,12 +132,14 @@ public class CraftingSystem : MonoBehaviour
 
     public void rotateBuildingLeft(){
         if(currentlyCraftedBuilding){
-            currentlyCraftedBuilding.transform.Rotate(0,-100 * Time.deltaTime ,0, Space.Self);
+            //currentlyCraftedBuilding.transform.Rotate(0,-100 * Time.deltaTime ,0, Space.Self);
+            currentlyCraftedBuilding.transform.Rotate( 0,-22.5f, 0, Space.Self);
         }
     }
     public void rotateBuildingRight(){
         if(currentlyCraftedBuilding){
-            currentlyCraftedBuilding.transform.Rotate(0,100 * Time.deltaTime ,0, Space.Self);
+            //currentlyCraftedBuilding.transform.Rotate(0,100 * Time.deltaTime ,0, Space.Self);
+            currentlyCraftedBuilding.transform.Rotate( 0, 22.5f, 0, Space.Self);
         }
     }
     public bool getIsCrafting(){

@@ -121,7 +121,6 @@ GameObject:
   - component: {fileID: 2742851133344122395}
   - component: {fileID: 2046118995057310000}
   - component: {fileID: 4536736845297269348}
-  - component: {fileID: 1727921688130297648}
   - component: {fileID: 8117677303061470838}
   - component: {fileID: 151930894528537175}
   m_Layer: 12
@@ -197,20 +196,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &1727921688130297648
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7882509137426262784}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fbf3575480402db40813e763382412fb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  color: 0
-  eraseRenderer: 1
 --- !u!64 &8117677303061470838
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -291,22 +276,36 @@ MonoBehaviour:
   buildingMenu: {fileID: 0}
   thisBuilding: {fileID: 0}
   apartOfTown: {fileID: 0}
-  workersInBuilding: []
-  isOwnedByPlayer: 0
-  isRented: 0
-  buildingIsProducing: 0
+  citizensWorkingInBuilding: []
+  citizensLivingInBuilding: []
+  citizensInBuilding: []
+  citizensGatheringResources: []
+  buildingInventory: {fileID: 0}
   buildingTag: 
-  buildingID: 0
   buildingName: 
   buildingDescription: 
+  jobName: 
+  buildingID: 0
   storageCapacity: 0
+  residentialLimit: 0
+  workerLimit: 0
+  gatherResourcesThreshold: 10
+  putItemInStorageThreshold: 20
+  amountToTransfer: 10
+  taxIncome: 0
+  buildingAgeHours: 0
+  buildingMaxHealth: 0
+  buildingHealth: 0
   productionProgress: 0
-  playerEnteredBuilding: 0
-  buildingInventory: {fileID: 0}
-  playerInBoundsBuilding: 0
   positionX: 0
   positionY: 0
   positionZ: 0
+  isOwnedByPlayer: 0
+  isRented: 0
+  buildingIsProducing: 0
+  someoneIsMovingFromWorkToStorage: 0
+  playerEnteredBuilding: 0
+  playerInBoundsBuilding: 0
   collidingWithOtherObject: 0
 --- !u!54 &-6974313391245275205
 Rigidbody:
@@ -349,6 +348,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5d9bcdd57d60534e8cd3b7ba5cecd85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inventorySlots: []
   inventoryCapacity: 0
   inventoryName: 
   inventoryID: 0

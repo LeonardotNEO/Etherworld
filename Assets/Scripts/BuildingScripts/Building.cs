@@ -16,10 +16,27 @@ public class Building
     private int residentialLimit;
     private int workerLimit;
     private string nameOfBuilding;
+    private string buildingTag;
     private string buildingDescription;
+    private string jobName;
 
     //CONSTRUCTOR
-    public Building(Dictionary<string, int> costToCraftBuilding, Dictionary<string, int> buildingUpkeep, Dictionary<string, int> buildingProduction, Dictionary<string, int> neededForProduction, GameObject  buildingPrefab, Sprite buildingSprite, int storageCapacity, int initialValue, int residentialLimit, int workerLimit, string nameOfBuilding, string buildingDescription){
+    public Building(
+        Dictionary<string, int> costToCraftBuilding, 
+        Dictionary<string, int> buildingUpkeep, 
+        Dictionary<string, int> buildingProduction, 
+        Dictionary<string, int> neededForProduction, 
+        GameObject buildingPrefab, 
+        Sprite buildingSprite, 
+        int storageCapacity, 
+        int initialValue, 
+        int residentialLimit, 
+        int workerLimit, 
+        string nameOfBuilding, 
+        string buildingTag, 
+        string buildingDescription, 
+        string jobName)
+        {
         this.costToCraftBuilding = costToCraftBuilding;
         this.buildingUpkeep = buildingUpkeep;
         this.buildingProduction = buildingProduction;
@@ -29,10 +46,12 @@ public class Building
         this.buildingPrefab = buildingPrefab;
         this.buildingSprite = buildingSprite;
         this.nameOfBuilding = nameOfBuilding;
+        this.buildingTag = buildingTag;
         this.buildingDescription = buildingDescription;
         this.buildingID++;
         this.workerLimit = workerLimit;
         this.residentialLimit = residentialLimit;
+        this.jobName = jobName;
     }
 
     //GETTERS
@@ -91,5 +110,11 @@ public class Building
     }
     public int getWorkerLimit(){
         return workerLimit;
+    }
+    public string getJobName(){
+        return jobName;
+    }
+    public string getTag(){
+        return buildingTag;
     }
 }

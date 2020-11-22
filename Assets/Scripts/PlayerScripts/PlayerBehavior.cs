@@ -73,21 +73,67 @@ public class PlayerBehavior : MonoBehaviour
     void OnTriggerExit(Collider colliderInfo){
         
     }
+
+    // GETTERS
     public bool getIsMovingToDestination(){
         return isMovingToDestination;
-    }
-    public void setIsMovingToDestination(bool newBool){
-        isMovingToDestination = newBool;
     }
     public bool getReachedDestination(){
         return reachedDestination;
     }
+    public Vector3 getPlayerPosition(){
+        return playerPosition;
+    } 
+    public bool getMovementDisabled(){
+        return movementDisabled;
+    }
+    public bool getPlayerInsideBuilding(){
+        return playerInsideBuilding;
+    }
+    public Skills getSkills(){
+        return skills;
+    }
+    public Inventory getInventory(){
+        return inventory;
+    }
+    public string getPlayerFirstName(){
+        return playerFirstName;
+    }
+    public string getPlayerLastName(){
+        return playerLastName;
+    }
+    public List<Town> getTownsOwned(){
+        return ownedTowns;
+    }
+    public Town getTownOwnedByIndex(int index){
+        return ownedTowns[index];
+    }
+    public Town getTownOwnedByName(string name){
+        // NAME IS UNIQE FOR TOWN EACH TOWN
+        // TODO MAKE A SYSTEM FOR UNIQE NAMES
+        foreach(Town town in ownedTowns){
+            if(town.getTownName().Equals(name)){
+                return town;
+            }
+        }
+        return null;
+    }
+
+    // SETTERS
     public void setReachedDestination(bool newBool){
         reachedDestination = newBool;
     }
-    public Vector3 getPlayerPosition(){
-        return playerPosition;
-    }  
+    public void setIsMovingToDestination(bool newBool){
+        isMovingToDestination = newBool;
+    }
+    public void setMovementDisabled(bool val){
+        movementDisabled = val;
+    }
+    public void setBuildingIsInsideOf(BuildingAttributes building){
+        buildingInsideOf = building;
+    }
+
+    // FUNCTIONS 
     public void stopPlayer(){
         agent.ResetPath();
     }
@@ -104,12 +150,6 @@ public class PlayerBehavior : MonoBehaviour
 
     public void playerLookAt(GameObject lookAt){
         transform.LookAt(new Vector3(lookAt.transform.position.x, 0, lookAt.transform.position.z));
-    }
-    public bool getMovementDisabled(){
-        return movementDisabled;
-    }
-    public void setMovementDisabled(bool val){
-        movementDisabled = val;
     }
 
     public void hideBody(bool val){
@@ -169,9 +209,6 @@ public class PlayerBehavior : MonoBehaviour
         setMovementDisabled(false);
         playerInsideBuilding = false;
     }
-    public void setBuildingIsInsideOf(BuildingAttributes building){
-        buildingInsideOf = building;
-    }
 
     public void checkMovement(){
         if(GetComponent<NavMeshAgent>().enabled == true){
@@ -185,22 +222,5 @@ public class PlayerBehavior : MonoBehaviour
                 GetComponent<Animator>().SetBool("isMoving" , true);
             }
         }
-    }
-
-    public bool getPlayerInsideBuilding(){
-        return playerInsideBuilding;
-    }
-
-    public Skills getSkills(){
-        return skills;
-    }
-    public Inventory getInventory(){
-        return inventory;
-    }
-    public string getPlayerFirstName(){
-        return playerFirstName;
-    }
-    public string getPlayerLastName(){
-        return playerLastName;
     }
 }

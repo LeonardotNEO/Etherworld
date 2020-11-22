@@ -12,14 +12,15 @@ public class Town : MonoBehaviour
     public List<BuildingAttributes> buildingsInTown = new List<BuildingAttributes>();
     public List<BuildingAttributes> residentialBuildingsInTown = new List<BuildingAttributes>();
     public List<BuildingAttributes> availableResidentialBuildingsInTown = new List<BuildingAttributes>();
+    public List<BuildingAttributes> availableWorkplacesInTown = new List<BuildingAttributes>();
     public List<BuildingAttributes> productionBuildingsInTown = new List<BuildingAttributes>();
     public List<BuildingAttributes> storageBuildingsInTown = new List<BuildingAttributes>();
     public List<BuildingAttributes> boardingHousesInTown = new List<BuildingAttributes>();
 
     public List<Citizen> citizensInTown = new List<Citizen>();
     public List<Citizen> townCouncil = new List<Citizen>();
-    public List<Citizen> availableWorkersInTown = new List<Citizen>();
-    public List<Citizen> citizensWithoutHouse = new List<Citizen>();
+    public List<Citizen> unemployedInTown = new List<Citizen>();
+    public List<Citizen> homelessCitizens = new List<Citizen>();
 
     public List<Town> townTradingPartners = new List<Town>();
     public List<Town> townAllies = new List<Town>();
@@ -42,7 +43,9 @@ public class Town : MonoBehaviour
     public int townAmountOfJobs;
     public int townAmountOfJobsAvailable;
     public int townAmountOfCitizenWithoutWork;
-    public float townTaxIncome;
+    public int townTaxIncome;
+    public float townTaxPercentage; 
+    public float townPropertyTax;
     public float townExpenditure;
     public int worktimeStart = 6;
     public int worktimeEnd = 18;
@@ -103,24 +106,31 @@ public class Town : MonoBehaviour
         }
         if(other is BoxCollider){
             if(other.gameObject.layer == LayerMask.NameToLayer("Citizens")){
-                StartCoroutine(waitForCitizenInventoryToLoad(other));
+                StartCoroutine(waitForCitizenToLoadThenAdd(other));
             }
+
         }
         
     }
 
     void OnTriggerExit(Collider other)
     {
-
+        // REMEMBER TO REMOVE FROM TOWN <--- OR THIS MIGHT NOT BE NEEDED SINCE TOWN ALLIEGENCE IS CHANGED ON ONDISABLE()
     }
 
-    public IEnumerator waitForCitizenInventoryToLoad(Collider other){
+    public IEnumerator waitForCitizenToLoadThenAdd(Collider other){
         yield return new WaitForSeconds(0.5f);
 
+        // ADD INVENTORY
         if(other.gameObject.GetComponent<Citizen>().getTownAlliegence() == this){
             if(other.gameObject.GetComponent<Inventory>()){
                 addInventoryToTown(other.gameObject.GetComponent<Inventory>());
             }
+        }
+
+        // ADD CITIZEN
+        if(other.gameObject.GetComponent<Citizen>().getTownAlliegence() == this){
+            addCitizenToTown(other.gameObject.GetComponent<Citizen>());
         }
         yield return null;
     }
@@ -158,7 +168,11 @@ public class Town : MonoBehaviour
     }
 
     public List<Citizen> getAvailableWorkersInTown(){
-        return availableWorkersInTown;
+        return unemployedInTown;
+    }
+    
+    public List<Citizen> getCitizensWithoutHouse(){
+        return homelessCitizens;
     }
 
     public int getTownAttractivnes(){
@@ -172,8 +186,30 @@ public class Town : MonoBehaviour
                 buildings.Add(building);
             }
         }
-        availableResidentialBuildingsInTown = buildings;
         return buildings;
+    }
+    public void setAvailableResidentialBuildingsInTown(List<BuildingAttributes> buildings){
+        availableResidentialBuildingsInTown = buildings;
+    }
+    public void updateAvailableResidentialBuildingsInTown(){
+        setAvailableResidentialBuildingsInTown(getAvailableResidentialBuildingsInTown());
+    }
+
+    public List<BuildingAttributes> getAvailableWorkplacesInTown(){
+    List<BuildingAttributes> buildings = new List<BuildingAttributes>();
+
+        foreach(BuildingAttributes building in buildingsInTown){
+            if(building.getWorkersInBuilding().Count < building.getWorkerLimit()){
+                buildings.Add(building);
+            }
+        }
+        return buildings;
+    }
+    public void setAvailableWorkplacesInTown(List<BuildingAttributes> buildings){
+        availableWorkplacesInTown = buildings;
+    }
+    public void updateAvailableWorkplacesInTown(){
+        setAvailableWorkplacesInTown(getAvailableWorkplacesInTown());
     }
 
     public List<BuildingAttributes> getBuildingsInTown(){
@@ -237,6 +273,50 @@ public class Town : MonoBehaviour
     public int getWorktimeEnd(){
         return worktimeEnd;
     }
+    public float getTaxPercentage(){
+        return townTaxPercentage;
+    }
+    public float getPropertyTaxPercentage(){
+        return townPropertyTax;
+    }
+    public Dictionary<string, int> getTownInventory(){
+        Dictionary<string, int> townAllItems = new Dictionary<string, int>();
+        foreach(Inventory inventory in townAllInventories){
+            if(inventory != null){
+                foreach(InventorySlot inventorySlot in inventory.getInventorySlots()){
+                    if(inventorySlot.getItemInSlot() != null){
+                        if(!townAllItems.ContainsKey(inventorySlot.getItemInSlot())){
+                            townAllItems.Add(inventorySlot.getItemInSlot(), inventorySlot.getCurrentAmountInSlot());
+                        } else {
+                            townAllItems[inventorySlot.getItemInSlot()] += inventorySlot.getCurrentAmountInSlot();                  
+                        }
+                    }  
+                }
+            }
+        }
+        return townAllItems;
+    }
+
+    public List<Citizen> getUnemployedInTown(){
+        List<Citizen> citizens = new List<Citizen>(); 
+
+        foreach(Citizen citizen in citizensInTown){
+            if(citizen.getWork() == null){
+                citizens.Add(citizen);
+            }
+        }
+        return citizens;
+    }
+    public List<Citizen> getHomelessInTown(){
+        List<Citizen> citizens = new List<Citizen>(); 
+
+        foreach(Citizen citizen in citizensInTown){
+            if(citizen.getHome() == null){
+                citizens.Add(citizen);
+            }
+        }
+        return citizens;
+    }
 
 
     // SETTERS
@@ -262,12 +342,12 @@ public class Town : MonoBehaviour
         citizensInTown.Remove(citizen);
     }
     public void addAvailableWorkerToTown(Citizen citizen){
-        availableWorkersInTown.Add(citizen);
+        unemployedInTown.Add(citizen);
         GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Workers/Workers Here/Scroll View/Viewport/Content").GetComponent<ShowWorkersInBuilding>().updateWorkersInBuildingList();
         GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Workers/Available workers/Scroll View/Viewport/Content").GetComponent<ShowAvailableWorkers>().updateAvailableWorkersList();
     }
     public void removeAvailableWorkerFromTown(Citizen citizen){
-        availableWorkersInTown.Remove(citizen);
+        unemployedInTown.Remove(citizen);
         GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Workers/Workers Here/Scroll View/Viewport/Content").GetComponent<ShowWorkersInBuilding>().updateWorkersInBuildingList();
         GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Workers/Available workers/Scroll View/Viewport/Content").GetComponent<ShowAvailableWorkers>().updateAvailableWorkersList();
     }
@@ -303,5 +383,28 @@ public class Town : MonoBehaviour
     }
     public void setWorktimeEnd(int time){
         worktimeEnd = time;
+    }
+    public void setTownTaxPercentage(float val){
+        townTaxPercentage = val;
+    }
+    public void setTownPropertyTaxPercentage(float val){
+        townPropertyTax = val;
+    }
+    public List<BuildingAttributes> getBuildingsInTownWithTag(string tag){
+        List<BuildingAttributes> buildingsByTag = new List<BuildingAttributes>();
+
+        foreach(BuildingAttributes building in buildingsInTown){
+            if(building.getBuildingTag().Equals(tag)){
+                buildingsByTag.Add(building);
+                //Debug.Log(building.getNameOfBuilding());
+            }
+        }
+        return buildingsByTag;
+    }
+    public void setHomelessInTown(List<Citizen> list){
+        homelessCitizens = list;
+    }
+    public void updateHomelessInTown(){
+        setHomelessInTown(getHomelessInTown());
     }
 }

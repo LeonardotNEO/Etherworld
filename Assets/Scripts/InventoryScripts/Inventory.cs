@@ -299,5 +299,8 @@ public class Inventory : MonoBehaviour
         if(GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Inventory").gameObject.activeSelf){
             showbuildingInv.updateInventory();
         }
+        if(GameObject.FindGameObjectWithTag("TownMenuUI").transform.Find("Background").gameObject.activeSelf){
+            gameManager.GetUI().updateTownInventory();
+        }
     }
 }

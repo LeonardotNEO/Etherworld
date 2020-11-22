@@ -28,6 +28,7 @@ TagManager:
   - Citizen
   - NPC
   - TownMenuUI
+  - Fortification
   layers:
   - Default
   - TransparentFX
