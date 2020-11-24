@@ -2,12 +2,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class BuildingsCatalog : MonoBehaviour
 {   
     public List<Building> buildingCatalog = new List<Building>();
     public List<BuildingAttributes> buildingsInWorld = new List<BuildingAttributes>();
     public int amountOfBuildingsInGame;
-    public GameObject buildingLastClicked = null; // IMPORTANT
+    GameObject buildingLastClicked = null; // IMPORTANT
+
+    //-------------//
+    // TOWN CENTER //
+    //-------------//
+    public GameObject townCenterRank1;
+    public Sprite townCenterRank1Sprite;
+    public GameObject townCenterRank2;
+    public Sprite townCenterRank2Sprite;
+    public GameObject townCenterRank3;
+    public Sprite townCenterRank3Sprite;
+    public GameObject townCenterRank4;
+    public Sprite townCenterRank4Sprite;
+    public GameObject townCenterRank5;
+    public Sprite townCenterRank5Sprite;
 
     //-------------//
     // RESIDENTIAL //
@@ -63,6 +78,100 @@ public class BuildingsCatalog : MonoBehaviour
         //-----------------------------//
         // ADDING BUILDINGS TO CATALOG //
         //-----------------------------//
+
+        //-------------//
+        // TOWN CENTER //
+        //-------------//
+        addBuildingToCatalog(
+            new Building(
+                /*Cost to craft*/       new Dictionary<string, int>(){ },
+                /*Upkeep*/              new Dictionary<string, int>(){ },
+                /*Production*/          new Dictionary<string, int>(){},
+                /*NeededForProduction*/ new Dictionary<string, int>(){},
+                /*Prefab*/              townCenterRank1,
+                /*Sprite*/              townCenterRank1Sprite,
+                /*StorageCapcity*/      0,
+                /*Initial Value*/       0,
+                /*Residential Limit*/   0,
+                /*Worker Limit*/        0,
+                /*Name*/                "Town center rank 1",
+                /*Tag*/                 "Town center",
+                /*Description*/         "A town center makes it possible to found a town",
+                /*Job Name*/            null
+            )
+        );
+        addBuildingToCatalog(
+            new Building(
+                /*Cost to craft*/       new Dictionary<string, int>(){ {"Wood plank", 50}},
+                /*Upkeep*/              new Dictionary<string, int>(){ {"Wood plank", 3}},
+                /*Production*/          new Dictionary<string, int>(){},
+                /*NeededForProduction*/ new Dictionary<string, int>(){},
+                /*Prefab*/              townCenterRank2,
+                /*Sprite*/              townCenterRank2Sprite,
+                /*StorageCapcity*/      0,
+                /*Initial Value*/       0,
+                /*Residential Limit*/   0,
+                /*Worker Limit*/        0,
+                /*Name*/                "Town center rank 2",
+                /*Tag*/                 "Town center",
+                /*Description*/         "A town center makes it possible to found a town",
+                /*Job Name*/            null
+            )
+        );
+        addBuildingToCatalog(
+            new Building(
+                /*Cost to craft*/       new Dictionary<string, int>(){ {"Wood plank", 50}},
+                /*Upkeep*/              new Dictionary<string, int>(){ {"Wood plank", 3}},
+                /*Production*/          new Dictionary<string, int>(){},
+                /*NeededForProduction*/ new Dictionary<string, int>(){},
+                /*Prefab*/              townCenterRank3,
+                /*Sprite*/              townCenterRank3Sprite,
+                /*StorageCapcity*/      0,
+                /*Initial Value*/       0,
+                /*Residential Limit*/   0,
+                /*Worker Limit*/        0,
+                /*Name*/                "Town center rank 3",
+                /*Tag*/                 "Town center",
+                /*Description*/         "A town center makes it possible to found a town",
+                /*Job Name*/            null
+            )
+        );
+        addBuildingToCatalog(
+            new Building(
+                /*Cost to craft*/       new Dictionary<string, int>(){ {"Wood plank", 50}},
+                /*Upkeep*/              new Dictionary<string, int>(){ {"Wood plank", 3}},
+                /*Production*/          new Dictionary<string, int>(){},
+                /*NeededForProduction*/ new Dictionary<string, int>(){},
+                /*Prefab*/              townCenterRank4,
+                /*Sprite*/              townCenterRank4Sprite,
+                /*StorageCapcity*/      0,
+                /*Initial Value*/       0,
+                /*Residential Limit*/   0,
+                /*Worker Limit*/        0,
+                /*Name*/                "Town center rank 4",
+                /*Tag*/                 "Town center",
+                /*Description*/         "A town center makes it possible to found a town",
+                /*Job Name*/            null
+            )
+        );
+        addBuildingToCatalog(
+            new Building(
+                /*Cost to craft*/       new Dictionary<string, int>(){ {"Wood plank", 50}},
+                /*Upkeep*/              new Dictionary<string, int>(){ {"Wood plank", 3}},
+                /*Production*/          new Dictionary<string, int>(){},
+                /*NeededForProduction*/ new Dictionary<string, int>(){},
+                /*Prefab*/              townCenterRank5,
+                /*Sprite*/              townCenterRank5Sprite,
+                /*StorageCapcity*/      0,
+                /*Initial Value*/       0,
+                /*Residential Limit*/   0,
+                /*Worker Limit*/        0,
+                /*Name*/                "Town center rank 5",
+                /*Tag*/                 "Town center",
+                /*Description*/         "A town center makes it possible to found a town",
+                /*Job Name*/            null
+            )
+        );
 
         //-------------//
         // RESIDENTIAL //
@@ -440,10 +549,16 @@ public class BuildingsCatalog : MonoBehaviour
         return buildingLastClicked;
     }
     public Inventory getBuildingLastClickedInventory(){
-        return buildingLastClicked.GetComponent<Inventory>();
+        if(buildingLastClicked){
+            return buildingLastClicked.GetComponent<Inventory>();
+        }
+        return null;
     }
     public BuildingAttributes getBuildingLastClickedAttributes(){
-        return buildingLastClicked.GetComponent<BuildingAttributes>();
+        if(buildingLastClicked){
+            return buildingLastClicked.GetComponent<BuildingAttributes>();
+        }
+        return null;
     }
 
     public Building getBuildingByName(string name){

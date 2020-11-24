@@ -6,19 +6,101 @@ public class Item
 {
     private string itemName;
     private string itemDescription;
-    private string itemType;
+    private string itemType1;
+    private string itemType2;
     Dictionary<string, int> costToCraftItem;
     private GameObject itemPrefab;
     private Sprite itemSprite;
-    private List<string> itemTypesAvailable = new List<string>{"Weapon", "Tool", "Food", "Mineral", "Armor", "Misc", "Wood", "Stone", "Ore", "Bar"};
+    private List<string> itemTypes1Available = new List<string>{
+        "Melee", 
+        "Pickaxe", 
+        "Axe", 
+        "Hammer", 
+        "Magic", 
+        "Ranged", 
+        "Shield",
+        "Armor", 
+        "Food", 
+        "Mineral", 
+        "Misc", 
+        "Wood", 
+        "Stone", 
+        "Woodcutting", 
+        "Smithing", 
+        "Mining"
+        };
+    private List<string> itemTypes2Available = new List<string>{
+        // MELEE //
+        "Onehand", 
+        "Twohand",
 
-    public Item(string itemName, string itemDescription, string itemType, Dictionary<string, int> costToCraftItem, GameObject itemPrefab, Sprite itemSprite){
+        // Pickaxe //
+        "Pickaxe",
+
+        // AXE//
+        "Axe",
+
+        // HAMMER //
+        "Hammer",
+
+        // MAGIC //
+        "Wand", 
+        "Staff", 
+        "Book", 
+        "Dust", 
+
+        // RANGED //
+        "Bow", 
+        "Crossbow",
+        "Arrow",
+
+        // SHIELD //
+        "Shield",
+
+        // ARMOR //
+        "Helmet", 
+        "Torso", 
+        "Legs", 
+        "Boots", 
+
+        // FOOD //
+        "Cattle", 
+
+        // MINERAL //
+        "Mineral", 
+
+        // MISC //
+        "Wood", 
+
+        // WOODCUTTING //
+        "Log", 
+        "Plank", 
+
+        // WOOD //
+        "Wood", 
+
+        // STONE //
+        "Stone",
+
+        // SMITHING //
+        "Bar", 
+
+        //MINGING // 
+        "Ore"
+        };
+
+    public Item(string itemName, string itemDescription, string itemType1, string itemType2, Dictionary<string, int> costToCraftItem, GameObject itemPrefab, Sprite itemSprite){
         this.itemName = itemName;
         this.itemDescription = itemDescription;
-        if(itemTypesAvailable.Contains(itemType)){
-            this.itemType = itemType;
+        if(itemTypes1Available.Contains(itemType1)){
+            this.itemType1 = itemType1;
         } else {
-            throw new System.ArgumentException("This type doesnt exist. Chose from: " + itemTypesAvailable[0] + " " + itemTypesAvailable[1] + " " + itemTypesAvailable[2] + " " + itemTypesAvailable[3] + " ");
+            throw new System.ArgumentException("This type1 doesnt exist. " + itemType1);
+        }
+        if(itemTypes2Available.Contains(itemType2)){
+            this.itemType2 = itemType2;
+        } else {
+            throw new System.ArgumentException("This type2 doesnt exist. " + itemType2);
         }
         this.itemPrefab = itemPrefab;
         this.itemSprite = itemSprite;
@@ -29,13 +111,16 @@ public class Item
         return itemName;
     }
     public string getType(){
-        return itemType;
+        return itemType1;
     }
     public string getItemDescription(){
         return itemDescription;
     }
-    public string getItemType(){
-        return itemType;
+    public string getItemType1(){
+        return itemType1;
+    }
+    public string getItemType2(){
+        return itemType2;
     }
     public Item getItemObject(){
         return this;

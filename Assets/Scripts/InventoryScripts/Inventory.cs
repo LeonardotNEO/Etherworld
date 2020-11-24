@@ -40,7 +40,7 @@ public class Inventory : MonoBehaviour
         }
 
         for(int i = 0; i < inventoryCapacity; i++){
-            inventorySlots.Add(new InventorySlot());
+            inventorySlots.Add(new InventorySlot(99, null));
         }
 
         // Gets the inventory catalog and add this inventory to it
@@ -67,17 +67,28 @@ public class Inventory : MonoBehaviour
 
 
     public void clickInventoryItem(int slotnumber, Inventory toInventory){
-        if(gameManager.getBuildingCatalog().getBuildingLastClicked() && gameManager.GetUI().getBuildingInventoryOpen() && this.getInventorySlot(slotnumber).currentAmountInSlot != 0){
-            if(gameManager.getBuildingCatalog().getBuildingLastClickedAttributes().getPlayerEnteredBuilding()){
 
-                int amountToRemove = toInventory.addItemToInventory(this.getInventorySlot(slotnumber).getItemInSlot() , this.getInventorySlot(slotnumber).getCurrentAmountInSlot());
-                removeAmountFromSpecificSlot(this.getInventorySlot(slotnumber), this.getInventorySlot(slotnumber).getCurrentAmountInSlot() - amountToRemove);
-                updateInventoryInterface();
+        // TRANSFER TO BUILDING INVENTORY
+        if(gameManager.getBuildingCatalog().getBuildingLastClicked() != null){
+            if(gameManager.GetUI().getBuildingInventoryOpen() && this.getInventorySlot(slotnumber).currentAmountInSlot != 0){
+                if(gameManager.getBuildingCatalog().getBuildingLastClickedAttributes().getPlayerEnteredBuilding()){
 
-            } else {
-                gameManager.getMessageLogText().addMessageToLog("The player needs to be inside the building in order to transfer items to building inventory");
+                    int amountToRemove = toInventory.addItemToInventory(this.getInventorySlot(slotnumber).getItemInSlot() , this.getInventorySlot(slotnumber).getCurrentAmountInSlot());
+                    removeAmountFromSpecificSlot(this.getInventorySlot(slotnumber), this.getInventorySlot(slotnumber).getCurrentAmountInSlot() - amountToRemove);
+                    updateInventoryInterface();
+
+                } else {
+                    gameManager.getMessageLogText().addMessageToLog("The player needs to be inside the building in order to transfer items to building inventory");
+                }
             }
         }
+
+        // TRANSFER TO TOOLBAR
+        if(!gameManager.GetUI().getBuildingInventoryOpen() && this.getInventorySlot(slotnumber).currentAmountInSlot != 0){
+            GameObject.FindGameObjectWithTag("ToolbeltUI").GetComponent<Toolbelt>().addToSlot(this.getInventorySlot(slotnumber));
+            updateInventoryInterface();
+        }
+
         
     }
 

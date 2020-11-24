@@ -3,13 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+[System.Serializable]
 public class CraftingSystem : MonoBehaviour
 {
     GameManager gameManager;
     private Dictionary<string, int> itemsToRemoveFromInventory;
-    private bool isCrafting;
+    public bool isCrafting;
     private GameObject currentlyCraftedBuilding;
-    private bool collidingWithOtherObject;
+
+    // BUILDING
+    public bool collidingWithOtherObject;
+    public bool craftedBuildingIsOutsideTown;
+
+    // TOWN
+    public bool townCollidingWithOtherTown;
+    public bool allBuildingsInsideTownIsPlayerOwned;
+
     public int craftingButtonsIDCounter;
     private Ray movementRay;
     private RaycastHit hit;
@@ -41,70 +50,123 @@ public class CraftingSystem : MonoBehaviour
             Physics.Raycast(movementRay, out hit, Mathf.Infinity, LayerMask.GetMask("Ground"));
             currentlyCraftedBuilding.transform.position = hit.point;
 
-            currentlyCraftedBuilding.GetComponent<BuildingAttributes>().buildingIndicator(true);
+            if(currentlyCraftedBuilding.GetComponent<BuildingAttributes>()){
+                collidingWithOtherObject = currentlyCraftedBuilding.GetComponent<BuildingAttributes>().getCollidingWithOtherObject();
 
-            if(isCrafting && Input.GetMouseButtonDown(0) && !currentlyCraftedBuilding.GetComponent<BuildingAttributes>().getCollidingWithOtherObject()){
-                if(currentlyCraftedBuilding.GetComponentInChildren<MeshCollider>()){
-                    currentlyCraftedBuilding.GetComponentInChildren<MeshCollider>().isTrigger = false;
-                } else if(!currentlyCraftedBuilding.GetComponentInChildren<MeshCollider>()){
-                    currentlyCraftedBuilding.GetComponentInChildren<BoxCollider>().isTrigger = false;
-                }
+                currentlyCraftedBuilding.GetComponent<BuildingAttributes>().buildingIndicator(true);
+                gameManager.GetUI().getPlayerOwnedSelectedTown().townIndicator(true);
 
-                BuildingAttributes buildingAttributes = currentlyCraftedBuilding.GetComponent<BuildingAttributes>();
-
-                // STORAGE CAPACITY
-                if(buildingAttributes.gameObject.GetComponent<Inventory>()){
-                    buildingAttributes.GetComponent<Inventory>().setInventoryCapacity(buildingAttributes.getStorageCapacity());
-                    buildingAttributes.gameObject.GetComponent<Inventory>().instatiateInventory();
-                }
-
-                // PLAYER OWNED
-                buildingAttributes.setIsOwnedByPlayer(true);
-
-                // POSITION
-                if(buildingAttributes.gameObject.GetComponent<BoxCollider>()){
-                    buildingAttributes.setPositionX(currentlyCraftedBuilding.transform.GetComponent<BoxCollider>().bounds.center.x);
-                    buildingAttributes.setPositionY(currentlyCraftedBuilding.transform.GetComponent<BoxCollider>().bounds.center.y);
-                    buildingAttributes.setPositionZ(currentlyCraftedBuilding.transform.GetComponent<BoxCollider>().bounds.center.z);
+                if(gameManager.GetUI().getPlayerOwnedSelectedTown().checkIfPositionIsInsideTown(currentlyCraftedBuilding.transform.position)){
+                    craftedBuildingIsOutsideTown = false;
+                    gameManager.GetUI().getPlayerOwnedSelectedTown().townIndicatorMode(true);
                 } else {
-                    buildingAttributes.setPositionX(buildingAttributes.transform.position.x);
-                    buildingAttributes.setPositionY(buildingAttributes.transform.position.y);
-                    buildingAttributes.setPositionZ(buildingAttributes.transform.position.z);
+                    craftedBuildingIsOutsideTown = true;
+                    gameManager.GetUI().getPlayerOwnedSelectedTown().townIndicatorMode(false);
+                    currentlyCraftedBuilding.GetComponent<BuildingAttributes>().buildingIndicatorMode(false);
                 }
-        
 
-                // TAGS AND LAYERS
-                currentlyCraftedBuilding.tag = craftingSavedTag;
-                buildingAttributes.setBuildingTag(craftingSavedTag);
-                currentlyCraftedBuilding.layer = LayerMask.NameToLayer(craftingSavedLayer);
 
-                // ADD BUILDING TO TOWN, ACTIVATE ONTRIGGER FOR TOWN
-                currentlyCraftedBuilding.SetActive(false);
-                currentlyCraftedBuilding.SetActive(true);
+                if(isCrafting && Input.GetMouseButtonDown(0) && !collidingWithOtherObject && !craftedBuildingIsOutsideTown){
+                    if(currentlyCraftedBuilding.GetComponentInChildren<MeshCollider>()){
+                        currentlyCraftedBuilding.GetComponentInChildren<MeshCollider>().isTrigger = false;
+                    } else if(!currentlyCraftedBuilding.GetComponentInChildren<MeshCollider>()){
+                        currentlyCraftedBuilding.GetComponentInChildren<BoxCollider>().isTrigger = false;
+                    }
 
-                foreach(var item in itemsToRemoveFromInventory){
-                    gameManager.getInventoryCatalog().getMainInventory().removeItemFromInventory(item.Key, item.Value);
+                    BuildingAttributes buildingAttributes = currentlyCraftedBuilding.GetComponent<BuildingAttributes>();
+
+                    // STORAGE CAPACITY
+                    if(buildingAttributes.gameObject.GetComponent<Inventory>()){
+                        buildingAttributes.GetComponent<Inventory>().setInventoryCapacity(buildingAttributes.getStorageCapacity());
+                        buildingAttributes.gameObject.GetComponent<Inventory>().instatiateInventory();
+                    }
+
+                    // PLAYER OWNED
+                    buildingAttributes.setIsOwnedByPlayer(true);
+
+                    // TOWN BUILDING IS A PART OF
+                    buildingAttributes.setTownBuildingIsApartOf(gameManager.GetUI().getPlayerOwnedSelectedTown());
+
+                    // POSITION
+                    if(buildingAttributes.gameObject.GetComponent<BoxCollider>()){
+                        buildingAttributes.setPositionX(currentlyCraftedBuilding.transform.GetComponent<BoxCollider>().bounds.center.x);
+                        buildingAttributes.setPositionY(currentlyCraftedBuilding.transform.GetComponent<BoxCollider>().bounds.center.y);
+                        buildingAttributes.setPositionZ(currentlyCraftedBuilding.transform.GetComponent<BoxCollider>().bounds.center.z);
+                    } else {
+                        buildingAttributes.setPositionX(buildingAttributes.transform.position.x);
+                        buildingAttributes.setPositionY(buildingAttributes.transform.position.y);
+                        buildingAttributes.setPositionZ(buildingAttributes.transform.position.z);
+                    }
+            
+
+                    // TAGS AND LAYERS
+                    currentlyCraftedBuilding.tag = craftingSavedTag;
+                    buildingAttributes.setBuildingTag(craftingSavedTag);
+                    currentlyCraftedBuilding.layer = LayerMask.NameToLayer(craftingSavedLayer);
+
+                    // ADD BUILDING TO TOWN, ACTIVATE ONTRIGGER FOR TOWN
+                    currentlyCraftedBuilding.SetActive(false);
+                    currentlyCraftedBuilding.SetActive(true);
+
+                    foreach(var item in itemsToRemoveFromInventory){
+                        gameManager.getInventoryCatalog().getMainInventory().removeItemFromInventory(item.Key, item.Value);
+                    }
+                    currentlyCraftedBuilding = null;
+                    foreach(Town town in gameManager.getPlayerBehavior().getTownsOwned()){
+                        town.townIndicator(false);
+                    }
+                    //gameManager.GetUI().getPlayerOwnedSelectedTown().townIndicator(false);
+                    setIsCrafting(false);
                 }
-                currentlyCraftedBuilding = null;
-                setIsCrafting(false);
+            }
+            if(currentlyCraftedBuilding){
+                if(currentlyCraftedBuilding.GetComponent<Town>()){
+                    townCollidingWithOtherTown = currentlyCraftedBuilding.GetComponent<Town>().getCollidingWithOtherTown();
+                    allBuildingsInsideTownIsPlayerOwned = currentlyCraftedBuilding.GetComponent<Town>().checkIfAllBuildingsInsideTownIsPlayerOwned();
+
+                    currentlyCraftedBuilding.GetComponent<Town>().townIndicator(true);
+                    if(!allBuildingsInsideTownIsPlayerOwned || townCollidingWithOtherTown){
+                        currentlyCraftedBuilding.GetComponent<Town>().townIndicatorMode(false);
+                    } else {
+                        currentlyCraftedBuilding.GetComponent<Town>().townIndicatorMode(true);
+                    }
+
+                    if(isCrafting && Input.GetMouseButtonDown(0) && !townCollidingWithOtherTown && allBuildingsInsideTownIsPlayerOwned){
+                        Town townCrafted = currentlyCraftedBuilding.GetComponent<Town>();
+                        
+                        // TAGS AND LAYERS
+                        currentlyCraftedBuilding.tag = craftingSavedTag;
+                        currentlyCraftedBuilding.layer = LayerMask.NameToLayer(craftingSavedLayer);
+
+                        // ADD BUILDING TO TOWN, ACTIVATE ONTRIGGER FOR TOWN
+                        currentlyCraftedBuilding.SetActive(false);
+                        currentlyCraftedBuilding.SetActive(true);
+
+                        // ADD TOWN TO PLAYERTOWNS
+                        gameManager.getPlayerBehavior().addTownToOwnedTowns(townCrafted);
+
+                        // NAME
+                        townCrafted.setTownOwner(gameManager.getPlayerBehavior().getPlayerFirstName() + " " + gameManager.getPlayerBehavior().getPlayerLastName());
+
+                        foreach(var item in itemsToRemoveFromInventory){
+                            gameManager.getInventoryCatalog().getMainInventory().removeItemFromInventory(item.Key, item.Value);
+                        }
+                        currentlyCraftedBuilding = null;
+                        foreach(Town town in gameManager.getPlayerBehavior().getTownsOwned()){
+                            town.townIndicator(false);
+                        }
+                        setIsCrafting(false);
+                    }
+                }
             }
         } 
         
         if(isCrafting && Input.GetKeyDown(KeyCode.Escape) || isCrafting && Input.GetMouseButtonDown(1)){
             setIsCrafting(false);
-            Destroy(currentlyCraftedBuilding);
-        }
-
-        if(currentlyCraftedBuilding){
-            if(currentlyCraftedBuilding.GetComponent<BuildingAttributes>().getCollidingWithOtherObject() && isCrafting){
-                //gameManager.getMainCamera().GetComponentInChildren<OutlineEffect>().setLineColor0(Color.red);
-            } else {
-                //gameManager.getMainCamera().GetComponentInChildren<OutlineEffect>().setLineColor0(Color.green);
+            foreach(Town town in gameManager.getPlayerBehavior().getTownsOwned()){
+                town.townIndicator(false);
             }
-        }
-
-        if(currentlyCraftedBuilding){
-            collidingWithOtherObject = currentlyCraftedBuilding.GetComponent<BuildingAttributes>().getCollidingWithOtherObject();
+            Destroy(currentlyCraftedBuilding);
         }
     }
     
@@ -174,5 +236,8 @@ public class CraftingSystem : MonoBehaviour
     }
     public void setCraftingSavedLayer(string layer){
         craftingSavedLayer = layer;
+    }
+    public GameObject getCurrentlyCraftedBuilding(){
+        return currentlyCraftedBuilding;
     }
 }

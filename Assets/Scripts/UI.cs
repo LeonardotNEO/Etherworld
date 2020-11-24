@@ -12,7 +12,11 @@ public class UI : MonoBehaviour
     // CONFIRMATION MENU
     public string situation;
 
+    // TOWN
+    int townSelectedValue;
+
     // MENU BOOLS
+    public bool menuBarOpen;
     public bool inventoryOpen;
     public bool craftingOpen;
     public bool messageLogOpen;
@@ -34,28 +38,52 @@ public class UI : MonoBehaviour
     void Update()
     {
         // INPUTS //
-        if(Input.GetKeyDown("|")){
-            Time.timeScale = 0;
-        }
         if(Input.GetKeyDown("1")){
-            Time.timeScale = 1;
+            GameObject.FindGameObjectWithTag("ToolbeltUI").GetComponent<Toolbelt>().selectToolbarElement("Magic");
         }
         if(Input.GetKeyDown("2")){
-            Time.timeScale = 2f;
+            GameObject.FindGameObjectWithTag("ToolbeltUI").GetComponent<Toolbelt>().selectToolbarElement("Melee");
         }
         if(Input.GetKeyDown("3")){
-            Time.timeScale = 4;
+            GameObject.FindGameObjectWithTag("ToolbeltUI").GetComponent<Toolbelt>().selectToolbarElement("Ranged");
         }
         if(Input.GetKeyDown("4")){
-            Time.timeScale = 8;
+            GameObject.FindGameObjectWithTag("ToolbeltUI").GetComponent<Toolbelt>().selectToolbarElement("Shield");
         }
         if(Input.GetKeyDown("5")){
-            gameManager.getPlayerBehavior().getSkills().getSkillByName("Woodcutting").increaseExperience(100000);
+            GameObject.FindGameObjectWithTag("ToolbeltUI").GetComponent<Toolbelt>().selectToolbarElement("Pickaxe");
         }
         if(Input.GetKeyDown("6")){
-
+            GameObject.FindGameObjectWithTag("ToolbeltUI").GetComponent<Toolbelt>().selectToolbarElement("Axe");
         }
         if(Input.GetKeyDown("7")){
+            GameObject.FindGameObjectWithTag("ToolbeltUI").GetComponent<Toolbelt>().selectToolbarElement("Hammer");
+        }
+        if(Input.GetKeyDown("8")){
+            GameObject.FindGameObjectWithTag("ToolbeltUI").GetComponent<Toolbelt>().selectToolbarElement("Food");
+        }
+        if(Input.GetKeyDown("9")){
+
+        }
+        if(Input.GetKeyDown("t")){
+            Time.timeScale = 0;
+        }
+        if(Input.GetKeyDown("y")){
+            Time.timeScale = 1;
+        }
+        if(Input.GetKeyDown("u")){
+            Time.timeScale = 2f;
+        }
+        if(Input.GetKeyDown("i")){
+            Time.timeScale = 4;
+        }
+        if(Input.GetKeyDown("o")){
+            gameManager.getPlayerBehavior().getSkills().getSkillByName("Woodcutting").increaseExperience(100000);
+        }
+        if(Input.GetKeyDown("p")){
+
+        }
+        if(Input.GetKeyDown("g")){
             Dictionary<string,int> listOfItems = new Dictionary<string, int>{
                 {"Wood planks", 3}, 
                 {"Stone", 3}};
@@ -64,7 +92,26 @@ public class UI : MonoBehaviour
                 gameManager.getInventoryCatalog().getMainInventory().removeItemFromInventory(item.Key, item.Value);
             }
         }
-        if(Input.GetKeyDown("8")){
+        if(Input.GetKeyDown("h")){
+            Dictionary<string,int> listOfItems = new Dictionary<string, int>{
+            {"Wand", 5}, 
+            {"Helmet", 5}, 
+            {"Sword", 5}, 
+            {"Battleaxe", 5},
+            {"Greatsword", 5},
+            {"Ether pickaxe", 5},
+            {"Steel axe", 5},
+            {"Stone hammer", 5},
+            {"Wood bow", 5},
+            {"Beef", 5},
+            {"Staff", 5}
+            };
+
+            foreach(var item in listOfItems){
+                gameManager.getInventoryCatalog().getMainInventory().addItemToInventory(item.Key, item.Value);
+            }
+        }
+        if(Input.GetKeyDown("j")){
             Dictionary<string,int> listOfItems = new Dictionary<string, int>{
             {"Wood plank", 35}, 
             {"Stone", 35}, 
@@ -82,7 +129,7 @@ public class UI : MonoBehaviour
                 gameManager.getInventoryCatalog().getMainInventory().addItemToInventory(item.Key, item.Value);
             }
         }
-        if(Input.GetKeyDown("9")){
+        if(Input.GetKeyDown("k")){
             if(gameManager.getBuildingCatalog().getBuildingLastClicked()){
                 Dictionary<string,int> listOfItems = new Dictionary<string, int>{
                 {"Wood log", 10}, 
@@ -589,11 +636,45 @@ public class UI : MonoBehaviour
     // MAIN MENUS //
     //------------//
     public void closeAllMainMenus(){
+        closeMenuBar();
         closeMessageLog();
         closeSkills();
         closeInventory();
         closeCrafting();
         closeTown();
+    }
+    public void closeAllMainMenusOpenMenuBar(){
+        openMenuBar();
+        closeMessageLog();
+        closeSkills();
+        closeInventory();
+        closeCrafting();
+        closeTown();
+    }
+    public void openMenuBar(){
+        closeAllMainMenus();
+
+        menuBarOpen = true;
+        GameObject.FindGameObjectWithTag("MenuBarUI").transform.Find("Background").gameObject.SetActive(true); 
+    }
+    public void closeMenuBar(){
+        menuBarOpen = false;
+        GameObject.FindGameObjectWithTag("MenuBarUI").transform.Find("Background").gameObject.SetActive(false); 
+    }
+
+    //---------//
+    // TOOLBAR //
+    //---------//
+    public void clickToolbarItem(string type){
+        Toolbelt toolbar = GameObject.FindGameObjectWithTag("ToolbeltUI").GetComponent<Toolbelt>();
+
+        // TRANSFER TO MAIN INVENTORY
+        if(inventoryOpen){
+            toolbar.transferFromToolbarToInventory(gameManager.getPlayerBehavior().getInventory(), type);
+        } else {
+            Debug.Log("inventoryopen not open");
+            toolbar.selectToolbarElement(type);
+        }
     }
 
     //-------------//
@@ -601,12 +682,12 @@ public class UI : MonoBehaviour
     //-------------//
     public void openMessageLog(){
         if(GameObject.FindGameObjectWithTag("MessageLogBarUI").transform.Find("Background").gameObject.activeSelf == true){
-            closeMessageLog();
+            closeAllMainMenusOpenMenuBar();
             return;
         }
 
-        messageLogOpen = true;
         closeAllMainMenus();
+        messageLogOpen = true;
         GameObject.FindGameObjectWithTag("MessageLogBarUI").transform.Find("Background").gameObject.SetActive(true); 
     }
     public void closeMessageLog(){
@@ -619,12 +700,13 @@ public class UI : MonoBehaviour
     //------------------//
     public void openInventory(){
         if(GameObject.FindGameObjectWithTag("InventoryMenuUI").transform.Find("Background").gameObject.activeSelf == true){
-            closeInventory();
+            closeAllMainMenusOpenMenuBar();
             return;
         }
 
-        inventoryOpen = true;
+        
         closeAllMainMenus();
+        inventoryOpen = true;
         GameObject.FindGameObjectWithTag("InventoryMenuUI").transform.Find("Background").gameObject.SetActive(true);
     }
     public void closeInventory(){
@@ -637,16 +719,20 @@ public class UI : MonoBehaviour
     //--------------//
     public void openCrafting(){
         if(GameObject.FindGameObjectWithTag("CraftingMenuUI").transform.Find("Background").gameObject.activeSelf == true){
-            closeCrafting();
+            closeAllMainMenusOpenMenuBar();
             return;
         }
 
-        craftingOpen = true;
+        
         closeAllMainMenus();
+        getPlayerOwnedSelectedTown().townIndicator(true);
+        getPlayerOwnedSelectedTown().townIndicatorMode(true);
+        craftingOpen = true;
         GameObject.FindGameObjectWithTag("CraftingMenuUI").transform.Find("Background").gameObject.SetActive(true); 
     }
     public void closeCrafting(){
         craftingOpen = false;
+        getPlayerOwnedSelectedTown().townIndicator(false);
         GameObject.FindGameObjectWithTag("CraftingMenuUI").transform.Find("Background").gameObject.SetActive(false); 
     }
 
@@ -655,12 +741,12 @@ public class UI : MonoBehaviour
     //--------//
     public void openSkills(){
         if(GameObject.FindGameObjectWithTag("Skills").transform.Find("Background").gameObject.activeSelf == true){
-            closeSkills();
+            closeAllMainMenusOpenMenuBar();
             return;
         }
 
-        skillsOpen = true;
         closeAllMainMenus();
+        skillsOpen = true;
         GameObject.FindGameObjectWithTag("Skills").transform.Find("Background").gameObject.SetActive(true); 
     }
     public void closeSkills(){
@@ -673,25 +759,31 @@ public class UI : MonoBehaviour
     //------//
     public void openTown(){
         if(GameObject.FindGameObjectWithTag("TownMenuUI").transform.Find("Background").gameObject.activeSelf == true){
-            closeTown();
+            closeAllMainMenusOpenMenuBar();
             return;
         }
 
         // DROPDOWN OF TOWNS
-        GameObject.FindGameObjectWithTag("TownMenuUI").transform.Find("Background/TownList").GetComponent<Dropdown>().ClearOptions();
-        List<Dropdown.OptionData> options = new List<Dropdown.OptionData>();
-        foreach(Town town in gameManager.getPlayerBehavior().getTownsOwned()){
-            options.Add(new Dropdown.OptionData(town.getTownName()));
-        }
-        GameObject.FindGameObjectWithTag("TownMenuUI").transform.Find("Background/TownList").GetComponent<Dropdown>().AddOptions(options);
+        instantiateDropdown();
 
-
-        townOpen = true;
         closeAllMainMenus();
+        townOpen = true;
         GameObject.FindGameObjectWithTag("TownMenuUI").transform.Find("Background").gameObject.SetActive(true);
     }  
     public void closeTown(){
+        townOpen = false;
         GameObject.FindGameObjectWithTag("TownMenuUI").transform.Find("Background").gameObject.SetActive(false);
+    }
+
+    public void instantiateDropdown(){
+        if(GameObject.FindGameObjectWithTag("TownMenuUI").transform.Find("Background/TownList").GetComponent<Dropdown>().options.Count != gameManager.getPlayerBehavior().getTownsOwned().Count){
+            GameObject.FindGameObjectWithTag("TownMenuUI").transform.Find("Background/TownList").GetComponent<Dropdown>().ClearOptions();
+            List<Dropdown.OptionData> options = new List<Dropdown.OptionData>();
+            foreach(Town town in gameManager.getPlayerBehavior().getTownsOwned()){
+                options.Add(new Dropdown.OptionData(town.getTownName()));
+            }
+            GameObject.FindGameObjectWithTag("TownMenuUI").transform.Find("Background/TownList").GetComponent<Dropdown>().AddOptions(options);
+        }
     }
 
     // BUILDINGS
@@ -921,7 +1013,7 @@ public class UI : MonoBehaviour
         closeTownCouncil();
     }
     public Town getPlayerOwnedSelectedTown(){
-        int townSelectedValue = GameObject.FindGameObjectWithTag("TownMenuUI").transform.Find("Background/TownList").GetComponent<Dropdown>().value;
+        townSelectedValue = GameObject.FindGameObjectWithTag("TownMenuUI").transform.Find("Background/TownList").GetComponent<Dropdown>().value;
         return gameManager.getPlayerBehavior().getTownOwnedByIndex(townSelectedValue);
     }
 }

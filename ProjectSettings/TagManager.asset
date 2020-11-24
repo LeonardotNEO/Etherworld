@@ -29,6 +29,9 @@ TagManager:
   - NPC
   - TownMenuUI
   - Fortification
+  - Town center
+  - MenuBarUI
+  - ToolbeltUI
   layers:
   - Default
   - TransparentFX

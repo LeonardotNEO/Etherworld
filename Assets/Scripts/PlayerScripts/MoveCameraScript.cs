@@ -55,13 +55,13 @@ public class MoveCameraScript : MonoBehaviour
                 GameObject.FindGameObjectWithTag("MainCamera").transform.RotateAround(GameObject.FindGameObjectWithTag("MainCamera").transform.position, Vector3.up, -rotateSensitivity);
             }
         }
-        if(Input.GetAxis("Mouse ScrollWheel") < 0f && 50F > positionY && positionY > 0F && !gameManager.GetUI().getIsMouseOverUI()){
+        if(Input.GetAxis("Mouse ScrollWheel") < 0f && 90F > positionY && positionY > 0F && !gameManager.GetUI().getIsMouseOverUI()){
             GameObject.FindGameObjectWithTag("MainCamera").transform.Translate(Vector3.up * scrollSensitivity * positionY * heightconstant, GameObject.FindGameObjectWithTag("MainCamera").transform);
             //WHEN ZOOMING OUT, THE CAMERA MOVES BACK FROM PIVOT POINT
             GameObject.FindGameObjectWithTag("MainCamera2").transform.Translate(Vector3.back * scrollSensitivity * positionY * heightconstant, GameObject.FindGameObjectWithTag("MainCamera").transform);
             positionY = GameObject.FindGameObjectWithTag("MainCamera").transform.position.y;
         }
-        if(Input.GetAxis("Mouse ScrollWheel") > 0f && 60F > positionY && positionY > 8F && !gameManager.GetUI().getIsMouseOverUI()){
+        if(Input.GetAxis("Mouse ScrollWheel") > 0f && 100F > positionY && positionY > 8F && !gameManager.GetUI().getIsMouseOverUI()){
             GameObject.FindGameObjectWithTag("MainCamera").transform.Translate(Vector3.down * scrollSensitivity * positionY * heightconstant, GameObject.FindGameObjectWithTag("MainCamera").transform);
             //WHEN ZOOMING IN, THE CAMERA MOVES FORWARD TO PIVOT POINT
             GameObject.FindGameObjectWithTag("MainCamera2").transform.Translate(Vector3.forward * scrollSensitivity * positionY * heightconstant, GameObject.FindGameObjectWithTag("MainCamera").transform);

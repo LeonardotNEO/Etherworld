@@ -11,18 +11,20 @@ public class InventorySlot
     public int currentAmountInSlot = 0;
     public int itemSlotPlacement = 0;
     public int slotNumber = 0;
-    void Start()
-    {
-        
+    public string type = null;
+
+    public InventorySlot(int slotCapacity, string type){
+        this.slotCapacity = slotCapacity;
+        this.type = type;
     }
 
-    void Update()
-    {
-
-    }
 
     public int getslotCapacity(){
         return slotCapacity;
+    }
+
+    public void setSlotCapacity(int val){
+        slotCapacity = val;
     }
 
     public int getCurrentAmountInSlot(){
@@ -47,6 +49,32 @@ public class InventorySlot
             itemInSlot = null;
         }
     }
+
+    public void addInventorySlotToThis(InventorySlot inventorySlot){
+        if(inventorySlot.getItemInSlot().Equals(this.getItemInSlot())){
+            if(inventorySlot.getCurrentAmountInSlot() + this.getCurrentAmountInSlot() <= getslotCapacity()){
+                this.updateCurrentAmountInSlot(inventorySlot.getCurrentAmountInSlot() + this.getCurrentAmountInSlot());
+                inventorySlot.updateCurrentAmountInSlot(0);
+            } else {
+                this.increaseCurrentAmountInSlot(getslotCapacity() - getCurrentAmountInSlot());
+                inventorySlot.decreaseCurrentAmountInSlot(getslotCapacity() - getCurrentAmountInSlot());
+            }
+        }
+
+        if(this.itemInSlot == null){
+            if(inventorySlot.getCurrentAmountInSlot() + this.getCurrentAmountInSlot() <= getslotCapacity()){
+                this.setItemInSlot(inventorySlot.getItemInSlot());
+                this.updateCurrentAmountInSlot(inventorySlot.getCurrentAmountInSlot() + this.getCurrentAmountInSlot());
+                inventorySlot.updateCurrentAmountInSlot(0);
+            } else {
+                int amountToAdd = getslotCapacity() - getCurrentAmountInSlot();
+                this.setItemInSlot(inventorySlot.getItemInSlot());
+                this.increaseCurrentAmountInSlot(amountToAdd);
+                inventorySlot.decreaseCurrentAmountInSlot(amountToAdd);
+            }
+        }
+    }
+
     public void setItemInSlot(string nameOfItem){
         itemInSlot = nameOfItem;
     }
@@ -58,5 +86,11 @@ public class InventorySlot
     }
     public int getSlotNumber(){
         return slotNumber;
+    }
+    public void setInventorySlotType(string type){
+        this.type = type;
+    }
+    public string getInventorySlotType(){
+        return type;
     }
 }

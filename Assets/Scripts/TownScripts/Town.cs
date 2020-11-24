@@ -27,6 +27,7 @@ public class Town : MonoBehaviour
     public List<Town> townEnemies = new List<Town>();
     public List<Town> townAtWarWith = new List<Town>();
     public List<Town> townInAllianceWith = new List<Town>();
+    public List<Town> townsCollidingWith = new List<Town>();
 
     public List<Inventory> townAllInventories = new List<Inventory>(); // adds all items innside collider to inventory
 
@@ -50,6 +51,9 @@ public class Town : MonoBehaviour
     public int worktimeStart = 6;
     public int worktimeEnd = 18;
 
+    public bool collidingWithOtherTown;
+    public bool currentlyCraftedBuildingIsOutsideOfTownRange;
+
     void Awake()
     {
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
@@ -65,6 +69,16 @@ public class Town : MonoBehaviour
         townCenter = transform.GetComponent<BoxCollider>().bounds.center;
         townAttractivnes = 40;
         gameManager.GetTownCatalog().addTownToAllTown(this);
+
+        // SET OBJECT INDICATOR TO PROPER WITH AND DEPTH
+        if(transform.Find("Object Indicator")){
+            if(transform.GetComponent<BoxCollider>()){
+                transform.Find("Object Indicator/Green indicator").GetComponent<SpriteRenderer>().size = new Vector2(transform.GetComponent<BoxCollider>().size.x, transform.GetComponent<BoxCollider>().size.z);
+                transform.Find("Object Indicator/Red indicator").GetComponent<SpriteRenderer>().size = new Vector2(transform.GetComponent<BoxCollider>().size.x, transform.GetComponent<BoxCollider>().size.z);
+            }
+            
+            townIndicator(false);
+        }
 
     }
 
@@ -102,19 +116,47 @@ public class Town : MonoBehaviour
                 }
             }
             StartCoroutine(waitForBuildingInventoryToLoad(other));
-            
         }
         if(other is BoxCollider){
             if(other.gameObject.layer == LayerMask.NameToLayer("Citizens")){
                 StartCoroutine(waitForCitizenToLoadThenAdd(other));
             }
-
         }
-        
+
+        if(other.transform.GetComponent<Town>()){
+            townsCollidingWith.Add(other.transform.GetComponent<Town>());
+            if(townsCollidingWith.Count > 0){
+                setCollidingWithOtherTown(true);
+            }
+        }
     }
 
     void OnTriggerExit(Collider other)
     {
+        if(other.gameObject.layer == LayerMask.NameToLayer("Buildings")){
+            if(other.gameObject.GetComponent<BuildingAttributes>()){
+                removeBuildingFromTown(other.gameObject.GetComponent<BuildingAttributes>());
+                if(other.gameObject.GetComponent<BuildingAttributes>().getBuildingName() == "Boarding House"){
+                    removeBoardingHouseFromTown(other.gameObject.GetComponent<BuildingAttributes>());
+                }
+                if(other.gameObject.GetComponent<BuildingAttributes>().getBuildingTag() == "Industrial"){
+                    removeProductionBuildingFromTown(other.gameObject.GetComponent<BuildingAttributes>());
+                }
+                if(other.gameObject.GetComponent<BuildingAttributes>().getBuildingTag() == "Residential"){
+                    removeResidentialBuildingFromTown(other.gameObject.GetComponent<BuildingAttributes>());
+                }
+                if(other.gameObject.GetComponent<BuildingAttributes>().getBuildingTag() == "Storage"){
+                    removeStorageBuildingFromTown(other.gameObject.GetComponent<BuildingAttributes>());
+                }
+            }
+            StartCoroutine(waitForBuildingInventoryToLoad(other));
+        }
+        if(other.transform.GetComponent<Town>()){
+            townsCollidingWith.Remove(other.transform.GetComponent<Town>());
+            if(townsCollidingWith.Count == 0){
+                setCollidingWithOtherTown(false);
+            }
+        }
         // REMEMBER TO REMOVE FROM TOWN <--- OR THIS MIGHT NOT BE NEEDED SINCE TOWN ALLIEGENCE IS CHANGED ON ONDISABLE()
     }
 
@@ -317,6 +359,9 @@ public class Town : MonoBehaviour
         }
         return citizens;
     }
+    public bool getCollidingWithOtherTown(){
+        return collidingWithOtherTown;
+    }
 
 
     // SETTERS
@@ -324,27 +369,35 @@ public class Town : MonoBehaviour
         townName = name;
     }
     public void addBuildingToTown(BuildingAttributes building){
-        buildingsInTown.Add(building);
+        if(!buildingsInTown.Contains(building)){
+            buildingsInTown.Add(building);
+        }
     }
     public void removeBuildingFromTown(BuildingAttributes building){
         buildingsInTown.Remove(building);
     }
     public void addInventoryToTown(Inventory inventory){
-        townAllInventories.Add(inventory);
+        if(!townAllInventories.Contains(inventory)){
+            townAllInventories.Add(inventory);
+        }
     }
     public void removeInventoryFromTown(Inventory inventory){
         townAllInventories.Remove(inventory);
     }
     public void addCitizenToTown(Citizen citizen){
-        citizensInTown.Add(citizen);
+        if(!citizensInTown.Contains(citizen)){
+            citizensInTown.Add(citizen);
+        }
     }
     public void removeCitizenFromTown(Citizen citizen){
         citizensInTown.Remove(citizen);
     }
     public void addAvailableWorkerToTown(Citizen citizen){
-        unemployedInTown.Add(citizen);
-        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Workers/Workers Here/Scroll View/Viewport/Content").GetComponent<ShowWorkersInBuilding>().updateWorkersInBuildingList();
-        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Workers/Available workers/Scroll View/Viewport/Content").GetComponent<ShowAvailableWorkers>().updateAvailableWorkersList();
+        if(!unemployedInTown.Contains(citizen)){
+            unemployedInTown.Add(citizen);
+            GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Workers/Workers Here/Scroll View/Viewport/Content").GetComponent<ShowWorkersInBuilding>().updateWorkersInBuildingList();
+            GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Workers/Available workers/Scroll View/Viewport/Content").GetComponent<ShowAvailableWorkers>().updateAvailableWorkersList();
+        }
     }
     public void removeAvailableWorkerFromTown(Citizen citizen){
         unemployedInTown.Remove(citizen);
@@ -352,25 +405,33 @@ public class Town : MonoBehaviour
         GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Workers/Available workers/Scroll View/Viewport/Content").GetComponent<ShowAvailableWorkers>().updateAvailableWorkersList();
     }
     public void addBoardingHouseToTown(BuildingAttributes building){
-        boardingHousesInTown.Add(building);
+        if(!boardingHousesInTown.Contains(building)){
+            boardingHousesInTown.Add(building);
+        }
     }
     public void removeBoardingHouseFromTown(BuildingAttributes building){
         boardingHousesInTown.Remove(building);
     }
     public void addProductionBuildingToTown(BuildingAttributes building){
-        productionBuildingsInTown.Add(building);
+        if(!productionBuildingsInTown.Contains(building)){
+            productionBuildingsInTown.Add(building);
+        }
     }
     public void removeProductionBuildingFromTown(BuildingAttributes building){
         productionBuildingsInTown.Remove(building);
     }
     public void addResidentialBuildingToTown(BuildingAttributes building){
-        residentialBuildingsInTown.Add(building);
+        if(!residentialBuildingsInTown.Contains(building)){
+            residentialBuildingsInTown.Add(building);
+        }
     }
     public void removeResidentialBuildingFromTown(BuildingAttributes building){
         residentialBuildingsInTown.Remove(building);
     }
     public void addStorageBuildingToTown(BuildingAttributes building){
-        storageBuildingsInTown.Add(building);
+        if(!storageBuildingsInTown.Contains(building)){
+            storageBuildingsInTown.Add(building);
+        }
     }
     public void removeStorageBuildingFromTown(BuildingAttributes building){
         storageBuildingsInTown.Remove(building);
@@ -406,5 +467,59 @@ public class Town : MonoBehaviour
     }
     public void updateHomelessInTown(){
         setHomelessInTown(getHomelessInTown());
+    }
+
+    public void townIndicator(bool val){
+        if(transform.Find("Object Indicator")){
+            transform.Find("Object Indicator").transform.gameObject.SetActive(val);
+        }
+    }
+    public void townIndicatorMode(bool val){
+        if(transform.Find("Object Indicator")){
+            if(val == false){
+                transform.Find("Object Indicator/Red indicator").transform.gameObject.SetActive(true);
+                transform.Find("Object Indicator/Green indicator").transform.gameObject.SetActive(false);
+            } else {
+                transform.Find("Object Indicator/Red indicator").transform.gameObject.SetActive(false);
+                transform.Find("Object Indicator/Green indicator").transform.gameObject.SetActive(true);
+            }
+        }
+    }
+
+    public void setCollidingWithOtherTown(bool val){
+        collidingWithOtherTown = val;
+        if(collidingWithOtherTown){
+            townIndicator(true);
+            townIndicatorMode(false);
+        } else {
+            townIndicator(false);
+            townIndicatorMode(true);
+        }
+    }
+
+    public bool checkIfPositionIsInsideTown(Vector3 position){
+        if(transform.GetComponent<BoxCollider>().bounds.Contains(position)){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public bool checkIfAllBuildingsInsideTownIsPlayerOwned(){
+        foreach(BuildingAttributes building in buildingsInTown){
+            if(!building.getIsOwnedByPlayer()){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public bool checkIfBuildingIsInsideTown(BuildingAttributes building){
+        foreach(BuildingAttributes buildings in buildingsInTown){
+            if(buildings.Equals(building)){
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -702,7 +702,7 @@ public class Citizen : MonoBehaviour
                 if(work.getBuildingName().Equals("Sawmill") || work.getBuildingName().Equals("Furnace") || work.getBuildingName().Equals("Waterwell")){
                     if(!notifyIfWorkTime()){
                         goToTownCenter();
-                        Debug.Log("work is done for the day");
+                        //Debug.Log("work is done for the day");
                         break;
                     }
 
@@ -710,7 +710,7 @@ public class Citizen : MonoBehaviour
                     if(notifyIfWorkTime()){
                         do{
                             StartCoroutine(goToWorkbuilding());
-                            Debug.Log("moving to workplace");
+                            //Debug.Log("moving to workplace");
                             yield return null;
                         } while(isMovingToWork && work);
                     }
@@ -722,7 +722,7 @@ public class Citizen : MonoBehaviour
                     if(notifyWhenWorkInventoryRunningLow() && !notifyWhenCitizenInventoryHasWorkItems() && morningMeetingFinished && !movingItemToBuilding){
                         do{
                             StartCoroutine(getItemFromBuilding(getListOfProductionItemsBasedOnTransferThresholds(), townAlliegence.getClosestStorageBuildingWithListOfItems(this.transform.position, getListOfProductionItemsBasedOnTransferThresholds())));
-                            Debug.Log("gathering item from storage");
+                            //Debug.Log("gathering item from storage");
                             yield return null;
                         } while (gatheringItemFromBuilding && work);
                     }
@@ -731,7 +731,7 @@ public class Citizen : MonoBehaviour
                     if(notifyWhenCitizenInventoryHasWorkItems() && morningMeetingFinished && !gatheringItemFromBuilding){
                         do{
                             StartCoroutine(putItemInBuilding(getListOfProductionItemsBasedOnTransferThresholds(), work));
-                            Debug.Log("putting item in workbuilding");
+                            //Debug.Log("putting item in workbuilding");
                             yield return null;
                         } while (movingItemToBuilding  && work);
                     }
@@ -740,7 +740,7 @@ public class Citizen : MonoBehaviour
                     if(notifyWhenWorkItemProducedThresholdReached() && morningMeetingFinished && !movingItemToBuilding){
                         do{
                             StartCoroutine(getItemFromBuilding(new Dictionary<string, int>(){{work.getItemCurrentlyProduced().getName(), work.getPutItemInStorageThreshold()}}, work));
-                            Debug.Log("gathering item from workbuilding");
+                            //Debug.Log("gathering item from workbuilding");
                             yield return null;
                         } while(gatheringItemFromBuilding && work);
                     }
@@ -749,7 +749,7 @@ public class Citizen : MonoBehaviour
                     if(notifyWhenCitizenInventoryHasProductionItem() && morningMeetingFinished && !gatheringItemFromBuilding){
                         do{
                             StartCoroutine(putItemInBuilding(new Dictionary<string, int>(){{work.getItemCurrentlyProduced().getName(), work.getPutItemInStorageThreshold()}}, townAlliegence.getClosestStoragetBuildingWithFreeSpace(this.transform.position, work.getItemCurrentlyProduced().getName(), work.getPutItemInStorageThreshold())));
-                            Debug.Log("putting item in storage");
+                            //Debug.Log("putting item in storage");
                             yield return null;
                         } while(movingItemToBuilding && work);
                     }

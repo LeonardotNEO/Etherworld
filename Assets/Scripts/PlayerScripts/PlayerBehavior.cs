@@ -60,7 +60,7 @@ public class PlayerBehavior : MonoBehaviour
         if (Input.GetMouseButtonDown(0) && !gameManager.GetUI().getIsMouseOverUI() && !gameManager.getCraftingSystem().getIsCrafting()){
             RaycastHit hit;
             Ray ray = GameObject.FindGameObjectWithTag("MainCamera2").GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
-            Physics.Raycast(ray, out hit, Mathf.Infinity);
+            Physics.Raycast(ray, out hit, Mathf.Infinity /*, LayerMask.NameToLayer()*/);
             if(hit.collider.tag == "Ground"){
                 moveToPosition(hit.point);
             }
@@ -222,5 +222,13 @@ public class PlayerBehavior : MonoBehaviour
                 GetComponent<Animator>().SetBool("isMoving" , true);
             }
         }
+    }
+
+    public void addTownToOwnedTowns(Town town){
+        ownedTowns.Add(town);
+    }
+
+    public void removeTownFromOwnedTowns(Town town){
+        ownedTowns.Remove(town);
     }
 }

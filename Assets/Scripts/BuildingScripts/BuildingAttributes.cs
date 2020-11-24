@@ -15,6 +15,7 @@ public class BuildingAttributes : MonoBehaviour
     public List<Citizen> citizensLivingInBuilding  = new List<Citizen>();
     public List<Citizen> citizensInBuilding = new List<Citizen>();
     public List<Citizen> citizensGatheringResources = new List<Citizen>();
+    public List<BuildingAttributes> buildingscollidingWith = new List<BuildingAttributes>();
     public Inventory buildingInventory;
     public Dictionary<string, int> buildingUpKeep;
     public Dictionary<string, int> itemsProducedInBuilding;
@@ -51,6 +52,7 @@ public class BuildingAttributes : MonoBehaviour
     public bool playerEnteredBuilding;
     public bool playerInBoundsBuilding;
     public bool collidingWithOtherObject;
+    public bool buildingOutsideOfTown;
     
 
     void Awake()
@@ -137,19 +139,18 @@ public class BuildingAttributes : MonoBehaviour
         if(other.gameObject.GetComponent<Town>()){
             setTownBuildingIsApartOf(other.gameObject.GetComponent<Town>());
         }
-    }
 
-    void OnTriggerStay(Collider other)
-    {
         if(
             other.gameObject.layer == 12  || /*Layer 12 is BUILDINGSMESH*/
             other.gameObject.layer == 13  || /*Layer 13 is RESOURCESMESH*/
             other.gameObject.layer == 14     /*Layer 14 is ITEMSMESH*/
         )
         {
-            setCollidingWithOtherObject(true);
-            if(other.transform.gameObject.GetComponent<BuildingAttributes>()){
-                other.transform.gameObject.GetComponent<BuildingAttributes>().setCollidingWithOtherObject(true);
+            if(other.transform.gameObject.GetComponentInParent<BuildingAttributes>()){
+                buildingscollidingWith.Add(other.transform.GetComponentInParent<BuildingAttributes>());
+            }
+            if(buildingscollidingWith.Count > 0){
+                setCollidingWithOtherObject(true);
             }
         } 
         if(
@@ -157,11 +158,21 @@ public class BuildingAttributes : MonoBehaviour
 
         ){setPlayerInBoundsBuilding(true);} 
     }
+
     void OnTriggerExit(Collider other)
     {
-        setCollidingWithOtherObject(false);
-        if(other.transform.GetComponent<BuildingAttributes>()){
-            other.transform.GetComponent<BuildingAttributes>().setCollidingWithOtherObject(false);
+        if(
+            other.gameObject.layer == 12  || /*Layer 12 is BUILDINGSMESH*/
+            other.gameObject.layer == 13  || /*Layer 13 is RESOURCESMESH*/
+            other.gameObject.layer == 14     /*Layer 14 is ITEMSMESH*/
+        )
+        {
+            if(other.transform.gameObject.GetComponentInParent<BuildingAttributes>()){
+                buildingscollidingWith.Remove(other.transform.GetComponentInParent<BuildingAttributes>());
+                if(buildingscollidingWith.Count == 0){
+                    setCollidingWithOtherObject(false);
+                }
+            }
         }
 
         setPlayerInBoundsBuilding(false);
@@ -337,6 +348,9 @@ public class BuildingAttributes : MonoBehaviour
     public string getJobName(){
         return jobName;
     }
+    public bool getBuildingOutsideOfTown(){
+        return buildingOutsideOfTown;
+    }
 
     //SETTERS
     public void setItemsProducedInBuilding(Dictionary<string, int> newItemsProduced)
@@ -402,8 +416,10 @@ public class BuildingAttributes : MonoBehaviour
     public void addWorkerToBuilding(Citizen citizen){
         citizensWorkingInBuilding.Add(citizen);
         citizen.setWork(this);
-        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Workers/Workers Here/Scroll View/Viewport/Content").GetComponent<ShowWorkersInBuilding>().updateWorkersInBuildingList();
-        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Workers/Available workers/Scroll View/Viewport/Content").GetComponent<ShowAvailableWorkers>().updateAvailableWorkersList();
+        if(gameManager.GetUI().getBuildingOpenOpen()){
+            GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Workers/Workers Here/Scroll View/Viewport/Content").GetComponent<ShowWorkersInBuilding>().updateWorkersInBuildingList();
+            GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Workers/Available workers/Scroll View/Viewport/Content").GetComponent<ShowAvailableWorkers>().updateAvailableWorkersList();
+        }
     }
     public void removeWorkerFromBuilding(Citizen citizen){
         if(citizen.getBuildingInsideOf()){
@@ -415,8 +431,10 @@ public class BuildingAttributes : MonoBehaviour
 
         citizensWorkingInBuilding.Remove(citizen);
         citizen.setWork(null);
-        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Workers/Workers Here/Scroll View/Viewport/Content").GetComponent<ShowWorkersInBuilding>().updateWorkersInBuildingList();
-        GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Workers/Available workers/Scroll View/Viewport/Content").GetComponent<ShowAvailableWorkers>().updateAvailableWorkersList();
+        if(gameManager.GetUI().getBuildingOpenOpen()){
+            GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Workers/Workers Here/Scroll View/Viewport/Content").GetComponent<ShowWorkersInBuilding>().updateWorkersInBuildingList();
+            GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Workers/Available workers/Scroll View/Viewport/Content").GetComponent<ShowAvailableWorkers>().updateAvailableWorkersList();
+        }
     }
     public void addResidentToBuilding(Citizen citizen){
         citizensLivingInBuilding.Add(citizen);
@@ -489,5 +507,8 @@ public class BuildingAttributes : MonoBehaviour
                 transform.Find("Object Indicator/Green indicator").transform.gameObject.SetActive(true);
             }
         }
+    }
+    public void setBuildingOutsideOfTown(bool val){
+        buildingOutsideOfTown = val;
     }
 }
