@@ -15,18 +15,18 @@ public class CraftingButton : MonoBehaviour
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
     }
 
-    void Start()
-    {
-        buttonId = gameManager.getCraftingSystem().getCraftingButtonIDCounter();
-        gameManager.getCraftingSystem().updateCraftingButtonIDCounter();
-    }
-
     public int getButtonId(){
         return buttonId;
+    }
+    public void setButtonId(int number){
+        buttonId = number;
     }
 
     public void setBuildingName(string buildingName){
         this.buildingName = buildingName;
+    }
+    public string getBuildingName(){
+        return buildingName;
     }
 
     public void setCostToCraftBuilding(Dictionary<string, int> list){

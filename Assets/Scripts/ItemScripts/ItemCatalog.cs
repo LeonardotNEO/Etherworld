@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class ItemCatalog : MonoBehaviour
 {
-    List<Item> itemCatalog = new List<Item>();
-    public Item selectedItem;
+    [SerializeField] public List<Item> itemCatalog = new List<Item>();
+    [SerializeField] public Item selectedItem;
     public GameObject woodModel;
     public Sprite woodSprite;
     public GameObject stonePileModel;

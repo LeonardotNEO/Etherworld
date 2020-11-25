@@ -19,7 +19,6 @@ public class CraftingSystem : MonoBehaviour
     public bool townCollidingWithOtherTown;
     public bool allBuildingsInsideTownIsPlayerOwned;
 
-    public int craftingButtonsIDCounter;
     private Ray movementRay;
     private RaycastHit hit;
     private string craftingSavedTag;
@@ -172,8 +171,8 @@ public class CraftingSystem : MonoBehaviour
     
     public void craftBuildingOnClick(){
         GameManager gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
-        int thisButtonID = EventSystem.current.currentSelectedGameObject.GetComponent<CraftingButton>().getButtonId();
-        Building buildingSelected = gameManager.getBuildingCatalog().getBuilding(thisButtonID);
+        string buildingName = EventSystem.current.currentSelectedGameObject.GetComponent<CraftingButton>().getBuildingName();
+        Building buildingSelected = gameManager.getBuildingCatalog().getBuildingByName(buildingName);
         Inventory mainInventory = gameManager.getInventoryCatalog().getMainInventory();
         Dictionary<string, int> itemsNeededToCraft = buildingSelected.getCostToCraftBuilding();
 
@@ -224,12 +223,6 @@ public class CraftingSystem : MonoBehaviour
     }
     public bool getcollidingWithOtherObject(){
         return collidingWithOtherObject;
-    }
-    public int getCraftingButtonIDCounter(){
-        return craftingButtonsIDCounter;
-    }
-    public void updateCraftingButtonIDCounter(){
-        craftingButtonsIDCounter++;
     }
     public void setCraftingSavedTag(string tag){
         craftingSavedTag = tag;

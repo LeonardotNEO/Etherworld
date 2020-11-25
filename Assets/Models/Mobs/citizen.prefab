@@ -36,6 +36,7 @@ GameObject:
   - component: {fileID: 8691096915985086058}
   - component: {fileID: 5114593348547200022}
   - component: {fileID: 5114593348547200018}
+  - component: {fileID: 2102196502739450197}
   - component: {fileID: 5114593348547200029}
   - component: {fileID: 5114593348547200028}
   - component: {fileID: 5114593348547200031}
@@ -126,6 +127,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   position: {x: 0, y: 0, z: 0}
   skills: {fileID: 0}
+  perks: {fileID: 0}
   relatives: []
   stoneDepotsInRange: []
   treesInRange: []
@@ -184,6 +186,18 @@ MonoBehaviour:
   inventoryCapacity: 0
   inventoryName: 
   inventoryID: 0
+--- !u!114 &2102196502739450197
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5114593348547200030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6063f394230d2a4db756a9cff57777d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!222 &5114593348547200029
 CanvasRenderer:
   m_ObjectHideFlags: 0

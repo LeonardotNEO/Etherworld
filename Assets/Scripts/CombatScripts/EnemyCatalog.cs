@@ -5,9 +5,9 @@ using UnityEngine;
 [System.Serializable]
 public class EnemyCatalog : MonoBehaviour
 {
-    private List<Enemy> enemyCatalog = new List<Enemy>();
-    private List<EnemyAttributes> enemiesInGame = new List<EnemyAttributes>();
-    private EnemyAttributes enemyCurrentlySelected;
+    public List<Enemy> enemyCatalog = new List<Enemy>();
+    public List<EnemyAttributes> enemiesInGame = new List<EnemyAttributes>();
+    public EnemyAttributes enemyCurrentlySelected;
 
     void Awake()
     {
@@ -24,7 +24,25 @@ public class EnemyCatalog : MonoBehaviour
                 /*BaseArmor*/       1,
                 /*BaseMovement*/    4,
                 /*BaseAttackSpeed*/ 10,
-                /*Aggressive*/      true
+                /*Aggressive*/      true,
+                /*Abilities*/       new List<string>(){}
+            )
+        );
+        addEnemyToGame(
+            new Enemy(
+                /*Name*/            "Wizard",
+                /*Desription*/      "Watch out so you dont get robbed",
+                /*Type*/            "Human",
+                /*Level*/           5,
+                /*baseHealth*/      100,  
+                /*baseDamage*/      8,        
+                /*baseCrit*/        1.01f,
+                /*Attackrange*/     1.5f,
+                /*BaseArmor*/       1,
+                /*BaseMovement*/    4,
+                /*BaseAttackSpeed*/ 10,
+                /*Aggressive*/      true,
+                /*Abilities*/       new List<string>(){"Firebolt"}
             )
         );
         addEnemyToGame(
@@ -40,7 +58,8 @@ public class EnemyCatalog : MonoBehaviour
                 /*BaseArmor*/       1,
                 /*BaseMovement*/    8,
                 /*BaseAttackSpeed*/ 10,
-                /*Aggressive*/      false
+                /*Aggressive*/      false,
+                /*Abilities*/       new List<string>(){}
             )
         );
         addEnemyToGame(
@@ -56,7 +75,8 @@ public class EnemyCatalog : MonoBehaviour
                 /*BaseArmor*/       1,
                 /*BaseMovement*/    8,
                 /*BaseAttackSpeed*/ 10,
-                /*Aggressive*/      false
+                /*Aggressive*/      false,
+                /*Abilities*/       new List<string>(){}
             )
         );
         addEnemyToGame(
@@ -72,7 +92,8 @@ public class EnemyCatalog : MonoBehaviour
                 /*BaseArmor*/       1,
                 /*BaseMovement*/    8,
                 /*BaseAttackSpeed*/ 5,
-                /*Aggressive*/      false
+                /*Aggressive*/      false,
+                /*Abilities*/       new List<string>(){}
             )
         );
     }

@@ -17,6 +17,10 @@ GameObject:
   - component: {fileID: 6480282145295294595}
   - component: {fileID: 6891126261973048801}
   - component: {fileID: 5554595800020129950}
+  - component: {fileID: 1323080936689023443}
+  - component: {fileID: 8806215017918769013}
+  - component: {fileID: 3406449161388754757}
+  - component: {fileID: 8025573604281534847}
   - component: {fileID: 3342161661001408956}
   - component: {fileID: 1461552315}
   - component: {fileID: 1461552316}
@@ -66,16 +70,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd989bea26b6dc44ca48b051560e7a7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clockSpeed: 1000
+  clockSpeed: 100
   years: 0
   months: 0
   days: 0
-  hours: 0
+  hours: 5
   minutes: 0
   seconds: 0
   rawTime: 0
   time: 0
-  startExtra: 0
+  startExtra: 220
   hour0: 0
   hour1: 0
   hour2: 0
@@ -128,7 +132,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buildingsInWorld: []
   amountOfBuildingsInGame: 0
-  buildingLastClicked: {fileID: 0}
+  townCenterRank1: {fileID: 1007340603426386707, guid: f0dc4d150de7d3c4791e04266abd1d81,
+    type: 3}
+  townCenterRank1Sprite: {fileID: 0}
+  townCenterRank2: {fileID: 4063219753043364056, guid: 7529c7f003a8dcd4cbe479fda82be310,
+    type: 3}
+  townCenterRank2Sprite: {fileID: 0}
+  townCenterRank3: {fileID: 4129305236891373809, guid: 503958729bd2e69499bc30f96cdc9280,
+    type: 3}
+  townCenterRank3Sprite: {fileID: 0}
+  townCenterRank4: {fileID: 7984022799998993439, guid: 1915a7ec90fa9a84a950dcb8af1db454,
+    type: 3}
+  townCenterRank4Sprite: {fileID: 0}
+  townCenterRank5: {fileID: 2578583599287326985, guid: cc81fc80ce9d676429cd198803701688,
+    type: 3}
+  townCenterRank5Sprite: {fileID: 0}
   smallWoodHouse: {fileID: 4932859491038232435, guid: b661f47856557a34fb5ee3699ec4be7c,
     type: 3}
   smallWoodHouseSprite: {fileID: 0}
@@ -145,7 +163,8 @@ MonoBehaviour:
   sawmillSprite: {fileID: 0}
   furnace: {fileID: 201775190020943813, guid: ca7ecf39c8151aa48bf4e862b565c2ba, type: 3}
   furnaceSprite: {fileID: 0}
-  warehouse: {fileID: 0}
+  warehouse: {fileID: 7565486743517001203, guid: b93b666e11bba7d49a07ee9492247b0e,
+    type: 3}
   warehouseSprite: {fileID: 0}
   woodFence: {fileID: 15760311937558185, guid: 04cf90eabfd0a154ebd1ae3838bc6faa, type: 3}
   woodFenceSprite: {fileID: 0}
@@ -161,13 +180,17 @@ MonoBehaviour:
   mediumStoneWallCorner: {fileID: 8225029139522262820, guid: d93f1b719357e59459df73b7808b640b,
     type: 3}
   MediumStoneWallCornerSprite: {fileID: 0}
-  bigStoneWall: {fileID: 0}
+  bigStoneWall: {fileID: 2786767418777999276, guid: e888f64edfde5d54bb347ce91c96d003,
+    type: 3}
   bigStoneWallSprite: {fileID: 0}
-  bigStoneWallGate: {fileID: 0}
+  bigStoneWallGate: {fileID: 5176827846550680339, guid: a78baabb9433f5342b82a66cbe62bf82,
+    type: 3}
   bigStoneWallGateSprite: {fileID: 0}
-  bigStoneWallCorner: {fileID: 0}
+  bigStoneWallCorner: {fileID: 203959035081596703, guid: 551414515e627e340b9679b455b6d5b9,
+    type: 3}
   bigStoneWallCornerSprite: {fileID: 0}
-  bigStoneWallInvertedCorner: {fileID: 0}
+  bigStoneWallInvertedCorner: {fileID: 6087077768668919717, guid: 314877e3a8f999b418ccd9c746af9921,
+    type: 3}
   bigStoneWallInvertedCornerSprite: {fileID: 0}
 --- !u!114 &3342161661001408952
 MonoBehaviour:
@@ -181,6 +204,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2803c939a9faf2b4092a20b4159c9426, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemCatalog: []
+  selectedItem:
+    itemName: 
+    itemDescription: 
+    itemType1: 
+    itemType2: 
   woodModel: {fileID: 6277615705952907542, guid: ae8f45abfe7da8b43860067e5eb82e56,
     type: 3}
   woodSprite: {fileID: 0}
@@ -226,6 +255,129 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7fbabe356f9e9047908a37ed621d442, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyCatalog: []
+  enemiesInGame: []
+  enemyCurrentlySelected: {fileID: 0}
+--- !u!114 &1323080936689023443
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3342161661001408955}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b11723dda321770438956e7321120e13, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  perkCatalog: []
+  categories: []
+--- !u!114 &8806215017918769013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3342161661001408955}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 545797e6b812da64c8bd95d69795ae50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  abilityCatalog: []
+  currentlySelectedAbility:
+    name: 
+    description: 
+    skill: 
+    level: 0
+    expGain: 0
+    cooldownTime: 0
+    onCooldown: 0
+    abilityUnlocked: 0
+  fireboltAnimation: {fileID: 0}
+  fireboltSprite: {fileID: 0}
+--- !u!114 &3406449161388754757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3342161661001408955}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbd40eaa733ce4c4b8d0d0bbf4f12c1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skillCatalog: []
+--- !u!114 &8025573604281534847
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3342161661001408955}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce31d28ac766fe64e9249b78368f6374, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  toolbar: []
+  magic:
+    itemInSlot: 
+    slotCapacity: 0
+    currentAmountInSlot: 0
+    itemSlotPlacement: 0
+    slotNumber: 0
+    type: 
+  melee:
+    itemInSlot: 
+    slotCapacity: 0
+    currentAmountInSlot: 0
+    itemSlotPlacement: 0
+    slotNumber: 0
+    type: 
+  ranged:
+    itemInSlot: 
+    slotCapacity: 0
+    currentAmountInSlot: 0
+    itemSlotPlacement: 0
+    slotNumber: 0
+    type: 
+  shield:
+    itemInSlot: 
+    slotCapacity: 0
+    currentAmountInSlot: 0
+    itemSlotPlacement: 0
+    slotNumber: 0
+    type: 
+  pickaxe:
+    itemInSlot: 
+    slotCapacity: 0
+    currentAmountInSlot: 0
+    itemSlotPlacement: 0
+    slotNumber: 0
+    type: 
+  axe:
+    itemInSlot: 
+    slotCapacity: 0
+    currentAmountInSlot: 0
+    itemSlotPlacement: 0
+    slotNumber: 0
+    type: 
+  hammer:
+    itemInSlot: 
+    slotCapacity: 0
+    currentAmountInSlot: 0
+    itemSlotPlacement: 0
+    slotNumber: 0
+    type: 
+  food:
+    itemInSlot: 
+    slotCapacity: 0
+    currentAmountInSlot: 0
+    itemSlotPlacement: 0
+    slotNumber: 0
+    type: 
 --- !u!114 &3342161661001408956
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -238,7 +390,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8828831a760c29a488425fe71a89badb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  craftingButtonsIDCounter: 0
+  isCrafting: 0
+  collidingWithOtherObject: 0
+  craftedBuildingIsOutsideTown: 0
+  townCollidingWithOtherTown: 0
+  allBuildingsInsideTownIsPlayerOwned: 0
 --- !u!114 &1461552315
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -264,6 +420,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   situation: 
+  menuBarOpen: 0
   inventoryOpen: 0
   craftingOpen: 0
   messageLogOpen: 0
@@ -272,6 +429,12 @@ MonoBehaviour:
   buildingOpenOpen: 0
   buildingInventoryOpenBool: 0
   townOpen: 0
-  building: {fileID: 0}
-  citizen: {fileID: 0}
-  item: {fileID: 0}
+  abilitesOpen: 0
+  craftingBuilding: {fileID: 0}
+  craftingBuildingHover: {fileID: 0}
+  skillSlot: {fileID: 0}
+  abilitiesSlot: {fileID: 0}
+  building: {fileID: 6991168349190834184, guid: 080ed1862650e5c49bb4b91dc4a4deb1,
+    type: 3}
+  citizen: {fileID: 3457879660930837726, guid: e538464200911104ab5c020e87879cfc, type: 3}
+  item: {fileID: 8668533974162976995, guid: 0d7a276c7e585254d99b3d52af47d902, type: 3}

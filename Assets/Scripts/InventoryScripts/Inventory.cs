@@ -85,7 +85,7 @@ public class Inventory : MonoBehaviour
 
         // TRANSFER TO TOOLBAR
         if(!gameManager.GetUI().getBuildingInventoryOpen() && this.getInventorySlot(slotnumber).currentAmountInSlot != 0){
-            GameObject.FindGameObjectWithTag("ToolbeltUI").GetComponent<Toolbelt>().addToSlot(this.getInventorySlot(slotnumber));
+            gameManager.getToolbelt().addToSlot(this.getInventorySlot(slotnumber));
             updateInventoryInterface();
         }
 
@@ -200,19 +200,24 @@ public class Inventory : MonoBehaviour
 
     public bool checkIfListOfItemsAreInInventory(Dictionary<string, int> checkList){
         string trueOrFalse = "";
-        foreach(var item in checkList){
-            int itemAmountFound = 0;
+        if(checkList != null){
+            foreach(var item in checkList){
+                int itemAmountFound = 0;
 
-            for(int i = 0; i < inventoryCapacity; i++){
-                if(item.Key == inventorySlots[i].getItemInSlot()){
-                    itemAmountFound += inventorySlots[i].getCurrentAmountInSlot();
+                for(int i = 0; i < inventoryCapacity; i++){
+                    if(item.Key == inventorySlots[i].getItemInSlot()){
+                        itemAmountFound += inventorySlots[i].getCurrentAmountInSlot();
+                    }
+                }
+                if(itemAmountFound >= item.Value){
+                    trueOrFalse += "true";
+                } else {
+                    trueOrFalse += "false";
                 }
             }
-            if(itemAmountFound >= item.Value){
-                trueOrFalse += "true";
-            } else {
-                trueOrFalse += "false";
-            }
+        } else {
+            //Debug.Log("the method needs a list of more than 0 items");
+            return false;
         }
         if(trueOrFalse.Contains("false")){
             return false;
@@ -276,7 +281,7 @@ public class Inventory : MonoBehaviour
                 return true;
             } else {
                 gameManager.getMessageLogText().addMessageToLog("Cant send item from inventory 1 to inventory 2, because inv1 doesnt have the item");
-                Debug.Log(this.getInventorySlots()[0].getItemInSlot() + this.getInventorySlots()[0].getCurrentAmountInSlot() + " " + this.transform.name + " " + inv2.transform.name);
+                Debug.Log(itemName + " " + amount + " " + this.transform.name + " " + inv2.transform.name);
             }
         } else {
             gameManager.getMessageLogText().addMessageToLog("Could not transfer item to inventory, since its not enough space");

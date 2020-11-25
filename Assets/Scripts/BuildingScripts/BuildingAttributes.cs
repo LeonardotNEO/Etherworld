@@ -511,4 +511,19 @@ public class BuildingAttributes : MonoBehaviour
     public void setBuildingOutsideOfTown(bool val){
         buildingOutsideOfTown = val;
     }
+
+    public Dictionary<string, int> getListOfProductionItemsBasedOnTransferThresholds(){
+        Dictionary<string, int> productionItems = null;
+        Dictionary<string, int> productionItemsBasedOnThreshold = new Dictionary<string, int>();
+
+            if(!itemCurrentlyProduced.getName().Equals("")){
+                
+                productionItems = itemCurrentlyProduced.getCostToCraftItem();
+
+                foreach(var item in productionItems){
+                    productionItemsBasedOnThreshold.Add(item.Key, item.Value * getAmountToTransfer());
+                }
+            } 
+        return productionItemsBasedOnThreshold;
+    }
 }

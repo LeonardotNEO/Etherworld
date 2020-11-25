@@ -31,7 +31,7 @@ public class Town : MonoBehaviour
 
     public List<Inventory> townAllInventories = new List<Inventory>(); // adds all items innside collider to inventory
 
-    public string townOwner;
+    [SerializeField] public string townOwner;
     public string townName;
     public string townCurrentDisaster;
 
@@ -68,7 +68,7 @@ public class Town : MonoBehaviour
         
         townCenter = transform.GetComponent<BoxCollider>().bounds.center;
         townAttractivnes = 40;
-        gameManager.GetTownCatalog().addTownToAllTown(this);
+        gameManager.getTownCatalog().addTownToAllTown(this);
 
         // SET OBJECT INDICATOR TO PROPER WITH AND DEPTH
         if(transform.Find("Object Indicator")){

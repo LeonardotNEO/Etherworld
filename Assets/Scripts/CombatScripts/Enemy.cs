@@ -5,21 +5,22 @@ using UnityEngine;
 [System.Serializable]
 public class Enemy
 {
-    private string name;
-    private string description;
-    private string type;
+    [SerializeField] private string name;
+    [SerializeField] private string description;
+    [SerializeField] private string type;
     private List<string> typesAvailable = new List<string>{"Human", "Zombie", "Belmmyae", "Manticore", "Troll", "Huldra", "Werewolf", "Bahkauv"};
-    private int level;
-    private int baseHealth;
-    private int baseDamage;
-    private float baseCritChance;
-    private float attackRange;
-    private int baseArmor;
-    private int baseMovementspeed;
-    private int baseAttackSpeed;
-    private bool aggressive;
+    [SerializeField] private int level;
+    [SerializeField] private int baseHealth;
+    [SerializeField] private int baseDamage;
+    [SerializeField] private float baseCritChance;
+    [SerializeField] private float attackRange;
+    [SerializeField] private int baseArmor;
+    [SerializeField] private int baseMovementspeed;
+    [SerializeField] private int baseAttackSpeed;
+    [SerializeField] private bool aggressive;
+    [SerializeField] private List<Ability> abilities = new List<Ability>();
 
-    public Enemy(string name, string description, string type, int level, int maxHealth, int damage, float critChance, float attackRange, int armor, int movementspeed, int baseAttackSpeed, bool aggressive){
+    public Enemy(string name, string description, string type, int level, int maxHealth, int damage, float critChance, float attackRange, int armor, int movementspeed, int baseAttackSpeed, bool aggressive, List<string> abilitiesString){
         this.name = name;
         this.description = description;
         if(!typesAvailable.Contains(type)){
@@ -37,6 +38,27 @@ public class Enemy
         this.baseMovementspeed = movementspeed;
         this.baseAttackSpeed = baseAttackSpeed;
         this.aggressive = aggressive;
+      
+        AbilityCatalog abilityCatalog = GameObject.FindGameObjectWithTag("GameManager").GetComponent<AbilityCatalog>();
+
+        if(abilitiesString.Count > 0){
+            foreach(string ability in abilitiesString){
+                if(abilityCatalog){
+                    if(abilityCatalog.getAbilityByName(ability) != null){
+                        this.abilities.Add(abilityCatalog.getAbilityByName(ability));
+                    } else {
+                        throw new System.ArgumentException("Tried to add an ability that dont exist: " + ability);
+                    }
+                } else {
+                    Debug.Log("couldnt find catalog");
+                }
+            }
+        }
+    }
+
+    void Awake()
+    {
+        
     }
 
     public string getName(){
@@ -71,5 +93,8 @@ public class Enemy
     }
     public float getAttackRange(){
         return attackRange;
+    }
+    public List<Ability> getAbilities(){
+        return abilities;
     }
 }

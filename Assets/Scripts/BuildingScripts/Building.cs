@@ -19,6 +19,7 @@ public class Building
     private string buildingTag;
     private string buildingDescription;
     private string jobName;
+    private bool buildingUnlocked;
 
     //CONSTRUCTOR
     public Building(
@@ -116,5 +117,11 @@ public class Building
     }
     public string getTag(){
         return buildingTag;
+    }
+    public bool getBuildingUnlocked(){
+        return buildingUnlocked;
+    }
+    public void setBuildingUnlocked(bool val){
+        buildingUnlocked = val;
     }
 }

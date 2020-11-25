@@ -15,7 +15,7 @@ public class PlayerBehavior : MonoBehaviour
     public List<Town> ownedTowns;
     public Inventory inventory;
     public Skills skills;
-
+    public PerkAttributes perkAttributes;
     public string playerFirstName;
     public string playerLastName;
     public string gender;
@@ -40,6 +40,7 @@ public class PlayerBehavior : MonoBehaviour
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
         inventory = GetComponent<Inventory>();
         skills = GetComponent<Skills>();
+        perkAttributes = GetComponent<PerkAttributes>();
     }
 
     void Start()
@@ -118,7 +119,6 @@ public class PlayerBehavior : MonoBehaviour
         }
         return null;
     }
-
     // SETTERS
     public void setReachedDestination(bool newBool){
         reachedDestination = newBool;
@@ -230,5 +230,9 @@ public class PlayerBehavior : MonoBehaviour
 
     public void removeTownFromOwnedTowns(Town town){
         ownedTowns.Remove(town);
+    }
+
+    public PerkAttributes getPerkattributes(){
+        return perkAttributes;
     }
 }

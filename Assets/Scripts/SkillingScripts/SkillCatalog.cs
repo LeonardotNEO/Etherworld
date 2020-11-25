@@ -4,15 +4,33 @@ using UnityEngine;
 
 public class SkillCatalog : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] public List<string> skillCatalog = new List<string>(){};
+
+    void Awake()
     {
-        
+        addSkillToCatalog("Woodcutting");
+        addSkillToCatalog("Mining");
+        addSkillToCatalog("Crafting");
+        addSkillToCatalog("Engineering");
+        addSkillToCatalog("Resiliance");
+        addSkillToCatalog("Onehand");
+        addSkillToCatalog("Twohand");
+        addSkillToCatalog("Ranged");
+        addSkillToCatalog("Magic");
+        addSkillToCatalog("Leadership");
+        addSkillToCatalog("Commanding");
+        addSkillToCatalog("Administration");
+        addSkillToCatalog("Researching");
+        addSkillToCatalog("Surgeoning");
+        addSkillToCatalog("Founding");
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public List<string> getSkillCatalog(){
+        return skillCatalog;
+    }
+    public void addSkillToCatalog(string name){
+        if(!skillCatalog.Contains(name)){
+            skillCatalog.Add(name);
+        }
     }
 }

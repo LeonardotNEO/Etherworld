@@ -23,25 +23,45 @@ public class Skill
         levelingDifficulty = 1.04f;
     }
 
-
-    //-------------//
-    // BASE METHOD //
-    //-------------//
-    // GETTERS
+    public string getSkillName(){
+        return skillName;
+    }
     public int getLevel(){
         return level;
+    }
+    public void increaseLevel(int amount){
+        level += amount;
+    }
+    public float getLevelingDifficulty(){
+        return levelingDifficulty;
+    }
+    public float getSpeedMultiplier(){
+        return speedMultiplier;
+    }
+    public void setSpeedMultiplier(int val){
+        speedMultiplier = val;
     }
     public int getExperience(){
         return experience;
     }
+    public void increaseExperience(int amount){
+        experience += amount;
+    }
+    public int getLastExperience(){
+        return lastExperience;
+    }
+    public void setLastExperience(int amount){
+        lastExperience = amount;
+    }
     public string getName(){
         return skillName;
     }
+
     public int getExperienceNextLevel(){
         if(level == 99){
             return 0;
         } else {
-            return (int)(Mathf.Pow(levelingDifficulty, level) * 1000 + lastExperience);
+            return (int)(Mathf.Pow(levelingDifficulty, level) * 1000 + experience);
         }
     }
     public int getExperienceLeft(){
@@ -57,31 +77,5 @@ public class Skill
         } else {
             return (float)((double)100/(getExperienceNextLevel() - lastExperience)) * (experience - lastExperience);
         }
-    }
-    public int getSpeedMultiplier(){
-        return speedMultiplier;
-    }
-
-    // SETTERS
-    public void increaseLevel(int amount){
-        level += amount;
-        speedMultiplier = 10 + level/2;
-    }
-    public void increaseExperience(int amount){
-        experience += amount;
-        checkIfNewLevel();
-        
-    }
-    public void checkIfNewLevel(){
-        while(experience >= Mathf.Pow(levelingDifficulty, level) * 1000 + lastExperience){
-            lastExperience = (int)(Mathf.Pow(levelingDifficulty, level) * 1000 + lastExperience);
-            if(level < 99){
-                increaseLevel(1);
-            }
-        }
-        if(playerSkill){
-            GameObject.FindGameObjectWithTag("Skills").GetComponent<ShowSkillsMenu>().updateSkills();
-        }
-        
     }
 }

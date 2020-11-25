@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class Item
 {
-    private string itemName;
-    private string itemDescription;
-    private string itemType1;
-    private string itemType2;
-    Dictionary<string, int> costToCraftItem;
+    [SerializeField] private string itemName;
+    [SerializeField] private string itemDescription;
+    [SerializeField] private string itemType1;
+    [SerializeField] private string itemType2;
+    [SerializeField] Dictionary<string, int> costToCraftItem;
     private GameObject itemPrefab;
     private Sprite itemSprite;
     private List<string> itemTypes1Available = new List<string>{

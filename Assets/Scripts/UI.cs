@@ -25,8 +25,23 @@ public class UI : MonoBehaviour
     public bool buildingOpenOpen;
     public bool buildingInventoryOpenBool;
     public bool townOpen;    
+    public bool abilitesOpen;
+    
+    //--------------------//
+    // UI ELEMENT PREFABS //
+    //--------------------//
 
-    // UI ELEMENT PREFABS
+    // CRAFTING
+    public GameObject craftingBuilding; // FOR CRAFTING
+    public GameObject craftingBuildingHover; // FOR CRAFTING
+
+    // SKILLS
+    public GameObject skillSlot; // FOR SKILLS
+
+    // ABILITIES
+    public GameObject abilitiesSlot; // FOR ABILITIES
+
+    // TOWN
     public GameObject building;  // FOR TOWN BUILDINGS
     public GameObject citizen; // FOR TOWN CITIZENS 
     public GameObject item; // FOR TOWN ITEM                                                                                                  
@@ -39,28 +54,28 @@ public class UI : MonoBehaviour
     {
         // INPUTS //
         if(Input.GetKeyDown("1")){
-            GameObject.FindGameObjectWithTag("ToolbeltUI").GetComponent<Toolbelt>().selectToolbarElement("Magic");
+            selectToolbarElement("Magic");
         }
         if(Input.GetKeyDown("2")){
-            GameObject.FindGameObjectWithTag("ToolbeltUI").GetComponent<Toolbelt>().selectToolbarElement("Melee");
+            selectToolbarElement("Melee");
         }
         if(Input.GetKeyDown("3")){
-            GameObject.FindGameObjectWithTag("ToolbeltUI").GetComponent<Toolbelt>().selectToolbarElement("Ranged");
+            selectToolbarElement("Ranged");
         }
         if(Input.GetKeyDown("4")){
-            GameObject.FindGameObjectWithTag("ToolbeltUI").GetComponent<Toolbelt>().selectToolbarElement("Shield");
+            selectToolbarElement("Shield");
         }
         if(Input.GetKeyDown("5")){
-            GameObject.FindGameObjectWithTag("ToolbeltUI").GetComponent<Toolbelt>().selectToolbarElement("Pickaxe");
+            selectToolbarElement("Pickaxe");
         }
         if(Input.GetKeyDown("6")){
-            GameObject.FindGameObjectWithTag("ToolbeltUI").GetComponent<Toolbelt>().selectToolbarElement("Axe");
+            selectToolbarElement("Axe");
         }
         if(Input.GetKeyDown("7")){
-            GameObject.FindGameObjectWithTag("ToolbeltUI").GetComponent<Toolbelt>().selectToolbarElement("Hammer");
+            selectToolbarElement("Hammer");
         }
         if(Input.GetKeyDown("8")){
-            GameObject.FindGameObjectWithTag("ToolbeltUI").GetComponent<Toolbelt>().selectToolbarElement("Food");
+            selectToolbarElement("Food");
         }
         if(Input.GetKeyDown("9")){
 
@@ -78,7 +93,7 @@ public class UI : MonoBehaviour
             Time.timeScale = 4;
         }
         if(Input.GetKeyDown("o")){
-            gameManager.getPlayerBehavior().getSkills().getSkillByName("Woodcutting").increaseExperience(100000);
+            gameManager.getPlayerBehavior().getSkills().increaseExperience("Woodcutting", 100000);
         }
         if(Input.GetKeyDown("p")){
 
@@ -161,6 +176,9 @@ public class UI : MonoBehaviour
         } 
         if(Input.GetKeyDown("v")){
             openTown();
+        }
+        if(Input.GetKeyDown("b")){
+            openAbilities();
         }
         if(gameManager.getCraftingSystem().getIsCrafting()){
             if(Input.GetKeyDown("q")){
@@ -642,6 +660,7 @@ public class UI : MonoBehaviour
         closeInventory();
         closeCrafting();
         closeTown();
+        closeAbilities();
     }
     public void closeAllMainMenusOpenMenuBar(){
         openMenuBar();
@@ -650,6 +669,7 @@ public class UI : MonoBehaviour
         closeInventory();
         closeCrafting();
         closeTown();
+        closeAbilities();
     }
     public void openMenuBar(){
         closeAllMainMenus();
@@ -662,24 +682,11 @@ public class UI : MonoBehaviour
         GameObject.FindGameObjectWithTag("MenuBarUI").transform.Find("Background").gameObject.SetActive(false); 
     }
 
-    //---------//
-    // TOOLBAR //
-    //---------//
-    public void clickToolbarItem(string type){
-        Toolbelt toolbar = GameObject.FindGameObjectWithTag("ToolbeltUI").GetComponent<Toolbelt>();
+    
 
-        // TRANSFER TO MAIN INVENTORY
-        if(inventoryOpen){
-            toolbar.transferFromToolbarToInventory(gameManager.getPlayerBehavior().getInventory(), type);
-        } else {
-            Debug.Log("inventoryopen not open");
-            toolbar.selectToolbarElement(type);
-        }
-    }
-
-    //-------------//
-    // MESSAGE LOG //
-    //-------------//
+    //----------------//
+    // MESSAGELOGMENU //
+    //----------------//
     public void openMessageLog(){
         if(GameObject.FindGameObjectWithTag("MessageLogBarUI").transform.Find("Background").gameObject.activeSelf == true){
             closeAllMainMenusOpenMenuBar();
@@ -696,7 +703,7 @@ public class UI : MonoBehaviour
     }
 
     //------------------//
-    // PLAYER INVENTORY //
+    // INVENTORY MENU   //
     //------------------//
     public void openInventory(){
         if(GameObject.FindGameObjectWithTag("InventoryMenuUI").transform.Find("Background").gameObject.activeSelf == true){
@@ -727,6 +734,8 @@ public class UI : MonoBehaviour
         closeAllMainMenus();
         getPlayerOwnedSelectedTown().townIndicator(true);
         getPlayerOwnedSelectedTown().townIndicatorMode(true);
+
+        showAllCraftingBuildings();
         craftingOpen = true;
         GameObject.FindGameObjectWithTag("CraftingMenuUI").transform.Find("Background").gameObject.SetActive(true); 
     }
@@ -735,10 +744,50 @@ public class UI : MonoBehaviour
         getPlayerOwnedSelectedTown().townIndicator(false);
         GameObject.FindGameObjectWithTag("CraftingMenuUI").transform.Find("Background").gameObject.SetActive(false); 
     }
+    public void showAllCraftingBuildings(){
+        removeAllCraftingBuildingsItems();
+        showCraftingBuildings(gameManager.getBuildingCatalog().getBuildingsCatalog());
+    }
+    public void showCraftingBuildings(List<Building> list){
+        removeAllCraftingBuildingsItems();
 
-    //--------//
-    // SKILLS //
-    //--------//
+        List<Building> buildingCatalog = gameManager.getBuildingCatalog().getBuildingsCatalog();
+        int counter = 0;
+
+        foreach(Building building in list){
+            GameObject thisBuilding = (GameObject)Instantiate(craftingBuilding, GameObject.FindGameObjectWithTag("CraftingMenuUI").transform.Find("Background/Crafting Elements/Viewport/Content"));
+            thisBuilding.GetComponent<CraftingButton>().setBuildingName(building.getNameOfBuilding());
+            thisBuilding.transform.name = building.getNameOfBuilding();
+            thisBuilding.transform.Find("Text").GetComponent<Text>().text = building.getNameOfBuilding();
+            thisBuilding.GetComponent<CraftingButton>().setBuildingName(building.getNameOfBuilding());
+            thisBuilding.GetComponent<CraftingButton>().setCostToCraftBuilding(building.getCostToCraftBuilding());
+
+            foreach(var item in building.getCostToCraftBuilding()){
+                GameObject costToCraftItem = Instantiate(craftingBuildingHover, thisBuilding.transform.Find("Hover/Cost").transform);
+                costToCraftItem.GetComponent<Text>().text = item.Value + " " + item.Key;
+                costToCraftItem.GetComponent<CostText>().setItemName(item.Key);
+                costToCraftItem.GetComponent<CostText>().setAmount(item.Value);
+            }
+            counter++;
+        }
+    }
+    public void showAllItems(){
+
+    }
+    public void showCraftingBuildingTag(string tag){
+        removeAllCraftingBuildingsItems();
+        showCraftingBuildings(gameManager.getBuildingCatalog().getBuildingsByTag(tag));
+    }
+
+    public void removeAllCraftingBuildingsItems(){
+        foreach(Transform child in GameObject.FindGameObjectWithTag("CraftingMenuUI").transform.Find("Background/Crafting Elements/Viewport/Content")){
+            Destroy(child.gameObject);
+        }
+    }
+
+    //------------//
+    // SKILLSMENU //
+    //------------//
     public void openSkills(){
         if(GameObject.FindGameObjectWithTag("Skills").transform.Find("Background").gameObject.activeSelf == true){
             closeAllMainMenusOpenMenuBar();
@@ -746,6 +795,7 @@ public class UI : MonoBehaviour
         }
 
         closeAllMainMenus();
+        showSkills();
         skillsOpen = true;
         GameObject.FindGameObjectWithTag("Skills").transform.Find("Background").gameObject.SetActive(true); 
     }
@@ -753,10 +803,182 @@ public class UI : MonoBehaviour
         skillsOpen = false;
         GameObject.FindGameObjectWithTag("Skills").transform.Find("Background").gameObject.SetActive(false); 
     }
+    public void showSkills(){
+        removeSkills();
+        List<Skill> skills = gameManager.getPlayerBehavior().getSkills().GetSkills();
 
-    //------//
-    // TOWN //
-    //------//
+        foreach(Skill skill in skills){
+            GameObject thisSkill = (GameObject)Instantiate(skillSlot, GameObject.FindGameObjectWithTag("Skills").transform.Find("Background/Skills"));
+            thisSkill.transform.Find("skillName").GetComponent<Text>().text = skill.getName();
+            thisSkill.transform.Find("level").GetComponent<Text>().text = skill.getLevel().ToString();
+            thisSkill.transform.Find("Experience Panel/Exp").GetComponent<Text>().text = skill.getExperience().ToString();
+            thisSkill.transform.Find("Experience Panel/Exp Next Lvl").GetComponent<Text>().text = skill.getExperienceNextLevel().ToString();
+            thisSkill.transform.Find("Experience Panel/Exp Til Next").GetComponent<Text>().text = skill.getExperienceLeft().ToString();
+            thisSkill.transform.Find("Experience Panel/Percentage").GetComponent<Text>().text = skill.getPercentageLeft().ToString("0.##") + "%";             
+        }
+    }
+    public void removeSkills(){
+        foreach(Transform child in GameObject.FindGameObjectWithTag("Skills").transform.Find("Background/Skills")){
+            Destroy(child.gameObject);
+        }
+    }
+
+    //-------------//
+    // TOOLBARMENU //
+    //-------------//
+    public void clickToolbarItem(string type){
+        Toolbelt toolbar = GameObject.FindGameObjectWithTag("ToolbeltUI").GetComponent<Toolbelt>();
+
+        // TRANSFER TO MAIN INVENTORY
+        if(inventoryOpen){
+            toolbar.transferFromToolbarToInventory(gameManager.getPlayerBehavior().getInventory(), type);
+        } else {
+            //Debug.Log("inventoryopen not open");
+            selectToolbarElement(type);
+        }
+    }
+    public void updateToolbarInterface(){
+        List<InventorySlot> toolbar = gameManager.getToolbelt().getToolbar();
+
+        int counter = 0;
+        foreach(Transform child in GameObject.FindGameObjectWithTag("ToolbeltUI").transform.Find("Background/Content")){
+            if(toolbar[counter].getItemInSlot() != null){
+                child.Find("Text").GetComponent<Text>().text = toolbar[counter].getItemInSlot();
+
+                int counter2 = 0;
+                foreach(Transform ability in child.Find("Hoverpanel/Background/Content")){
+                    if(ability.transform.GetComponentInParent<AbilitiesButton>().getAbilityButton().Length > counter2){
+                        if(ability.transform.GetComponentInParent<AbilitiesButton>().getAbilityButton()[counter2] != null){
+                            ability.Find("Abilityname").GetComponent<Text>().text = ability.transform.GetComponentInParent<AbilitiesButton>().getAbilityButton()[counter2].getName();
+                            ability.transform.name = ability.transform.GetComponentInParent<AbilitiesButton>().getAbilityButton()[counter2].getName();
+                        } else {
+                            ability.Find("Abilityname").GetComponent<Text>().text = "";
+                            ability.transform.name = "";
+                        }
+                        
+                    }
+                    counter2++;
+                }
+
+                // FOR FOOD
+                if(counter == 7){
+                    child.Find("Amount").GetComponent<Text>().text = toolbar[counter].getCurrentAmountInSlot().ToString();
+                }
+            } else {
+                child.Find("Text").GetComponent<Text>().text = toolbar[counter].getInventorySlotType();
+
+                int counter2 = 0;
+                foreach(Transform ability in child.Find("Hoverpanel/Background/Content")){
+                    if(ability.transform.GetComponentInParent<AbilitiesButton>().getAbilityButton().Length > counter2){
+                        if(ability.transform.GetComponentInParent<AbilitiesButton>().getAbilityButton()[counter2] != null){
+                            ability.Find("Abilityname").GetComponent<Text>().text = ability.transform.GetComponentInParent<AbilitiesButton>().getAbilityButton()[counter2].getName();
+                            ability.transform.name = ability.transform.GetComponentInParent<AbilitiesButton>().getAbilityButton()[counter2].getName();
+                        } else {
+                            ability.Find("Abilityname").GetComponent<Text>().text = "";
+                            ability.transform.name = "";
+                        }
+                        
+                    }
+                    counter2++;
+                }
+
+                // FOR FOOD
+                if(counter == 7){
+                    child.Find("Amount").GetComponent<Text>().text = "";
+                }
+            }
+            counter++;
+        }
+    }
+    public void selectToolbarElement(string type){
+        List<InventorySlot> toolbar = gameManager.getToolbelt().getToolbar();
+
+        int counter = 0;
+        foreach(InventorySlot inventorySlot in toolbar){
+            Transform toolbarUI = GameObject.FindGameObjectWithTag("ToolbeltUI").transform.Find("Background/Content").GetChild(counter).transform;
+
+            if(inventorySlot.getInventorySlotType().Equals(type)){
+                toolbarUI.Find("Number").GetComponent<Text>().color = Color.yellow;
+                toolbarUI.Find("Hoverpanel").transform.gameObject.SetActive(true);
+            } else {
+                toolbarUI.Find("Number").GetComponent<Text>().color = Color.white;
+                toolbarUI.Find("Hoverpanel").transform.gameObject.SetActive(false);
+            }
+            counter++;
+        }
+    }
+
+    public void removeAbilityFromToolbar(int slotNumber){
+
+    }
+
+    //--------------//
+    // ABILITESMENU //
+    //--------------//
+    public void openAbilities(){
+        if(GameObject.FindGameObjectWithTag("AbilitiesMenuUI").transform.Find("Background").gameObject.activeSelf == true){
+            closeAllMainMenusOpenMenuBar();
+            return;
+        }
+
+        closeAllMainMenus();
+        showAbilitesAll();
+        abilitesOpen = true;
+        GameObject.FindGameObjectWithTag("AbilitiesMenuUI").transform.Find("Background").gameObject.SetActive(true);
+    }
+    public void closeAbilities(){
+        abilitesOpen = false;
+        GameObject.FindGameObjectWithTag("AbilitiesMenuUI").transform.Find("Background").gameObject.SetActive(false);
+    }
+    public void showAbilities(List<Ability> list){
+        removeAbilities();
+
+        foreach(Ability ability in list){
+            GameObject abilitySlot = (GameObject)Instantiate(abilitiesSlot, GameObject.FindGameObjectWithTag("AbilitiesMenuUI").transform.Find("Background/Abilities/Viewport/Content"));
+            abilitySlot.transform.Find("Ability Name").GetComponent<Text>().text = ability.getName();
+            abilitySlot.transform.name = ability.getName() + "/" + ability.getType();
+            abilitySlot.transform.Find("Level").GetComponent<Text>().text = ability.getLevel().ToString();
+            abilitySlot.transform.Find("Skill").GetComponent<Text>().text = ability.getSkill();
+        }
+    }
+    public void showAbilitesAll(){
+        showAbilities(gameManager.getAbilityCatalog().getAbilityCatalog());
+    }
+    public void showAbilitiesUnlocked(){
+        showAbilities(gameManager.getPlayerBehavior().getPerkattributes().getAbilitiesUnlocked());
+    }
+    public void showAbilitiesBySkill(string skill){
+        showAbilities(gameManager.getAbilityCatalog().getAbilityBySkill(skill));
+    }
+    public void removeAbilities(){
+        foreach(Transform child in GameObject.FindGameObjectWithTag("AbilitiesMenuUI").transform.Find("Background/Abilities/Viewport/Content")){
+            Destroy(child.gameObject);
+        }
+    }
+
+    public void clickAbilityButton(GameObject button){
+        string[] abilityFull = button.transform.name.Split('/');
+        string abilityName = abilityFull[0]; 
+        string abilityType = abilityFull[1];
+        gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+        Ability selectedAbility = gameManager.getAbilityCatalog().getAbilityByNameAndType(abilityName, abilityType);
+        Transform abilitiesToolbelt = GameObject.FindGameObjectWithTag("ToolbeltUI").transform.Find("Background/Content");
+
+        foreach(Transform child in abilitiesToolbelt){
+            AbilitiesButton slot = child.GetComponent<AbilitiesButton>();
+
+            if(slot.getButtonName().Equals(selectedAbility.getType())){
+                slot.addAbilityToAbilities(selectedAbility);
+            
+            }
+        }
+        updateToolbarInterface();
+        selectToolbarElement(selectedAbility.getType());
+    }
+
+    //----------//
+    // TOWNMENU //
+    //----------//
     public void openTown(){
         if(GameObject.FindGameObjectWithTag("TownMenuUI").transform.Find("Background").gameObject.activeSelf == true){
             closeAllMainMenusOpenMenuBar();

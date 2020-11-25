@@ -4,18 +4,7 @@ using UnityEngine;
 
 public class TownCatalog : MonoBehaviour
 {
-    public List<Town> allTowns = new List<Town>();
-
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    [SerializeField] public List<Town> allTowns = new List<Town>();
 
     public List<Town> getAllTowns(){
         return allTowns;

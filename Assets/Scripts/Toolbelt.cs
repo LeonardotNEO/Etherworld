@@ -34,14 +34,16 @@ public class Toolbelt : MonoBehaviour
         addSlotToToolbar(food = new InventorySlot(99, "Food"));
     }
 
-
+    public List<InventorySlot> getToolbelt(){
+        return toolbar;
+    }
     public bool addToSlot(InventorySlot inventorySlot){
         string itemType = gameManager.getItemCatalog().getItemType1ByName(inventorySlot.getItemInSlot());
 
         foreach(InventorySlot slot in toolbar){
             if(slot.getInventorySlotType().Equals(itemType)){
                 slot.addInventorySlotToThis(inventorySlot);
-                updateToolbarInterface();
+                gameManager.GetUI().updateToolbarInterface();
                 return true;
             } 
         }
@@ -55,44 +57,7 @@ public class Toolbelt : MonoBehaviour
                 inventorySlot.decreaseCurrentAmountInSlot(inventorySlot.getCurrentAmountInSlot() - amountToNotRemove);
             }
         }
-        updateToolbarInterface();
-    }
-
-    public void selectToolbarElement(string type){
-        int counter = 0;
-        foreach(InventorySlot inventorySlot in toolbar){
-            if(!transform.Find("Background/Content").GetChild(counter).transform.Find("Hoverpanel").gameObject.activeSelf){
-                if(inventorySlot.getInventorySlotType().Equals(type)){
-                    transform.Find("Background/Content").GetChild(counter).transform.Find("Number").GetComponent<Text>().color = Color.yellow;
-                    transform.Find("Background/Content").GetChild(counter).transform.Find("Hoverpanel").transform.gameObject.SetActive(true);
-                } else {
-                    transform.Find("Background/Content").GetChild(counter).transform.Find("Number").GetComponent<Text>().color = Color.white;
-                    transform.Find("Background/Content").GetChild(counter).transform.Find("Hoverpanel").transform.gameObject.SetActive(false);
-                }
-            } else {
-                transform.Find("Background/Content").GetChild(counter).transform.Find("Number").GetComponent<Text>().color = Color.white;
-                transform.Find("Background/Content").GetChild(counter).transform.Find("Hoverpanel").transform.gameObject.SetActive(false);
-            }
-            counter++;
-        }
-    }
-
-    public void updateToolbarInterface(){
-        int counter = 0;
-        foreach(Transform child in transform.Find("Background/Content")){
-            if(toolbar[counter].getItemInSlot() != null){
-                child.Find("Text").GetComponent<Text>().text = toolbar[counter].getItemInSlot();
-                if(counter == 7){
-                    child.Find("Amount").GetComponent<Text>().text = toolbar[counter].getCurrentAmountInSlot().ToString();
-                }
-            } else {
-                child.Find("Text").GetComponent<Text>().text = toolbar[counter].getInventorySlotType();
-                if(counter == 7){
-                    child.Find("Amount").GetComponent<Text>().text = "";
-                }
-            }
-            counter++;
-        }
+        gameManager.GetUI().updateToolbarInterface();
     }
 
     public void addSlotToToolbar(InventorySlot slot){

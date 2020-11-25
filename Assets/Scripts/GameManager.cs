@@ -14,6 +14,10 @@ public class GameManager : MonoBehaviour
     private CitizenCatalog citizenCatalog;
     private TownCatalog townCatalog;
     private EnemyCatalog enemyCatalog;
+    private AbilityCatalog abilityCatalog;
+    private PerkCatalog perkCatalog;
+    private SkillCatalog skillCatalog;
+    public Toolbelt toolbelt;
     private UI UI;
     private MessageLogText messageLogText;
     private Clock clock;
@@ -28,6 +32,10 @@ public class GameManager : MonoBehaviour
         citizenCatalog = GetComponent<CitizenCatalog>();
         townCatalog = GetComponent<TownCatalog>();
         enemyCatalog = GetComponent<EnemyCatalog>();
+        abilityCatalog = GetComponent<AbilityCatalog>();
+        perkCatalog = GetComponent<PerkCatalog>();
+        skillCatalog = GetComponent<SkillCatalog>();
+        toolbelt = GetComponent<Toolbelt>();
         UI = GetComponent<UI>();
         messageLogText = GameObject.FindGameObjectWithTag("MessageLogBarUI").GetComponentInChildren<MessageLogText>();
         clock = GetComponent<Clock>();
@@ -46,17 +54,29 @@ public class GameManager : MonoBehaviour
     public CitizenCatalog getCitizenCatalog(){
         return citizenCatalog;
     }
-    public TownCatalog GetTownCatalog(){
+    public TownCatalog getTownCatalog(){
         return townCatalog;
     }
     public EnemyCatalog getEnemyCatalog(){
         return enemyCatalog;
+    }
+    public AbilityCatalog getAbilityCatalog(){
+        return abilityCatalog;
+    }
+    public PerkCatalog getPerkCatalog(){
+        return perkCatalog;
+    }
+    public SkillCatalog getSkillCatalog(){
+        return skillCatalog;
     }
     public PlayerBehavior getPlayerBehavior(){
         return playerBehavior;
     }
     public CraftingSystem getCraftingSystem(){
         return craftingSystem;
+    }
+    public Toolbelt getToolbelt(){
+        return toolbelt;
     }
     public UI GetUI(){
         return UI;

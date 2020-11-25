@@ -13,6 +13,7 @@ public class EnemyAttributes : MonoBehaviour
     public EnemyAttributes currentTarget;
     public List<EnemyAttributes> enemiesInRange;
     public Vector3 position;
+    public List<Ability> abilities;
     public string enemyName;
     public string description;
     public string type;
@@ -56,6 +57,7 @@ public class EnemyAttributes : MonoBehaviour
             critChance = enemyCatalog.getEnemyByName(enemyName).getBaseCritChange();
             attackRange = enemyCatalog.getEnemyByName(enemyName).getAttackRange();
             aggressive = false;
+            abilities = enemyCatalog.getEnemyByName(enemyName).getAbilities();
         }
     }
 
@@ -269,6 +271,13 @@ public class EnemyAttributes : MonoBehaviour
     }
 
     public void lookAt(GameObject lookAt){
-        transform.LookAt(new Vector3(lookAt.transform.position.x, 0, lookAt.transform.position.z));
+        // FIX THIS
+        //transform.LookAt(new Vector3(lookAt.transform.position.x, 0, lookAt.transform.position.z));
+    }
+
+    public void addAbilityToEnemy(Ability ability){
+        if(!abilities.Contains(ability)){
+            abilities.Add(ability);
+        }
     }
 }

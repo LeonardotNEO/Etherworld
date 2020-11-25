@@ -10,7 +10,7 @@ public class Citizen : MonoBehaviour
     public Vector3 position;
     NavMeshAgent citizenAgent;
     public Skills skills;
-
+    public PerkCatalog perks;
     public List<Citizen> relatives = new List<Citizen>();
     public List<ResourceAttributes> stoneDepotsInRange = new List<ResourceAttributes>();
     public List<ResourceAttributes> treesInRange = new List<ResourceAttributes>();
@@ -181,6 +181,9 @@ public class Citizen : MonoBehaviour
 
         // SKILLS
         skills = GetComponent<Skills>();
+
+        // PERKS
+        perks = GetComponent<PerkCatalog>();
 
         // INVENTORY
         inventory = transform.GetComponent<Inventory>();
@@ -490,7 +493,7 @@ public class Citizen : MonoBehaviour
     public bool notifyWhenWorkInventoryRunningLow(){
         if(work){
             if(work.getItemCurrentlyProduced() != null){
-                Dictionary<string,int> itemsNeeded = getListOfProductionItemsBasedOnTransferThresholds();
+                Dictionary<string,int> itemsNeeded = work.getListOfProductionItemsBasedOnTransferThresholds();
                 
                 if(!work.getBuildingInventory().checkIfListOfItemsAreInInventory(itemsNeeded)){
                     return true;
@@ -636,25 +639,6 @@ public class Citizen : MonoBehaviour
         }
         
     }
-    
-    // MOVE THIS TO BUILDINGATTRBITUTES
-    public Dictionary<string, int> getListOfProductionItemsBasedOnTransferThresholds(){
-        Dictionary<string, int> productionItems = null;
-        Dictionary<string, int> productionItemsBasedOnThreshold = new Dictionary<string, int>();
-
-        if(work){
-            if(work.getItemCurrentlyProduced() != null){
-                productionItems = work.getItemCurrentlyProduced().getCostToCraftItem();
-
-                foreach(var item in productionItems){
-                    productionItemsBasedOnThreshold.Add(item.Key, item.Value * work.getAmountToTransfer());
-                }
-            } 
-        }
-        return productionItemsBasedOnThreshold;
-    }
-
-    
 
     public IEnumerator goToWorkbuilding(){
         if(buildingInsideOf){
@@ -721,7 +705,7 @@ public class Citizen : MonoBehaviour
                     // GETTING RESOURCES IF WORKINVENTORY DONT HAVE PRODUCTION ITEM //
                     if(notifyWhenWorkInventoryRunningLow() && !notifyWhenCitizenInventoryHasWorkItems() && morningMeetingFinished && !movingItemToBuilding){
                         do{
-                            StartCoroutine(getItemFromBuilding(getListOfProductionItemsBasedOnTransferThresholds(), townAlliegence.getClosestStorageBuildingWithListOfItems(this.transform.position, getListOfProductionItemsBasedOnTransferThresholds())));
+                            StartCoroutine(getItemFromBuilding(work.getListOfProductionItemsBasedOnTransferThresholds(), townAlliegence.getClosestStorageBuildingWithListOfItems(this.transform.position, work.getListOfProductionItemsBasedOnTransferThresholds())));
                             //Debug.Log("gathering item from storage");
                             yield return null;
                         } while (gatheringItemFromBuilding && work);
@@ -730,7 +714,7 @@ public class Citizen : MonoBehaviour
                     // MOVE RESOURCES BACK TO WORKPLACE //
                     if(notifyWhenCitizenInventoryHasWorkItems() && morningMeetingFinished && !gatheringItemFromBuilding){
                         do{
-                            StartCoroutine(putItemInBuilding(getListOfProductionItemsBasedOnTransferThresholds(), work));
+                            StartCoroutine(putItemInBuilding(work.getListOfProductionItemsBasedOnTransferThresholds(), work));
                             //Debug.Log("putting item in workbuilding");
                             yield return null;
                         } while (movingItemToBuilding  && work);
@@ -891,7 +875,7 @@ public class Citizen : MonoBehaviour
                 }
             }
         } else {
-            gameManager.GetTownCatalog().getNearestTown();
+            gameManager.getTownCatalog().getNearestTown();
             // Get nearest town with attractivnes over 20?
         }
     }

@@ -32,6 +32,7 @@ TagManager:
   - Town center
   - MenuBarUI
   - ToolbeltUI
+  - AbilitiesMenuUI
   layers:
   - Default
   - TransparentFX
