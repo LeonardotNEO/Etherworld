@@ -11,6 +11,7 @@ public class ItemAttributes : MonoBehaviour
 
     private bool playerInBounds;
     private bool citizenInBounds;
+    public bool walkingToItemBool;
 
 
     void Start()
@@ -28,11 +29,6 @@ public class ItemAttributes : MonoBehaviour
         }
 
         this.transform.name = itemName;
-    }
-
-    void Update()
-    {
-        
     }
 
     public int getItemAmount(){
@@ -84,23 +80,31 @@ public class ItemAttributes : MonoBehaviour
         }
     }
 
-    public void pickUpItem(){
-        if(player.tag == "player"){
-            if(getItemAmount() != 0){
-                itemAmount = gameManager.getInventoryCatalog().getMainInventory().addItemToInventory(getItemName(), getItemAmount());
+    public void pickUpItem(PlayerBehavior player, Citizen citizen){
+        bool itemPickedUp = false;
+        if(!itemPickedUp){
+            itemPickedUp = true;
+
+            if(player){
+                if(getItemAmount() != 0){
+                    itemAmount = gameManager.getInventoryCatalog().getMainInventory().addItemToInventory(getItemName(), getItemAmount());
+                }
+                if(itemAmount == 0){
+                    player.GetComponent<Animator>().SetTrigger("pickingUpItem");
+                    Destroy(this.gameObject);
+                }
             }
-            player.GetComponent<Animator>().SetTrigger("pickingUpItem");
-            if(itemAmount == 0){
-                Destroy(this.gameObject);
-            }
-        }
-        if(player.tag == "Citizen"){
-            if(getItemAmount() != 0){
-                itemAmount = player.GetComponent<Citizen>().getInventory().addItemToInventory(getItemName(), getItemAmount());
-            }
-            player.GetComponent<Animator>().SetTrigger("pickingUpItem");
-            if(itemAmount == 0){
-                Destroy(this.gameObject);
+            if(citizen){
+                if(getItemAmount() != 0){
+                    itemAmount = citizen.getInventory().addItemToInventory(getItemName(), getItemAmount());
+                }
+
+                if(itemAmount == 0){
+                    citizen.transform.GetComponent<Citizen>().removeItemFromItemsToPickUp(this);
+                    //Debug.Log("item picked up");
+                    citizen.transform.GetComponent<Animator>().SetTrigger("pickingUpItem");
+                    Destroy(this.gameObject);
+                }
             }
         }
     }
@@ -112,24 +116,35 @@ public class ItemAttributes : MonoBehaviour
             if(playerInBounds){
                 gameManager.getPlayerBehavior().stopPlayer();
                 gameManager.getPlayerBehavior().playerLookAt(this.gameObject);
-                pickUpItem();
-                runLoop = false;
+                pickUpItem(gameManager.getPlayerBehavior(), null);
+                break;
             }
             yield return null;
         }
     }
+
     public IEnumerator walkingToItem(Citizen citizen){
-        bool runLoop = true;
-        citizen.goToDestination(this.transform.position);
-        while(runLoop){
-            if(citizenInBounds){
-                citizen.stopMovement();
-                citizen.lookAt(this.gameObject);
-                pickUpItem();
-                runLoop = false;
+        if(!walkingToItemBool){
+            //Debug.Log("walking to item started");
+            walkingToItemBool = true;
+            citizen.goToDestination(this.transform.position);
+            bool reachedResource = false;
+
+            while(walkingToItemBool){
+                if(this != null){
+                    if(Vector3.Distance(this.transform.position, citizen.transform.position) <= 1.5f && !reachedResource){
+                        reachedResource = true;
+                        citizen.lookAt(this.gameObject);
+                        citizen.stopMovement();
+                        pickUpItem(null, citizen);
+                        break;
+                    }
+                }
+                yield return null;
             }
-            yield return null;
+            walkingToItemBool = false;
         }
+    
     }
 }
 

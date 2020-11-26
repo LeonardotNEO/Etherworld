@@ -82,11 +82,6 @@ public class Town : MonoBehaviour
 
     }
 
-    void Update()
-    {
-
-    }
-
     void OnDisable()
     {
         foreach(BuildingAttributes building in buildingsInTown){

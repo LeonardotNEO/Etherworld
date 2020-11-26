@@ -33,8 +33,22 @@ public class GenerateGround : MonoBehaviour
             
             GameObject spawn = Instantiate(treePrefab, new Vector3(Random.Range(transform.position.x + 150, transform.position.x - 150), transform.position.y, Random.Range(transform.position.z + 150, transform.position.z - 150)), transform.rotation);
             Collider[] intersecting = Physics.OverlapSphere(new Vector3(spawn.transform.position.x, spawn.transform.position.y + 4.5f, spawn.transform.position.z), 2f);
+            List<Collider> intersectingList = new List<Collider>();
+
+            float randomVector3Scale = Random.Range(1.3f, 2.0f);
+            spawn.transform.localScale = new Vector3(randomVector3Scale, randomVector3Scale, randomVector3Scale);
+
+            foreach(Collider collider in intersecting){
+                if(collider.transform.name.Equals("Spherecollider")){
+                    //Debug.Log("Not adding that coolider");
+                } else {
+                    intersectingList.Add(collider);
+                }
+            }
+            
+            
             spawn.transform.parent = GameObject.Find("Resources").transform;
-            if(intersecting.Length != 4){
+            if(intersectingList.Count != 4){
                 Destroy(spawn);
                 actualSpawnedTrees--;
             }
@@ -47,20 +61,25 @@ public class GenerateGround : MonoBehaviour
             GameObject spawn = Instantiate(stonePrefab, new Vector3(Random.Range(transform.position.x + 150, transform.position.x - 150), transform.position.y, Random.Range(transform.position.z + 150, transform.position.z - 150)), transform.rotation);
             Collider[] intersecting = Physics.OverlapSphere(new Vector3(spawn.transform.position.x, spawn.transform.position.y, spawn.transform.position.z), 0.5f);
             spawn.transform.parent = GameObject.Find("Resources").transform;
+
+            List<Collider> intersectingList = new List<Collider>();
+
+            foreach(Collider collider in intersecting){
+                if(collider.transform.name.Equals("Spherecollider")){
+                    //Debug.Log("Not adding that coolider");
+                } else {
+                    intersectingList.Add(collider);
+                }
+            }
             //for(int y = 0; y < intersecting.Length; y++){
             //    Debug.Log(intersecting[y].name);
             //}
-            if(intersecting.Length != 4){
+            if(intersectingList.Count != 4){
                 Destroy(spawn);
                 actualSpawnedStone--;
             }
             actualSpawnedStone++;
         }
-    }
-
-    void Update()
-    {
-
     }
 
     void OnTriggerEnter(Collider other)

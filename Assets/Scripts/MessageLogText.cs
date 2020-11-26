@@ -13,16 +13,6 @@ public class MessageLogText : MonoBehaviour
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
     }
 
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-        
-    }
-
     public void addMessageToLog(string message){
         int hours = gameManager.getClock().getHours();
         int minutes = gameManager.getClock().getMinutes();

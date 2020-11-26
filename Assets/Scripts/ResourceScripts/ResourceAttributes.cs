@@ -16,6 +16,7 @@ public class ResourceAttributes : MonoBehaviour
     public bool playerInBounds;
     public bool citizenInBounds;
     public bool gatheringsResourcesRunning;
+    public bool walkingToResourceBool;
 
     void Start()
     {
@@ -27,11 +28,6 @@ public class ResourceAttributes : MonoBehaviour
         }
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
         progressbar = GameObject.FindGameObjectWithTag("ProgressBar").GetComponent<Progressbar>(); 
-    }
-
-    void Update()
-    {
-        
     }
 
     void OnMouseDown()
@@ -81,10 +77,6 @@ public class ResourceAttributes : MonoBehaviour
         
     }
 
-    void OnCollisionEnter(Collision collisionInfo)
-    {
-        
-    }
     void OnTriggerExit(Collider other)
     {
         if(!gatheringsResourcesRunning){
@@ -102,30 +94,41 @@ public class ResourceAttributes : MonoBehaviour
     }
 
     public IEnumerator walkingToResource(){
-        bool runLoop = true;
-        gameManager.getPlayerBehavior().moveToPosition(this.transform.position);
-        while(runLoop){
-            if(playerInBounds){
-                gameManager.getPlayerBehavior().stopPlayer();
-                gameManager.getPlayerBehavior().playerLookAt(this.gameObject);
-                StartCoroutine(gatheringResources());
-                runLoop = false;
+        if(!walkingToResourceBool){
+            walkingToResourceBool = true;
+            gameManager.getPlayerBehavior().moveToPosition(this.transform.position);
+            while(walkingToResourceBool){
+                if(playerInBounds){
+                    gameManager.getPlayerBehavior().stopPlayer();
+                    gameManager.getPlayerBehavior().playerLookAt(this.gameObject);
+                    StartCoroutine(gatheringResources());
+                    break;
+                }
+                yield return null;
             }
-            yield return null;
+            walkingToResourceBool = false;
         }
     }
     public IEnumerator walkingToResource(Citizen citizen){
-        bool runLoop = true;
-        citizen.goToDestination(this.transform.position);
-        while(runLoop){
-            if(citizenInBounds){
-                citizen.stopMovement();
-                citizen.lookAt(this.gameObject);
-                StartCoroutine(gatheringResources());
-                runLoop = false;
+        if(!walkingToResourceBool){
+            walkingToResourceBool = true;
+            citizen.goToDestination(this.transform.position);
+            bool reachedResource = false;
+
+            while(walkingToResourceBool){
+                if(this != null){
+                    if(Vector3.Distance(this.transform.position, citizen.transform.position) <= 1f && !reachedResource){
+                        reachedResource = true;
+                        citizen.stopMovement();
+                        StartCoroutine(gatheringResources());
+                        break;
+                    }
+                }
+                yield return null;
             }
-            yield return null;
+            walkingToResourceBool = false;
         }
+    
     }
 
     public IEnumerator gatheringResources(){
@@ -134,6 +137,11 @@ public class ResourceAttributes : MonoBehaviour
             gatheringsResourcesRunning = true;
             player.GetComponent<Animator>().SetBool("isGatheringResources" , true);
 
+            if(player.tag == "Citizen"){
+                player.GetComponent<Citizen>().setResourceBeingMined(this);
+                player.GetComponent<Citizen>().lookAt(this.gameObject);
+            }
+
             // TREES
             if(resourceName == "Tree"){
                 float progress = 0;
@@ -141,7 +149,7 @@ public class ResourceAttributes : MonoBehaviour
                 bool instantiated = false;
 
                 while(progress <= 360){
-                    progress += Time.deltaTime * progressSpeed;
+                    progress += Time.deltaTime * progressSpeed * 10;
                     if(player.tag == "player"){
                         progressbar.updateProgressBar(progress);
                     }
@@ -155,13 +163,13 @@ public class ResourceAttributes : MonoBehaviour
                             break;
                         } 
                     }
-                    if(player.tag == "Citizen"){
+                    /*if(player.tag == "Citizen"){
                         if(player.GetComponent<Citizen>().getIsMovingToDestination()){
                             gatheringsResourcesRunning = false;
                             player.GetComponent<Animator>().SetBool("isGatheringResources" , false);
                             break;
                         } 
-                    }
+                    }*/
                     if(progress >= 360 && !instantiated){
                         instantiated = true;
                         GameObject woodLog1 = Instantiate(resourceMined, new Vector3(transform.position.x, transform.position.y + 1f, transform.position.z -0.5f), Quaternion.identity);
@@ -179,6 +187,14 @@ public class ResourceAttributes : MonoBehaviour
 
                         player.GetComponent<Skills>().getSkillByName("Woodcutting").increaseExperience(400);
 
+                        if(player.tag == "Citizen"){
+                            player.GetComponent<Citizen>().setResourceBeingMined(null);
+                            player.GetComponent<Citizen>().addItemToItemsToPickUp(woodLog1.GetComponent<ItemAttributes>());
+                            player.GetComponent<Citizen>().addItemToItemsToPickUp(woodLog2.GetComponent<ItemAttributes>());
+                            player.GetComponent<Citizen>().addItemToItemsToPickUp(woodLog3.GetComponent<ItemAttributes>());
+                        }
+
+                        
                         Destroy(gameObject);
                     }
                     yield return null;
@@ -207,14 +223,14 @@ public class ResourceAttributes : MonoBehaviour
                             progressbar.resetProgressBar();
                             break;
                         } 
-                    }
+                    }/*
                     if(player.tag == "Citizen"){
                         if(player.GetComponent<Citizen>().getIsMovingToDestination()){
                             gatheringsResourcesRunning = false;
                             player.GetComponent<Animator>().SetBool("isGatheringResources" , false);
                             break;
                         } 
-                    }
+                    }*/
                     if(progress >= 60 && !firstTriggered){
                         gatheringResourceSteps("first");
                         firstTriggered = true;
@@ -244,6 +260,7 @@ public class ResourceAttributes : MonoBehaviour
                 }
             }
         }
+        yield return new WaitForSeconds(1);
         gatheringsResourcesRunning = false;
     }
     public void gatheringResourceSteps(string animationTrigger){
@@ -261,7 +278,22 @@ public class ResourceAttributes : MonoBehaviour
             if(player.tag == "player"){
                 progressbar.resetProgressBar();
             }
+            if(player.tag == "Citizen"){
+                player.GetComponent<Citizen>().setResourceBeingMined(null);
+            }
             Destroy(gameObject);
         }       
+    }
+
+    public bool getGatheringResourcesRunning(){
+        return gatheringsResourcesRunning;
+    }
+
+    public bool getWalkingToResource(){
+        return walkingToResourceBool;
+    }
+
+    public string getResourceName(){
+        return resourceName;
     }
 }

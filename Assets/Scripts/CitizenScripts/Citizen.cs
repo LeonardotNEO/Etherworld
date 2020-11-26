@@ -14,6 +14,8 @@ public class Citizen : MonoBehaviour
     public List<Citizen> relatives = new List<Citizen>();
     public List<ResourceAttributes> stoneDepotsInRange = new List<ResourceAttributes>();
     public List<ResourceAttributes> treesInRange = new List<ResourceAttributes>();
+    public ResourceAttributes resourceBeingMined;
+    public List<ItemAttributes> itemsToPickUp = new List<ItemAttributes>();
 
     IEnumerator goToBuildingCourentine = null;
 
@@ -73,7 +75,9 @@ public class Citizen : MonoBehaviour
     // REMOVE HUNGER/THIRST
     public bool degenerating;
 
-
+    // MINING RESOURCE
+    public bool gatheringResource;
+    public bool pickingUpItem;
 
     void Awake()
     {
@@ -102,13 +106,21 @@ public class Citizen : MonoBehaviour
             }
             // THIRST HUNGER
             StartCoroutine(degenerateThirstHunger()); 
-
+        
             // HOUSE
             if(home == null){
                 lookForHome();
             } else {
                 foundHome();
             }
+            if(!gatheringResource && treesInRange.Count > 0 && itemsToPickUp.Count == 0 && !pickingUpItem){
+                treesInRange.RemoveAll(item => item == null);
+                StartCoroutine(gatherResources("Tree"));
+            } 
+            if(itemsToPickUp.Count > 0){
+                StartCoroutine(pickUpItem());
+            }
+
         }
     }
 
@@ -789,12 +801,31 @@ public class Citizen : MonoBehaviour
         Destroy(gameObject);
     }
     
-    public void gatherResources(string resourceName){
-        if(resourceName.Equals("StoneDepot") && findClosestResource(stoneDepotsInRange) != null){
-            StartCoroutine(findClosestResource(stoneDepotsInRange).walkingToResource(this)); 
-        }
+    public IEnumerator gatherResources(string resourceName){
+        if(!gatheringResource){
+            gatheringResource = true;
+            ResourceAttributes closestResource = null;
 
+            if(resourceName.Equals("StoneDepot") && findClosestResource(stoneDepotsInRange) != null){
+                closestResource = findClosestResource(stoneDepotsInRange);
+            }
+            if(resourceName.Equals("Tree") && findClosestResource(treesInRange) != null){
+                closestResource = findClosestResource(treesInRange);
+            }
+            if(closestResource != null){
+                StartCoroutine(closestResource.walkingToResource(this)); 
+            }
+
+            while(gatheringResource){
+                if(closestResource == null){
+                    break;
+                }
+                yield return null;
+            }
+            gatheringResource = false;
+        }
     }
+    
 
     public ResourceAttributes findClosestResource(List<ResourceAttributes> resourceList){
 
@@ -803,7 +834,13 @@ public class Citizen : MonoBehaviour
 
         foreach(ResourceAttributes resource in resourceList){
             if(resource != null){
-                resourceAfterDistance.Add(resource, Vector3.Distance(this.transform.position, resource.transform.position));
+                if(!resourceAfterDistance.ContainsKey(resource)){
+                    if(resource.GetComponent<ResourceAttributes>().getGatheringResourcesRunning() == false){
+                        resourceAfterDistance.Add(resource, Vector3.Distance(this.transform.position, resource.transform.position));
+                    } else {
+                        //Debug.Log("cant add resource because it is already beeing mined");
+                    }
+                }
             }
         }
 
@@ -943,8 +980,26 @@ public class Citizen : MonoBehaviour
     public void teleportToPosition(){
         
     }
-    public void pickUpItem(){
+    public IEnumerator pickUpItem(){
+        if(!pickingUpItem){
+            pickingUpItem = true;
+            ItemAttributes itemtoPickUp = itemsToPickUp.First();
+            //Debug.Log("picking up items");
 
+            while(pickingUpItem && itemsToPickUp.Count > 0){
+            
+                if(itemsToPickUp.Contains(itemtoPickUp)){
+                    StartCoroutine(itemsToPickUp.First().walkingToItem(this));
+                } else {
+                    break;
+                }
+                    
+                yield return null;
+            }
+            yield return new WaitForSeconds(1.5f);
+            pickingUpItem = false;
+            //Debug.Log("donw picking up item");
+        }
     }
     public void moveItemToHouse(){
 
@@ -1008,6 +1063,9 @@ public class Citizen : MonoBehaviour
     public BuildingAttributes getHome(){
         return home;
     }
+    public ResourceAttributes getResourceBeingMined(){
+        return resourceBeingMined;
+    }
 
     // SETTERS
     public void setHouse(BuildingAttributes building){
@@ -1034,5 +1092,15 @@ public class Citizen : MonoBehaviour
     public void setJob(string name){
         job = name;
     }
-    
+    public void setResourceBeingMined(ResourceAttributes resource){
+        resourceBeingMined = resource;
+    }
+    public void addItemToItemsToPickUp(ItemAttributes item){
+        if(!itemsToPickUp.Contains(item)){
+            itemsToPickUp.Add(item);
+        }
+    }
+    public void removeItemFromItemsToPickUp(ItemAttributes item){
+        itemsToPickUp.Remove(item);
+    }
 }

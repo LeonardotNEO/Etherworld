@@ -7,17 +7,6 @@ public class CitizenCatalog : MonoBehaviour
     public List<Citizen> allCitizens = new List<Citizen>();
     public Citizen selectedCitizen;
 
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void addCitizenToAllCitizens(Citizen citizen){
         allCitizens.Add(citizen);
     }

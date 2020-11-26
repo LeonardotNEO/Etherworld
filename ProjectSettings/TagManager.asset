@@ -33,6 +33,7 @@ TagManager:
   - MenuBarUI
   - ToolbeltUI
   - AbilitiesMenuUI
+  - World
   layers:
   - Default
   - TransparentFX

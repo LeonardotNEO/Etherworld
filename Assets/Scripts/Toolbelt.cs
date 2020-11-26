@@ -8,14 +8,6 @@ public class Toolbelt : MonoBehaviour
 {
     GameManager gameManager;
     public List<InventorySlot> toolbar = new List<InventorySlot>();
-    public InventorySlot magic = null;
-    public InventorySlot melee = null;
-    public InventorySlot ranged = null;
-    public InventorySlot shield = null;
-    public InventorySlot pickaxe = null;
-    public InventorySlot axe = null;
-    public InventorySlot hammer = null;
-    public InventorySlot food = null;
 
     void Awake()
     {
@@ -24,14 +16,14 @@ public class Toolbelt : MonoBehaviour
 
     void Start()
     {
-        addSlotToToolbar(magic = new InventorySlot(1, "Magic"));
-        addSlotToToolbar(melee = new InventorySlot(1, "Melee"));
-        addSlotToToolbar(ranged = new InventorySlot(1, "Ranged"));
-        addSlotToToolbar(shield = new InventorySlot(1, "Shield"));
-        addSlotToToolbar(pickaxe = new InventorySlot(1, "Pickaxe"));
-        addSlotToToolbar(axe = new InventorySlot(1, "Axe"));
-        addSlotToToolbar(hammer = new InventorySlot(1, "Hammer"));
-        addSlotToToolbar(food = new InventorySlot(99, "Food"));
+        addSlotToToolbar(new InventorySlot(1, "Magic"));
+        addSlotToToolbar(new InventorySlot(1, "Melee"));
+        addSlotToToolbar(new InventorySlot(1, "Ranged"));
+        addSlotToToolbar(new InventorySlot(1, "Shield"));
+        addSlotToToolbar(new InventorySlot(1, "Pickaxe"));
+        addSlotToToolbar(new InventorySlot(1, "Axe"));
+        addSlotToToolbar(new InventorySlot(1, "Hammer"));
+        addSlotToToolbar(new InventorySlot(99, "Food"));
     }
 
     public List<InventorySlot> getToolbelt(){

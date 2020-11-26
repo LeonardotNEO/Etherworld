@@ -108,12 +108,7 @@ public class BuildingAttributes : MonoBehaviour
         thisBuilding = this.gameObject;
 
     }
-
-    void Update()
-    {
-        
-    }
-
+    
     void OnDisable()
     {
         foreach(Citizen citizen in citizensLivingInBuilding){

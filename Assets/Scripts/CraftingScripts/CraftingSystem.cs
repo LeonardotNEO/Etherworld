@@ -29,12 +29,6 @@ public class CraftingSystem : MonoBehaviour
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
     }
 
-    void Start()
-    {
-
-    }
-
-
     void Update()
     {
         // updating placingBuilding

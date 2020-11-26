@@ -63,13 +63,7 @@ public class EnemyAttributes : MonoBehaviour
 
     void Update()
     {
-        if(!transform.tag.Equals("player")){
-            if(enemiesInRange.Count > 0){
-                StartCoroutine(walkToClosestEnemy());
-            }
-            checkMovement();
-        }
-        updatePosition();
+        checkMovement();
     }
 
 
@@ -84,6 +78,9 @@ public class EnemyAttributes : MonoBehaviour
             if(other.transform.GetComponent<EnemyAttributes>() != null && !enemiesInRange.Contains(other.transform.GetComponent<EnemyAttributes>())){
                 if(other.transform.GetComponent<EnemyAttributes>().getName() != null && !other.transform.GetComponent<EnemyAttributes>().getName().Equals(this.getName())){
                     addEnemyToEnemyInRange(other.transform.GetComponent<EnemyAttributes>());
+                    if(enemiesInRange.Count > 0){
+                        StartCoroutine(walkToClosestEnemy());
+                    }
                 }
             }
         }
@@ -92,6 +89,7 @@ public class EnemyAttributes : MonoBehaviour
                 //addEnemyToEnemyInRange(other.transform.GetComponent<EnemyAttributes>());
             }
         }
+            
     }
     void OnTriggerExit(Collider other)
     {
@@ -239,7 +237,7 @@ public class EnemyAttributes : MonoBehaviour
     }
 
     public Vector3 getPosition(){
-        return position;
+        return this.transform.position;
     }
 
     public void lookAtTargetEnemy(EnemyAttributes enemy){

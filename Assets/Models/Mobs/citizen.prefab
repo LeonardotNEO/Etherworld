@@ -131,6 +131,8 @@ MonoBehaviour:
   relatives: []
   stoneDepotsInRange: []
   treesInRange: []
+  resourceBeingMined: {fileID: 0}
+  itemsToPickUp: []
   inventory: {fileID: 0}
   home: {fileID: 0}
   work: {fileID: 0}
@@ -170,6 +172,8 @@ MonoBehaviour:
   movingItemToBuilding: 0
   puttingItemInStorage: 0
   degenerating: 0
+  gatheringResource: 0
+  pickingUpItem: 0
 --- !u!114 &5114593348547200018
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -198,6 +202,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6063f394230d2a4db756a9cff57777d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  perks: []
 --- !u!222 &5114593348547200029
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -290,8 +295,8 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 87.99992
-  m_Height: 175.99985
+  m_Radius: 13.201995
+  m_Height: 26.40399
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &5114593347256388562

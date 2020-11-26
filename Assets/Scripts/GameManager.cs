@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
     private UI UI;
     private MessageLogText messageLogText;
     private Clock clock;
+    private World world;
 
     void Awake()
     {
@@ -39,6 +40,7 @@ public class GameManager : MonoBehaviour
         UI = GetComponent<UI>();
         messageLogText = GameObject.FindGameObjectWithTag("MessageLogBarUI").GetComponentInChildren<MessageLogText>();
         clock = GetComponent<Clock>();
+        //world = GameObject.FindGameObjectWithTag("World").GetComponent<World>();
     }
 
     // GET SCRIPTS //
@@ -86,6 +88,9 @@ public class GameManager : MonoBehaviour
     }
     public Clock getClock(){
         return clock;
+    }
+    public World getWorld(){
+        return world;
     }
 
 }

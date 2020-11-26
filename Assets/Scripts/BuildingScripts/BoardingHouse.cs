@@ -12,12 +12,6 @@ public class BoardingHouse : MonoBehaviour
         boardingHousePosition = GetComponent<BoxCollider>().bounds.center;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.layer == LayerMask.NameToLayer("Citizens") && other.gameObject.GetComponent<Citizen>().getIsLookingForWork()){
