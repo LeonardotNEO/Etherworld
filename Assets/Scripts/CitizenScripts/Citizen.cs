@@ -88,6 +88,7 @@ public class Citizen : MonoBehaviour
     void Start()
     {
         StartCoroutine(initialisingCitizen());
+
     }
 
     void Update()
@@ -122,6 +123,16 @@ public class Citizen : MonoBehaviour
             }
 
         }
+    }
+
+    void OnMouseEnter()
+    {
+        setCitizenIndicator(true);
+    }
+
+    void OnMouseExit()
+    {
+        setCitizenIndicator(false);
     }
 
     void OnTriggerEnter(Collider other){
@@ -1102,5 +1113,8 @@ public class Citizen : MonoBehaviour
     }
     public void removeItemFromItemsToPickUp(ItemAttributes item){
         itemsToPickUp.Remove(item);
+    }
+    public void setCitizenIndicator(bool val){
+        transform.Find("mob_indicator/green_indicator").gameObject.SetActive(val);
     }
 }

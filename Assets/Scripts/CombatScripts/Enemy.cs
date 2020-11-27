@@ -19,8 +19,9 @@ public class Enemy
     [SerializeField] private int baseAttackSpeed;
     [SerializeField] private bool aggressive;
     [SerializeField] private List<Ability> abilities = new List<Ability>();
+    [SerializeField] private Dictionary<Dictionary<string, int>, float> droptable = new Dictionary<Dictionary<string, int>, float>();
 
-    public Enemy(string name, string description, string type, int level, int maxHealth, int damage, float critChance, float attackRange, int armor, int movementspeed, int baseAttackSpeed, bool aggressive, List<string> abilitiesString){
+    public Enemy(string name, string description, string type, int level, int maxHealth, int damage, float critChance, float attackRange, int armor, int movementspeed, int baseAttackSpeed, bool aggressive, List<string> abilitiesString, Dictionary<Dictionary<string, int>, float> droptable){
         this.name = name;
         this.description = description;
         if(!typesAvailable.Contains(type)){
@@ -38,6 +39,7 @@ public class Enemy
         this.baseMovementspeed = movementspeed;
         this.baseAttackSpeed = baseAttackSpeed;
         this.aggressive = aggressive;
+        this.droptable = droptable;
       
         AbilityCatalog abilityCatalog = GameObject.FindGameObjectWithTag("GameManager").GetComponent<AbilityCatalog>();
 
@@ -96,5 +98,11 @@ public class Enemy
     }
     public List<Ability> getAbilities(){
         return abilities;
+    }
+    public bool getAggressive(){
+        return aggressive;
+    }
+    public Dictionary<Dictionary<string, int>, float> getDroptable(){
+        return droptable;
     }
 }

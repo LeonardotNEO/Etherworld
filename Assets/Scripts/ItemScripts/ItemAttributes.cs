@@ -7,16 +7,16 @@ public class ItemAttributes : MonoBehaviour
     private GameManager gameManager;
     private Collider player;
     public int itemAmount;
-    private string itemName;
+    public string itemName;
 
     private bool playerInBounds;
-    private bool citizenInBounds;
     public bool walkingToItemBool;
 
 
     void Start()
     {
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+        //this.transform.name = itemName;
 
         if(this.transform.name.Contains("Wood log")){
             itemName = "Wood log";
@@ -28,7 +28,6 @@ public class ItemAttributes : MonoBehaviour
             itemAmount = 1;
         }
 
-        this.transform.name = itemName;
     }
 
     public int getItemAmount(){
@@ -36,6 +35,12 @@ public class ItemAttributes : MonoBehaviour
     }
     public string getItemName(){
         return itemName;
+    }
+    public void setItemAmount(int amount){
+        itemAmount = amount;
+    }
+    public void setItemName(string name){
+        itemName = name;
     }
     
     public void OnMouseDown()
@@ -61,39 +66,19 @@ public class ItemAttributes : MonoBehaviour
             player = other;
             playerInBounds = true;
         }
-        if(other is BoxCollider){
-            if(other.tag == "Citizen"){
-                player = other;
-                citizenInBounds = true;
-            }
-        }
     }
     void OnTriggerExit(Collider other)
     {
         if(other.tag == "player"){
             playerInBounds = false;
         }
-        if(other is BoxCollider){
-            if(other.tag == "Citizen"){
-                citizenInBounds = false;
-            }
-        }
     }
 
-    public void pickUpItem(PlayerBehavior player, Citizen citizen){
+    public void pickUpItem(Citizen citizen){
         bool itemPickedUp = false;
         if(!itemPickedUp){
             itemPickedUp = true;
 
-            if(player){
-                if(getItemAmount() != 0){
-                    itemAmount = gameManager.getInventoryCatalog().getMainInventory().addItemToInventory(getItemName(), getItemAmount());
-                }
-                if(itemAmount == 0){
-                    player.GetComponent<Animator>().SetTrigger("pickingUpItem");
-                    Destroy(this.gameObject);
-                }
-            }
             if(citizen){
                 if(getItemAmount() != 0){
                     itemAmount = citizen.getInventory().addItemToInventory(getItemName(), getItemAmount());
@@ -108,6 +93,22 @@ public class ItemAttributes : MonoBehaviour
             }
         }
     }
+    public void pickUpItem(PlayerBehavior player){
+        bool itemPickedUp = false;
+        if(!itemPickedUp){
+            itemPickedUp = true;
+
+            if(player){
+                if(getItemAmount() != 0){
+                    itemAmount = gameManager.getInventoryCatalog().getMainInventory().addItemToInventory(getItemName(), getItemAmount());
+                }
+                if(itemAmount == 0){
+                    player.GetComponent<Animator>().SetTrigger("pickingUpItem");
+                    Destroy(this.gameObject);
+                }
+            }
+        }
+    }
 
     public IEnumerator walkingToItem(){
         bool runLoop = true;
@@ -116,7 +117,7 @@ public class ItemAttributes : MonoBehaviour
             if(playerInBounds){
                 gameManager.getPlayerBehavior().stopPlayer();
                 gameManager.getPlayerBehavior().playerLookAt(this.gameObject);
-                pickUpItem(gameManager.getPlayerBehavior(), null);
+                pickUpItem(gameManager.getPlayerBehavior());
                 break;
             }
             yield return null;
@@ -136,7 +137,7 @@ public class ItemAttributes : MonoBehaviour
                         reachedResource = true;
                         citizen.lookAt(this.gameObject);
                         citizen.stopMovement();
-                        pickUpItem(null, citizen);
+                        pickUpItem(citizen);
                         break;
                     }
                 }

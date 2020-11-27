@@ -25,7 +25,15 @@ public class EnemyCatalog : MonoBehaviour
                 /*BaseMovement*/    4,
                 /*BaseAttackSpeed*/ 10,
                 /*Aggressive*/      true,
-                /*Abilities*/       new List<string>(){}
+                /*Abilities*/       new List<string>(){},
+                /*Droptable*/       new Dictionary<Dictionary<string, int>, float>(){
+                    {new Dictionary<string, int>{{"Wood log", 1}}, 0.25f},
+                    {new Dictionary<string, int>{{"Ether pickaxe", 1}}, 0.25f},
+                    {new Dictionary<string, int>{{"Bucket of water", 1}}, 0.25f},
+                    {new Dictionary<string, int>{{"Gold ore", 1}}, 0.25f},
+                    {new Dictionary<string, int>{{"Iron bar", 1}}, 0.25f},
+                    {new Dictionary<string, int>{{"Wood hammer", 1}}, 0.25f},
+                    }
             )
         );
         addEnemyToGame(
@@ -42,7 +50,13 @@ public class EnemyCatalog : MonoBehaviour
                 /*BaseMovement*/    4,
                 /*BaseAttackSpeed*/ 10,
                 /*Aggressive*/      true,
-                /*Abilities*/       new List<string>(){"Firebolt"}
+                /*Abilities*/       new List<string>(){"Firebolt"},
+                /*Droptable*/       new Dictionary<Dictionary<string, int>, float>(){
+                    {new Dictionary<string, int>{{"Wood plank", 1}}, 0.50f},
+                    {new Dictionary<string, int>{{"Stone", 1}}, 0.50f},
+                    {new Dictionary<string, int>{{"Gold coin", 1}}, 0.1f},
+                    {new Dictionary<string, int>{{"Silver coin", 5}}, 0.30f},
+                    }
             )
         );
         addEnemyToGame(
@@ -51,15 +65,16 @@ public class EnemyCatalog : MonoBehaviour
                 /*Desription*/      "Player character",
                 /*Type*/            "Human",
                 /*Level*/           1,
-                /*baseHealth*/      100,  
-                /*baseDamage*/      2,        
+                /*baseHealth*/      10000,  
+                /*baseDamage*/      8,        
                 /*baseCrit*/        1.01f,
                 /*Attackrange*/     1.5f,
                 /*BaseArmor*/       1,
                 /*BaseMovement*/    8,
-                /*BaseAttackSpeed*/ 10,
+                /*BaseAttackSpeed*/ 20,
                 /*Aggressive*/      false,
-                /*Abilities*/       new List<string>(){}
+                /*Abilities*/       new List<string>(){},
+                /*Droptable*/       null
             )
         );
         addEnemyToGame(
@@ -76,7 +91,8 @@ public class EnemyCatalog : MonoBehaviour
                 /*BaseMovement*/    8,
                 /*BaseAttackSpeed*/ 10,
                 /*Aggressive*/      false,
-                /*Abilities*/       new List<string>(){}
+                /*Abilities*/       new List<string>(){},
+                /*Droptable*/       null
             )
         );
         addEnemyToGame(
@@ -93,7 +109,13 @@ public class EnemyCatalog : MonoBehaviour
                 /*BaseMovement*/    8,
                 /*BaseAttackSpeed*/ 5,
                 /*Aggressive*/      false,
-                /*Abilities*/       new List<string>(){}
+                /*Abilities*/       new List<string>(){},
+                /*Droptable*/       new Dictionary<Dictionary<string, int>, float>(){
+                    {new Dictionary<string, int>{{"Wood plank", 1}}, 0.50f},
+                    {new Dictionary<string, int>{{"Stone", 1}}, 0.50f},
+                    {new Dictionary<string, int>{{"Gold coin", 1}}, 0.1f},
+                    {new Dictionary<string, int>{{"Silver coin", 5}}, 0.30f},
+                    }
             )
         );
     }

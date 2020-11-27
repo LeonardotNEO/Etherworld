@@ -63,6 +63,7 @@ public class PlayerBehavior : MonoBehaviour
             Ray ray = GameObject.FindGameObjectWithTag("MainCamera2").GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
             Physics.Raycast(ray, out hit, Mathf.Infinity /*, LayerMask.NameToLayer()*/);
             if(hit.collider.tag == "Ground"){
+                hitGround = hit.point;
                 moveToPosition(hit.point);
             }
         } 
@@ -234,5 +235,8 @@ public class PlayerBehavior : MonoBehaviour
 
     public PerkAttributes getPerkattributes(){
         return perkAttributes;
+    }
+    public Vector3 getHitGround(){
+        return hitGround;
     }
 }

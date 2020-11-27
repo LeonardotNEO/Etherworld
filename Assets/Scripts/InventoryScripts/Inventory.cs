@@ -25,10 +25,14 @@ public class Inventory : MonoBehaviour
 
     void Start()
     {
-          instatiateInventory();
+        StartCoroutine(instatiateInventory());
     }
 
-    public void instatiateInventory(){
+    public IEnumerator instatiateInventory(){
+        yield return new WaitForSeconds(0.5f);
+
+        inventoryCapacity = 3;
+
         if(transform.gameObject.layer == LayerMask.NameToLayer("Buildings")){
             inventoryCapacity = gameManager.getBuildingCatalog().getBuildingByName(transform.name).getStorageCapacity();
         }
@@ -51,6 +55,21 @@ public class Inventory : MonoBehaviour
             gameManager.getInventoryCatalog().addInventoryToCatalog(this);
             inventoryID = gameManager.getInventoryCatalog().getAmountOfInventoriesInCatalog();
         } 
+
+        if(transform.tag != "player" && transform.GetComponent<EnemyAttributes>()){
+            foreach(var item in transform.GetComponent<EnemyAttributes>().getDroptable()){
+                string itemName = null;
+                int itemAmount = 0;
+                float droprate = item.Value;
+                foreach(var itemNameAmount in item.Key){
+                    itemName = itemNameAmount.Key;
+                    itemAmount = itemNameAmount.Value;
+                }
+                if(Random.Range(0f, 1f) <= droprate){
+                    this.addItemToInventory(itemName, itemAmount);
+                }
+            }
+        }
     }
     
     public Inventory getInventory(){

@@ -40,7 +40,7 @@ public class GameManager : MonoBehaviour
         UI = GetComponent<UI>();
         messageLogText = GameObject.FindGameObjectWithTag("MessageLogBarUI").GetComponentInChildren<MessageLogText>();
         clock = GetComponent<Clock>();
-        //world = GameObject.FindGameObjectWithTag("World").GetComponent<World>();
+        world = GameObject.FindGameObjectWithTag("World").GetComponent<World>();
     }
 
     // GET SCRIPTS //
