@@ -20,6 +20,7 @@ public class Enemy
     [SerializeField] private bool aggressive;
     [SerializeField] private List<Ability> abilities = new List<Ability>();
     [SerializeField] private Dictionary<Dictionary<string, int>, float> droptable = new Dictionary<Dictionary<string, int>, float>();
+    AbilityCatalog abilityCatalog;
 
     public Enemy(string name, string description, string type, int level, int maxHealth, int damage, float critChance, float attackRange, int armor, int movementspeed, int baseAttackSpeed, bool aggressive, List<string> abilitiesString, Dictionary<Dictionary<string, int>, float> droptable){
         this.name = name;
@@ -41,16 +42,18 @@ public class Enemy
         this.aggressive = aggressive;
         this.droptable = droptable;
       
-        AbilityCatalog abilityCatalog = GameObject.FindGameObjectWithTag("GameManager").GetComponent<AbilityCatalog>();
+
+        abilityCatalog = GameObject.FindGameObjectWithTag("GameManager").GetComponent<AbilityCatalog>();
 
         if(abilitiesString.Count > 0){
             foreach(string ability in abilitiesString){
                 if(abilityCatalog){
-                    if(abilityCatalog.getAbilityByName(ability) != null){
+                    //Debug.Log(abilityCatalog.getAbilityByName(ability));
+                    //if(abilityCatalog.getAbilityByName(ability) != null){
                         this.abilities.Add(abilityCatalog.getAbilityByName(ability));
-                    } else {
-                        throw new System.ArgumentException("Tried to add an ability that dont exist: " + ability);
-                    }
+                    //} else {
+                    //    throw new System.ArgumentException("Tried to add an ability that dont exist: " + ability);
+                    //}
                 } else {
                     Debug.Log("couldnt find catalog");
                 }

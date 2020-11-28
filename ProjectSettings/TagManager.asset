@@ -34,6 +34,7 @@ TagManager:
   - ToolbeltUI
   - AbilitiesMenuUI
   - World
+  - CitizenMenuUI
   layers:
   - Default
   - TransparentFX
@@ -70,4 +71,10 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: ui 3d
+    uniqueID: 1396228723
+    locked: 0
+  - name: New Layer
+    uniqueID: 598637319
     locked: 0

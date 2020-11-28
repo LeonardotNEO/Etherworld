@@ -115,14 +115,19 @@ public class Citizen : MonoBehaviour
                 foundHome();
             }
             if(!gatheringResource && treesInRange.Count > 0 && itemsToPickUp.Count == 0 && !pickingUpItem){
-                treesInRange.RemoveAll(item => item == null);
                 StartCoroutine(gatherResources("Tree"));
             } 
-            if(itemsToPickUp.Count > 0){
+            if(itemsToPickUp.Count > 0 && !gatheringResource){
                 StartCoroutine(pickUpItem());
             }
 
         }
+    }
+
+    void OnMouseDown()
+    {
+        gameManager.getCitizenCatalog().setSelectedCitizen(this);
+        gameManager.GetUI().openCitizenMenu();
     }
 
     void OnMouseEnter()
@@ -816,6 +821,7 @@ public class Citizen : MonoBehaviour
         if(!gatheringResource){
             gatheringResource = true;
             ResourceAttributes closestResource = null;
+            IEnumerator coroutine = null;
 
             if(resourceName.Equals("StoneDepot") && findClosestResource(stoneDepotsInRange) != null){
                 closestResource = findClosestResource(stoneDepotsInRange);
@@ -824,11 +830,15 @@ public class Citizen : MonoBehaviour
                 closestResource = findClosestResource(treesInRange);
             }
             if(closestResource != null){
-                StartCoroutine(closestResource.walkingToResource(this)); 
+                StartCoroutine(coroutine = closestResource.walkingToResource(this)); 
             }
 
             while(gatheringResource){
                 if(closestResource == null){
+                    break;
+                }
+                if(closestResource.getGatheringResourcesRunning() && this.getResourceBeingMined() != closestResource){
+                    StopCoroutine(coroutine);
                     break;
                 }
                 yield return null;
@@ -839,6 +849,7 @@ public class Citizen : MonoBehaviour
     
 
     public ResourceAttributes findClosestResource(List<ResourceAttributes> resourceList){
+        resourceList.RemoveAll(item => item == null);
 
         List<ResourceAttributes> resourceArrangeAfterDistance = new List<ResourceAttributes>();
         Dictionary<ResourceAttributes, float> resourceAfterDistance = new Dictionary<ResourceAttributes, float>();
@@ -1012,6 +1023,7 @@ public class Citizen : MonoBehaviour
             //Debug.Log("donw picking up item");
         }
     }
+
     public void moveItemToHouse(){
 
     }
@@ -1051,7 +1063,10 @@ public class Citizen : MonoBehaviour
         return isMovingToDestination;
     }
     public int getAmountToPayInTax(){
-        return (int)((float)income * townAlliegence.getTaxPercentage()) + (int)(wealth * townAlliegence.getPropertyTaxPercentage());
+        if(townAlliegence != null){
+            return (int)((float)income * townAlliegence.getTaxPercentage()) + (int)(wealth * townAlliegence.getPropertyTaxPercentage());
+        }
+        return 0;
     }
     public string getGender(){
         return gender;
@@ -1116,5 +1131,20 @@ public class Citizen : MonoBehaviour
     }
     public void setCitizenIndicator(bool val){
         transform.Find("mob_indicator/green_indicator").gameObject.SetActive(val);
+    }
+    public int getIncome(){
+        return income; 
+    }
+    public string getStatus(){
+        return status;
+    }
+    public int getHealth(){
+        return health;
+    }
+    public int getHunger(){
+        return hunger;
+    }
+    public int getThrist(){
+        return thirst;
     }
 }

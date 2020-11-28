@@ -61,7 +61,7 @@ public class Skill
         if(level == 99){
             return 0;
         } else {
-            return (int)(Mathf.Pow(levelingDifficulty, level) * 1000 + experience);
+            return (int)(Mathf.Pow(levelingDifficulty, level) * 1000 + lastExperience);
         }
     }
     public int getExperienceLeft(){

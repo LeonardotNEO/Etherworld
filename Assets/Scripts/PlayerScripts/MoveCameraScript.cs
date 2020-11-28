@@ -45,7 +45,7 @@ public class MoveCameraScript : MonoBehaviour
         }
         if(Input.GetKey("space")){
             //IMPROVE THIS!
-            GameObject.FindGameObjectWithTag("MainCamera").transform.position = new Vector3(gameManager.getPlayerBehavior().getPlayerPosition().x, gameManager.getPlayerBehavior().getPlayerPosition().y + 8, gameManager.getPlayerBehavior().getPlayerPosition().z);
+            moveCameraToPosition(gameManager.getPlayerBehavior().getPlayerPosition());
         }
         if(!gameManager.getCraftingSystem().getIsCrafting()){
             if(Input.GetKey("q")){
@@ -67,5 +67,32 @@ public class MoveCameraScript : MonoBehaviour
             GameObject.FindGameObjectWithTag("MainCamera2").transform.Translate(Vector3.forward * scrollSensitivity * positionY * heightconstant, GameObject.FindGameObjectWithTag("MainCamera").transform);
             positionY = GameObject.FindGameObjectWithTag("MainCamera").transform.position.y;               
         }
+    }
+
+    public void moveCameraToPosition(Vector3 position){
+        StopAllCoroutines();
+        StartCoroutine(moveCameraToPositionCoroutine(position));
+    }
+
+    public IEnumerator moveCameraToPositionCoroutine(Vector3 position){
+        this.transform.parent.position = new Vector3(position.x, this.transform.parent.position.y, position.z);
+
+        /*if(GameObject.FindGameObjectWithTag("MainCamera").transform.position.y < 15){
+            while(GameObject.FindGameObjectWithTag("MainCamera").transform.position.y < 20){
+                GameObject.FindGameObjectWithTag("MainCamera").transform.Translate(new Vector3(0, 3, 0), GameObject.FindGameObjectWithTag("MainCamera").transform);
+                GameObject.FindGameObjectWithTag("MainCamera2").transform.Translate(new Vector3(0, 0, -3), GameObject.FindGameObjectWithTag("MainCamera").transform);
+                yield return null;
+            }
+            yield break;
+        } */
+        if(GameObject.FindGameObjectWithTag("MainCamera").transform.position.y > 15){
+            while(GameObject.FindGameObjectWithTag("MainCamera").transform.position.y > 10){
+                GameObject.FindGameObjectWithTag("MainCamera").transform.Translate(new Vector3(0, -3, 0), GameObject.FindGameObjectWithTag("MainCamera").transform);
+                GameObject.FindGameObjectWithTag("MainCamera2").transform.Translate(new Vector3(0, 0, 3), GameObject.FindGameObjectWithTag("MainCamera").transform);
+                yield return null;
+            }
+        }
+        
+        //positionY = GameObject.FindGameObjectWithTag("MainCamera").transform.position.y;  
     }
 }

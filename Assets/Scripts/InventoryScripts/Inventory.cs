@@ -11,16 +11,11 @@ public class Inventory : MonoBehaviour
     public string inventoryName;
     private GameManager gameManager;
     public int inventoryID;
-    ShowMainInventory showMainInv;
-    ShowBuildingInventory showbuildingInv;
     
     void Awake()
     {
         gameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
         inventoryName = transform.name;
-
-        showMainInv = GameObject.FindGameObjectWithTag("InventoryMenuUI").transform.Find("Background/Scroll View/Viewport/MainInventory").GetComponent<ShowMainInventory>();
-        showbuildingInv = GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Inventory/Scroll View/Viewport/BuildingInventory").GetComponent<ShowBuildingInventory>();
     }
 
     void Start()
@@ -86,12 +81,11 @@ public class Inventory : MonoBehaviour
 
 
     public void clickInventoryItem(int slotnumber, Inventory toInventory){
-
+        
         // TRANSFER TO BUILDING INVENTORY
         if(gameManager.getBuildingCatalog().getBuildingLastClicked() != null){
             if(gameManager.GetUI().getBuildingInventoryOpen() && this.getInventorySlot(slotnumber).currentAmountInSlot != 0){
                 if(gameManager.getBuildingCatalog().getBuildingLastClickedAttributes().getPlayerEnteredBuilding()){
-
                     int amountToRemove = toInventory.addItemToInventory(this.getInventorySlot(slotnumber).getItemInSlot() , this.getInventorySlot(slotnumber).getCurrentAmountInSlot());
                     removeAmountFromSpecificSlot(this.getInventorySlot(slotnumber), this.getInventorySlot(slotnumber).getCurrentAmountInSlot() - amountToRemove);
                     updateInventoryInterface();
@@ -328,14 +322,23 @@ public class Inventory : MonoBehaviour
     }
 
     public void updateInventoryInterface(){
-        if(GameObject.FindGameObjectWithTag("InventoryMenuUI").transform.Find("Background").gameObject.activeSelf){
-            showMainInv.updateInventory();
+        if(this.transform.tag == "player" && GameObject.FindGameObjectWithTag("InventoryMenuUI").transform.Find("Background").gameObject.activeSelf){
+            gameManager.GetUI().updateMainInventory();
+            //Debug.Log("updating main inventory");
         }
         if(GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Inventory").gameObject.activeSelf){
-            showbuildingInv.updateInventory();
+            gameManager.GetUI().updateBuildingInventory();
+            //Debug.Log("updating building inventory");
         }
         if(GameObject.FindGameObjectWithTag("TownMenuUI").transform.Find("Background").gameObject.activeSelf){
             gameManager.GetUI().updateTownInventory();
+            //Debug.Log("updating town inventory");
+        }
+        if(gameManager.getCitizenCatalog().getSelectedCitizen()){
+            if(gameManager.getCitizenCatalog().getSelectedCitizen().Equals(this.transform.GetComponent<Citizen>()) && GameObject.FindGameObjectWithTag("CitizenMenuUI").transform.Find("Background").gameObject.activeSelf){
+                gameManager.GetUI().updateCitizenInventory();
+                //Debug.Log("updating citizen inventory");
+            }
         }
     }
 }

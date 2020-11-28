@@ -38,7 +38,7 @@ public class Skills : MonoBehaviour
                 return skill;
             }
         }
-        Debug.Log("No skill with that name");
+        //Debug.Log("No skill with that name");
         return null;
     }
 
@@ -52,7 +52,6 @@ public class Skills : MonoBehaviour
     }
     public void increaseExperience(string skillName, int amount){
         Skill skill = getSkillByName(skillName);
-
         skill.increaseExperience(amount);
         checkIfNewLevel(skillName);
         
@@ -66,8 +65,15 @@ public class Skills : MonoBehaviour
                 increaseLevel(skillName, 1);
             }
         }
-        if(playerSkill){
-            gameManager.GetUI().showSkills();
+
+        if(transform.tag == "player" && GameObject.FindGameObjectWithTag("Skills").transform.Find("Background").gameObject.activeSelf){
+            gameManager.GetUI().updateSkills();
+        }
+
+        if(gameManager.getCitizenCatalog().getSelectedCitizen()){
+            if(gameManager.getCitizenCatalog().getSelectedCitizen().Equals(this.transform.GetComponent<Citizen>()) && GameObject.FindGameObjectWithTag("CitizenMenuUI").transform.Find("Background").gameObject.activeSelf){
+                gameManager.GetUI().updateCitizenSkills();
+            }
         }
         
     }
@@ -81,5 +87,39 @@ public class Skills : MonoBehaviour
         } else {
             Debug.Log("This player does not have perks");
         }
+    }
+
+    public Skill getSkillWithHighestLevel(){
+        Skill highestSkill = null;
+        foreach(Skill skill in skills){
+            if(highestSkill == null){
+                highestSkill = skill;
+                continue;
+            }
+            if(skill.getLevel() >= highestSkill.getLevel()){
+                highestSkill = skill;
+            }
+        }   
+        return highestSkill;
+    }
+
+    public Skill getSkillWithSecondHighestLevel(){
+        Skill highestSkill = null;
+        Skill secondHighestSkill = null;
+        foreach(Skill skill in skills){
+            if(highestSkill == null || secondHighestSkill == null){
+                highestSkill = skill;
+                secondHighestSkill = skill;
+                continue;
+            }
+            if(skill.getLevel() >= highestSkill.getLevel()){
+                highestSkill = skill;
+                continue;
+            }
+            if(skill.getLevel() >= secondHighestSkill.getLevel() && skill != highestSkill){
+                secondHighestSkill = skill;
+            }
+        }   
+        return highestSkill;
     }
 }

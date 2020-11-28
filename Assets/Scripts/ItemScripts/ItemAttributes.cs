@@ -133,7 +133,7 @@ public class ItemAttributes : MonoBehaviour
 
             while(walkingToItemBool){
                 if(this != null){
-                    if(Vector3.Distance(this.transform.position, citizen.transform.position) <= 1.5f && !reachedResource){
+                    if(Vector3.Distance(this.transform.position, citizen.transform.position) <= 2.5f && !reachedResource){
                         reachedResource = true;
                         citizen.lookAt(this.gameObject);
                         citizen.stopMovement();

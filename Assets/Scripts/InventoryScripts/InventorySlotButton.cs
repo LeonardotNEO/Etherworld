@@ -11,16 +11,24 @@ public class InventorySlotButton : MonoBehaviour
     void Start()
     {
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
-
-        if(transform.tag == "MainInvSlot"){
-            transform.GetComponent<Button>().onClick.AddListener(delegate {gameManager.getInventoryCatalog().getMainInventory().clickInventoryItem(inventorySlotID, gameManager.getBuildingCatalog().getBuildingLastClickedInventory()); });
-        }
-        if(transform.tag == "BuildingInvSlot"){
-            transform.GetComponent<Button>().onClick.AddListener(delegate {gameManager.getBuildingCatalog().getBuildingLastClickedInventory().clickInventoryItem(inventorySlotID, gameManager.getInventoryCatalog().getMainInventory()); });
-        }
     }
 
     public void setInventorySlotID(int number){
         inventorySlotID = number;
+    }
+
+    public void buttonClick(){
+        if(transform.tag == "MainInvSlot"){
+            gameManager.getInventoryCatalog().getMainInventory().clickInventoryItem(inventorySlotID, gameManager.getBuildingCatalog().getBuildingLastClickedInventory());
+            //Debug.Log("1");
+            //Debug.Log(inventorySlotID);
+        }
+        if(transform.tag == "BuildingInvSlot"){
+            gameManager.getBuildingCatalog().getBuildingLastClickedInventory().clickInventoryItem(inventorySlotID, gameManager.getInventoryCatalog().getMainInventory());
+            //Debug.Log("2");
+            //Debug.Log(inventorySlotID);
+
+        
+        }
     }
 }

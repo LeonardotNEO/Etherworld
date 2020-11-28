@@ -5,13 +5,14 @@ using UnityEngine;
 public class ResourceAttributes : MonoBehaviour
 {
     private GameManager gameManager;
-    private Collider player;
+    private Transform player;
     public GameObject resourceMined;
     public Progressbar progressbar;
 
     public string resourceName;
     public int amountLeft = 6;
     public float progress = 0;
+    public float distanceCenter;
 
     public bool playerInBounds;
     public bool citizenInBounds;
@@ -22,9 +23,11 @@ public class ResourceAttributes : MonoBehaviour
     {
         if(this.transform.name.Contains("Tree")){
             resourceName = "Tree";
+            distanceCenter = 1;
         }
         if(this.transform.name.Contains("StoneDepot")){
             resourceName = "StoneDepot";
+            distanceCenter = 2.5f;
         }
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
         progressbar = GameObject.FindGameObjectWithTag("ProgressBar").GetComponent<Progressbar>(); 
@@ -35,16 +38,6 @@ public class ResourceAttributes : MonoBehaviour
         if(!gatheringsResourcesRunning && !gameManager.GetUI().getIsMouseOverUI() && !gameManager.getCraftingSystem().getIsCrafting()){
             StartCoroutine(walkingToResource());
         }
-    }
-    void OnMouseEnter()
-    {
-        //GetComponentInChildren<Outline>().enabled = true;
-        //GetComponentInChildren<Outline>().eraseRenderer = false;
-    }
-
-    void OnMouseExit()
-    {
-        //GetComponentInChildren<Outline>().enabled = false;
     }
 
     public GameObject getResourceMined(){
@@ -59,49 +52,17 @@ public class ResourceAttributes : MonoBehaviour
         progress += addProgress;
     }
 
-    void OnTriggerEnter(Collider other)
-    {
-        if(!gatheringsResourcesRunning){
-            if(other.tag == "player"){
-                player = other;
-                playerInBounds = true;
-            }
-
-            if(other is BoxCollider){
-                if(other.tag == "Citizen"){
-                    player = other;
-                    citizenInBounds = true;
-                }
-            }
-        }
-        
-    }
-
-    void OnTriggerExit(Collider other)
-    {
-        if(!gatheringsResourcesRunning){
-            if(other.tag == "player"){
-                playerInBounds = false;
-            }
-
-            if(other is BoxCollider){
-                if(other.tag == "Citizen"){
-                    citizenInBounds = false;
-                }
-            }
-        }
-        
-    }
-
     public IEnumerator walkingToResource(){
         if(!walkingToResourceBool){
             walkingToResourceBool = true;
+            bool reachedResource = false;
             gameManager.getPlayerBehavior().moveToPosition(this.transform.position);
+
             while(walkingToResourceBool){
-                if(playerInBounds){
+                if(Vector3.Distance(this.transform.position, gameManager.getPlayerBehavior().getPlayerPosition()) <= distanceCenter && !reachedResource){
+                    reachedResource = true;
                     gameManager.getPlayerBehavior().stopPlayer();
-                    gameManager.getPlayerBehavior().playerLookAt(this.gameObject);
-                    StartCoroutine(gatheringResources());
+                    StartCoroutine(gatheringResources(gameManager.getPlayerBehavior(), null));
                     break;
                 }
                 yield return null;
@@ -117,10 +78,10 @@ public class ResourceAttributes : MonoBehaviour
 
             while(walkingToResourceBool){
                 if(this != null){
-                    if(Vector3.Distance(this.transform.position, citizen.transform.position) <= 1f && !reachedResource){
+                    if(Vector3.Distance(this.transform.position, citizen.transform.position) <= distanceCenter && !reachedResource){
                         reachedResource = true;
                         citizen.stopMovement();
-                        StartCoroutine(gatheringResources());
+                        StartCoroutine(gatheringResources(null, citizen));
                         break;
                     }
                 }
@@ -131,15 +92,21 @@ public class ResourceAttributes : MonoBehaviour
     
     }
 
-    public IEnumerator gatheringResources(){
+    public IEnumerator gatheringResources(PlayerBehavior playerBehavior, Citizen citizen){
         yield return new WaitForSeconds(0.3f);
         if(!gatheringsResourcesRunning){
             gatheringsResourcesRunning = true;
-            player.GetComponent<Animator>().SetBool("isGatheringResources" , true);
 
-            if(player.tag == "Citizen"){
-                player.GetComponent<Citizen>().setResourceBeingMined(this);
-                player.GetComponent<Citizen>().lookAt(this.gameObject);
+            if(citizen){
+                citizen.setResourceBeingMined(this);
+                citizen.lookAt(this.gameObject);
+                player = citizen.transform;
+                player.GetComponent<Animator>().SetBool("isGatheringResources" , true);
+            }
+            if(playerBehavior){
+                playerBehavior.playerLookAt(this.gameObject);
+                player = playerBehavior.transform;
+                player.GetComponent<Animator>().SetBool("isGatheringResources" , true);
             }
 
             // TREES
@@ -181,17 +148,17 @@ public class ResourceAttributes : MonoBehaviour
 
                         player.GetComponent<Animator>().SetBool("isGatheringResources" , false);
                         
-                        if(player.tag == "player"){
+                        if(playerBehavior){
                             progressbar.resetProgressBar();
                         }
 
-                        player.GetComponent<Skills>().getSkillByName("Woodcutting").increaseExperience(400);
+                        player.GetComponent<Skills>().increaseExperience("Woodcutting", 400);
 
-                        if(player.tag == "Citizen"){
-                            player.GetComponent<Citizen>().setResourceBeingMined(null);
-                            player.GetComponent<Citizen>().addItemToItemsToPickUp(woodLog1.GetComponent<ItemAttributes>());
-                            player.GetComponent<Citizen>().addItemToItemsToPickUp(woodLog2.GetComponent<ItemAttributes>());
-                            player.GetComponent<Citizen>().addItemToItemsToPickUp(woodLog3.GetComponent<ItemAttributes>());
+                        if(citizen){
+                            citizen.setResourceBeingMined(null);
+                            citizen.addItemToItemsToPickUp(woodLog1.GetComponent<ItemAttributes>());
+                            citizen.addItemToItemsToPickUp(woodLog2.GetComponent<ItemAttributes>());
+                            citizen.addItemToItemsToPickUp(woodLog3.GetComponent<ItemAttributes>());
                         }
 
                         
@@ -216,21 +183,21 @@ public class ResourceAttributes : MonoBehaviour
                         progressbar.updateProgressBar(progress);
                     }
 
-                    if(player.tag == "player"){
+                    if(playerBehavior){
                         if(gameManager.getPlayerBehavior().getIsMovingToDestination()){
                             gatheringsResourcesRunning = false;
                             player.GetComponent<Animator>().SetBool("isGatheringResources" , false);
                             progressbar.resetProgressBar();
                             break;
                         } 
-                    }/*
-                    if(player.tag == "Citizen"){
-                        if(player.GetComponent<Citizen>().getIsMovingToDestination()){
+                    }
+                    if(citizen){
+                        if(citizen.getIsMovingToDestination()){
                             gatheringsResourcesRunning = false;
                             player.GetComponent<Animator>().SetBool("isGatheringResources" , false);
                             break;
                         } 
-                    }*/
+                    }
                     if(progress >= 60 && !firstTriggered){
                         gatheringResourceSteps("first");
                         firstTriggered = true;
@@ -267,8 +234,11 @@ public class ResourceAttributes : MonoBehaviour
         GameObject stone = Instantiate(resourceMined, new Vector3(player.transform.position.x - 1.5F, player.transform.position.y + 1, player.transform.position.z), Quaternion.identity);
         stone.name = resourceMined.name;
 
-        
-        player.GetComponent<Skills>().getSkillByName("Mining").increaseExperience(400);
+        if(player.GetComponent<Citizen>()){
+            player.GetComponent<Citizen>().addItemToItemsToPickUp(stone.GetComponent<ItemAttributes>());
+        }
+
+        player.GetComponent<Skills>().increaseExperience("Mining", 400);
 
         //GetComponent<Animator>().SetTrigger(animationTrigger);
         amountLeft--;

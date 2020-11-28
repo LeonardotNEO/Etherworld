@@ -35,6 +35,9 @@ public class UI : MonoBehaviour
     public GameObject craftingBuilding; // FOR CRAFTING
     public GameObject craftingBuildingHover; // FOR CRAFTING
 
+    // INVENTORY
+    public GameObject inventorySlot; // FOR INVENTORY
+
     // SKILLS
     public GameObject skillSlot; // FOR SKILLS
 
@@ -161,7 +164,9 @@ public class UI : MonoBehaviour
                 }
             }
         }
-        
+        //if(Input.GetKeyDown("space")){
+        //    GameObject.FindGameObjectWithTag("MainCamera2").GetComponent<MoveCameraScript>().moveCameraToPosition(gameManager.getPlayerBehavior().getPlayerPosition());
+        //}
         if(Input.GetKeyDown("tab")){
             openInventory();
         } 
@@ -422,6 +427,8 @@ public class UI : MonoBehaviour
             BuildingAttributes building = gameManager.getBuildingCatalog().getBuildingLastClicked().GetComponent<BuildingAttributes>();
             closeBuildingUI();
 
+            closeAllBuildingOptions();
+            buildingProductionOpen();
             GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background").gameObject.SetActive(true);
 
             //HEADER
@@ -429,6 +436,7 @@ public class UI : MonoBehaviour
         }
     }
     public void buildingOpenClose(){
+        closeAllBuildingOptions();
         buildingOpenOpen = false;
         resetSelectedItem();
         GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background").gameObject.SetActive(false);
@@ -455,16 +463,56 @@ public class UI : MonoBehaviour
     // INVENTORY
     public void buildingInventoryOpen(){
         // OPEN PLAYER INVENTORY
-        setBuildingInventoryOpen(true);
         gameManager.GetUI().openInventory();
 
         //OPEN
         closeAllBuildingOptions();
         GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Inventory").gameObject.SetActive(true);
+        setBuildingInventoryOpen(true);
+        updateBuildingInventory();
     }
     public void closeBuildingInventory(){
         setBuildingInventoryOpen(false);
         GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Inventory").gameObject.SetActive(false);
+    }
+    public void updateBuildingInventory(){
+        Inventory inventory = gameManager.getBuildingCatalog().getBuildingLastClicked().GetComponent<Inventory>();
+        Transform buildingInventoryUIContent = GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Inventory/Scroll View/Viewport/BuildingInventory");
+
+        if(buildingInventoryUIContent.childCount > inventory.getInventoryCapacity()){
+            removeBuildingInventory(buildingInventoryUIContent.childCount - inventory.getInventoryCapacity());
+        }
+        if(buildingInventoryUIContent.childCount < inventory.getInventoryCapacity()){
+            int amountToInstiate = inventory.getInventoryCapacity() - buildingInventoryUIContent.childCount;
+            for(int i = 0; i < amountToInstiate; i++){
+                inventorySlot.GetComponentInChildren<Button>().transform.tag = "BuildingInvSlot";
+                Instantiate(inventorySlot, buildingInventoryUIContent);
+                
+            }
+        }
+
+        int counter = 0;
+        foreach(InventorySlot inventorySlot in inventory.getInventorySlots()){
+            buildingInventoryUIContent.GetChild(counter).Find("Button").GetComponent<InventorySlotButton>().setInventorySlotID(counter);
+
+            if(inventorySlot.getCurrentAmountInSlot() != 0){
+                buildingInventoryUIContent.GetChild(counter).transform.Find("Button/Text").GetComponent<Text>().text = inventory.getInventorySlots()[counter].getItemInSlot();
+                buildingInventoryUIContent.GetChild(counter).transform.Find("Panel/Text").GetComponent<Text>().text = inventory.getInventorySlots()[counter].getCurrentAmountInSlot().ToString();
+            } else {
+                buildingInventoryUIContent.GetChild(counter).transform.Find("Button/Text").GetComponent<Text>().text = "";
+                buildingInventoryUIContent.GetChild(counter).transform.Find("Panel/Text").GetComponent<Text>().text = "";
+            }
+            counter++;
+        }
+    }
+    public void removeBuildingInventory(int amount){
+        int counter = 0;
+        foreach(Transform child in GameObject.FindGameObjectWithTag("BuildingOpenUI").transform.Find("Background/Inventory/Scroll View/Viewport/BuildingInventory")){
+            if(counter < amount){
+                Destroy(child.gameObject);
+            }
+            counter++;
+        }
     }
 
     // STATS
@@ -715,10 +763,49 @@ public class UI : MonoBehaviour
         closeAllMainMenus();
         inventoryOpen = true;
         GameObject.FindGameObjectWithTag("InventoryMenuUI").transform.Find("Background").gameObject.SetActive(true);
+        updateMainInventory();
     }
     public void closeInventory(){
         inventoryOpen = false;
         GameObject.FindGameObjectWithTag("InventoryMenuUI").transform.Find("Background").gameObject.SetActive(false); 
+    }
+    public void updateMainInventory(){
+        Inventory inventory = gameManager.getPlayerBehavior().getInventory();
+        Transform mainInventoryUIContent = GameObject.FindGameObjectWithTag("InventoryMenuUI").transform.Find("Background/Scroll View/Viewport/MainInventory");
+
+        if(mainInventoryUIContent.childCount > inventory.getInventoryCapacity()){
+            removeMainInventory(mainInventoryUIContent.childCount - inventory.getInventoryCapacity());
+        }
+        if(mainInventoryUIContent.childCount < inventory.getInventoryCapacity()){
+            int amountToInstiate = inventory.getInventoryCapacity() - mainInventoryUIContent.childCount;
+            for(int i = 0; i < amountToInstiate; i++){
+                inventorySlot.GetComponentInChildren<Button>().transform.tag = "MainInvSlot";
+                Instantiate(inventorySlot, mainInventoryUIContent);
+            }
+        }
+
+        int counter = 0;
+        foreach(InventorySlot inventorySlot in inventory.getInventorySlots()){
+            mainInventoryUIContent.GetChild(counter).Find("Button").GetComponent<InventorySlotButton>().setInventorySlotID(counter);
+
+            if(inventorySlot.getCurrentAmountInSlot() != 0){
+                mainInventoryUIContent.GetChild(counter).transform.Find("Button/Text").GetComponent<Text>().text = inventory.getInventorySlots()[counter].getItemInSlot();
+                mainInventoryUIContent.GetChild(counter).transform.Find("Panel/Text").GetComponent<Text>().text = inventory.getInventorySlots()[counter].getCurrentAmountInSlot().ToString();
+            } else {
+                mainInventoryUIContent.GetChild(counter).transform.Find("Button/Text").GetComponent<Text>().text = "";
+                mainInventoryUIContent.GetChild(counter).transform.Find("Panel/Text").GetComponent<Text>().text = "";
+            }
+            counter++;
+        }
+    }
+    public void removeMainInventory(int amount){
+        int counter = 0;
+        foreach(Transform child in GameObject.FindGameObjectWithTag("InventoryMenuUI").transform.Find("Background/Scroll View/Viewport/MainInventory")){
+            if(counter < amount){
+                Destroy(child.gameObject);
+            }
+            counter++;
+        }
     }
 
     //--------------//
@@ -795,7 +882,7 @@ public class UI : MonoBehaviour
         }
 
         closeAllMainMenus();
-        showSkills();
+        updateSkills();
         skillsOpen = true;
         GameObject.FindGameObjectWithTag("Skills").transform.Find("Background").gameObject.SetActive(true); 
     }
@@ -803,23 +890,38 @@ public class UI : MonoBehaviour
         skillsOpen = false;
         GameObject.FindGameObjectWithTag("Skills").transform.Find("Background").gameObject.SetActive(false); 
     }
-    public void showSkills(){
-        removeSkills();
+    public void updateSkills(){
         List<Skill> skills = gameManager.getPlayerBehavior().getSkills().GetSkills();
+        Transform Skillscontent = GameObject.FindGameObjectWithTag("Skills").transform.Find("Background/Skills");
 
+        if(Skillscontent.childCount > skills.Count){
+            removeSkills(Skillscontent.childCount - skills.Count);
+        }
+        if(Skillscontent.childCount < skills.Count){
+            int amountToInstiate = skills.Count - Skillscontent.childCount;
+            for(int i = 0; i < amountToInstiate; i++){
+                Instantiate(skillSlot, Skillscontent);
+            }
+        }
+
+        int counter = 0;
         foreach(Skill skill in skills){
-            GameObject thisSkill = (GameObject)Instantiate(skillSlot, GameObject.FindGameObjectWithTag("Skills").transform.Find("Background/Skills"));
-            thisSkill.transform.Find("skillName").GetComponent<Text>().text = skill.getName();
-            thisSkill.transform.Find("level").GetComponent<Text>().text = skill.getLevel().ToString();
-            thisSkill.transform.Find("Experience Panel/Exp").GetComponent<Text>().text = skill.getExperience().ToString();
-            thisSkill.transform.Find("Experience Panel/Exp Next Lvl").GetComponent<Text>().text = skill.getExperienceNextLevel().ToString();
-            thisSkill.transform.Find("Experience Panel/Exp Til Next").GetComponent<Text>().text = skill.getExperienceLeft().ToString();
-            thisSkill.transform.Find("Experience Panel/Percentage").GetComponent<Text>().text = skill.getPercentageLeft().ToString("0.##") + "%";             
+            Skillscontent.GetChild(counter).transform.Find("skillName").GetComponent<Text>().text = skill.getName();
+            Skillscontent.GetChild(counter).transform.Find("level").GetComponent<Text>().text = skill.getLevel().ToString();
+            Skillscontent.GetChild(counter).transform.Find("Experience Panel/Exp").GetComponent<Text>().text = skill.getExperience().ToString();
+            Skillscontent.GetChild(counter).transform.Find("Experience Panel/Exp Next Lvl").GetComponent<Text>().text = skill.getExperienceNextLevel().ToString();
+            Skillscontent.GetChild(counter).transform.Find("Experience Panel/Exp Til Next").GetComponent<Text>().text = skill.getExperienceLeft().ToString();
+            Skillscontent.GetChild(counter).transform.Find("Experience Panel/Percentage").GetComponent<Text>().text = skill.getPercentageLeft().ToString("0.##") + "%";     
+            counter++;        
         }
     }
-    public void removeSkills(){
+    public void removeSkills(int amount){
+        int counter = 0;
         foreach(Transform child in GameObject.FindGameObjectWithTag("Skills").transform.Find("Background/Skills")){
-            Destroy(child.gameObject);
+            if(counter < amount){   
+                Destroy(child.gameObject);
+            }
+            counter++;
         }
     }
 
@@ -827,7 +929,7 @@ public class UI : MonoBehaviour
     // TOOLBARMENU //
     //-------------//
     public void clickToolbarItem(string type){
-        Toolbelt toolbar = GameObject.FindGameObjectWithTag("ToolbeltUI").GetComponent<Toolbelt>();
+        Toolbelt toolbar = gameManager.getToolbelt();
 
         // TRANSFER TO MAIN INVENTORY
         if(inventoryOpen){
@@ -1024,6 +1126,7 @@ public class UI : MonoBehaviour
 
         foreach(BuildingAttributes buildingInTown in list){
             GameObject instantiateBuilding = Instantiate(building, buildingList.transform);
+            instantiateBuilding.transform.GetComponent<buildingBotton>().setBuilding(buildingInTown);
             instantiateBuilding.transform.Find("Name").GetComponent<Text>().text = buildingInTown.getBuildingName();
             instantiateBuilding.transform.Find("Residents").GetComponent<Text>().text = buildingInTown.getResidentsInBuilding().Count.ToString() + "/" + buildingInTown.getResidentialLimit().ToString();
             instantiateBuilding.transform.Find("Workers").GetComponent<Text>().text = buildingInTown.getWorkersInBuilding().Count.ToString() + "/" + buildingInTown.getWorkerLimit().ToString();
@@ -1237,5 +1340,172 @@ public class UI : MonoBehaviour
     public Town getPlayerOwnedSelectedTown(){
         townSelectedValue = GameObject.FindGameObjectWithTag("TownMenuUI").transform.Find("Background/TownList").GetComponent<Dropdown>().value;
         return gameManager.getPlayerBehavior().getTownOwnedByIndex(townSelectedValue);
+    }
+
+    //-------------//
+    // CITIZENMENU //
+    //-------------//
+    public void openCitizenMenu(){
+        closeAllCitizenOptions();
+
+        Citizen citizen = gameManager.getCitizenCatalog().getSelectedCitizen();
+        GameObject.FindGameObjectWithTag("CitizenMenuUI").transform.Find("Background/Header").GetComponent<Text>().text = citizen.getFirstName() + " " + citizen.getLastName();
+        GameObject.FindGameObjectWithTag("CitizenMenuUI").transform.Find("Background").gameObject.SetActive(true);
+
+        openCitizenStats();
+    }
+    public void closeCitizenMenu(){
+        GameObject.FindGameObjectWithTag("CitizenMenuUI").transform.Find("Background").gameObject.SetActive(false);
+    }
+
+    // STATS
+    public void openCitizenStats(){
+        closeAllCitizenOptions();
+        Citizen citizen = gameManager.getCitizenCatalog().getSelectedCitizen();
+        GameObject.FindGameObjectWithTag("CitizenMenuUI").transform.Find("Background/Stats").gameObject.SetActive(true);
+        Transform elementsLocation = GameObject.FindGameObjectWithTag("CitizenMenuUI").transform.Find("Background/Stats/");
+
+
+        elementsLocation.Find("Firstname").GetComponent<Text>().text = "Firstname: " + citizen.getFirstName();
+        elementsLocation.Find("Lastname").GetComponent<Text>().text = "Lastname: " + citizen.getLastName();
+        elementsLocation.Find("Age").GetComponent<Text>().text = "Age: " + citizen.getAge().ToString();
+        elementsLocation.Find("Gender").GetComponent<Text>().text = "Gender: " + citizen.getGender();
+        elementsLocation.Find("Happiness").GetComponent<Text>().text = "Happiness: " + citizen.getHappiness().ToString();
+        elementsLocation.Find("Job").GetComponent<Text>().text = "Job: " + citizen.getJob();
+        elementsLocation.Find("Wealth").GetComponent<Text>().text = "Wealth: " + citizen.getWealth().ToString();
+        elementsLocation.Find("Income").GetComponent<Text>().text = "Income: " + citizen.getIncome().ToString();
+        elementsLocation.Find("Tax payment").GetComponent<Text>().text = "Tax payment: " + citizen.getAmountToPayInTax().ToString();
+        elementsLocation.Find("Status").GetComponent<Text>().text = "Status: " + citizen.getStatus();
+        elementsLocation.Find("Best Skill").GetComponent<Text>().text = "Best skill: " + citizen.getSkills().getSkillWithHighestLevel().getLevel().ToString() + " " + citizen.getSkills().getSkillWithHighestLevel().getName();
+        elementsLocation.Find("Second Best Skill").GetComponent<Text>().text = "2th skill: " + citizen.getSkills().getSkillWithSecondHighestLevel().getLevel().ToString() + " " + citizen.getSkills().getSkillWithSecondHighestLevel().getName();
+        elementsLocation.Find("Health").GetComponent<Text>().text = "Health: " + citizen.getHealth().ToString();
+        elementsLocation.Find("Hunger").GetComponent<Text>().text = "Hunger: " + citizen.getHunger().ToString();
+        elementsLocation.Find("Thirst").GetComponent<Text>().text = "Thirst: " + citizen.getThrist().ToString();
+    }
+    public void closeCitizenStats(){
+        GameObject.FindGameObjectWithTag("CitizenMenuUI").transform.Find("Background/Stats").gameObject.SetActive(false);
+    }
+    public void clickCitizenHome(){
+        Citizen citizen = gameManager.getCitizenCatalog().getSelectedCitizen();
+
+        if(gameManager.getCitizenCatalog().getSelectedCitizen()){
+            if(gameManager.getCitizenCatalog().getSelectedCitizen().getHome() != null){
+                GameObject.FindGameObjectWithTag("MainCamera2").GetComponent<MoveCameraScript>().moveCameraToPosition(citizen.getHome().transform.position);
+            }
+        }
+        closeCitizenMenu();
+    }
+    public void clickCitizenWorkplace(){
+        Citizen citizen = gameManager.getCitizenCatalog().getSelectedCitizen();
+
+        if(gameManager.getCitizenCatalog().getSelectedCitizen().getWork() != null){
+            GameObject.FindGameObjectWithTag("MainCamera2").GetComponent<MoveCameraScript>().moveCameraToPosition(citizen.getWork().transform.position);
+        }
+        closeCitizenMenu();
+    }
+    public void clickCitizenTown(){
+        Citizen citizen = gameManager.getCitizenCatalog().getSelectedCitizen();
+
+        if(gameManager.getCitizenCatalog().getSelectedCitizen().getTownAlliegence() != null){
+            GameObject.FindGameObjectWithTag("MainCamera2").GetComponent<MoveCameraScript>().moveCameraToPosition(citizen.getTownAlliegence().transform.position);
+        }
+        closeCitizenMenu();
+    }
+
+    // SKILLS
+    public void openCitizenSkills(){
+        closeAllCitizenOptions();
+        GameObject.FindGameObjectWithTag("CitizenMenuUI").transform.Find("Background/Skills").gameObject.SetActive(true);
+        updateCitizenSkills();
+    }
+    public void updateCitizenSkills(){
+        Citizen citizen = gameManager.getCitizenCatalog().getSelectedCitizen();
+        List<Skill> skills = citizen.getSkills().GetSkills();
+        Transform Skillscontent = GameObject.FindGameObjectWithTag("CitizenMenuUI").transform.Find("Background/Skills/Skills content");
+
+        if(Skillscontent.childCount > skills.Count){
+            removeCitizenSkills(Skillscontent.childCount - skills.Count);
+        }
+        if(Skillscontent.childCount < skills.Count){
+            int amountToInstiate = skills.Count - Skillscontent.childCount;
+            for(int i = 0; i < amountToInstiate; i++){
+                Instantiate(skillSlot, Skillscontent);
+            }
+        }
+
+        int counter = 0;
+        foreach(Skill skill in skills){
+            Skillscontent.GetChild(counter).transform.Find("skillName").GetComponent<Text>().text = skill.getName();
+            Skillscontent.GetChild(counter).transform.Find("level").GetComponent<Text>().text = skill.getLevel().ToString();
+            Skillscontent.GetChild(counter).transform.Find("Experience Panel/Exp").GetComponent<Text>().text = skill.getExperience().ToString();
+            Skillscontent.GetChild(counter).transform.Find("Experience Panel/Exp Next Lvl").GetComponent<Text>().text = skill.getExperienceNextLevel().ToString();
+            Skillscontent.GetChild(counter).transform.Find("Experience Panel/Exp Til Next").GetComponent<Text>().text = skill.getExperienceLeft().ToString();
+            Skillscontent.GetChild(counter).transform.Find("Experience Panel/Percentage").GetComponent<Text>().text = skill.getPercentageLeft().ToString("0.##") + "%";  
+            counter++;           
+        }
+    }
+    public void closeCitizenSkills(){
+        GameObject.FindGameObjectWithTag("CitizenMenuUI").transform.Find("Background/Skills").gameObject.SetActive(false);
+    }
+    public void removeCitizenSkills(int amount){
+        int counter = 0;
+        foreach(Transform child in GameObject.FindGameObjectWithTag("CitizenMenuUI").transform.Find("Background/Skills/Skills content")){
+            if(counter < amount){
+                Destroy(child.gameObject);
+            }
+            counter++;
+        }
+    }
+
+    // INVENTORY
+    public void openCitizenInventory(){
+        closeAllCitizenOptions();
+        GameObject.FindGameObjectWithTag("CitizenMenuUI").transform.Find("Background/Inventory").gameObject.SetActive(true);
+        updateCitizenInventory();
+    }
+    public void closeCitizenInventory(){
+        GameObject.FindGameObjectWithTag("CitizenMenuUI").transform.Find("Background/Inventory").gameObject.SetActive(false);
+    }
+    public void updateCitizenInventory(){
+        Inventory inventory = gameManager.getCitizenCatalog().getSelectedCitizen().getInventory();
+        Transform citizenInventoryUIContent = GameObject.FindGameObjectWithTag("CitizenMenuUI").transform.Find("Background/Inventory/Scroll View/Viewport/MainInventory");
+
+        if(citizenInventoryUIContent.childCount > inventory.getInventoryCapacity()){
+            removeMainInventory(citizenInventoryUIContent.childCount - inventory.getInventoryCapacity());
+        }
+        if(citizenInventoryUIContent.childCount < inventory.getInventoryCapacity()){
+            int amountToInstiate = inventory.getInventoryCapacity() - citizenInventoryUIContent.childCount;
+            for(int i = 0; i < amountToInstiate; i++){
+                Instantiate(inventorySlot, citizenInventoryUIContent);
+            }
+        }
+
+        int counter = 0;
+        foreach(InventorySlot inventorySlot in inventory.getInventorySlots()){
+
+            if(inventorySlot.getCurrentAmountInSlot() != 0){
+                citizenInventoryUIContent.GetChild(counter).transform.Find("Button/Text").GetComponent<Text>().text = inventory.getInventorySlots()[counter].getItemInSlot();
+                citizenInventoryUIContent.GetChild(counter).transform.Find("Panel/Text").GetComponent<Text>().text = inventory.getInventorySlots()[counter].getCurrentAmountInSlot().ToString();
+            } else {
+                citizenInventoryUIContent.GetChild(counter).transform.Find("Button/Text").GetComponent<Text>().text = "";
+                citizenInventoryUIContent.GetChild(counter).transform.Find("Panel/Text").GetComponent<Text>().text = "";
+            }
+            counter++;
+        }
+    }
+    public void removeCitizenInventory(int amount){
+        int counter = 0;
+        foreach(Transform child in GameObject.FindGameObjectWithTag("CitizenMenuUI").transform.Find("Background/Inventory/Scroll View/Viewport/MainInventory")){
+            if(counter < amount){
+                Destroy(child.gameObject);
+            }
+            counter++;
+        }
+    }
+
+    public void closeAllCitizenOptions(){
+        closeCitizenStats();
+        closeCitizenSkills();
+        closeCitizenInventory();
     }
 }

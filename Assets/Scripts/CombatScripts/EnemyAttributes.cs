@@ -15,7 +15,7 @@ public class EnemyAttributes : MonoBehaviour
     public Vector3 position;
     public List<Ability> abilities;
     public Inventory inventory;
-    [SerializeField] public Dictionary<Dictionary<string, int>, float> droptable;
+    public Dictionary<Dictionary<string, int>, float> droptable;
     public string enemyName;
     public string description;
     public string type;
@@ -34,14 +34,13 @@ public class EnemyAttributes : MonoBehaviour
     void Awake()
     {
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+        agent = this.transform.GetComponent<NavMeshAgent>();
     }
 
     void Start()
     {
+        StartCoroutine(instatiateEnemy());
         enemyCatalog = gameManager.getEnemyCatalog();
-        agent = this.transform.GetComponent<NavMeshAgent>();
-
-        
         enemyName = enemyCatalog.getNameContains(transform.name);
         transform.name = enemyName;
         if(enemyCatalog.getEnemyByName(enemyName) != null){
@@ -57,10 +56,15 @@ public class EnemyAttributes : MonoBehaviour
             critChance = enemyCatalog.getEnemyByName(enemyName).getBaseCritChange();
             attackRange = enemyCatalog.getEnemyByName(enemyName).getAttackRange();
             aggressive = enemyCatalog.getEnemyByName(enemyName).getAggressive();
-            abilities = enemyCatalog.getEnemyByName(enemyName).getAbilities();
             droptable = enemyCatalog.getEnemyByName(enemyName).getDroptable();
             inventory = transform.GetComponent<Inventory>();
+            abilities = enemyCatalog.getEnemyByName(enemyName).getAbilities();
         }
+    }
+
+    public IEnumerator instatiateEnemy(){
+        yield return new WaitForSeconds(1f);
+        
     }
 
     void Update()
@@ -274,12 +278,14 @@ public class EnemyAttributes : MonoBehaviour
             attackingEnemy = false;
         }
     }
+
+    // PLAYER
     public IEnumerator attackEnemy(EnemyAttributes enemy, bool player){
         EnemyAttributes playerEnemy = gameManager.getPlayerBehavior().transform.GetComponent<EnemyAttributes>();
         Vector3 hitGroundPosition = gameManager.getPlayerBehavior().getHitGround();
 
         //Debug.Log("start attacking");
-        if(!playerEnemy.getIsAttackingEnemy()){
+        if(!playerEnemy.getIsAttackingEnemy() && enemy != this){
             playerEnemy.setIsAttackigEnemy(true);
             playerEnemy.lookAtTargetEnemy(enemy);
 
@@ -323,12 +329,12 @@ public class EnemyAttributes : MonoBehaviour
 
     public void dealDamage(EnemyAttributes enemy){
         if(!attackCooldown){
-            StartCoroutine(activateAttackCooldown());
             GetComponent<Animator>().SetTrigger("punch");
+            StartCoroutine(activateAttackCooldown());
             //Debug.Log("punch");
             int damageToDeal = damage;
             enemy.takeDamage(damage);
-            GetComponent<Animator>().SetTrigger("punch");
+        
             updateHealthbar(enemy);
         }
     }

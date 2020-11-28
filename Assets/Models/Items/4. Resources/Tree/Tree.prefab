@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 509102605602016199}
-  - component: {fileID: 1346918606}
   - component: {fileID: 1084976971110723651}
   - component: {fileID: 6469411810059685536}
+  - component: {fileID: 4635353878200445442}
   m_Layer: 9
   m_Name: Tree
   m_TagString: Untagged
@@ -34,19 +34,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &1346918606
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 509102605602016196}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1.4785199, y: 4.1906137, z: 1.287091}
-  m_Center: {x: -0.007892689, y: 2.0978055, z: 0.050588887}
 --- !u!114 &1084976971110723651
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62,6 +49,14 @@ MonoBehaviour:
   resourceMined: {fileID: 6277615705952907542, guid: ae8f45abfe7da8b43860067e5eb82e56,
     type: 3}
   progressbar: {fileID: 0}
+  resourceName: 
+  amountLeft: 6
+  progress: 0
+  distanceCenter: 0
+  playerInBounds: 0
+  citizenInBounds: 0
+  gatheringsResourcesRunning: 0
+  walkingToResourceBool: 0
 --- !u!136 &6469411810059685536
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -76,6 +71,19 @@ CapsuleCollider:
   m_Height: 3.1609428
   m_Direction: 1
   m_Center: {x: -0.053251825, y: 3.735956, z: 0.008810043}
+--- !u!65 &4635353878200445442
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 509102605602016196}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.3672231, y: 2.8104825, z: 0.46061108}
+  m_Center: {x: 0, y: 1.3857198, z: 0}
 --- !u!1 &574042836474985695
 GameObject:
   m_ObjectHideFlags: 0

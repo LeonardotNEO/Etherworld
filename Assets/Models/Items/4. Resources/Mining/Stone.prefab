@@ -75,7 +75,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b292f7335baf61a4c9bca83f2c2c4716, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemAmount: 0
+  itemAmount: 1
+  itemName: Stone
+  walkingToItemBool: 0
 --- !u!1 &789738551900164906
 GameObject:
   m_ObjectHideFlags: 0
