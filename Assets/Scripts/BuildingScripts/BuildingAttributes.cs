@@ -16,6 +16,8 @@ public class BuildingAttributes : MonoBehaviour
     public List<Citizen> citizensInBuilding = new List<Citizen>();
     public List<Citizen> citizensGatheringResources = new List<Citizen>();
     public List<BuildingAttributes> buildingscollidingWith = new List<BuildingAttributes>();
+    public List<UnfinishedBuilding> unfinishedBuildingsCollidingWith = new List<UnfinishedBuilding>();
+    public List<GameObject> gameObjectsCollidingWith = new List<GameObject>();
     public Inventory buildingInventory;
     public Dictionary<string, int> buildingUpKeep;
     public Dictionary<string, int> itemsProducedInBuilding;
@@ -138,7 +140,7 @@ public class BuildingAttributes : MonoBehaviour
         if(
             other.gameObject.layer == 12  || /*Layer 12 is BUILDINGSMESH*/
             other.gameObject.layer == 13  || /*Layer 13 is RESOURCESMESH*/
-            other.gameObject.layer == 14     /*Layer 14 is ITEMSMESH*/
+            other.gameObject.layer == 14  /*Layer 14 is ITEMSMESH*/
         )
         {
             if(other.transform.gameObject.GetComponentInParent<BuildingAttributes>()){
@@ -159,14 +161,14 @@ public class BuildingAttributes : MonoBehaviour
         if(
             other.gameObject.layer == 12  || /*Layer 12 is BUILDINGSMESH*/
             other.gameObject.layer == 13  || /*Layer 13 is RESOURCESMESH*/
-            other.gameObject.layer == 14     /*Layer 14 is ITEMSMESH*/
+            other.gameObject.layer == 14   /*Layer 14 is ITEMSMESH*/
         )
         {
             if(other.transform.gameObject.GetComponentInParent<BuildingAttributes>()){
                 buildingscollidingWith.Remove(other.transform.GetComponentInParent<BuildingAttributes>());
-                if(buildingscollidingWith.Count == 0){
-                    setCollidingWithOtherObject(false);
-                }
+            }
+            if(buildingscollidingWith.Count == 0){
+                setCollidingWithOtherObject(false);
             }
         }
 

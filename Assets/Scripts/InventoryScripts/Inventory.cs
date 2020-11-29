@@ -32,15 +32,51 @@ public class Inventory : MonoBehaviour
             inventoryCapacity = gameManager.getBuildingCatalog().getBuildingByName(transform.name).getStorageCapacity();
         }
         if(transform.gameObject.layer == LayerMask.NameToLayer("Citizens")){
-            inventoryCapacity = 10;
+            inventoryCapacity = 5;
         }
         if(transform.tag == "player"){
             inventoryCapacity = 30;
         }
 
-        for(int i = 0; i < inventoryCapacity; i++){
-            inventorySlots.Add(new InventorySlot(99, null));
+        // INSTATIATING AN INVENTORY ON UNFINISHED BUILDING
+        if(GetComponent<UnfinishedBuilding>()){
+            int amountInventorySlots = 0;
+
+            foreach(var item in GetComponent<UnfinishedBuilding>().getItemsNeededToCraft()){
+                int amountToAdd = item.Value;
+                int amountOfInventorySlots = amountToAdd/99;
+                float rest = 0;
+
+                if(amountToAdd/99.0f <= 1){
+                    amountOfInventorySlots = 1;
+                } else {
+                    rest = (float)(amountToAdd/99f) % (float)amountOfInventorySlots;
+                    if(rest != 0){
+                        amountOfInventorySlots++;
+                    }
+                }
+
+                for(int i = 0; i < amountOfInventorySlots; i++){
+                    if(i == amountOfInventorySlots - 1){
+                        //Debug.Log();
+                        inventorySlots.Add(new InventorySlot(amountToAdd - (99*i), item.Key));
+                    } else {
+                        inventorySlots.Add(new InventorySlot(99, item.Key));
+                    }
+                    amountInventorySlots++;
+                }
+            }
+            inventoryCapacity = amountInventorySlots;
         }
+
+        // ADDING THE INVENTORY SLOTS
+        if(!GetComponent<UnfinishedBuilding>()){
+            for(int i = 0; i < inventoryCapacity; i++){
+                inventorySlots.Add(new InventorySlot(99, null));
+            }
+        }
+        
+
 
         // Gets the inventory catalog and add this inventory to it
         if(transform.tag == "player"){
@@ -96,10 +132,36 @@ public class Inventory : MonoBehaviour
             }
         }
 
+        // TRANSFER TO UNFINISHED BUILDING
+        if(gameManager.getBuildingCatalog().getUnfinishedBuildingSelected() != null){
+            if(gameManager.GetUI().getUnfinishedBuildingOpen() && this.getInventorySlot(slotnumber).currentAmountInSlot != 0){
+
+                    // TODO: if statement that prohbit player from transfering if to far away
+                    int amountToRemove = toInventory.addItemToInventory(this.getInventorySlot(slotnumber).getItemInSlot() , this.getInventorySlot(slotnumber).getCurrentAmountInSlot());
+                    removeAmountFromSpecificSlot(this.getInventorySlot(slotnumber), this.getInventorySlot(slotnumber).getCurrentAmountInSlot() - amountToRemove);
+                    updateInventoryInterface();
+            }
+        }
+
+        // TRANSFER TO CITIZEN
+        if(gameManager.getCitizenCatalog().getSelectedCitizen() != null){
+            if(gameManager.GetUI().getCitizenInventoryOpen() && this.getInventorySlot(slotnumber).currentAmountInSlot != 0){
+
+                    // TODO: if statement that prohbit player from transfering if to far away
+                    int amountToRemove = toInventory.addItemToInventory(this.getInventorySlot(slotnumber).getItemInSlot() , this.getInventorySlot(slotnumber).getCurrentAmountInSlot());
+                    removeAmountFromSpecificSlot(this.getInventorySlot(slotnumber), this.getInventorySlot(slotnumber).getCurrentAmountInSlot() - amountToRemove);
+                    updateInventoryInterface();
+            }
+        }
+
         // TRANSFER TO TOOLBAR
-        if(!gameManager.GetUI().getBuildingInventoryOpen() && this.getInventorySlot(slotnumber).currentAmountInSlot != 0){
-            gameManager.getToolbelt().addToSlot(this.getInventorySlot(slotnumber));
-            updateInventoryInterface();
+        if(!gameManager.GetUI().getCitizenInventoryOpen() && !gameManager.GetUI().getUnfinishedBuildingOpen() && !gameManager.GetUI().getBuildingInventoryOpen() && this.getInventorySlot(slotnumber).currentAmountInSlot != 0){
+            if(gameManager.getPlayerBehavior().getPerkattributes().getPerksByName(this.getInventorySlot(slotnumber).getItemInSlot()) != null){
+                gameManager.getToolbelt().addToSlot(this.getInventorySlot(slotnumber));
+                updateInventoryInterface();
+            } else {
+                //Debug.Log("Dont have the perk associated with that item");
+            }
         }
 
         
@@ -113,6 +175,11 @@ public class Inventory : MonoBehaviour
     public int addItemToInventory(string item, int amount){
         int amountLeftToAdd = amount;
         List<InventorySlot> invSlotsWithItemAlready = new List<InventorySlot>();
+
+        if(item.Equals(null)){
+            Debug.Log("Can add item thats null");
+            return 0;
+        }
 
         foreach(InventorySlot inventorySlot in inventorySlots){
             if(inventorySlot.getItemInSlot() == item && inventorySlot.getCurrentAmountInSlot() < 99){
@@ -151,7 +218,7 @@ public class Inventory : MonoBehaviour
                     amountLeftToAdd -= amountToAddToThisSlot;
                 }
             } else {
-                if(inventorySlot.getCurrentAmountInSlot() == 0){
+                if(inventorySlot.getCurrentAmountInSlot() == 0 && (inventorySlot.getInventorySlotType() == null || inventorySlot.getInventorySlotType() == item)){
                     if(amountLeftToAdd + inventorySlot.getCurrentAmountInSlot() <= inventorySlot.getslotCapacity()){
                         int amountToAddToThisSlot = amountLeftToAdd;
                         inventorySlot.increaseCurrentAmountInSlot(amountToAddToThisSlot);
@@ -161,6 +228,7 @@ public class Inventory : MonoBehaviour
                         int amountToAddToThisSlot = inventorySlot.getslotCapacity() - inventorySlot.getCurrentAmountInSlot();
                         inventorySlot.increaseCurrentAmountInSlot(amountToAddToThisSlot);
                         amountLeftToAdd -= amountToAddToThisSlot;
+                        inventorySlot.setItemInSlot(item);
                     }
                 }
             }
@@ -319,6 +387,16 @@ public class Inventory : MonoBehaviour
     }
     public void setInventoryCapacity(int number){
         inventoryCapacity = number;
+        updateInventorySlots(number);
+    }
+
+    public void updateInventorySlots(int newCapacity){
+        if(newCapacity != inventorySlots.Count){
+            inventorySlots.Clear();
+            for(int i = 0; i < inventoryCapacity; i++){
+                inventorySlots.Add(new InventorySlot(99, null));
+            }
+        }
     }
 
     public void updateInventoryInterface(){
@@ -330,6 +408,10 @@ public class Inventory : MonoBehaviour
             gameManager.GetUI().updateBuildingInventory();
             //Debug.Log("updating building inventory");
         }
+        if(GameObject.FindGameObjectWithTag("UnfinishedBuildingMenuUI").transform.Find("Background").gameObject.activeSelf){
+            gameManager.GetUI().openUnfinishedBuilding();
+            //Debug.Log("updating unfinished building inventory");
+        }
         if(GameObject.FindGameObjectWithTag("TownMenuUI").transform.Find("Background").gameObject.activeSelf){
             gameManager.GetUI().updateTownInventory();
             //Debug.Log("updating town inventory");
@@ -339,6 +421,11 @@ public class Inventory : MonoBehaviour
                 gameManager.GetUI().updateCitizenInventory();
                 //Debug.Log("updating citizen inventory");
             }
+        }
+
+        // UPDATING UNFINISHED BUILDING IF IT EXISTS
+        if(this.transform.GetComponent<UnfinishedBuilding>()){
+            this.transform.GetComponent<UnfinishedBuilding>().updateMaterialProgress();
         }
     }
 }

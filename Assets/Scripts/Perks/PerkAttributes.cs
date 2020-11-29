@@ -17,7 +17,7 @@ public class PerkAttributes : MonoBehaviour
         if(!perks.Contains(perk)){
             perks.Add(perk);
         } else {
-            Debug.Log("Perk already in perks");
+            //Debug.Log("Perk already in perks");
         }
     }
 
@@ -42,6 +42,26 @@ public class PerkAttributes : MonoBehaviour
             }
         }
         return perks;
+    }
+
+    public List<Perk> getPerksByItem(string itemName){
+        List<Perk> perks = new List<Perk>();
+
+        foreach(Perk perk in perks){
+            if(perk.getSkill().Equals(gameManager.getItemCatalog().getItemByName(itemName).getItemType1()) && !perks.Contains(perk)){
+                perks.Add(perk);
+            }
+        }
+        return perks;
+    }
+
+    public Perk getPerksByName(string perkName){
+        foreach(Perk perk in perks){
+            if(perk.getName().Equals(perkName)){
+                return perk;
+            }
+        }
+        return null;
     }
 
     public void updatePerksUnlocked(){

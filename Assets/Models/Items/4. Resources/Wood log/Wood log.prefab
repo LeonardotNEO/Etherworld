@@ -76,7 +76,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemAmount: 1
-  itemName: Wood plank
+  itemName: Wood log
   walkingToItemBool: 0
 --- !u!64 &2444538373591651769
 MeshCollider:

@@ -76,7 +76,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemAmount: 1
-  itemName: Stone
+  itemName: Bucket of water
   walkingToItemBool: 0
 --- !u!1 &789738551900164906
 GameObject:

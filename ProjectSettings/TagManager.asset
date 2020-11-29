@@ -19,8 +19,6 @@ TagManager:
   - BuildingOpenUI
   - ProductionProgressBar
   - Residential
-  - BuildingInvSlot
-  - MainInvSlot
   - BoardingHouse
   - Placeholder
   - Storage
@@ -35,6 +33,10 @@ TagManager:
   - AbilitiesMenuUI
   - World
   - CitizenMenuUI
+  - UnfinishedBuildingMenuUI
+  - BuildingInvSlot
+  - UnfinishedBuilding
+  - BuildingIndicator
   layers:
   - Default
   - TransparentFX

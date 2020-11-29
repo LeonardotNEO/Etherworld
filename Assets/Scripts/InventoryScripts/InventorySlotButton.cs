@@ -18,17 +18,45 @@ public class InventorySlotButton : MonoBehaviour
     }
 
     public void buttonClick(){
-        if(transform.tag == "MainInvSlot"){
-            gameManager.getInventoryCatalog().getMainInventory().clickInventoryItem(inventorySlotID, gameManager.getBuildingCatalog().getBuildingLastClickedInventory());
-            //Debug.Log("1");
-            //Debug.Log(inventorySlotID);
-        }
-        if(transform.tag == "BuildingInvSlot"){
-            gameManager.getBuildingCatalog().getBuildingLastClickedInventory().clickInventoryItem(inventorySlotID, gameManager.getInventoryCatalog().getMainInventory());
-            //Debug.Log("2");
-            //Debug.Log(inventorySlotID);
 
-        
+        // TRANSFER FROM MAIN INVENTORY
+        if(transform.parent.parent.name == "Main Inventory"){
+
+            // TO CITIZEN INVENTORY
+            if(gameManager.GetUI().getCitizenInventoryOpen()){
+                gameManager.getInventoryCatalog().getMainInventory().clickInventoryItem(inventorySlotID, gameManager.getCitizenCatalog().getSelectedCitizen().getInventory());
+            }
+
+            // TO BUILDING INVENTORY
+            if(gameManager.GetUI().getBuildingInventoryOpen()){
+                gameManager.getInventoryCatalog().getMainInventory().clickInventoryItem(inventorySlotID, gameManager.getBuildingCatalog().getBuildingLastClickedInventory());
+            }
+
+            // TO UNFINISHED BUILDING INVENTORY
+            if(gameManager.GetUI().getUnfinishedBuildingOpen()){
+                gameManager.getInventoryCatalog().getMainInventory().clickInventoryItem(inventorySlotID, gameManager.getBuildingCatalog().getUnfinishedBuildingSelected().getInventory());
+            }
+
+            // TO TOOLBAR
+            if(!gameManager.GetUI().getUnfinishedBuildingOpen() && !gameManager.GetUI().getBuildingInventoryOpen() && !gameManager.GetUI().getCitizenInventoryOpen()){
+                gameManager.getInventoryCatalog().getMainInventory().clickInventoryItem(inventorySlotID, null);
+            }
+        }
+
+        // TRANSFER FROM CITIZEN INVENTORY
+        if(transform.parent.parent.name == "Citizen Inventory"){
+            gameManager.getCitizenCatalog().getSelectedCitizen().getInventory().clickInventoryItem(inventorySlotID, gameManager.getInventoryCatalog().getMainInventory());
+        }
+
+        // TRANSFER FROM BUILDING INVENTORY
+        if(transform.parent.parent.name == "Building Inventory"){
+            gameManager.getBuildingCatalog().getBuildingLastClickedInventory().clickInventoryItem(inventorySlotID, gameManager.getInventoryCatalog().getMainInventory());
+        }
+
+        // TRANSFER FROM UNFINISHED BUILDING INVENTORY
+        if(transform.parent.parent.name == "Unfinished Building Inventory"){
+            Debug.Log("unifnished building");
+            gameManager.getBuildingCatalog().getUnfinishedBuildingSelected().getInventory().clickInventoryItem(inventorySlotID, gameManager.getInventoryCatalog().getMainInventory());
         }
     }
 }

@@ -9,6 +9,7 @@ public class BuildingsCatalog : MonoBehaviour
     public List<BuildingAttributes> buildingsInWorld = new List<BuildingAttributes>();
     public int amountOfBuildingsInGame;
     GameObject buildingLastClicked = null; // IMPORTANT
+    UnfinishedBuilding unfinishedBuildingSelected = null;
 
     //-------------//
     // TOWN CENTER //
@@ -593,6 +594,14 @@ public class BuildingsCatalog : MonoBehaviour
             }
         }
         return buildingsByTag;
+    }
+
+    public void setUnfinishedBuildingSelected(UnfinishedBuilding building){
+        unfinishedBuildingSelected = building;
+    }
+
+    public UnfinishedBuilding getUnfinishedBuildingSelected(){
+        return unfinishedBuildingSelected;
     }
 
 }
