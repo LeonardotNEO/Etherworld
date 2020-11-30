@@ -16,17 +16,6 @@ public class ItemAttributes : MonoBehaviour
     void Start()
     {
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
-        //this.transform.name = itemName;
-
-        if(this.transform.name.Contains("Wood log")){
-            itemName = "Wood log";
-            itemAmount = 1;
-        } else if(this.transform.name.Contains("Stone")){
-            itemName = "Stone";
-            itemAmount = 1;
-        } else {
-            itemAmount = 1;
-        }
 
     }
 

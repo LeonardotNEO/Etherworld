@@ -21,13 +21,54 @@ public class ResourceAttributes : MonoBehaviour
 
     void Start()
     {
+        distanceCenter = 2f;
         if(this.transform.name.Contains("Tree")){
             resourceName = "Tree";
             distanceCenter = 1;
         }
-        if(this.transform.name.Contains("StoneDepot")){
-            resourceName = "StoneDepot";
-            distanceCenter = 2.5f;
+        if(this.transform.name.Contains("Stone depot")){
+            resourceName = "Stone depot";
+            distanceCenter = 3f;
+        }
+        if(this.transform.name.Contains("Coal depot")){
+            resourceName = "Coal depot";
+            distanceCenter = 3f;
+        }
+        if(this.transform.name.Contains("Marble depot")){
+            resourceName = "Marble depot";
+            distanceCenter = 3f;
+        }
+        if(this.transform.name.Contains("Tin depot")){
+            resourceName = "Tin depot";
+            distanceCenter = 2f;
+        }
+        if(this.transform.name.Contains("Copper depot")){
+            resourceName = "Copper depot";
+            distanceCenter = 2f;
+        }
+        if(this.transform.name.Contains("Iron depot")){
+            resourceName = "Iron depot";
+            distanceCenter = 2f;
+        }
+        if(this.transform.name.Contains("Silver depot")){
+            resourceName = "Silver depot";
+            distanceCenter = 2f;
+        }
+        if(this.transform.name.Contains("Gold depot")){
+            resourceName = "Gold depot";
+            distanceCenter = 2f;
+        }
+        if(this.transform.name.Contains("Kimberlite depot")){
+            resourceName = "Kimberlite depot";
+            distanceCenter = 2f;
+        }
+        if(this.transform.name.Contains("Neonium depot")){
+            resourceName = "Neonium depot";
+            distanceCenter = 2f;
+        }
+        if(this.transform.name.Contains("Ethereum depot")){
+            resourceName = "Ethereum depot";
+            distanceCenter = 2f;
         }
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
         progressbar = GameObject.FindGameObjectWithTag("ProgressBar").GetComponent<Progressbar>(); 
@@ -110,7 +151,15 @@ public class ResourceAttributes : MonoBehaviour
             }
 
             // TREES
-            if(resourceName == "Tree"){
+            if(resourceName == "Tree" || 
+            resourceName == "Tin depot" ||
+            resourceName == "Copper depot" ||
+            resourceName == "Iron depot" ||
+            resourceName == "Silver depot" ||
+            resourceName == "Gold depot" ||
+            resourceName == "Kimberlite depot" ||
+            resourceName == "Neonium depot" ||
+            resourceName == "Ethereum depot"){
                 float progress = 0;
                 float progressSpeed = player.GetComponent<Skills>().getSkillByName("Woodcutting").getSpeedMultiplier();
                 bool instantiated = false;
@@ -168,7 +217,7 @@ public class ResourceAttributes : MonoBehaviour
                 }
             }
             // STONEDEPOT; IRONDEPOT; COALDEPOT
-            if(resourceName == "StoneDepot" || resourceName == "IronDepot" || resourceName == "CoalDepot"){
+            if(resourceName == "Stone depot" || resourceName == "Coal depot" || resourceName == "Marble depot"){
                 float progressSpeed = player.GetComponent<Skills>().getSkillByName("Mining").getSpeedMultiplier();
                 bool firstTriggered = false;
                 bool secondTriggered = false;

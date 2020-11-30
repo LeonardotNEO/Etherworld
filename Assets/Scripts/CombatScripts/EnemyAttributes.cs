@@ -78,7 +78,9 @@ public class EnemyAttributes : MonoBehaviour
 
     void OnMouseDown()
     {
-        StartCoroutine(gameManager.getPlayerBehavior().transform.GetComponent<EnemyAttributes>().walkToEnemy(this));
+        if(transform.tag != "player"){
+            StartCoroutine(gameManager.getPlayerBehavior().transform.GetComponent<EnemyAttributes>().walkToEnemy(this));
+        }
     }
 
     void OnMouseEnter()

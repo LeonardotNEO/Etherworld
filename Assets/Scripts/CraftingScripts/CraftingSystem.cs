@@ -152,6 +152,7 @@ public class CraftingSystem : MonoBehaviour
         //gameManager.GetUI().getPlayerOwnedSelectedTown().townIndicator(false);
         setIsCrafting(false);
         buildingAttributes.transform.gameObject.SetActive(false);
+        buildingAttributes.buildingIndicator(false);
         return buildingAttributes;
     }
 

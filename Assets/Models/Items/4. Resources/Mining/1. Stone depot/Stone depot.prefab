@@ -1,0 +1,188 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8760402837038622259
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8760402837038622258}
+  - component: {fileID: 1511813172410897953}
+  - component: {fileID: 5131797652586692174}
+  m_Layer: 9
+  m_Name: Stone depot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8760402837038622258
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8760402837038622259}
+  m_LocalRotation: {x: 0, y: -0.3196706, z: 0, w: 0.9475288}
+  m_LocalPosition: {x: -5.3255844, y: 0, z: -10.703081}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_Children:
+  - {fileID: 8133187454941325838}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: -37.286003, z: 0}
+--- !u!114 &1511813172410897953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8760402837038622259}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68f52fa77d670d54aabebb22e233c2ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  resourceMined: {fileID: 789738550749354686, guid: d2e73e34e76cb4c4580e232083bffc97,
+    type: 3}
+  progressbar: {fileID: 0}
+  resourceName: 
+  amountLeft: 6
+  progress: 0
+  distanceCenter: 0
+  playerInBounds: 0
+  citizenInBounds: 0
+  gatheringsResourcesRunning: 0
+  walkingToResourceBool: 0
+--- !u!136 &5131797652586692174
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8760402837038622259}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 1.6210027
+  m_Height: 3.2420053
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!64 &9099477541832213535
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8905079133982208180}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4068373912626513877, guid: ab5ff37f439896d4282d6e4b7d501686, type: 3}
+--- !u!208 &5202246200684614348
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8905079133982208180}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 0
+  m_Extents: {x: 0.69600004, y: 0.57000005, z: 0.69600004}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: -0.040000003, y: -0.62, z: -0.026}
+  m_TimeToStationary: 0.5
+--- !u!1001 &8598598311610256869
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 8760402837038622258}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: ab5ff37f439896d4282d6e4b7d501686,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ab5ff37f439896d4282d6e4b7d501686,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.51835304
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ab5ff37f439896d4282d6e4b7d501686,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ab5ff37f439896d4282d6e4b7d501686,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ab5ff37f439896d4282d6e4b7d501686,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ab5ff37f439896d4282d6e4b7d501686,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ab5ff37f439896d4282d6e4b7d501686,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ab5ff37f439896d4282d6e4b7d501686,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ab5ff37f439896d4282d6e4b7d501686,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ab5ff37f439896d4282d6e4b7d501686,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: ab5ff37f439896d4282d6e4b7d501686,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: ab5ff37f439896d4282d6e4b7d501686,
+        type: 3}
+      propertyPath: m_Name
+      value: Stonedepot
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: ab5ff37f439896d4282d6e4b7d501686,
+        type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: ab5ff37f439896d4282d6e4b7d501686, type: 3}
+--- !u!1 &8905079133982208180 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: ab5ff37f439896d4282d6e4b7d501686,
+    type: 3}
+  m_PrefabInstance: {fileID: 8598598311610256869}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8133187454941325838 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: ab5ff37f439896d4282d6e4b7d501686,
+    type: 3}
+  m_PrefabInstance: {fileID: 8598598311610256869}
+  m_PrefabAsset: {fileID: 0}
