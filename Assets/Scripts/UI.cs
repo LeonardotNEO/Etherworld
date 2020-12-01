@@ -61,13 +61,13 @@ public class UI : MonoBehaviour
     {
         // INPUTS //
         if(Input.GetKeyDown("1")){
-            selectToolbarElement("Magic");
+            selectToolbarElement("Wand");
         }
         if(Input.GetKeyDown("2")){
-            selectToolbarElement("Melee");
+            selectToolbarElement("Onehand");
         }
         if(Input.GetKeyDown("3")){
-            selectToolbarElement("Ranged");
+            selectToolbarElement("Bow");
         }
         if(Input.GetKeyDown("4")){
             selectToolbarElement("Shield");
@@ -118,7 +118,7 @@ public class UI : MonoBehaviour
             Dictionary<string,int> listOfItems = new Dictionary<string, int>{
             {"Wand", 5}, 
             {"Helmet", 5}, 
-            {"Sword", 5}, 
+            {"Wood sword", 5}, 
             {"Battleaxe", 5},
             {"Greatsword", 5},
             {"Ether pickaxe", 5},
@@ -983,13 +983,20 @@ public class UI : MonoBehaviour
 
     }
     public void selectToolbarElement(string type){
-        List<InventorySlot> toolbar = gameManager.getPlayerBehavior().getToolbelt().getToolbar();
+        Toolbelt toolbar = gameManager.getPlayerBehavior().getToolbelt();
 
         int counter = 0;
-        foreach(InventorySlot inventorySlot in toolbar){
+        foreach(InventorySlot inventorySlot in toolbar.getToolbelt()){
             Transform toolbarUI = GameObject.FindGameObjectWithTag("ToolbeltUI").transform.Find("Background/Content").GetChild(counter).transform;
+            if(inventorySlot.getInventorySlotType().Contains(type)){
 
-            if(inventorySlot.getInventorySlotType().Equals(type)){
+                // SETS THE CURRENT SELECTED SLOT
+                if(inventorySlot.getItemInSlot() != null){
+                    toolbar.setCurrentlySelectedSlot(inventorySlot);
+                } else {
+                    toolbar.setCurrentlySelectedSlot(null);
+                }
+
                 toolbarUI.Find("Number").GetComponent<Text>().color = Color.yellow;
                 toolbarUI.Find("Hoverpanel").transform.gameObject.SetActive(true);
             } else {
@@ -997,6 +1004,9 @@ public class UI : MonoBehaviour
                 toolbarUI.Find("Hoverpanel").transform.gameObject.SetActive(false);
             }
             counter++;
+            if(counter == 8){
+                break;
+            }
         }
     }
 
@@ -1087,11 +1097,28 @@ public class UI : MonoBehaviour
         GameObject.FindGameObjectWithTag("EquipmentMenuUI").transform.Find("Background").gameObject.SetActive(false);
     }
     public void updateEquipmentInterface(){
-        Transform content = GameObject.FindGameObjectWithTag("EquipmentMenuUI").transform.Find("Background/Content").transform;
+        Transform contentEquipment = GameObject.FindGameObjectWithTag("EquipmentMenuUI").transform.Find("Background/Content").transform;
+        Transform contentStats = GameObject.FindGameObjectWithTag("EquipmentMenuUI").transform.Find("Background/Stats").transform;
         List<InventorySlot> toolbelt = gameManager.getPlayerBehavior().getToolbelt().getToolbar();
+        EnemyAttributes enemyAttributes = gameManager.getPlayerBehavior().getEnemyAttributes();
+
+
+        contentStats.Find("Combat level").GetComponent<Text>().text = "Combat level: " + enemyAttributes.getLevel().ToString();
+        contentStats.Find("Health").GetComponent<Text>().text = "Health: " + enemyAttributes.getHealth() + "/" + enemyAttributes.getMaxHealth().ToString();
+        contentStats.Find("Armor").GetComponent<Text>().text = "Armor: " + enemyAttributes.getArmor().ToString();
+        contentStats.Find("Ranged").GetComponent<Text>().text = "Ranged: " + enemyAttributes.getRanged().ToString();
+        contentStats.Find("Magic").GetComponent<Text>().text = "Magic: " + enemyAttributes.getMagic().ToString();
+        contentStats.Find("Melee").GetComponent<Text>().text = "Melee: " + enemyAttributes.getMelee().ToString();
+        contentStats.Find("Attack speed").GetComponent<Text>().text = "Attack speed: " + enemyAttributes.getAttackSpeed().ToString();
+        contentStats.Find("Crit chance").GetComponent<Text>().text = "Crit chance: " + enemyAttributes.getCritChance().ToString();
+        contentStats.Find("Attack range").GetComponent<Text>().text = "Attack range: " + enemyAttributes.getAttackRange().ToString();
+        contentStats.Find("Movement speed").GetComponent<Text>().text = "Movement speed: " + enemyAttributes.getMovementSpeed().ToString();
+        contentStats.Find("Inventory capacity").GetComponent<Text>().text = "Inventory capacity: " + enemyAttributes.getInventoryCapacity().ToString();
+        contentStats.Find("Frost resistance").GetComponent<Text>().text = "Frost resistance: " + enemyAttributes.getFrostResistance().ToString();
+        contentStats.Find("Fire resistance").GetComponent<Text>().text = "Fire resistance: " + enemyAttributes.getFireResistance().ToString();
 
         int counter = 8;
-        foreach(Transform child in content){
+        foreach(Transform child in contentEquipment){
             child.Find("Text").GetComponent<Text>().text = toolbelt[counter].getItemInSlot();
             if(toolbelt[counter].getItemInSlot() == null){
                 string typeString = "";

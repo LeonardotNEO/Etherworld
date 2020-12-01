@@ -26,7 +26,8 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Food",
                 /*CostToCraft*/     new Dictionary<string, int>(){},
                 /*Prefab*/          woodModel,
-                /*Sprite*/          woodSprite
+                /*Sprite*/          woodSprite,
+                /*Equipment*/       null
             )
         );
 
@@ -41,7 +42,8 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Log",
                 /*CostToCraft*/     new Dictionary<string, int>(){},
                 /*Prefab*/          woodModel,
-                /*Sprite*/          woodSprite
+                /*Sprite*/          woodSprite,
+                /*Equipment*/       null
             )
         );
         addItemToCatalog(
@@ -52,7 +54,8 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Log",
                 /*CostToCraft*/     new Dictionary<string, int>(){},
                 /*Prefab*/          woodModel,
-                /*Sprite*/          woodSprite
+                /*Sprite*/          woodSprite,
+                /*Equipment*/       null
             )
         );
         addItemToCatalog(
@@ -63,7 +66,8 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Log",
                 /*CostToCraft*/     new Dictionary<string, int>(){},
                 /*Prefab*/          woodModel,
-                /*Sprite*/          woodSprite
+                /*Sprite*/          woodSprite,
+                /*Equipment*/       null
             )
         );
         addItemToCatalog(
@@ -74,7 +78,8 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Log",
                 /*CostToCraft*/     new Dictionary<string, int>(){},
                 /*Prefab*/          woodModel,
-                /*Sprite*/          woodSprite
+                /*Sprite*/          woodSprite,
+                /*Equipment*/       null
             )
         );
         addItemToCatalog(
@@ -85,7 +90,8 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Log",
                 /*CostToCraft*/     new Dictionary<string, int>(){},
                 /*Prefab*/          woodModel,
-                /*Sprite*/          woodSprite
+                /*Sprite*/          woodSprite,
+                /*Equipment*/       null
             )
         );
         addItemToCatalog(
@@ -96,7 +102,8 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Log",
                 /*CostToCraft*/     new Dictionary<string, int>(){},
                 /*Prefab*/          woodModel,
-                /*Sprite*/          woodSprite
+                /*Sprite*/          woodSprite,
+                /*Equipment*/       null
             )
         );
         addItemToCatalog(
@@ -107,7 +114,8 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Log",
                 /*CostToCraft*/     new Dictionary<string, int>(){},
                 /*Prefab*/          woodModel,
-                /*Sprite*/          woodSprite
+                /*Sprite*/          woodSprite,
+                /*Equipment*/       null
             )
         );
         addItemToCatalog(
@@ -118,7 +126,8 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Plank",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood log", 1}, },
                 /*Prefab*/          woodModel,
-                /*Sprite*/          woodSprite
+                /*Sprite*/          woodSprite,
+                /*Equipment*/       null
             )
         );
         addItemToCatalog(
@@ -129,7 +138,8 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Plank",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Spruce log", 1}, },
                 /*Prefab*/          woodModel,
-                /*Sprite*/          woodSprite
+                /*Sprite*/          woodSprite,
+                /*Equipment*/       null
             )
         );
         addItemToCatalog(
@@ -140,7 +150,8 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Plank",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Pine log", 1}, },
                 /*Prefab*/          woodModel,
-                /*Sprite*/          woodSprite
+                /*Sprite*/          woodSprite,
+                /*Equipment*/       null
             )
         );
         addItemToCatalog(
@@ -151,7 +162,8 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Plank",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Yew log", 1}, },
                 /*Prefab*/          woodModel,
-                /*Sprite*/          woodSprite
+                /*Sprite*/          woodSprite,
+                /*Equipment*/       null
             )
         );
         addItemToCatalog(
@@ -162,7 +174,8 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Plank",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Birch log", 1}, },
                 /*Prefab*/          woodModel,
-                /*Sprite*/          woodSprite
+                /*Sprite*/          woodSprite,
+                /*Equipment*/       null
             )
         );
         addItemToCatalog(
@@ -173,7 +186,8 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Plank",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Oak log", 1}, },
                 /*Prefab*/          woodModel,
-                /*Sprite*/          woodSprite
+                /*Sprite*/          woodSprite,
+                /*Equipment*/       null
             )
         );
         addItemToCatalog(
@@ -184,7 +198,8 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Plank",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Ash log", 1}, },
                 /*Prefab*/          woodModel,
-                /*Sprite*/          woodSprite
+                /*Sprite*/          woodSprite,
+                /*Equipment*/       null
             )
         );
 
@@ -199,7 +214,8 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Stone",
                 /*CostToCraft*/     new Dictionary<string, int>(){},
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       null
             )
         );
 
@@ -214,7 +230,8 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Bar",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Copper ore", 1}, {"Tin ore", 1}},
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       null
             )
         );
         addItemToCatalog(
@@ -225,7 +242,8 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Bar",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Iron ore", 1}, {"Coal ore", 2}},
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       null
             )
         );
         addItemToCatalog(
@@ -236,7 +254,8 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Bar",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Iron ore", 3}, },
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       null
             )
         );
         addItemToCatalog(
@@ -247,7 +266,8 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Bar",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Silver ore", 3}, },
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       null
             )
         );
         addItemToCatalog(
@@ -258,7 +278,8 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Bar",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Gold ore", 5}, },
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       null
             )
         );
 
@@ -273,7 +294,8 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Ore",
                 /*CostToCraft*/     new Dictionary<string, int>(){},
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       null
             )
         );
         addItemToCatalog(
@@ -284,7 +306,8 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Ore",
                 /*CostToCraft*/     new Dictionary<string, int>(){},
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       null
             )
         );
         addItemToCatalog(
@@ -295,7 +318,8 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Ore",
                 /*CostToCraft*/     new Dictionary<string, int>(){},
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       null
             )
         );
         addItemToCatalog(
@@ -306,7 +330,8 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Ore",
                 /*CostToCraft*/     new Dictionary<string, int>(){},
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       null
             )
         );
         addItemToCatalog(
@@ -317,7 +342,8 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Ore",
                 /*CostToCraft*/     new Dictionary<string, int>(){},
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       null
             )
         );
         addItemToCatalog(
@@ -328,7 +354,8 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Ore",
                 /*CostToCraft*/     new Dictionary<string, int>(){},
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       null
             )
         );
         addItemToCatalog(
@@ -339,7 +366,8 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Ore",
                 /*CostToCraft*/     new Dictionary<string, int>(){},
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       null
             )
         );
         addItemToCatalog(
@@ -350,7 +378,8 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Ore",
                 /*CostToCraft*/     new Dictionary<string, int>(){},
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       null
             )
         );
         addItemToCatalog(
@@ -361,7 +390,8 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Ore",
                 /*CostToCraft*/     new Dictionary<string, int>(){},
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       null
             )
         );
 
@@ -370,13 +400,27 @@ public class ItemCatalog : MonoBehaviour
         //-------//
         addItemToCatalog(
             new Item(
-                /*Name*/            "Sword",
+                /*Name*/            "Wood sword",
                 /*Description*/     "Try swinging it",
                 /*Type*/            "Melee",
                 /*Type2*/           "Onehand",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       new Equipment(
+                    /*Health*/              0,
+                    /*Armor*/               0,
+                    /*Ranged*/              0,
+                    /*Magic*/               0,
+                    /*Melee*/               2,
+                    /*Attackspeed*/         10,
+                    /*Attackrange*/         0f,
+                    /*Critchance*/          0f,
+                    /*Movementspeed*/       0,
+                    /*Inventorycapacity*/   0,
+                    /*Frostrestistance*/    0,
+                    /*Fireresistance*/      0
+                )
             )
         );
         addItemToCatalog(
@@ -387,7 +431,21 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Twohand",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       new Equipment(
+                    /*Health*/              0,
+                    /*Armor*/               0,
+                    /*Ranged*/              0,
+                    /*Magic*/               0,
+                    /*Melee*/               0,
+                    /*Attackspeed*/         0,
+                    /*Attackrange*/         0f,
+                    /*Critchance*/          0f,
+                    /*Movementspeed*/       0,
+                    /*Inventorycapacity*/   0,
+                    /*Frostrestistance*/    0,
+                    /*Fireresistance*/      0
+                )
             )
         );
         addItemToCatalog(
@@ -398,7 +456,21 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Twohand",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       new Equipment(
+                    /*Health*/              0,
+                    /*Armor*/               0,
+                    /*Ranged*/              0,
+                    /*Magic*/               0,
+                    /*Melee*/               0,
+                    /*Attackspeed*/         0,
+                    /*Attackrange*/         0f,
+                    /*Critchance*/          0f,
+                    /*Movementspeed*/       0,
+                    /*Inventorycapacity*/   0,
+                    /*Frostrestistance*/    0,
+                    /*Fireresistance*/      0
+                )
             )
         );
 
@@ -413,7 +485,21 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Wand",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       new Equipment(
+                    /*Health*/              0,
+                    /*Armor*/               0,
+                    /*Ranged*/              0,
+                    /*Magic*/               0,
+                    /*Melee*/               0,
+                    /*Attackspeed*/         0,
+                    /*Attackrange*/         0f,
+                    /*Critchance*/          0f,
+                    /*Movementspeed*/       0,
+                    /*Inventorycapacity*/   0,
+                    /*Frostrestistance*/    0,
+                    /*Fireresistance*/      0
+                )
             )
         );
         addItemToCatalog(
@@ -424,7 +510,21 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Staff",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       new Equipment(
+                    /*Health*/              0,
+                    /*Armor*/               0,
+                    /*Ranged*/              0,
+                    /*Magic*/               0,
+                    /*Melee*/               0,
+                    /*Attackspeed*/         0,
+                    /*Attackrange*/         0f,
+                    /*Critchance*/          0f,
+                    /*Movementspeed*/       0,
+                    /*Inventorycapacity*/   0,
+                    /*Frostrestistance*/    0,
+                    /*Fireresistance*/      0
+                )
             )
         );
         addItemToCatalog(
@@ -435,7 +535,21 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Book",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       new Equipment(
+                    /*Health*/              0,
+                    /*Armor*/               0,
+                    /*Ranged*/              0,
+                    /*Magic*/               0,
+                    /*Melee*/               0,
+                    /*Attackspeed*/         0,
+                    /*Attackrange*/         0f,
+                    /*Critchance*/          0f,
+                    /*Movementspeed*/       0,
+                    /*Inventorycapacity*/   0,
+                    /*Frostrestistance*/    0,
+                    /*Fireresistance*/      0
+                )
             )
         );
 
@@ -450,7 +564,21 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Bow",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       new Equipment(
+                    /*Health*/              0,
+                    /*Armor*/               0,
+                    /*Ranged*/              0,
+                    /*Magic*/               0,
+                    /*Melee*/               0,
+                    /*Attackspeed*/         0,
+                    /*Attackrange*/         0f,
+                    /*Critchance*/          0f,
+                    /*Movementspeed*/       0,
+                    /*Inventorycapacity*/   0,
+                    /*Frostrestistance*/    0,
+                    /*Fireresistance*/      0
+                )
             )
         );
 
@@ -465,13 +593,30 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Shield",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       new Equipment(
+                    /*Health*/              0,
+                    /*Armor*/               0,
+                    /*Ranged*/              0,
+                    /*Magic*/               0,
+                    /*Melee*/               0,
+                    /*Attackspeed*/         0,
+                    /*Attackrange*/         0f,
+                    /*Critchance*/          0f,
+                    /*Movementspeed*/       0,
+                    /*Inventorycapacity*/   0,
+                    /*Frostrestistance*/    0,
+                    /*Fireresistance*/      0
+                )
             )
         );
 
         //-------//
         // ARMOR //
         //-------//
+        //------//
+        // HEAD //
+        //------//
         addItemToCatalog(
             new Item(
                 /*Name*/            "Wool hat",
@@ -480,29 +625,21 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Head",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
-            )
-        );
-        addItemToCatalog(
-            new Item(
-                /*Name*/            "Wool jacket",
-                /*Description*/     "Try swinging it",
-                /*Type*/            "Armor",
-                /*Type2*/           "Torso",
-                /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
-                /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
-            )
-        );
-        addItemToCatalog(
-            new Item(
-                /*Name*/            "Wool pants",
-                /*Description*/     "Try swinging it",
-                /*Type*/            "Armor",
-                /*Type2*/           "Legs",
-                /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
-                /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       new Equipment(
+                    /*Health*/              0,
+                    /*Armor*/               2,
+                    /*Ranged*/              0,
+                    /*Magic*/               0,
+                    /*Melee*/               0,
+                    /*Attackspeed*/         0,
+                    /*Attackrange*/         0f,
+                    /*Critchance*/          0f,
+                    /*Movementspeed*/       0,
+                    /*Inventorycapacity*/   0,
+                    /*Frostrestistance*/    0,
+                    /*Fireresistance*/      0
+                )
             )
         );
         addItemToCatalog(
@@ -513,7 +650,79 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Head",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       new Equipment(
+                    /*Health*/              0,
+                    /*Armor*/               5,
+                    /*Ranged*/              0,
+                    /*Magic*/               0,
+                    /*Melee*/               0,
+                    /*Attackspeed*/         0,
+                    /*Attackrange*/         0f,
+                    /*Critchance*/          0f,
+                    /*Movementspeed*/       0,
+                    /*Inventorycapacity*/   0,
+                    /*Frostrestistance*/    0,
+                    /*Fireresistance*/      0
+                )
+            )
+        );
+
+        //-------//
+        // TORSO //
+        //-------//
+        addItemToCatalog(
+            new Item(
+                /*Name*/            "Wool jacket",
+                /*Description*/     "Try swinging it",
+                /*Type*/            "Armor",
+                /*Type2*/           "Torso",
+                /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
+                /*Prefab*/          stonePileModel,
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       new Equipment(
+                    /*Health*/              0,
+                    /*Armor*/               5,
+                    /*Ranged*/              0,
+                    /*Magic*/               0,
+                    /*Melee*/               0,
+                    /*Attackspeed*/         0,
+                    /*Attackrange*/         0f,
+                    /*Critchance*/          0f,
+                    /*Movementspeed*/       0,
+                    /*Inventorycapacity*/   0,
+                    /*Frostrestistance*/    0,
+                    /*Fireresistance*/      0
+                )
+            )
+        );
+
+        //------//
+        // LEGS //
+        //------//
+        addItemToCatalog(
+            new Item(
+                /*Name*/            "Wool pants",
+                /*Description*/     "Try swinging it",
+                /*Type*/            "Armor",
+                /*Type2*/           "Legs",
+                /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
+                /*Prefab*/          stonePileModel,
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       new Equipment(
+                    /*Health*/              0,
+                    /*Armor*/               4,
+                    /*Ranged*/              0,
+                    /*Magic*/               0,
+                    /*Melee*/               0,
+                    /*Attackspeed*/         0,
+                    /*Attackrange*/         0f,
+                    /*Critchance*/          0f,
+                    /*Movementspeed*/       0,
+                    /*Inventorycapacity*/   0,
+                    /*Frostrestistance*/    0,
+                    /*Fireresistance*/      0
+                )
             )
         );
 
@@ -528,7 +737,21 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Pickaxe",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       new Equipment(
+                    /*Health*/              0,
+                    /*Armor*/               0,
+                    /*Ranged*/              0,
+                    /*Magic*/               0,
+                    /*Melee*/               0,
+                    /*Attackspeed*/         0,
+                    /*Attackrange*/         0f,
+                    /*Critchance*/          0f,
+                    /*Movementspeed*/       0,
+                    /*Inventorycapacity*/   0,
+                    /*Frostrestistance*/    0,
+                    /*Fireresistance*/      0
+                )
             )
         );
         addItemToCatalog(
@@ -539,7 +762,21 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Pickaxe",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       new Equipment(
+                    /*Health*/              0,
+                    /*Armor*/               0,
+                    /*Ranged*/              0,
+                    /*Magic*/               0,
+                    /*Melee*/               1,
+                    /*Attackspeed*/         0,
+                    /*Attackrange*/         0f,
+                    /*Critchance*/          0f,
+                    /*Movementspeed*/       0,
+                    /*Inventorycapacity*/   0,
+                    /*Frostrestistance*/    0,
+                    /*Fireresistance*/      0
+                )
             )
         );
         addItemToCatalog(
@@ -550,7 +787,21 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Pickaxe",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       new Equipment(
+                    /*Health*/              0,
+                    /*Armor*/               0,
+                    /*Ranged*/              0,
+                    /*Magic*/               0,
+                    /*Melee*/               2,
+                    /*Attackspeed*/         0,
+                    /*Attackrange*/         0f,
+                    /*Critchance*/          0f,
+                    /*Movementspeed*/       0,
+                    /*Inventorycapacity*/   0,
+                    /*Frostrestistance*/    0,
+                    /*Fireresistance*/      0
+                )
             )
         );
         addItemToCatalog(
@@ -561,7 +812,21 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Pickaxe",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       new Equipment(
+                    /*Health*/              0,
+                    /*Armor*/               0,
+                    /*Ranged*/              0,
+                    /*Magic*/               0,
+                    /*Melee*/               3,
+                    /*Attackspeed*/         0,
+                    /*Attackrange*/         0f,
+                    /*Critchance*/          0f,
+                    /*Movementspeed*/       0,
+                    /*Inventorycapacity*/   0,
+                    /*Frostrestistance*/    0,
+                    /*Fireresistance*/      0
+                )
             )
         );
         addItemToCatalog(
@@ -572,7 +837,21 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Pickaxe",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       new Equipment(
+                    /*Health*/              0,
+                    /*Armor*/               0,
+                    /*Ranged*/              0,
+                    /*Magic*/               0,
+                    /*Melee*/               4,
+                    /*Attackspeed*/         0,
+                    /*Attackrange*/         0f,
+                    /*Critchance*/          0f,
+                    /*Movementspeed*/       0,
+                    /*Inventorycapacity*/   0,
+                    /*Frostrestistance*/    0,
+                    /*Fireresistance*/      0
+                )
             )
         );
         addItemToCatalog(
@@ -583,7 +862,21 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Pickaxe",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       new Equipment(
+                    /*Health*/              0,
+                    /*Armor*/               0,
+                    /*Ranged*/              0,
+                    /*Magic*/               0,
+                    /*Melee*/               5,
+                    /*Attackspeed*/         0,
+                    /*Attackrange*/         0f,
+                    /*Critchance*/          0f,
+                    /*Movementspeed*/       0,
+                    /*Inventorycapacity*/   0,
+                    /*Frostrestistance*/    0,
+                    /*Fireresistance*/      0
+                )
             )
         );
         addItemToCatalog(
@@ -594,7 +887,21 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Pickaxe",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       new Equipment(
+                    /*Health*/              0,
+                    /*Armor*/               0,
+                    /*Ranged*/              0,
+                    /*Magic*/               0,
+                    /*Melee*/               6,
+                    /*Attackspeed*/         0,
+                    /*Attackrange*/         0f,
+                    /*Critchance*/          0f,
+                    /*Movementspeed*/       0,
+                    /*Inventorycapacity*/   0,
+                    /*Frostrestistance*/    0,
+                    /*Fireresistance*/      0
+                )
             )
         );
         addItemToCatalog(
@@ -605,7 +912,21 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Pickaxe",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       new Equipment(
+                    /*Health*/              0,
+                    /*Armor*/               0,
+                    /*Ranged*/              0,
+                    /*Magic*/               0,
+                    /*Melee*/               7,
+                    /*Attackspeed*/         0,
+                    /*Attackrange*/         0f,
+                    /*Critchance*/          0f,
+                    /*Movementspeed*/       0,
+                    /*Inventorycapacity*/   0,
+                    /*Frostrestistance*/    0,
+                    /*Fireresistance*/      0
+                )
             )
         );
         addItemToCatalog(
@@ -616,7 +937,21 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Pickaxe",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       new Equipment(
+                    /*Health*/              0,
+                    /*Armor*/               0,
+                    /*Ranged*/              0,
+                    /*Magic*/               0,
+                    /*Melee*/               8,
+                    /*Attackspeed*/         0,
+                    /*Attackrange*/         0f,
+                    /*Critchance*/          0f,
+                    /*Movementspeed*/       0,
+                    /*Inventorycapacity*/   0,
+                    /*Frostrestistance*/    0,
+                    /*Fireresistance*/      0
+                )
             )
         );
         addItemToCatalog(
@@ -627,7 +962,21 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Pickaxe",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       new Equipment(
+                    /*Health*/              0,
+                    /*Armor*/               0,
+                    /*Ranged*/              0,
+                    /*Magic*/               0,
+                    /*Melee*/               9,
+                    /*Attackspeed*/         1,
+                    /*Attackrange*/         1f,
+                    /*Critchance*/          0f,
+                    /*Movementspeed*/       0,
+                    /*Inventorycapacity*/   0,
+                    /*Frostrestistance*/    0,
+                    /*Fireresistance*/      0
+                )
             )
         );
 
@@ -642,7 +991,21 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Axe",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       new Equipment(
+                    /*Health*/              0,
+                    /*Armor*/               0,
+                    /*Ranged*/              0,
+                    /*Magic*/               0,
+                    /*Melee*/               0,
+                    /*Attackspeed*/         0,
+                    /*Attackrange*/         0f,
+                    /*Critchance*/          0f,
+                    /*Movementspeed*/       0,
+                    /*Inventorycapacity*/   0,
+                    /*Frostrestistance*/    0,
+                    /*Fireresistance*/      0
+                )
             )
         );
         addItemToCatalog(
@@ -653,7 +1016,21 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Axe",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       new Equipment(
+                    /*Health*/              0,
+                    /*Armor*/               0,
+                    /*Ranged*/              0,
+                    /*Magic*/               0,
+                    /*Melee*/               0,
+                    /*Attackspeed*/         0,
+                    /*Attackrange*/         0f,
+                    /*Critchance*/          0f,
+                    /*Movementspeed*/       0,
+                    /*Inventorycapacity*/   0,
+                    /*Frostrestistance*/    0,
+                    /*Fireresistance*/      0
+                )
             )
         );
         addItemToCatalog(
@@ -664,7 +1041,21 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Axe",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       new Equipment(
+                    /*Health*/              0,
+                    /*Armor*/               0,
+                    /*Ranged*/              0,
+                    /*Magic*/               0,
+                    /*Melee*/               0,
+                    /*Attackspeed*/         0,
+                    /*Attackrange*/         0f,
+                    /*Critchance*/          0f,
+                    /*Movementspeed*/       0,
+                    /*Inventorycapacity*/   0,
+                    /*Frostrestistance*/    0,
+                    /*Fireresistance*/      0
+                )
             )
         );
         addItemToCatalog(
@@ -675,7 +1066,21 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Axe",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       new Equipment(
+                    /*Health*/              0,
+                    /*Armor*/               0,
+                    /*Ranged*/              0,
+                    /*Magic*/               0,
+                    /*Melee*/               0,
+                    /*Attackspeed*/         0,
+                    /*Attackrange*/         0f,
+                    /*Critchance*/          0f,
+                    /*Movementspeed*/       0,
+                    /*Inventorycapacity*/   0,
+                    /*Frostrestistance*/    0,
+                    /*Fireresistance*/      0
+                )
             )
         );
         addItemToCatalog(
@@ -686,7 +1091,21 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Axe",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       new Equipment(
+                    /*Health*/              0,
+                    /*Armor*/               0,
+                    /*Ranged*/              0,
+                    /*Magic*/               0,
+                    /*Melee*/               0,
+                    /*Attackspeed*/         0,
+                    /*Attackrange*/         0f,
+                    /*Critchance*/          0f,
+                    /*Movementspeed*/       0,
+                    /*Inventorycapacity*/   0,
+                    /*Frostrestistance*/    0,
+                    /*Fireresistance*/      0
+                )
             )
         );
         addItemToCatalog(
@@ -697,7 +1116,21 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Axe",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       new Equipment(
+                    /*Health*/              0,
+                    /*Armor*/               0,
+                    /*Ranged*/              0,
+                    /*Magic*/               0,
+                    /*Melee*/               0,
+                    /*Attackspeed*/         0,
+                    /*Attackrange*/         0f,
+                    /*Critchance*/          0f,
+                    /*Movementspeed*/       0,
+                    /*Inventorycapacity*/   0,
+                    /*Frostrestistance*/    0,
+                    /*Fireresistance*/      0
+                )
             )
         );
         addItemToCatalog(
@@ -708,7 +1141,21 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Axe",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       new Equipment(
+                    /*Health*/              0,
+                    /*Armor*/               0,
+                    /*Ranged*/              0,
+                    /*Magic*/               0,
+                    /*Melee*/               0,
+                    /*Attackspeed*/         0,
+                    /*Attackrange*/         0f,
+                    /*Critchance*/          0f,
+                    /*Movementspeed*/       0,
+                    /*Inventorycapacity*/   0,
+                    /*Frostrestistance*/    0,
+                    /*Fireresistance*/      0
+                )
             )
         );
         addItemToCatalog(
@@ -719,7 +1166,21 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Axe",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       new Equipment(
+                    /*Health*/              0,
+                    /*Armor*/               0,
+                    /*Ranged*/              0,
+                    /*Magic*/               0,
+                    /*Melee*/               0,
+                    /*Attackspeed*/         0,
+                    /*Attackrange*/         0f,
+                    /*Critchance*/          0f,
+                    /*Movementspeed*/       0,
+                    /*Inventorycapacity*/   0,
+                    /*Frostrestistance*/    0,
+                    /*Fireresistance*/      0
+                )
             )
         );
         addItemToCatalog(
@@ -730,7 +1191,21 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Axe",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       new Equipment(
+                    /*Health*/              0,
+                    /*Armor*/               0,
+                    /*Ranged*/              0,
+                    /*Magic*/               0,
+                    /*Melee*/               0,
+                    /*Attackspeed*/         0,
+                    /*Attackrange*/         0f,
+                    /*Critchance*/          0f,
+                    /*Movementspeed*/       0,
+                    /*Inventorycapacity*/   0,
+                    /*Frostrestistance*/    0,
+                    /*Fireresistance*/      0
+                )
             )
         );
         addItemToCatalog(
@@ -741,7 +1216,21 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Axe",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       new Equipment(
+                    /*Health*/              0,
+                    /*Armor*/               0,
+                    /*Ranged*/              0,
+                    /*Magic*/               0,
+                    /*Melee*/               0,
+                    /*Attackspeed*/         0,
+                    /*Attackrange*/         0f,
+                    /*Critchance*/          0f,
+                    /*Movementspeed*/       0,
+                    /*Inventorycapacity*/   0,
+                    /*Frostrestistance*/    0,
+                    /*Fireresistance*/      0
+                )
             )
         );
 
@@ -756,7 +1245,21 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Hammer",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       new Equipment(
+                    /*Health*/              0,
+                    /*Armor*/               0,
+                    /*Ranged*/              0,
+                    /*Magic*/               0,
+                    /*Melee*/               0,
+                    /*Attackspeed*/         0,
+                    /*Attackrange*/         0f,
+                    /*Critchance*/          0f,
+                    /*Movementspeed*/       0,
+                    /*Inventorycapacity*/   0,
+                    /*Frostrestistance*/    0,
+                    /*Fireresistance*/      0
+                )
             )
         );
         addItemToCatalog(
@@ -767,7 +1270,21 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Hammer",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       new Equipment(
+                    /*Health*/              0,
+                    /*Armor*/               0,
+                    /*Ranged*/              0,
+                    /*Magic*/               0,
+                    /*Melee*/               0,
+                    /*Attackspeed*/         0,
+                    /*Attackrange*/         0f,
+                    /*Critchance*/          0f,
+                    /*Movementspeed*/       0,
+                    /*Inventorycapacity*/   0,
+                    /*Frostrestistance*/    0,
+                    /*Fireresistance*/      0
+                )
             )
         );
         addItemToCatalog(
@@ -778,7 +1295,21 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Hammer",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       new Equipment(
+                    /*Health*/              0,
+                    /*Armor*/               0,
+                    /*Ranged*/              0,
+                    /*Magic*/               0,
+                    /*Melee*/               0,
+                    /*Attackspeed*/         0,
+                    /*Attackrange*/         0f,
+                    /*Critchance*/          0f,
+                    /*Movementspeed*/       0,
+                    /*Inventorycapacity*/   0,
+                    /*Frostrestistance*/    0,
+                    /*Fireresistance*/      0
+                )
             )
         );
         addItemToCatalog(
@@ -789,7 +1320,21 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Hammer",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       new Equipment(
+                    /*Health*/              0,
+                    /*Armor*/               0,
+                    /*Ranged*/              0,
+                    /*Magic*/               0,
+                    /*Melee*/               0,
+                    /*Attackspeed*/         0,
+                    /*Attackrange*/         0f,
+                    /*Critchance*/          0f,
+                    /*Movementspeed*/       0,
+                    /*Inventorycapacity*/   0,
+                    /*Frostrestistance*/    0,
+                    /*Fireresistance*/      0
+                )
             )
         );
         addItemToCatalog(
@@ -800,7 +1345,21 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Hammer",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       new Equipment(
+                    /*Health*/              0,
+                    /*Armor*/               0,
+                    /*Ranged*/              0,
+                    /*Magic*/               0,
+                    /*Melee*/               0,
+                    /*Attackspeed*/         0,
+                    /*Attackrange*/         0f,
+                    /*Critchance*/          0f,
+                    /*Movementspeed*/       0,
+                    /*Inventorycapacity*/   0,
+                    /*Frostrestistance*/    0,
+                    /*Fireresistance*/      0
+                )
             )
         );
         addItemToCatalog(
@@ -811,7 +1370,21 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Hammer",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       new Equipment(
+                    /*Health*/              0,
+                    /*Armor*/               0,
+                    /*Ranged*/              0,
+                    /*Magic*/               0,
+                    /*Melee*/               0,
+                    /*Attackspeed*/         0,
+                    /*Attackrange*/         0f,
+                    /*Critchance*/          0f,
+                    /*Movementspeed*/       0,
+                    /*Inventorycapacity*/   0,
+                    /*Frostrestistance*/    0,
+                    /*Fireresistance*/      0
+                )
             )
         );
         addItemToCatalog(
@@ -822,7 +1395,21 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Hammer",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       new Equipment(
+                    /*Health*/              0,
+                    /*Armor*/               0,
+                    /*Ranged*/              0,
+                    /*Magic*/               0,
+                    /*Melee*/               0,
+                    /*Attackspeed*/         0,
+                    /*Attackrange*/         0f,
+                    /*Critchance*/          0f,
+                    /*Movementspeed*/       0,
+                    /*Inventorycapacity*/   0,
+                    /*Frostrestistance*/    0,
+                    /*Fireresistance*/      0
+                )
             )
         );
         addItemToCatalog(
@@ -833,7 +1420,21 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Hammer",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       new Equipment(
+                    /*Health*/              0,
+                    /*Armor*/               0,
+                    /*Ranged*/              0,
+                    /*Magic*/               0,
+                    /*Melee*/               0,
+                    /*Attackspeed*/         0,
+                    /*Attackrange*/         0f,
+                    /*Critchance*/          0f,
+                    /*Movementspeed*/       0,
+                    /*Inventorycapacity*/   0,
+                    /*Frostrestistance*/    0,
+                    /*Fireresistance*/      0
+                )
             )
         );
         addItemToCatalog(
@@ -844,7 +1445,21 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Hammer",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       new Equipment(
+                    /*Health*/              0,
+                    /*Armor*/               0,
+                    /*Ranged*/              0,
+                    /*Magic*/               0,
+                    /*Melee*/               0,
+                    /*Attackspeed*/         0,
+                    /*Attackrange*/         0f,
+                    /*Critchance*/          0f,
+                    /*Movementspeed*/       0,
+                    /*Inventorycapacity*/   0,
+                    /*Frostrestistance*/    0,
+                    /*Fireresistance*/      0
+                )
             )
         );
         addItemToCatalog(
@@ -855,7 +1470,21 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Hammer",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       new Equipment(
+                    /*Health*/              0,
+                    /*Armor*/               0,
+                    /*Ranged*/              0,
+                    /*Magic*/               0,
+                    /*Melee*/               0,
+                    /*Attackspeed*/         0,
+                    /*Attackrange*/         0f,
+                    /*Critchance*/          0f,
+                    /*Movementspeed*/       0,
+                    /*Inventorycapacity*/   0,
+                    /*Frostrestistance*/    0,
+                    /*Fireresistance*/      0
+                )
             )
         );
 
@@ -870,7 +1499,8 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Wood",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       null
             )
         );
         addItemToCatalog(
@@ -881,7 +1511,8 @@ public class ItemCatalog : MonoBehaviour
                 /*Type2*/           "Wood",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Bucket", 1}},
                 /*Prefab*/          stonePileModel,
-                /*Sprite*/          stonePileSprite
+                /*Sprite*/          stonePileSprite,
+                /*Equipment*/       null
             )
         );
     }

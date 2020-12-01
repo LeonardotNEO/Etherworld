@@ -10,6 +10,7 @@ public class Item
     [SerializeField] private string itemType1;
     [SerializeField] private string itemType2;
     [SerializeField] Dictionary<string, int> costToCraftItem;
+    private Equipment equipment;
     private GameObject itemPrefab;
     private Sprite itemSprite;
     private List<string> itemTypes1Available = new List<string>{
@@ -94,7 +95,7 @@ public class Item
         "Food"
         };
 
-    public Item(string itemName, string itemDescription, string itemType1, string itemType2, Dictionary<string, int> costToCraftItem, GameObject itemPrefab, Sprite itemSprite){
+    public Item(string itemName, string itemDescription, string itemType1, string itemType2, Dictionary<string, int> costToCraftItem, GameObject itemPrefab, Sprite itemSprite, Equipment equipment){
         this.itemName = itemName;
         this.itemDescription = itemDescription;
         if(itemTypes1Available.Contains(itemType1)){
@@ -110,6 +111,7 @@ public class Item
         this.itemPrefab = itemPrefab;
         this.itemSprite = itemSprite;
         this.costToCraftItem = costToCraftItem;
+        this.equipment = equipment;
     }
 
     public string getName(){
@@ -135,5 +137,9 @@ public class Item
     }
     public Dictionary<string, int> getCostToCraftItem(){
         return costToCraftItem;
+    }
+
+    public Equipment getEquipment(){
+        return equipment;
     }
 }

@@ -8,6 +8,7 @@ public class Toolbelt : MonoBehaviour
 {
     GameManager gameManager;
     public List<InventorySlot> toolbar = new List<InventorySlot>();
+    public InventorySlot currentlySelectedSlot;
 
     void Awake()
     {
@@ -82,5 +83,11 @@ public class Toolbelt : MonoBehaviour
     }
     public List<InventorySlot> getToolbar(){
         return toolbar;
+    }
+    public void setCurrentlySelectedSlot(InventorySlot slot){
+        currentlySelectedSlot = slot;
+    }
+    public InventorySlot getCurrentlySelectedSlot(){
+        return currentlySelectedSlot;
     }
 }

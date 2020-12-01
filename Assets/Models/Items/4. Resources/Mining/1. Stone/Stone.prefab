@@ -76,7 +76,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemAmount: 1
-  itemName: Stone
+  itemName: Wood hammer
   walkingToItemBool: 0
 --- !u!64 &4521286826779047719
 MeshCollider:

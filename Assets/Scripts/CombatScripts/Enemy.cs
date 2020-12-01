@@ -11,18 +11,22 @@ public class Enemy
     private List<string> typesAvailable = new List<string>{"Human", "Zombie", "Belmmyae", "Manticore", "Troll", "Huldra", "Werewolf", "Bahkauv"};
     [SerializeField] private int level;
     [SerializeField] private int baseHealth;
-    [SerializeField] private int baseDamage;
+    [SerializeField] private int magic;
+    [SerializeField] private int ranged;
+    [SerializeField] private int melee;
     [SerializeField] private float baseCritChance;
     [SerializeField] private float attackRange;
     [SerializeField] private int baseArmor;
     [SerializeField] private int baseMovementspeed;
     [SerializeField] private int baseAttackSpeed;
+    [SerializeField] private int frostResistance;
+    [SerializeField] private int fireResistance;
     [SerializeField] private bool aggressive;
     [SerializeField] private List<Ability> abilities = new List<Ability>();
     [SerializeField] private Dictionary<Dictionary<string, int>, float> droptable = new Dictionary<Dictionary<string, int>, float>();
     AbilityCatalog abilityCatalog;
 
-    public Enemy(string name, string description, string type, int level, int maxHealth, int damage, float critChance, float attackRange, int armor, int movementspeed, int baseAttackSpeed, bool aggressive, List<string> abilitiesString, Dictionary<Dictionary<string, int>, float> droptable){
+    public Enemy(string name, string description, string type, int level, int maxHealth, int ranged, int magic, int melee, float critChance, float attackRange, int armor, int movementspeed, int baseAttackSpeed, int frostResistance, int fireResistance, bool aggressive, List<string> abilitiesString, Dictionary<Dictionary<string, int>, float> droptable){
         this.name = name;
         this.description = description;
         if(!typesAvailable.Contains(type)){
@@ -33,12 +37,16 @@ public class Enemy
         this.type = type;
         this.level = level;
         this.baseHealth = maxHealth;
-        this.baseDamage = damage;
+        this.ranged = ranged;
+        this.melee = melee;
+        this.magic = magic;
         this.baseCritChance = critChance;
         this.attackRange = attackRange;
         this.baseArmor = armor;
         this.baseMovementspeed = movementspeed;
         this.baseAttackSpeed = baseAttackSpeed;
+        this.frostResistance = frostResistance;
+        this.fireResistance = fireResistance;
         this.aggressive = aggressive;
         this.droptable = droptable;
       
@@ -81,9 +89,7 @@ public class Enemy
     public int getBaseHealth(){
         return baseHealth;
     }
-    public int getBaseDamage(){
-        return baseDamage;
-    }
+    
     public float getBaseCritChange(){
         return baseCritChance;
     }
@@ -107,5 +113,21 @@ public class Enemy
     }
     public Dictionary<Dictionary<string, int>, float> getDroptable(){
         return droptable;
+    }
+    public int getRanged(){
+        return ranged;
+    }
+
+    public int getMagic(){
+        return magic;
+    }
+    public int getMelee(){
+        return melee;
+    }
+    public int getFrostResistance(){
+        return frostResistance;
+    }
+    public int getFireResistance(){
+        return fireResistance;
     }
 }

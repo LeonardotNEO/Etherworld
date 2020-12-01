@@ -17,6 +17,7 @@ public class PlayerBehavior : MonoBehaviour
     public Toolbelt toolbelt;
     public Skills skills;
     public PerkAttributes perkAttributes;
+    public EnemyAttributes enemyAttributes;
     public string playerFirstName;
     public string playerLastName;
     public string gender;
@@ -43,6 +44,7 @@ public class PlayerBehavior : MonoBehaviour
         skills = GetComponent<Skills>();
         perkAttributes = GetComponent<PerkAttributes>();
         toolbelt = GetComponent<Toolbelt>();
+        enemyAttributes = GetComponent<EnemyAttributes>();
     }
 
     void Start()
@@ -244,5 +246,8 @@ public class PlayerBehavior : MonoBehaviour
 
     public Toolbelt getToolbelt(){
         return toolbelt;
+    }
+    public EnemyAttributes getEnemyAttributes(){
+        return enemyAttributes;
     }
 }
