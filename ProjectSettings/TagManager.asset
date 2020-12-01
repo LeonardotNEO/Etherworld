@@ -37,6 +37,7 @@ TagManager:
   - BuildingInvSlot
   - UnfinishedBuilding
   - BuildingIndicator
+  - EquipmentMenuUI
   layers:
   - Default
   - TransparentFX

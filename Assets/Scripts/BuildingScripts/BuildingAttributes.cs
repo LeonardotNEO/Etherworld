@@ -93,7 +93,7 @@ public class BuildingAttributes : MonoBehaviour
                 transform.Find("Object Indicator/Red indicator").GetComponent<SpriteRenderer>().size = new Vector2(GetComponentInChildren<NavMeshObstacle>().size.x * GetComponentInChildren<NavMeshObstacle>().transform.localScale.x, GetComponentInChildren<NavMeshObstacle>().size.z  * GetComponentInChildren<NavMeshObstacle>().transform.localScale.z);
             }
             
-            buildingIndicator(false);
+            buildingIndicatorOff();
         }
 
         // POSITION
@@ -146,7 +146,12 @@ public class BuildingAttributes : MonoBehaviour
             if(other.transform.gameObject.GetComponentInParent<BuildingAttributes>()){
                 buildingscollidingWith.Add(other.transform.GetComponentInParent<BuildingAttributes>());
             }
-            if(buildingscollidingWith.Count > 0){
+            if(other.transform.gameObject.GetComponentInParent<UnfinishedBuilding>()){
+                if(!unfinishedBuildingsCollidingWith.Contains(other.transform.gameObject.GetComponentInParent<UnfinishedBuilding>())){
+                    unfinishedBuildingsCollidingWith.Add(other.transform.gameObject.GetComponentInParent<UnfinishedBuilding>());
+                }
+            }
+            if(buildingscollidingWith.Count > 0 || unfinishedBuildingsCollidingWith.Count > 0){
                 setCollidingWithOtherObject(true);
             }
         } 
@@ -159,6 +164,7 @@ public class BuildingAttributes : MonoBehaviour
     void OnTriggerExit(Collider other)
     {
         if(
+            
             other.gameObject.layer == 12  || /*Layer 12 is BUILDINGSMESH*/
             other.gameObject.layer == 13  || /*Layer 13 is RESOURCESMESH*/
             other.gameObject.layer == 14   /*Layer 14 is ITEMSMESH*/
@@ -167,7 +173,10 @@ public class BuildingAttributes : MonoBehaviour
             if(other.transform.gameObject.GetComponentInParent<BuildingAttributes>()){
                 buildingscollidingWith.Remove(other.transform.GetComponentInParent<BuildingAttributes>());
             }
-            if(buildingscollidingWith.Count == 0){
+            if(other.transform.gameObject.GetComponentInParent<UnfinishedBuilding>()){
+                unfinishedBuildingsCollidingWith.Remove(other.transform.gameObject.GetComponentInParent<UnfinishedBuilding>());
+            }
+            if(buildingscollidingWith.Count == 0 && unfinishedBuildingsCollidingWith.Count == 0){
                 setCollidingWithOtherObject(false);
             }
         }
@@ -194,10 +203,8 @@ public class BuildingAttributes : MonoBehaviour
         }
 
        if(collidingWithOtherObject){
-            buildingIndicator(true);
             buildingIndicatorMode(false);
         } else {
-            buildingIndicator(true);
             buildingIndicatorMode(true);
         }
     }
@@ -210,8 +217,7 @@ public class BuildingAttributes : MonoBehaviour
         /*
         buildingIndicator(false);*/
         if(!collidingWithOtherObject){
-            buildingIndicator(false);
-            buildingIndicatorMode(true);
+            buildingIndicatorOff();
         }
     }
 
@@ -373,11 +379,9 @@ public class BuildingAttributes : MonoBehaviour
     public void setCollidingWithOtherObject(bool set){
         collidingWithOtherObject = set;
         if(collidingWithOtherObject){
-            buildingIndicator(true);
             buildingIndicatorMode(false);
         } else {
-            buildingIndicator(false);
-            buildingIndicatorMode(true);
+            buildingIndicatorOff();
         }
     }
     public void setIsOwnedByPlayer(bool value){
@@ -489,12 +493,14 @@ public class BuildingAttributes : MonoBehaviour
     public void setJobName(string name){
         jobName = name;
     }
-    public void buildingIndicator(bool val){
+    public void buildingIndicatorOff(){
         if(transform.Find("Object Indicator")){
-            transform.Find("Object Indicator").transform.gameObject.SetActive(val);
+            transform.Find("Object Indicator/Red indicator").transform.gameObject.SetActive(false);
+            transform.Find("Object Indicator/Green indicator").transform.gameObject.SetActive(false);
         }
     }
     public void buildingIndicatorMode(bool val){
+
         if(transform.Find("Object Indicator")){
             if(val == false){
                 transform.Find("Object Indicator/Red indicator").transform.gameObject.SetActive(true);

@@ -49,7 +49,12 @@ public class CraftingSystem : MonoBehaviour
                 collidingWithOtherObject = currentlyCraftedBuilding.GetComponent<BuildingAttributes>().getCollidingWithOtherObject();
 
                 // INDICATORS
-                currentlyCraftedBuilding.GetComponent<BuildingAttributes>().buildingIndicator(true);
+                if(currentlyCraftedBuilding.GetComponent<BuildingAttributes>().getCollidingWithOtherObject()){
+                    currentlyCraftedBuilding.GetComponent<BuildingAttributes>().buildingIndicatorMode(false);
+                } else {
+                    currentlyCraftedBuilding.GetComponent<BuildingAttributes>().buildingIndicatorMode(true);
+                }
+                
                 gameManager.GetUI().getPlayerOwnedSelectedTown().townIndicator(true);
 
                 if(gameManager.GetUI().getPlayerOwnedSelectedTown().checkIfPositionIsInsideTown(currentlyCraftedBuilding.transform.position)){
@@ -152,7 +157,7 @@ public class CraftingSystem : MonoBehaviour
         //gameManager.GetUI().getPlayerOwnedSelectedTown().townIndicator(false);
         setIsCrafting(false);
         buildingAttributes.transform.gameObject.SetActive(false);
-        buildingAttributes.buildingIndicator(false);
+        buildingAttributes.buildingIndicatorOff();
         return buildingAttributes;
     }
 

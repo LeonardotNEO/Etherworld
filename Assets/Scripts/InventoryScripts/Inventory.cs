@@ -59,9 +59,9 @@ public class Inventory : MonoBehaviour
                 for(int i = 0; i < amountOfInventorySlots; i++){
                     if(i == amountOfInventorySlots - 1){
                         //Debug.Log();
-                        inventorySlots.Add(new InventorySlot(amountToAdd - (99*i), item.Key));
+                        inventorySlots.Add(new InventorySlot(amountToAdd - (99*i), new List<string>(){item.Key}));
                     } else {
-                        inventorySlots.Add(new InventorySlot(99, item.Key));
+                        inventorySlots.Add(new InventorySlot(99, new List<string>(){item.Key}));
                     }
                     amountInventorySlots++;
                 }
@@ -156,12 +156,16 @@ public class Inventory : MonoBehaviour
 
         // TRANSFER TO TOOLBAR
         if(!gameManager.GetUI().getCitizenInventoryOpen() && !gameManager.GetUI().getUnfinishedBuildingOpen() && !gameManager.GetUI().getBuildingInventoryOpen() && this.getInventorySlot(slotnumber).currentAmountInSlot != 0){
-            if(gameManager.getPlayerBehavior().getPerkattributes().getPerksByName(this.getInventorySlot(slotnumber).getItemInSlot()) != null){
-                gameManager.getToolbelt().addToSlot(this.getInventorySlot(slotnumber));
+            //if(gameManager.getPlayerBehavior().getPerkattributes().getPerksByName(this.getInventorySlot(slotnumber).getItemInSlot()) != null){
+                gameManager.getPlayerBehavior().getToolbelt().addToSlot(this.getInventorySlot(slotnumber));
                 updateInventoryInterface();
-            } else {
+            //} else {
                 //Debug.Log("Dont have the perk associated with that item");
-            }
+            //}
+        }
+        if(gameManager.GetUI().getInventoryOpen() && gameManager.GetUI().getEquipmentOpen() && this.getInventorySlot(slotnumber).currentAmountInSlot != 0){
+            gameManager.getPlayerBehavior().getToolbelt().addToSlot(this.getInventorySlot(slotnumber));
+            updateInventoryInterface();
         }
 
         
@@ -218,7 +222,7 @@ public class Inventory : MonoBehaviour
                     amountLeftToAdd -= amountToAddToThisSlot;
                 }
             } else {
-                if(inventorySlot.getCurrentAmountInSlot() == 0 && (inventorySlot.getInventorySlotType() == null || inventorySlot.getInventorySlotType() == item)){
+                if(inventorySlot.getCurrentAmountInSlot() == 0 && (inventorySlot.getInventorySlotType() == null || inventorySlot.getInventorySlotType().Contains(item))){
                     if(amountLeftToAdd + inventorySlot.getCurrentAmountInSlot() <= inventorySlot.getslotCapacity()){
                         int amountToAddToThisSlot = amountLeftToAdd;
                         inventorySlot.increaseCurrentAmountInSlot(amountToAddToThisSlot);

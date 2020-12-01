@@ -23,7 +23,7 @@ public class ItemCatalog : MonoBehaviour
                 /*Name*/            "Beef",
                 /*Description*/     "Yummy",
                 /*Type1*/           "Food",
-                /*Type2*/           "Cattle",
+                /*Type2*/           "Food",
                 /*CostToCraft*/     new Dictionary<string, int>(){},
                 /*Prefab*/          woodModel,
                 /*Sprite*/          woodSprite
@@ -461,7 +461,7 @@ public class ItemCatalog : MonoBehaviour
             new Item(
                 /*Name*/            "Wood shield",
                 /*Description*/     "Try swinging it",
-                /*Type*/            "Shield",
+                /*Type*/            "Resiliance",
                 /*Type2*/           "Shield",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
@@ -477,7 +477,7 @@ public class ItemCatalog : MonoBehaviour
                 /*Name*/            "Wool hat",
                 /*Description*/     "Try swinging it",
                 /*Type*/            "Armor",
-                /*Type2*/           "Helmet",
+                /*Type2*/           "Head",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
                 /*Sprite*/          stonePileSprite
@@ -488,7 +488,7 @@ public class ItemCatalog : MonoBehaviour
                 /*Name*/            "Wool jacket",
                 /*Description*/     "Try swinging it",
                 /*Type*/            "Armor",
-                /*Type2*/           "Helmet",
+                /*Type2*/           "Torso",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
                 /*Sprite*/          stonePileSprite
@@ -499,7 +499,7 @@ public class ItemCatalog : MonoBehaviour
                 /*Name*/            "Wool pants",
                 /*Description*/     "Try swinging it",
                 /*Type*/            "Armor",
-                /*Type2*/           "Helmet",
+                /*Type2*/           "Legs",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
                 /*Sprite*/          stonePileSprite
@@ -510,7 +510,7 @@ public class ItemCatalog : MonoBehaviour
                 /*Name*/            "Helmet",
                 /*Description*/     "Try swinging it",
                 /*Type*/            "Armor",
-                /*Type2*/           "Helmet",
+                /*Type2*/           "Head",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
                 /*Sprite*/          stonePileSprite
@@ -524,7 +524,7 @@ public class ItemCatalog : MonoBehaviour
             new Item(
                 /*Name*/            "Wood pickaxe",
                 /*Description*/     "Try swinging it",
-                /*Type*/            "Pickaxe",
+                /*Type*/            "Mining",
                 /*Type2*/           "Pickaxe",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
@@ -535,7 +535,7 @@ public class ItemCatalog : MonoBehaviour
             new Item(
                 /*Name*/            "Stone pickaxe",
                 /*Description*/     "Try swinging it",
-                /*Type*/            "Pickaxe",
+                /*Type*/            "Mining",
                 /*Type2*/           "Pickaxe",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
@@ -546,7 +546,7 @@ public class ItemCatalog : MonoBehaviour
             new Item(
                 /*Name*/            "Bronze pickaxe",
                 /*Description*/     "Try swinging it",
-                /*Type*/            "Pickaxe",
+                /*Type*/            "Mining",
                 /*Type2*/           "Pickaxe",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
@@ -557,7 +557,7 @@ public class ItemCatalog : MonoBehaviour
             new Item(
                 /*Name*/            "Iron pickaxe",
                 /*Description*/     "Try swinging it",
-                /*Type*/            "Pickaxe",
+                /*Type*/            "Mining",
                 /*Type2*/           "Pickaxe",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
@@ -568,7 +568,7 @@ public class ItemCatalog : MonoBehaviour
             new Item(
                 /*Name*/            "Steel pickaxe",
                 /*Description*/     "Try swinging it",
-                /*Type*/            "Pickaxe",
+                /*Type*/            "Mining",
                 /*Type2*/           "Pickaxe",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
@@ -579,7 +579,7 @@ public class ItemCatalog : MonoBehaviour
             new Item(
                 /*Name*/            "Silver pickaxe",
                 /*Description*/     "Try swinging it",
-                /*Type*/            "Pickaxe",
+                /*Type*/            "Mining",
                 /*Type2*/           "Pickaxe",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
@@ -590,7 +590,7 @@ public class ItemCatalog : MonoBehaviour
             new Item(
                 /*Name*/            "Gold pickaxe",
                 /*Description*/     "Try swinging it",
-                /*Type*/            "Pickaxe",
+                /*Type*/            "Mining",
                 /*Type2*/           "Pickaxe",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
@@ -601,7 +601,7 @@ public class ItemCatalog : MonoBehaviour
             new Item(
                 /*Name*/            "Diamond pickaxe",
                 /*Description*/     "Try swinging it",
-                /*Type*/            "Pickaxe",
+                /*Type*/            "Mining",
                 /*Type2*/           "Pickaxe",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
@@ -612,7 +612,7 @@ public class ItemCatalog : MonoBehaviour
             new Item(
                 /*Name*/            "Neon pickaxe",
                 /*Description*/     "Try swinging it",
-                /*Type*/            "Pickaxe",
+                /*Type*/            "Mining",
                 /*Type2*/           "Pickaxe",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
@@ -623,7 +623,7 @@ public class ItemCatalog : MonoBehaviour
             new Item(
                 /*Name*/            "Ether pickaxe",
                 /*Description*/     "Try swinging it",
-                /*Type*/            "Pickaxe",
+                /*Type*/            "Mining",
                 /*Type2*/           "Pickaxe",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
@@ -638,7 +638,7 @@ public class ItemCatalog : MonoBehaviour
             new Item(
                 /*Name*/            "Wood axe",
                 /*Description*/     "Try swinging it",
-                /*Type*/            "Axe",
+                /*Type*/            "Woodcutting",
                 /*Type2*/           "Axe",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
@@ -649,7 +649,7 @@ public class ItemCatalog : MonoBehaviour
             new Item(
                 /*Name*/            "Stone axe",
                 /*Description*/     "Try swinging it",
-                /*Type*/            "Axe",
+                /*Type*/            "Woodcutting",
                 /*Type2*/           "Axe",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
@@ -660,7 +660,7 @@ public class ItemCatalog : MonoBehaviour
             new Item(
                 /*Name*/            "Bronze axe",
                 /*Description*/     "Try swinging it",
-                /*Type*/            "Axe",
+                /*Type*/            "Woodcutting",
                 /*Type2*/           "Axe",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
@@ -671,7 +671,7 @@ public class ItemCatalog : MonoBehaviour
             new Item(
                 /*Name*/            "Iron axe",
                 /*Description*/     "Try swinging it",
-                /*Type*/            "Axe",
+                /*Type*/            "Woodcutting",
                 /*Type2*/           "Axe",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
@@ -682,7 +682,7 @@ public class ItemCatalog : MonoBehaviour
             new Item(
                 /*Name*/            "Steel axe",
                 /*Description*/     "Try swinging it",
-                /*Type*/            "Axe",
+                /*Type*/            "Woodcutting",
                 /*Type2*/           "Axe",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
@@ -693,7 +693,7 @@ public class ItemCatalog : MonoBehaviour
             new Item(
                 /*Name*/            "Silver axe",
                 /*Description*/     "Try swinging it",
-                /*Type*/            "Axe",
+                /*Type*/            "Woodcutting",
                 /*Type2*/           "Axe",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
@@ -704,7 +704,7 @@ public class ItemCatalog : MonoBehaviour
             new Item(
                 /*Name*/            "Gold axe",
                 /*Description*/     "Try swinging it",
-                /*Type*/            "Axe",
+                /*Type*/            "Woodcutting",
                 /*Type2*/           "Axe",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
@@ -715,7 +715,7 @@ public class ItemCatalog : MonoBehaviour
             new Item(
                 /*Name*/            "Diamond axe",
                 /*Description*/     "Try swinging it",
-                /*Type*/            "Axe",
+                /*Type*/            "Woodcutting",
                 /*Type2*/           "Axe",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
@@ -726,7 +726,7 @@ public class ItemCatalog : MonoBehaviour
             new Item(
                 /*Name*/            "Neon axe",
                 /*Description*/     "Try swinging it",
-                /*Type*/            "Axe",
+                /*Type*/            "Woodcutting",
                 /*Type2*/           "Axe",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
@@ -737,7 +737,7 @@ public class ItemCatalog : MonoBehaviour
             new Item(
                 /*Name*/            "Ether axe",
                 /*Description*/     "Try swinging it",
-                /*Type*/            "Axe",
+                /*Type*/            "Woodcutting",
                 /*Type2*/           "Axe",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
@@ -752,7 +752,7 @@ public class ItemCatalog : MonoBehaviour
             new Item(
                 /*Name*/            "Wood hammer",
                 /*Description*/     "Try swinging it",
-                /*Type*/            "Hammer",
+                /*Type*/            "Crafting",
                 /*Type2*/           "Hammer",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
@@ -763,7 +763,7 @@ public class ItemCatalog : MonoBehaviour
             new Item(
                 /*Name*/            "Stone hammer",
                 /*Description*/     "Try swinging it",
-                /*Type*/            "Hammer",
+                /*Type*/            "Crafting",
                 /*Type2*/           "Hammer",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
@@ -774,7 +774,7 @@ public class ItemCatalog : MonoBehaviour
             new Item(
                 /*Name*/            "Bronze hammer",
                 /*Description*/     "Try swinging it",
-                /*Type*/            "Hammer",
+                /*Type*/            "Crafting",
                 /*Type2*/           "Hammer",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
@@ -785,7 +785,7 @@ public class ItemCatalog : MonoBehaviour
             new Item(
                 /*Name*/            "Iron hammer",
                 /*Description*/     "Try swinging it",
-                /*Type*/            "Hammer",
+                /*Type*/            "Crafting",
                 /*Type2*/           "Hammer",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
@@ -796,7 +796,7 @@ public class ItemCatalog : MonoBehaviour
             new Item(
                 /*Name*/            "Steel hammer",
                 /*Description*/     "Try swinging it",
-                /*Type*/            "Hammer",
+                /*Type*/            "Crafting",
                 /*Type2*/           "Hammer",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
@@ -807,7 +807,7 @@ public class ItemCatalog : MonoBehaviour
             new Item(
                 /*Name*/            "Silver hammer",
                 /*Description*/     "Try swinging it",
-                /*Type*/            "Hammer",
+                /*Type*/            "Crafting",
                 /*Type2*/           "Hammer",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
@@ -818,7 +818,7 @@ public class ItemCatalog : MonoBehaviour
             new Item(
                 /*Name*/            "Gold hammer",
                 /*Description*/     "Try swinging it",
-                /*Type*/            "Hammer",
+                /*Type*/            "Crafting",
                 /*Type2*/           "Hammer",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
@@ -829,7 +829,7 @@ public class ItemCatalog : MonoBehaviour
             new Item(
                 /*Name*/            "Diamond hammer",
                 /*Description*/     "Try swinging it",
-                /*Type*/            "Hammer",
+                /*Type*/            "Crafting",
                 /*Type2*/           "Hammer",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
@@ -840,7 +840,7 @@ public class ItemCatalog : MonoBehaviour
             new Item(
                 /*Name*/            "Neon hammer",
                 /*Description*/     "Try swinging it",
-                /*Type*/            "Hammer",
+                /*Type*/            "Crafting",
                 /*Type2*/           "Hammer",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,
@@ -851,7 +851,7 @@ public class ItemCatalog : MonoBehaviour
             new Item(
                 /*Name*/            "Ether hammer",
                 /*Description*/     "Try swinging it",
-                /*Type*/            "Hammer",
+                /*Type*/            "Crafting",
                 /*Type2*/           "Hammer",
                 /*CostToCraft*/     new Dictionary<string, int>(){{"Wood plank", 1}},
                 /*Prefab*/          stonePileModel,

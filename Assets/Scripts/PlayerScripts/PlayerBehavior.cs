@@ -14,6 +14,7 @@ public class PlayerBehavior : MonoBehaviour
     public BuildingAttributes buildingInsideOf;
     public List<Town> ownedTowns;
     public Inventory inventory;
+    public Toolbelt toolbelt;
     public Skills skills;
     public PerkAttributes perkAttributes;
     public string playerFirstName;
@@ -41,6 +42,7 @@ public class PlayerBehavior : MonoBehaviour
         inventory = GetComponent<Inventory>();
         skills = GetComponent<Skills>();
         perkAttributes = GetComponent<PerkAttributes>();
+        toolbelt = GetComponent<Toolbelt>();
     }
 
     void Start()
@@ -238,5 +240,9 @@ public class PlayerBehavior : MonoBehaviour
     }
     public Vector3 getHitGround(){
         return hitGround;
+    }
+
+    public Toolbelt getToolbelt(){
+        return toolbelt;
     }
 }

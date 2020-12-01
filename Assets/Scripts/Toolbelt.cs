@@ -16,26 +16,47 @@ public class Toolbelt : MonoBehaviour
 
     void Start()
     {
-        addSlotToToolbar(new InventorySlot(1, "Magic"));
-        addSlotToToolbar(new InventorySlot(1, "Melee"));
-        addSlotToToolbar(new InventorySlot(1, "Ranged"));
-        addSlotToToolbar(new InventorySlot(1, "Shield"));
-        addSlotToToolbar(new InventorySlot(1, "Pickaxe"));
-        addSlotToToolbar(new InventorySlot(1, "Axe"));
-        addSlotToToolbar(new InventorySlot(1, "Hammer"));
-        addSlotToToolbar(new InventorySlot(99, "Food"));
+        // TOOLBELT
+        addSlotToToolbar(new InventorySlot(1, new List<string>(){"Wand", "Staff", "Magic book"}));
+        addSlotToToolbar(new InventorySlot(1, new List<string>(){"Onehand", "Twohand"}));
+        addSlotToToolbar(new InventorySlot(1, new List<string>(){"Bow"}));
+        addSlotToToolbar(new InventorySlot(1, new List<string>(){"Shield"}));
+        addSlotToToolbar(new InventorySlot(1, new List<string>(){"Pickaxe"}));
+        addSlotToToolbar(new InventorySlot(1, new List<string>(){"Axe"}));
+        addSlotToToolbar(new InventorySlot(1, new List<string>(){"Hammer"}));
+        addSlotToToolbar(new InventorySlot(99, new List<string>(){"Food"}));
+
+        // EQUIPMENT
+        addSlotToToolbar(new InventorySlot(1, new List<string>(){"Head"}));
+        addSlotToToolbar(new InventorySlot(1, new List<string>(){"Torso"}));
+        addSlotToToolbar(new InventorySlot(1, new List<string>(){"Legs"}));
+        addSlotToToolbar(new InventorySlot(1, new List<string>(){"Boots"}));
+        addSlotToToolbar(new InventorySlot(500, new List<string>(){"Magic dust"}));
+        addSlotToToolbar(new InventorySlot(500, new List<string>(){"Arrow"}));
+
     }
 
     public List<InventorySlot> getToolbelt(){
         return toolbar;
     }
     public bool addToSlot(InventorySlot inventorySlot){
-        string itemType = gameManager.getItemCatalog().getItemType1ByName(inventorySlot.getItemInSlot());
+        string itemType = gameManager.getItemCatalog().getItemType2ByName(inventorySlot.getItemInSlot());
 
         foreach(InventorySlot slot in toolbar){
-            if(slot.getInventorySlotType().Equals(itemType)){
+            if(slot.getInventorySlotType().Contains(itemType)){
+                if(slot.getItemInSlot() != null){
+                    transferFromToolbarToInventory(this.transform.GetComponent<Inventory>(), itemType);
+                }
                 slot.addInventorySlotToThis(inventorySlot);
-                gameManager.GetUI().updateToolbarInterface();
+
+                if(this.transform.tag.Equals("player")){
+                    // UPDATE TOOLBAR
+                    gameManager.GetUI().updateToolbarInterface();
+
+                    // UPDATE EQUIPMENT
+                    gameManager.GetUI().updateEquipmentInterface();
+                }
+
                 return true;
             } 
         }
@@ -44,12 +65,16 @@ public class Toolbelt : MonoBehaviour
 
     public void transferFromToolbarToInventory(Inventory inventory, string type){
         foreach(InventorySlot inventorySlot in toolbar){
-            if(type.Equals(inventorySlot.getInventorySlotType()) && inventorySlot.getCurrentAmountInSlot() > 0){
+            if(inventorySlot.getInventorySlotType().Contains(type) && inventorySlot.getCurrentAmountInSlot() > 0){
                 int amountToNotRemove = gameManager.getPlayerBehavior().getInventory().addItemToInventory(inventorySlot.getItemInSlot(), inventorySlot.getCurrentAmountInSlot());
                 inventorySlot.decreaseCurrentAmountInSlot(inventorySlot.getCurrentAmountInSlot() - amountToNotRemove);
             }
         }
-        gameManager.GetUI().updateToolbarInterface();
+
+        if(this.transform.tag.Equals("player")){
+            gameManager.GetUI().updateToolbarInterface();
+            gameManager.GetUI().updateEquipmentInterface();
+        }
     }
 
     public void addSlotToToolbar(InventorySlot slot){

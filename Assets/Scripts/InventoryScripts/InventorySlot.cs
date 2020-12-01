@@ -11,9 +11,9 @@ public class InventorySlot
     public int currentAmountInSlot = 0;
     public int itemSlotPlacement = 0;
     public int slotNumber = 0;
-    public string type = null;
+    public List<string> type = null;
 
-    public InventorySlot(int slotCapacity, string type){
+    public InventorySlot(int slotCapacity, List<string> type){
         this.slotCapacity = slotCapacity;
         this.type = type;
     }
@@ -87,10 +87,10 @@ public class InventorySlot
     public int getSlotNumber(){
         return slotNumber;
     }
-    public void setInventorySlotType(string type){
+    public void setInventorySlotType(List<string> type){
         this.type = type;
     }
-    public string getInventorySlotType(){
+    public List<string> getInventorySlotType(){
         return type;
     }
 }

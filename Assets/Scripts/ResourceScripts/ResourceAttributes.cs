@@ -106,6 +106,7 @@ public class ResourceAttributes : MonoBehaviour
                     StartCoroutine(gatheringResources(gameManager.getPlayerBehavior(), null));
                     break;
                 }
+                // IF GATHERING RESOURCE STARTED BREAK??
                 yield return null;
             }
             walkingToResourceBool = false;

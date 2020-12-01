@@ -19,7 +19,7 @@ public class Item
         "Hammer", 
         "Magic", 
         "Ranged", 
-        "Shield",
+        "Resiliance",
         "Armor", 
         "Food", 
         "Mineral", 
@@ -28,7 +28,8 @@ public class Item
         "Stone", 
         "Woodcutting", 
         "Smithing", 
-        "Mining"
+        "Mining",
+        "Crafting"
         };
     private List<string> itemTypes2Available = new List<string>{
         // MELEE //
@@ -59,7 +60,7 @@ public class Item
         "Shield",
 
         // ARMOR //
-        "Helmet", 
+        "Head", 
         "Torso", 
         "Legs", 
         "Boots", 
@@ -87,7 +88,10 @@ public class Item
         "Bar", 
 
         //MINGING // 
-        "Ore"
+        "Ore",
+
+        // FOOD //
+        "Food"
         };
 
     public Item(string itemName, string itemDescription, string itemType1, string itemType2, Dictionary<string, int> costToCraftItem, GameObject itemPrefab, Sprite itemSprite){

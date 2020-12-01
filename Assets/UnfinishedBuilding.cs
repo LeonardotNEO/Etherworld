@@ -15,6 +15,7 @@ public class UnfinishedBuilding : MonoBehaviour
     public int maxMaterialProgress;
     public Dictionary<string, int> itemsNeededToCraft;
     public bool allMaterialsInBuilding;
+    public List<BuildingAttributes> buildingsCollidingWith = new List<BuildingAttributes>();
 
     void Awake()
     {
@@ -33,6 +34,32 @@ public class UnfinishedBuilding : MonoBehaviour
             increaseBuildingProgress(5);
             gameManager.GetUI().openUnfinishedBuilding();
         }
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if(other.transform.GetComponentInParent<BuildingAttributes>()){
+            if(!buildingsCollidingWith.Contains(other.transform.GetComponentInParent<BuildingAttributes>())){
+                buildingsCollidingWith.Add(other.transform.GetComponentInParent<BuildingAttributes>());
+            }
+            if(buildingsCollidingWith.Count > 0){
+                buildingIndicatorMode(false);
+            } else {
+                buildingIndicatorOff();
+            }
+        }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if(other.transform.GetComponentInParent<BuildingAttributes>()){
+            buildingsCollidingWith.Remove(other.transform.GetComponentInParent<BuildingAttributes>());
+            if(buildingsCollidingWith.Count > 0){
+                buildingIndicatorMode(false);
+            } else {
+                buildingIndicatorOff();
+            }
+        } 
     }
 
     public void instantiateUnfinishedBuilding(){
@@ -55,7 +82,7 @@ public class UnfinishedBuilding : MonoBehaviour
                 transform.Find("Object Indicator/Red indicator").GetComponent<SpriteRenderer>().size = new Vector2(building.transform.GetComponentInChildren<NavMeshObstacle>().size.x * building.transform.GetComponentInChildren<NavMeshObstacle>().transform.localScale.x, building.transform.GetComponentInChildren<NavMeshObstacle>().size.z  * building.transform.GetComponentInChildren<NavMeshObstacle>().transform.localScale.z);
             }
             
-            buildingIndicator(false);
+            //buildingIndicatorOff();
         }
 
         // GROUND SPRITE
@@ -68,7 +95,6 @@ public class UnfinishedBuilding : MonoBehaviour
 
     void OnMouseOver()
     {
-        buildingIndicator(true);
         buildingIndicatorMode(true);
 
         if(!gameManager.GetUI().getIsMouseOverUI() && Input.GetMouseButtonDown(1)){
@@ -79,8 +105,7 @@ public class UnfinishedBuilding : MonoBehaviour
 
     void OnMouseExit()
     {
-        buildingIndicator(false);
-        buildingIndicatorMode(true);
+        buildingIndicatorOff();
     }
 
     void OnDestroy()
@@ -91,9 +116,10 @@ public class UnfinishedBuilding : MonoBehaviour
         gameManager.GetUI().closeUnfinishedBuilding();
     }
 
-    public void buildingIndicator(bool val){
+    public void buildingIndicatorOff(){
         if(transform.Find("Object Indicator")){
-            transform.Find("Object Indicator").transform.gameObject.SetActive(val);
+            transform.Find("Object Indicator/Red indicator").transform.gameObject.SetActive(false);
+            transform.Find("Object Indicator/Green indicator").transform.gameObject.SetActive(false);
         }
     }
     public void buildingIndicatorMode(bool val){

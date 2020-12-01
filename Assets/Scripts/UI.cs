@@ -29,6 +29,7 @@ public class UI : MonoBehaviour
     public bool citizenOpen;
     public bool citizenInventoryOpen;
     public bool unfinishedBuildingOpen;
+    public bool equipmentOpen;
     
     //--------------------//
     // UI ELEMENT PREFABS //
@@ -245,6 +246,9 @@ public class UI : MonoBehaviour
     }
     public bool getUnfinishedBuildingOpen(){
         return unfinishedBuildingOpen;
+    }
+    public bool getEquipmentOpen(){
+        return equipmentOpen;
     }
 
     //---------//
@@ -686,6 +690,7 @@ public class UI : MonoBehaviour
         closeCrafting();
         closeTown();
         closeAbilities();
+        closeEquipment();
     }
     public void closeAllMainMenusOpenMenuBar(){
         openMenuBar();
@@ -695,6 +700,7 @@ public class UI : MonoBehaviour
         closeCrafting();
         closeTown();
         closeAbilities();
+        closeEquipment();
     }
     public void openMenuBar(){
         closeAllMainMenus();
@@ -906,7 +912,7 @@ public class UI : MonoBehaviour
     // TOOLBARMENU //
     //-------------//
     public void clickToolbarItem(string type){
-        Toolbelt toolbar = gameManager.getToolbelt();
+        Toolbelt toolbar = gameManager.getPlayerBehavior().getToolbelt();
 
         // TRANSFER TO MAIN INVENTORY
         if(inventoryOpen){
@@ -917,12 +923,13 @@ public class UI : MonoBehaviour
         }
     }
     public void updateToolbarInterface(){
-        List<InventorySlot> toolbar = gameManager.getToolbelt().getToolbar();
+        List<InventorySlot> toolbar = gameManager.getPlayerBehavior().getToolbelt().getToolbar();
 
         int counter = 0;
         foreach(Transform child in GameObject.FindGameObjectWithTag("ToolbeltUI").transform.Find("Background/Content")){
             if(toolbar[counter].getItemInSlot() != null){
                 child.Find("Text").GetComponent<Text>().text = toolbar[counter].getItemInSlot();
+
 
                 int counter2 = 0;
                 foreach(Transform ability in child.Find("Hoverpanel/Background/Content")){
@@ -944,7 +951,11 @@ public class UI : MonoBehaviour
                     child.Find("Amount").GetComponent<Text>().text = toolbar[counter].getCurrentAmountInSlot().ToString();
                 }
             } else {
-                child.Find("Text").GetComponent<Text>().text = toolbar[counter].getInventorySlotType();
+                string typeString = "";
+                foreach(var item in toolbar[counter].getInventorySlotType()){
+                    typeString += "\n" + item;
+                }
+                child.Find("Text").GetComponent<Text>().text = typeString;
 
                 int counter2 = 0;
                 foreach(Transform ability in child.Find("Hoverpanel/Background/Content")){
@@ -968,9 +979,11 @@ public class UI : MonoBehaviour
             }
             counter++;
         }
+
+
     }
     public void selectToolbarElement(string type){
-        List<InventorySlot> toolbar = gameManager.getToolbelt().getToolbar();
+        List<InventorySlot> toolbar = gameManager.getPlayerBehavior().getToolbelt().getToolbar();
 
         int counter = 0;
         foreach(InventorySlot inventorySlot in toolbar){
@@ -1053,6 +1066,42 @@ public class UI : MonoBehaviour
         }
         updateToolbarInterface();
         selectToolbarElement(selectedAbility.getType());
+    }
+
+    //---------------//
+    // EQUIPMENTMENU //
+    //---------------//
+    public void openEquipment(){
+        if(GameObject.FindGameObjectWithTag("EquipmentMenuUI").transform.Find("Background").gameObject.activeSelf == true){
+            closeAllMainMenusOpenMenuBar();
+            return;
+        }
+
+        openInventory();
+        GameObject.FindGameObjectWithTag("EquipmentMenuUI").transform.Find("Background").gameObject.SetActive(true);
+        equipmentOpen = true;
+        updateEquipmentInterface();
+
+    }
+    public void closeEquipment(){
+        GameObject.FindGameObjectWithTag("EquipmentMenuUI").transform.Find("Background").gameObject.SetActive(false);
+    }
+    public void updateEquipmentInterface(){
+        Transform content = GameObject.FindGameObjectWithTag("EquipmentMenuUI").transform.Find("Background/Content").transform;
+        List<InventorySlot> toolbelt = gameManager.getPlayerBehavior().getToolbelt().getToolbar();
+
+        int counter = 8;
+        foreach(Transform child in content){
+            child.Find("Text").GetComponent<Text>().text = toolbelt[counter].getItemInSlot();
+            if(toolbelt[counter].getItemInSlot() == null){
+                string typeString = "";
+                foreach(var item in toolbelt[counter].getInventorySlotType()){
+                    typeString += "\n" + item;
+                }
+                child.Find("Text").GetComponent<Text>().text = typeString;
+            }
+            counter++;
+        }
     }
 
     //----------//

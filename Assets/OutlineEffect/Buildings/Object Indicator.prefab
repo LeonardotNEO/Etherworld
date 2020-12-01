@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5291573715978000018}
-  - component: {fileID: 6864925532610945838}
   - component: {fileID: 203393194958439708}
-  m_Layer: 0
+  - component: {fileID: 7213661952988414327}
+  m_Layer: 12
   m_Name: Object Indicator
   m_TagString: BuildingIndicator
   m_Icon: {fileID: 0}
@@ -34,18 +34,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6864925532610945838
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4392791062542017261}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a24af1f05fee13c489a73cbc7224bce9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!65 &203393194958439708
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -59,6 +47,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7213661952988414327
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4392791062542017261}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a24af1f05fee13c489a73cbc7224bce9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &3099253416509647317
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -70,6 +70,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Red indicator
+      objectReference: {fileID: 0}
+    - target: {fileID: 2673339762485205549, guid: 1e36a541d37f5a142816bca1aab29958,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8874895540874470231, guid: 1e36a541d37f5a142816bca1aab29958,
         type: 3}
@@ -149,7 +154,7 @@ PrefabInstance:
     - target: {fileID: 3446245762045137927, guid: 0b9dfe8c5e328e247a5c1f3ab3ddef72,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8206662852878773629, guid: 0b9dfe8c5e328e247a5c1f3ab3ddef72,
         type: 3}

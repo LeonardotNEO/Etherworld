@@ -17,7 +17,6 @@ public class GameManager : MonoBehaviour
     private AbilityCatalog abilityCatalog;
     private PerkCatalog perkCatalog;
     private SkillCatalog skillCatalog;
-    public Toolbelt toolbelt;
     private UI UI;
     private MessageLogText messageLogText;
     private Clock clock;
@@ -36,7 +35,6 @@ public class GameManager : MonoBehaviour
         abilityCatalog = GetComponent<AbilityCatalog>();
         perkCatalog = GetComponent<PerkCatalog>();
         skillCatalog = GetComponent<SkillCatalog>();
-        toolbelt = GetComponent<Toolbelt>();
         UI = GetComponent<UI>();
         messageLogText = GameObject.FindGameObjectWithTag("MessageLogBarUI").GetComponentInChildren<MessageLogText>();
         clock = GetComponent<Clock>();
@@ -76,9 +74,6 @@ public class GameManager : MonoBehaviour
     }
     public CraftingSystem getCraftingSystem(){
         return craftingSystem;
-    }
-    public Toolbelt getToolbelt(){
-        return toolbelt;
     }
     public UI GetUI(){
         return UI;
