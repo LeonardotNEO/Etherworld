@@ -13,6 +13,7 @@ public class ResourceAttributes : MonoBehaviour
     public int amountLeft = 6;
     public float progress = 0;
     public float distanceCenter;
+    public int experienceGain;
 
     public bool playerInBounds;
     public bool citizenInBounds;
@@ -152,15 +153,7 @@ public class ResourceAttributes : MonoBehaviour
             }
 
             // TREES
-            if(resourceName == "Tree" || 
-            resourceName == "Tin depot" ||
-            resourceName == "Copper depot" ||
-            resourceName == "Iron depot" ||
-            resourceName == "Silver depot" ||
-            resourceName == "Gold depot" ||
-            resourceName == "Kimberlite depot" ||
-            resourceName == "Neonium depot" ||
-            resourceName == "Ethereum depot"){
+            if(resourceName == "Tree"){
                 float progress = 0;
                 float progressSpeed = player.GetComponent<Skills>().getSkillByName("Woodcutting").getSpeedMultiplier();
                 bool instantiated = false;
@@ -201,8 +194,75 @@ public class ResourceAttributes : MonoBehaviour
                         if(playerBehavior){
                             progressbar.resetProgressBar();
                         }
+                        
+                        player.GetComponent<Skills>().increaseExperience("Woodcutting", experienceGain);
 
-                        player.GetComponent<Skills>().increaseExperience("Woodcutting", 400);
+                        if(citizen){
+                            citizen.setResourceBeingMined(null);
+                            citizen.addItemToItemsToPickUp(woodLog1.GetComponent<ItemAttributes>());
+                            citizen.addItemToItemsToPickUp(woodLog2.GetComponent<ItemAttributes>());
+                            citizen.addItemToItemsToPickUp(woodLog3.GetComponent<ItemAttributes>());
+                        }
+
+                        
+                        Destroy(gameObject);
+                    }
+                    yield return null;
+                }
+            }
+
+            // MINING DEPOTS
+            if(resourceName == "Tin depot" ||
+            resourceName == "Copper depot" ||
+            resourceName == "Iron depot" ||
+            resourceName == "Silver depot" ||
+            resourceName == "Gold depot" ||
+            resourceName == "Kimberlite depot" ||
+            resourceName == "Neonium depot" ||
+            resourceName == "Ethereum depot"){
+                float progress = 0;
+                float progressSpeed = player.GetComponent<Skills>().getSkillByName("Woodcutting").getSpeedMultiplier();
+                bool instantiated = false;
+
+                while(progress <= 360){
+                    progress += Time.deltaTime * progressSpeed * 10;
+                    if(player.tag == "player"){
+                        progressbar.updateProgressBar(progress);
+                    }
+                    
+
+                    if(player.tag == "player"){
+                        if(gameManager.getPlayerBehavior().getIsMovingToDestination()){
+                            gatheringsResourcesRunning = false;
+                            player.GetComponent<Animator>().SetBool("isGatheringResources" , false);
+                            progressbar.resetProgressBar();
+                            break;
+                        } 
+                    }
+                    /*if(player.tag == "Citizen"){
+                        if(player.GetComponent<Citizen>().getIsMovingToDestination()){
+                            gatheringsResourcesRunning = false;
+                            player.GetComponent<Animator>().SetBool("isGatheringResources" , false);
+                            break;
+                        } 
+                    }*/
+                    if(progress >= 360 && !instantiated){
+                        // CHANGE HOW MANY IS SPAWNED??
+                        instantiated = true;
+                        GameObject woodLog1 = Instantiate(resourceMined, new Vector3(transform.position.x, transform.position.y + 1f, transform.position.z -0.5f), Quaternion.identity);
+                        GameObject woodLog2 = Instantiate(resourceMined, new Vector3(transform.position.x, transform.position.y + 1.5f, transform.position.z + 0.5f), Quaternion.identity);
+                        GameObject woodLog3 = Instantiate(resourceMined, new Vector3(transform.position.x, transform.position.y + 2f, transform.position.z), Quaternion.identity);
+                        woodLog1.name = resourceMined.name;
+                        woodLog2.name = resourceMined.name;
+                        woodLog3.name = resourceMined.name;
+
+                        player.GetComponent<Animator>().SetBool("isGatheringResources" , false);
+                        
+                        if(playerBehavior){
+                            progressbar.resetProgressBar();
+                        }
+                        
+                        player.GetComponent<Skills>().increaseExperience("Mining", experienceGain);
 
                         if(citizen){
                             citizen.setResourceBeingMined(null);
@@ -288,7 +348,7 @@ public class ResourceAttributes : MonoBehaviour
             player.GetComponent<Citizen>().addItemToItemsToPickUp(stone.GetComponent<ItemAttributes>());
         }
 
-        player.GetComponent<Skills>().increaseExperience("Mining", 400);
+        player.GetComponent<Skills>().increaseExperience("Mining", experienceGain);
 
         //GetComponent<Animator>().SetTrigger(animationTrigger);
         amountLeft--;

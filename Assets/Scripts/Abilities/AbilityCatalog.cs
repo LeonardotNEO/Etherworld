@@ -78,28 +78,12 @@ public class AbilityCatalog : MonoBehaviour
         ));
 
         //---------//
-        // ONEHAND //
+        // MELEE   //
         //---------//
         addAbilityToCatalog(new Ability(
             /*Name*/            "Firestrike",
             /*Description*/     "Launch a small firebolt",
-            /*Skill*/           "Onehand",
-            /*Type*/            "Melee",
-            /*Level*/           5,
-            /*Exp gain*/        400,
-            /*Cost to cast*/    new Dictionary<string, int>(){{"Silver dust", 1}},
-            /*CooldownTime*/    5.0f,
-            /*Animation*/       fireboltAnimation,
-            /*Sprite*/          fireboltSprite
-        ));
-
-        //---------//
-        // TWOHAND //
-        //---------//
-        addAbilityToCatalog(new Ability(
-            /*Name*/            "Firestrike",
-            /*Description*/     "Launch a small firebolt",
-            /*Skill*/           "Twohand",
+            /*Skill*/           "Melee",
             /*Type*/            "Melee",
             /*Level*/           5,
             /*Exp gain*/        400,
@@ -193,9 +177,9 @@ public class AbilityCatalog : MonoBehaviour
         }
         return null;
     }
-    public Ability getAbilityByNameAndType(string name, string type){
+    public Ability getAbilityByNameAndSkill(string name, string skill){
         foreach(Ability ability in abilityCatalog){
-            if(ability.getName().Equals(name) && ability.getType().Equals(type)){
+            if(ability.getName().Equals(name) && ability.getSkill().Equals(skill)){
                 return ability;
             }
         }

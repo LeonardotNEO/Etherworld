@@ -56,30 +56,33 @@ public class UI : MonoBehaviour
     void Start()
     {
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+        updateToolbarInterface();
+        updateMainInventory();
+        updateBarsInterface();
     }
     void Update()
     {
         // INPUTS //
         if(Input.GetKeyDown("1")){
-            selectToolbarElement("Wand");
+            selectToolbarElement("Magic");
         }
         if(Input.GetKeyDown("2")){
-            selectToolbarElement("Onehand");
+            selectToolbarElement("Melee");
         }
         if(Input.GetKeyDown("3")){
-            selectToolbarElement("Bow");
+            selectToolbarElement("Ranged");
         }
         if(Input.GetKeyDown("4")){
-            selectToolbarElement("Shield");
+            selectToolbarElement("Resiliance");
         }
         if(Input.GetKeyDown("5")){
-            selectToolbarElement("Pickaxe");
+            selectToolbarElement("Mining");
         }
         if(Input.GetKeyDown("6")){
-            selectToolbarElement("Axe");
+            selectToolbarElement("Woodcutting");
         }
         if(Input.GetKeyDown("7")){
-            selectToolbarElement("Hammer");
+            selectToolbarElement("Crafting");
         }
         if(Input.GetKeyDown("8")){
             selectToolbarElement("Food");
@@ -114,10 +117,10 @@ public class UI : MonoBehaviour
                 gameManager.getInventoryCatalog().getMainInventory().removeItemFromInventory(item.Key, item.Value);
             }
         }
+
+        // SPAWN ITEMS //
         if(Input.GetKeyDown("h")){
             Dictionary<string,int> listOfItems = new Dictionary<string, int>{
-            {"Wand", 5}, 
-            {"Helmet", 5}, 
             {"Wood sword", 5}, 
             {"Battleaxe", 5},
             {"Greatsword", 5},
@@ -127,7 +130,15 @@ public class UI : MonoBehaviour
             {"Stone hammer", 5},
             {"Wood bow", 5},
             {"Beef", 5},
-            {"Staff", 5}
+            {"Staff", 5},
+            {"Wand", 5},
+            {"Magic book", 5},
+            {"Wood shield", 5},
+            {"Helmet", 5},
+            {"Wool hat", 5},
+            {"Wool jacket", 5},
+            {"Wool pants", 5},
+            {"Running shoes", 1},
             };
 
             foreach(var item in listOfItems){
@@ -693,7 +704,6 @@ public class UI : MonoBehaviour
         closeEquipment();
     }
     public void closeAllMainMenusOpenMenuBar(){
-        openMenuBar();
         closeMessageLog();
         closeSkills();
         closeInventory();
@@ -701,10 +711,10 @@ public class UI : MonoBehaviour
         closeTown();
         closeAbilities();
         closeEquipment();
+        openMenuBar();
     }
     public void openMenuBar(){
         closeAllMainMenus();
-
         menuBarOpen = true;
         GameObject.FindGameObjectWithTag("MenuBarUI").transform.Find("Background").gameObject.SetActive(true); 
     }
@@ -917,9 +927,11 @@ public class UI : MonoBehaviour
         // TRANSFER TO MAIN INVENTORY
         if(inventoryOpen){
             toolbar.transferFromToolbarToInventory(gameManager.getPlayerBehavior().getInventory(), type);
-        } else {
-            //Debug.Log("inventoryopen not open");
-            selectToolbarElement(type);
+        }
+    }
+    public void clickToolbarItem(AbilitiesButton button){
+        if(!inventoryOpen){
+            selectToolbarElement(button.getButtonName());
         }
     }
     public void updateToolbarInterface(){
@@ -985,29 +997,46 @@ public class UI : MonoBehaviour
     public void selectToolbarElement(string type){
         Toolbelt toolbar = gameManager.getPlayerBehavior().getToolbelt();
 
-        int counter = 0;
-        foreach(InventorySlot inventorySlot in toolbar.getToolbelt()){
-            Transform toolbarUI = GameObject.FindGameObjectWithTag("ToolbeltUI").transform.Find("Background/Content").GetChild(counter).transform;
-            if(inventorySlot.getInventorySlotType().Contains(type)){
+        if(type.Equals("Food")){
+            InventorySlot inventorySlot = toolbar.getToolbelt()[7];
+            Transform toolbarUI = GameObject.FindGameObjectWithTag("ToolbeltUI").transform.Find("Background/Content/Food Button").transform;
 
-                // SETS THE CURRENT SELECTED SLOT
-                if(inventorySlot.getItemInSlot() != null){
-                    toolbar.setCurrentlySelectedSlot(inventorySlot);
+            if(inventorySlot.getItemInSlot() != null){
+                if(gameManager.getPlayerBehavior().getEnemyAttributes().increaseCurrentHealth(gameManager.getItemCatalog().getItemByName(inventorySlot.getItemInSlot()).getEquipment().getHealth())){
+                    inventorySlot.decreaseCurrentAmountInSlot(1);
+                    updateBarsInterface();
                 } else {
-                    toolbar.setCurrentlySelectedSlot(null);
+                    gameManager.getMessageLogText().addMessageToLog("Couldnt eat food because you have max health");
                 }
-
-                toolbarUI.Find("Number").GetComponent<Text>().color = Color.yellow;
-                toolbarUI.Find("Hoverpanel").transform.gameObject.SetActive(true);
-            } else {
-                toolbarUI.Find("Number").GetComponent<Text>().color = Color.white;
-                toolbarUI.Find("Hoverpanel").transform.gameObject.SetActive(false);
             }
-            counter++;
-            if(counter == 8){
-                break;
+        } else {
+            int counter = 0;
+            foreach(InventorySlot inventorySlot in toolbar.getToolbelt()){
+                Transform toolbarUI = GameObject.FindGameObjectWithTag("ToolbeltUI").transform.Find("Background/Content").GetChild(counter).transform;
+                if(toolbarUI.GetComponent<AbilitiesButton>().getButtonName().Equals(type)){
+
+                    // SETS THE CURRENT SELECTED SLOT
+                    if(inventorySlot.getItemInSlot() != null && !type.Equals("Food")){
+                        toolbar.setCurrentlySelectedSlot(inventorySlot);
+                    }
+
+                    toolbarUI.Find("Number").GetComponent<Text>().color = Color.yellow;
+                    toolbarUI.Find("Hoverpanel").transform.gameObject.SetActive(true);   
+                } else {
+
+                    toolbarUI.Find("Number").GetComponent<Text>().color = Color.white;
+                    toolbarUI.Find("Hoverpanel").transform.gameObject.SetActive(false);
+                }
+                counter++;
+                if(counter == 7){
+                    break;
+                }
             }
         }
+
+        // UPDATE EQUIPMENT INTERFACE
+        updateEquipmentInterface();
+        updateToolbarInterface();
     }
 
     public void removeAbilityFromToolbar(int slotNumber){
@@ -1038,7 +1067,7 @@ public class UI : MonoBehaviour
         foreach(Ability ability in list){
             GameObject abilitySlot = (GameObject)Instantiate(abilitiesSlot, GameObject.FindGameObjectWithTag("AbilitiesMenuUI").transform.Find("Background/Abilities/Viewport/Content"));
             abilitySlot.transform.Find("Ability Name").GetComponent<Text>().text = ability.getName();
-            abilitySlot.transform.name = ability.getName() + "/" + ability.getType();
+            abilitySlot.transform.name = ability.getName() + "/" + ability.getSkill();
             abilitySlot.transform.Find("Level").GetComponent<Text>().text = ability.getLevel().ToString();
             abilitySlot.transform.Find("Skill").GetComponent<Text>().text = ability.getSkill();
         }
@@ -1061,21 +1090,19 @@ public class UI : MonoBehaviour
     public void clickAbilityButton(GameObject button){
         string[] abilityFull = button.transform.name.Split('/');
         string abilityName = abilityFull[0]; 
-        string abilityType = abilityFull[1];
+        string abilitySkill = abilityFull[1];
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
-        Ability selectedAbility = gameManager.getAbilityCatalog().getAbilityByNameAndType(abilityName, abilityType);
+        Ability selectedAbility = gameManager.getAbilityCatalog().getAbilityByNameAndSkill(abilityName, abilitySkill);
         Transform abilitiesToolbelt = GameObject.FindGameObjectWithTag("ToolbeltUI").transform.Find("Background/Content");
 
         foreach(Transform child in abilitiesToolbelt){
             AbilitiesButton slot = child.GetComponent<AbilitiesButton>();
-
-            if(slot.getButtonName().Equals(selectedAbility.getType())){
+            if(slot.getButtonName().Equals(selectedAbility.getSkill())){
                 slot.addAbilityToAbilities(selectedAbility);
-            
             }
         }
         updateToolbarInterface();
-        selectToolbarElement(selectedAbility.getType());
+        selectToolbarElement(selectedAbility.getSkill());
     }
 
     //---------------//
@@ -1094,6 +1121,7 @@ public class UI : MonoBehaviour
 
     }
     public void closeEquipment(){
+        equipmentOpen = false;
         GameObject.FindGameObjectWithTag("EquipmentMenuUI").transform.Find("Background").gameObject.SetActive(false);
     }
     public void updateEquipmentInterface(){
@@ -1564,5 +1592,26 @@ public class UI : MonoBehaviour
     
     public void updateUnfinishedBuildingInventory(){
         updateInventory(gameManager.getBuildingCatalog().getUnfinishedBuildingSelected().getInventory(), GameObject.FindGameObjectWithTag("UnfinishedBuildingMenuUI").transform.Find("Background/Inventory/Scroll View/Viewport/Unfinished Building Inventory"));
+    }
+
+    //----------//
+    // BARSMENU //
+    //----------//
+    public void updateBarsInterface(){
+        Transform content = GameObject.FindGameObjectWithTag("BarsUI").transform;
+        EnemyAttributes player = gameManager.getPlayerBehavior().getEnemyAttributes();
+        PlayerBehavior playerBehavior = gameManager.getPlayerBehavior();
+
+        // HEALTH
+        content.Find("Healthbar background/Healthbar").transform.GetComponent<RectTransform>().sizeDelta = new Vector2((float)(268.4f/player.getMaxHealth()) * player.getHealth(), 31.39f);
+        content.Find("Healthbar background/Text").GetComponent<Text>().text = player.getHealth().ToString() + "/" + player.getMaxHealth().ToString();
+    
+        // THIRST
+        content.Find("Thirstbar background/Thirstbar").transform.GetComponent<RectTransform>().sizeDelta = new Vector2((float)(268.4f/100) * playerBehavior.getThirst(), 31.39f);
+        content.Find("Thirstbar background/Text").GetComponent<Text>().text = playerBehavior.getThirst().ToString() + "/100";
+
+        // HUNGER
+        content.Find("Hungerbar background/Hungerbar").transform.GetComponent<RectTransform>().sizeDelta = new Vector2((float)(268.4f/100) * playerBehavior.getHunger(), 31.39f);
+        content.Find("Hungerbar background/Text").GetComponent<Text>().text = playerBehavior.getHunger().ToString() + "/100";
     }
 }

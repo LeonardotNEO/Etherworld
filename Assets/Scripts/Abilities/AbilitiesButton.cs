@@ -49,10 +49,12 @@ public class AbilitiesButton : MonoBehaviour
         string skillName = gameObject.transform.name;
 
         for(int i = 0; i < abilities.Length; i++){
-            if(abilities[i].getName().Equals(skillName)){
-                abilities[i] = null;
-                gameManager.GetUI().updateToolbarInterface();
-                break;
+            if(abilities[i] != null){
+                if(abilities[i].getName().Equals(skillName)){
+                    abilities[i] = null;
+                    gameManager.GetUI().updateToolbarInterface();
+                    break;
+                }
             }
         }
     }

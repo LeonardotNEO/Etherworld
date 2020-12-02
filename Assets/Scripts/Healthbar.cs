@@ -30,8 +30,8 @@ public class Healthbar : MonoBehaviour
 
             if(startHealth != 0){
 
-                float currentWidth = (float)(healthStartWidth/startHealth) * this.transform.GetComponentInParent<EnemyAttributes>().getMaxHealth();
-                this.transform.Find("Health").transform.GetComponent<RectTransform>().sizeDelta = new Vector2(currentWidth, 0.1524451f);
+            float currentWidth = (float)(healthStartWidth/startHealth) * this.transform.GetComponentInParent<EnemyAttributes>().getHealth();
+            this.transform.Find("Health").transform.GetComponent<RectTransform>().sizeDelta = new Vector2(currentWidth, 0.1524451f);
             }
         }
     }

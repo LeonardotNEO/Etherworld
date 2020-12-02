@@ -14,36 +14,41 @@ public class Item
     private GameObject itemPrefab;
     private Sprite itemSprite;
     private List<string> itemTypes1Available = new List<string>{
-        "Melee", 
-        "Pickaxe", 
-        "Axe", 
-        "Hammer", 
+        "Melee",  
         "Magic", 
         "Ranged", 
         "Resiliance",
-        "Armor", 
-        "Food", 
-        "Mineral", 
-        "Misc", 
-        "Wood", 
-        "Stone", 
         "Woodcutting", 
         "Smithing", 
         "Mining",
-        "Crafting"
+        "Crafting", 
+        "Food", 
+        "Armor",
+
+        "Mineral", 
+        "Misc", 
+        "Wood", 
+        "Stone"
         };
     private List<string> itemTypes2Available = new List<string>{
         // MELEE //
         "Onehand", 
         "Twohand",
 
-        // Pickaxe //
+        // MINING //
         "Pickaxe",
+        "Bar", 
+        "Ore",
+        "Mineral", 
+        "Stone",
 
-        // AXE//
+        // WOODCUTTING //
         "Axe",
+        "Log", 
+        "Plank", 
+        "Wood", 
 
-        // HAMMER //
+        // CRAFTING //
         "Hammer",
 
         // MAGIC //
@@ -57,7 +62,7 @@ public class Item
         "Crossbow",
         "Arrow",
 
-        // SHIELD //
+        // RESILIANCE //
         "Shield",
 
         // ARMOR //
@@ -68,31 +73,12 @@ public class Item
 
         // FOOD //
         "Cattle", 
-
-        // MINERAL //
-        "Mineral", 
+        "Food",
 
         // MISC //
         "Wood", 
 
-        // WOODCUTTING //
-        "Log", 
-        "Plank", 
-
-        // WOOD //
-        "Wood", 
-
-        // STONE //
-        "Stone",
-
-        // SMITHING //
-        "Bar", 
-
-        //MINGING // 
-        "Ore",
-
-        // FOOD //
-        "Food"
+        
         };
 
     public Item(string itemName, string itemDescription, string itemType1, string itemType2, Dictionary<string, int> costToCraftItem, GameObject itemPrefab, Sprite itemSprite, Equipment equipment){

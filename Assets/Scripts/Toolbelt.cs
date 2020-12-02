@@ -18,7 +18,7 @@ public class Toolbelt : MonoBehaviour
     void Start()
     {
         // TOOLBELT
-        addSlotToToolbar(new InventorySlot(1, new List<string>(){"Wand", "Staff", "Magic book"}));
+        addSlotToToolbar(new InventorySlot(1, new List<string>(){"Wand", "Staff", "Book"}));
         addSlotToToolbar(new InventorySlot(1, new List<string>(){"Onehand", "Twohand"}));
         addSlotToToolbar(new InventorySlot(1, new List<string>(){"Bow"}));
         addSlotToToolbar(new InventorySlot(1, new List<string>(){"Shield"}));
@@ -64,17 +64,26 @@ public class Toolbelt : MonoBehaviour
         return false;
     }
 
-    public void transferFromToolbarToInventory(Inventory inventory, string type){
-        foreach(InventorySlot inventorySlot in toolbar){
-            if(inventorySlot.getInventorySlotType().Contains(type) && inventorySlot.getCurrentAmountInSlot() > 0){
-                int amountToNotRemove = gameManager.getPlayerBehavior().getInventory().addItemToInventory(inventorySlot.getItemInSlot(), inventorySlot.getCurrentAmountInSlot());
-                inventorySlot.decreaseCurrentAmountInSlot(inventorySlot.getCurrentAmountInSlot() - amountToNotRemove);
-            }
-        }
+    public void transferFromToolbarToInventory(Inventory inventory, string types){
+        string[] typesArray = types.Split(' ');
 
-        if(this.transform.tag.Equals("player")){
-            gameManager.GetUI().updateToolbarInterface();
-            gameManager.GetUI().updateEquipmentInterface();
+        foreach(InventorySlot inventorySlot in toolbar){
+            if(inventorySlot.getCurrentAmountInSlot() > 0){
+                foreach(var itemTypesInSlot in inventorySlot.getInventorySlotType()){
+                    foreach(var itemTypes in typesArray){
+                        if(itemTypesInSlot.Equals(itemTypes)){
+                            int amountToNotRemove = gameManager.getPlayerBehavior().getInventory().addItemToInventory(inventorySlot.getItemInSlot(), inventorySlot.getCurrentAmountInSlot());
+                            inventorySlot.decreaseCurrentAmountInSlot(inventorySlot.getCurrentAmountInSlot() - amountToNotRemove);
+
+                            if(this.transform.tag.Equals("player")){
+                                gameManager.GetUI().updateToolbarInterface();
+                                gameManager.GetUI().updateEquipmentInterface();
+                            }
+                            return;
+                        }
+                    }
+                }
+            }
         }
     }
 

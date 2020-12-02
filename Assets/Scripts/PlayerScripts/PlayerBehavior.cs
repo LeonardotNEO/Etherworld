@@ -22,6 +22,9 @@ public class PlayerBehavior : MonoBehaviour
     public string playerLastName;
     public string gender;
 
+    public int thirst;
+    public int hunger;
+
     public bool isMovingToDestination;
     public bool reachedDestination;
 
@@ -45,6 +48,8 @@ public class PlayerBehavior : MonoBehaviour
         perkAttributes = GetComponent<PerkAttributes>();
         toolbelt = GetComponent<Toolbelt>();
         enemyAttributes = GetComponent<EnemyAttributes>();
+        thirst = 100;
+        hunger = 100;
     }
 
     void Start()
@@ -249,5 +254,25 @@ public class PlayerBehavior : MonoBehaviour
     }
     public EnemyAttributes getEnemyAttributes(){
         return enemyAttributes;
+    }
+
+    public void increaseThirst(int amount){
+        thirst += amount;
+    }
+    public void decreaseThirst(int amount){
+        thirst -= amount;
+    }
+    public int getThirst(){
+        return thirst;
+    }
+
+    public void increaseHunger(int amount){
+        hunger += amount;
+    }
+    public void decreaseHunger(int amount){
+        hunger -= amount;
+    }
+    public int getHunger(){
+        return hunger;
     }
 }

@@ -274,16 +274,17 @@ public class EnemyAttributes : MonoBehaviour
 
                 if(Vector3.Distance(this.transform.position, enemy.getPosition()) > attackRange){
                     //Debug.Log("Lost target, or distance to high to attack");
-                    enemy.setHealthbar(false);
+                    //enemy.setHealthbar(false);
                     break;
                 }
 
                 if(enemy == null){
                     stopMovement();
                     //Debug.Log("Current target is null");
+                    setHealthbar(false);
                     break;
                 } else {
-                    enemy.setHealthbar(true);
+                    //enemy.setHealthbar(true);
                 }
 
                 this.dealDamage(enemy);
@@ -308,16 +309,13 @@ public class EnemyAttributes : MonoBehaviour
                 if(hitGroundPosition != gameManager.getPlayerBehavior().getHitGround()){
                     //Debug.Log("not attacking anymore because player clicked elsewhere");
                     enemy.setMobIndicator(false);
-                    playerEnemy.setHealthbar(false);
                     enemy.setHealthbar(false);
                     enemy.setAllIndicatorsFallsAndActivate("red");
                     break;
                 }
                 if(enemy == null){
-                    playerEnemy.setHealthbar(false);
                     break;
                 } else {
-                    playerEnemy.setHealthbar(true);
                     enemy.setHealthbar(true);
                     enemy.setMobIndicator(true);
                     enemy.setAllIndicatorsFallsAndActivate("yellow");
@@ -348,8 +346,6 @@ public class EnemyAttributes : MonoBehaviour
             //Debug.Log("punch");
             int damageToDeal = melee;
             enemy.takeDamage(melee);
-        
-            updateHealthbar(enemy);
         }
     }
 
@@ -357,6 +353,11 @@ public class EnemyAttributes : MonoBehaviour
         //Debug.Log(transform.name +" took " + amount + " damaage");
         health -= amount;
         checkIfDead();
+        if(transform.tag.Equals("player")){
+            gameManager.GetUI().updateBarsInterface();
+        } else {
+            updateHealthbar(this);
+        }
     }
 
     public void checkMovement(){
@@ -454,6 +455,18 @@ public class EnemyAttributes : MonoBehaviour
         enemy.transform.Find("Healthbar").GetComponent<Healthbar>().updateHealthBar();
     }
 
+    public bool increaseCurrentHealth(int amount){
+        if(health < getMaxHealth()){
+            if(amount + health >= getMaxHealth()){
+                health += getMaxHealth() - health;
+            } else {
+                health += amount;
+            }
+            return true;
+        }
+        return false;
+    }
+
     public NavMeshAgent getNavMeshAgent(){
         return agent;
     }
@@ -496,15 +509,17 @@ public class EnemyAttributes : MonoBehaviour
 
     public int getMaxHealth(){
         Enemy enemy = gameManager.getEnemyCatalog().getEnemyByName(name);
-        health = enemy.getBaseHealth();
+        int maxHealth = enemy.getBaseHealth();
         if(toolbelt){
             foreach(InventorySlot inventorySlot in toolbelt.getToolbar()){
                 if(inventorySlot.getItemInSlot() != null){
-                    health += gameManager.getItemCatalog().getItemByName(inventorySlot.getItemInSlot()).getEquipment().getHealth();
+                    if(gameManager.getItemCatalog().getItemByName(inventorySlot.getItemInSlot()).getEquipment() != null && inventorySlot.getInventorySlotType().Equals("Food")){
+                        maxHealth += gameManager.getItemCatalog().getItemByName(inventorySlot.getItemInSlot()).getEquipment().getHealth();
+                    }
                 }
             }
         }
-        return health;
+        return maxHealth;
     }
 
     public int getHealth(){
@@ -516,7 +531,9 @@ public class EnemyAttributes : MonoBehaviour
         armor = enemy.getBaseArmor();
         foreach(InventorySlot inventorySlot in toolbelt.getToolbar()){
             if(inventorySlot.getItemInSlot() != null){
-                armor += gameManager.getItemCatalog().getItemByName(inventorySlot.getItemInSlot()).getEquipment().getArmor();
+                if(gameManager.getItemCatalog().getItemByName(inventorySlot.getItemInSlot()).getEquipment() != null){
+                    armor += gameManager.getItemCatalog().getItemByName(inventorySlot.getItemInSlot()).getEquipment().getArmor();
+                }
             }
         }
         return armor;
@@ -524,46 +541,77 @@ public class EnemyAttributes : MonoBehaviour
 
     public int getRanged(){
         Enemy enemy = gameManager.getEnemyCatalog().getEnemyByName(name);
-        armor = enemy.getRanged();
-        foreach(InventorySlot inventorySlot in toolbelt.getToolbar()){
-            if(inventorySlot.getItemInSlot() != null){
-                ranged += gameManager.getItemCatalog().getItemByName(inventorySlot.getItemInSlot()).getEquipment().getRanged();
+
+        if(toolbelt.getCurrentlySelectedSlot() != null){
+            foreach(InventorySlot inventorySlot in toolbelt.getToolbar()){
+                if(toolbelt.getCurrentlySelectedSlot() != null){
+                    if(toolbelt.getCurrentlySelectedSlot().Equals(inventorySlot)){
+                        // RETURNS CURRENTLY SELECTED ELEMENT IN TOOLBARS ATTACKSPEED
+                        if(inventorySlot.getItemInSlot() != null){
+                            return ranged = gameManager.getItemCatalog().getItemByName(inventorySlot.getItemInSlot()).getEquipment().getRanged();
+                        }
+                    }
+                }
             }
         }
-        return ranged;
+
+        // RETURNS STANDARD ATTACK SPEED VALUE FOR NPC
+        return ranged = enemy.getRanged();
     }
 
     public int getMagic(){
         Enemy enemy = gameManager.getEnemyCatalog().getEnemyByName(name);
-        magic = enemy.getMagic();
-        foreach(InventorySlot inventorySlot in toolbelt.getToolbar()){
-            if(inventorySlot.getItemInSlot() != null){
-                magic += gameManager.getItemCatalog().getItemByName(inventorySlot.getItemInSlot()).getEquipment().getMagic();
+
+        if(toolbelt.getCurrentlySelectedSlot() != null){
+            foreach(InventorySlot inventorySlot in toolbelt.getToolbar()){
+                if(toolbelt.getCurrentlySelectedSlot() != null){
+                    if(toolbelt.getCurrentlySelectedSlot().Equals(inventorySlot)){
+                        // RETURNS CURRENTLY SELECTED ELEMENT IN TOOLBARS ATTACKSPEED
+                        if(inventorySlot.getItemInSlot() != null){
+                            return magic = gameManager.getItemCatalog().getItemByName(inventorySlot.getItemInSlot()).getEquipment().getMagic();
+                        }
+                    }
+                }
             }
         }
-        return magic;
+
+        // RETURNS STANDARD ATTACK SPEED VALUE FOR NPC
+        return magic = enemy.getMagic();
     }
 
     public int getMelee(){
         Enemy enemy = gameManager.getEnemyCatalog().getEnemyByName(name);
-        melee = enemy.getMelee();
-        foreach(InventorySlot inventorySlot in toolbelt.getToolbar()){
-            if(inventorySlot.getItemInSlot() != null){
-                melee += gameManager.getItemCatalog().getItemByName(inventorySlot.getItemInSlot()).getEquipment().getMelee();
+
+        if(toolbelt.getCurrentlySelectedSlot() != null){
+            foreach(InventorySlot inventorySlot in toolbelt.getToolbar()){
+                if(toolbelt.getCurrentlySelectedSlot() != null){
+                    if(toolbelt.getCurrentlySelectedSlot().Equals(inventorySlot)){
+                        // RETURNS CURRENTLY SELECTED ELEMENT IN TOOLBARS ATTACKSPEED
+                        if(inventorySlot.getItemInSlot() != null){
+                            return melee = gameManager.getItemCatalog().getItemByName(inventorySlot.getItemInSlot()).getEquipment().getMelee();
+                        }
+                    }
+                }
             }
         }
-        return melee;
+
+        // RETURNS STANDARD ATTACK SPEED VALUE FOR NPC
+        return melee = enemy.getMelee();
     }
 
     // SAME AS MELEE?
     public int getAttackSpeed(){
         Enemy enemy = gameManager.getEnemyCatalog().getEnemyByName(name);
 
-        foreach(InventorySlot inventorySlot in toolbelt.getToolbar()){
-            if(toolbelt.getCurrentlySelectedSlot().Equals(inventorySlot)){
-                // RETURNS CURRENTLY SELECTED ELEMENT IN TOOLBARS ATTACKSPEED
-                if(inventorySlot.getItemInSlot() != null){
-                    return attackSpeed = gameManager.getItemCatalog().getItemByName(inventorySlot.getItemInSlot()).getEquipment().getAttackSpeed();
+        if(toolbelt.getCurrentlySelectedSlot() != null){
+            foreach(InventorySlot inventorySlot in toolbelt.getToolbar()){
+                if(toolbelt.getCurrentlySelectedSlot() != null){
+                    if(toolbelt.getCurrentlySelectedSlot().Equals(inventorySlot)){
+                        // RETURNS CURRENTLY SELECTED ELEMENT IN TOOLBARS ATTACKSPEED
+                        if(inventorySlot.getItemInSlot() != null){
+                            return attackSpeed = gameManager.getItemCatalog().getItemByName(inventorySlot.getItemInSlot()).getEquipment().getAttackSpeed();
+                        }
+                    }
                 }
             }
         }
@@ -576,11 +624,13 @@ public class EnemyAttributes : MonoBehaviour
     public float getCritChance(){
         Enemy enemy = gameManager.getEnemyCatalog().getEnemyByName(name);
 
-        foreach(InventorySlot inventorySlot in toolbelt.getToolbar()){
-            if(toolbelt.getCurrentlySelectedSlot().Equals(inventorySlot)){
-                // RETURNS CURRENTLY SELECTED ELEMENT IN TOOLBARS CRITCHANCE
-                if(inventorySlot.getItemInSlot() != null){
-                    return critChance = gameManager.getItemCatalog().getItemByName(inventorySlot.getItemInSlot()).getEquipment().getCritChance();
+        if(toolbelt.getCurrentlySelectedSlot() != null){
+            foreach(InventorySlot inventorySlot in toolbelt.getToolbar()){
+                if(toolbelt.getCurrentlySelectedSlot().Equals(inventorySlot)){
+                    // RETURNS CURRENTLY SELECTED ELEMENT IN TOOLBARS CRITCHANCE
+                    if(inventorySlot.getItemInSlot() != null){
+                        return critChance = gameManager.getItemCatalog().getItemByName(inventorySlot.getItemInSlot()).getEquipment().getCritChance();
+                    }
                 }
             }
         }
@@ -593,11 +643,13 @@ public class EnemyAttributes : MonoBehaviour
     public float getAttackRange(){
         Enemy enemy = gameManager.getEnemyCatalog().getEnemyByName(name);
 
-        foreach(InventorySlot inventorySlot in toolbelt.getToolbar()){
-            if(toolbelt.getCurrentlySelectedSlot().Equals(inventorySlot)){
-                // RETURNS CURRENTLY SELECTED ELEMENT IN TOOLBARS CRITCHANCE
-                if(inventorySlot.getItemInSlot() != null){
-                    return attackRange = gameManager.getItemCatalog().getItemByName(inventorySlot.getItemInSlot()).getEquipment().getAttackRange();
+        if(toolbelt.getCurrentlySelectedSlot() != null){
+            foreach(InventorySlot inventorySlot in toolbelt.getToolbar()){
+                if(toolbelt.getCurrentlySelectedSlot().Equals(inventorySlot)){
+                    // RETURNS CURRENTLY SELECTED ELEMENT IN TOOLBARS CRITCHANCE
+                    if(inventorySlot.getItemInSlot() != null){
+                        return attackRange = gameManager.getItemCatalog().getItemByName(inventorySlot.getItemInSlot()).getEquipment().getAttackRange();
+                    }
                 }
             }
         }
@@ -611,9 +663,12 @@ public class EnemyAttributes : MonoBehaviour
         movementspeed = enemy.getBaseMovementSpeed();
         foreach(InventorySlot inventorySlot in toolbelt.getToolbar()){
             if(inventorySlot.getItemInSlot() != null){
-                movementspeed += gameManager.getItemCatalog().getItemByName(inventorySlot.getItemInSlot()).getEquipment().getMovementSpeed();
+                if(gameManager.getItemCatalog().getItemByName(inventorySlot.getItemInSlot()).getEquipment() != null){
+                    movementspeed += gameManager.getItemCatalog().getItemByName(inventorySlot.getItemInSlot()).getEquipment().getMovementSpeed();
+                }
             }
         }
+        setMovementSpeed(movementspeed);
         return movementspeed;
     }
 
@@ -626,7 +681,9 @@ public class EnemyAttributes : MonoBehaviour
         frostResistance = enemy.getFrostResistance();
         foreach(InventorySlot inventorySlot in toolbelt.getToolbar()){
             if(inventorySlot.getItemInSlot() != null){
-                frostResistance += gameManager.getItemCatalog().getItemByName(inventorySlot.getItemInSlot()).getEquipment().getFrostResistance();
+                if(gameManager.getItemCatalog().getItemByName(inventorySlot.getItemInSlot()).getEquipment() != null){
+                    frostResistance += gameManager.getItemCatalog().getItemByName(inventorySlot.getItemInSlot()).getEquipment().getFrostResistance();
+                }
             }
         }
         return frostResistance;
@@ -637,7 +694,9 @@ public class EnemyAttributes : MonoBehaviour
         fireRestistance = enemy.getFireResistance();
         foreach(InventorySlot inventorySlot in toolbelt.getToolbar()){
             if(inventorySlot.getItemInSlot() != null){
-                fireRestistance += gameManager.getItemCatalog().getItemByName(inventorySlot.getItemInSlot()).getEquipment().getFireResistance();
+                if(gameManager.getItemCatalog().getItemByName(inventorySlot.getItemInSlot()).getEquipment() != null){
+                    fireRestistance += gameManager.getItemCatalog().getItemByName(inventorySlot.getItemInSlot()).getEquipment().getFireResistance();
+                }
             }
         }
         return fireRestistance;

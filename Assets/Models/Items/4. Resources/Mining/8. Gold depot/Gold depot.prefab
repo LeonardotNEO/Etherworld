@@ -52,6 +52,7 @@ MonoBehaviour:
   amountLeft: 6
   progress: 0
   distanceCenter: 0
+  experienceGain: 1000
   playerInBounds: 0
   citizenInBounds: 0
   gatheringsResourcesRunning: 0
