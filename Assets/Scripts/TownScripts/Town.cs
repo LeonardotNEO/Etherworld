@@ -114,7 +114,7 @@ public class Town : MonoBehaviour
         }
         if(other is BoxCollider){
             if(other.gameObject.layer == LayerMask.NameToLayer("Citizens")){
-                StartCoroutine(waitForCitizenToLoadThenAdd(other));
+                StartCoroutine(waitForCitizenToLoadThenAdd(other.transform.GetComponent<Citizen>()));
             }
         }
 
@@ -155,19 +155,17 @@ public class Town : MonoBehaviour
         // REMEMBER TO REMOVE FROM TOWN <--- OR THIS MIGHT NOT BE NEEDED SINCE TOWN ALLIEGENCE IS CHANGED ON ONDISABLE()
     }
 
-    public IEnumerator waitForCitizenToLoadThenAdd(Collider other){
+    public IEnumerator waitForCitizenToLoadThenAdd(Citizen citizen){
         yield return new WaitForSeconds(0.5f);
 
-        // ADD INVENTORY
-        if(other.gameObject.GetComponent<Citizen>().getTownAlliegence() == this){
-            if(other.gameObject.GetComponent<Inventory>()){
-                addInventoryToTown(other.gameObject.GetComponent<Inventory>());
+        if(citizen.getTownAlliegence() == this){
+            // ADD CITIZEN
+            addCitizenToTown(citizen);
+            
+            // ADD INVENTORY
+            if(citizen.transform.GetComponent<Inventory>()){
+                addInventoryToTown(citizen.transform.GetComponent<Inventory>());
             }
-        }
-
-        // ADD CITIZEN
-        if(other.gameObject.GetComponent<Citizen>().getTownAlliegence() == this){
-            addCitizenToTown(other.gameObject.GetComponent<Citizen>());
         }
         yield return null;
     }

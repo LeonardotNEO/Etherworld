@@ -926,6 +926,7 @@ public class Citizen : MonoBehaviour
                     setIsLookingForHousing(false);    
                     home.addResidentToBuilding(this);
                     setTownAlliegence(home.getTownBuildingIsApartOf());
+                    StartCoroutine(townAlliegence.waitForCitizenToLoadThenAdd(this));
 
                     townAlliegence.updateAvailableResidentialBuildingsInTown();
                     townAlliegence.updateHomelessInTown();

@@ -9,8 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4063219753043364057}
-  - component: {fileID: 4063219753043364058}
   - component: {fileID: 4063219753043364059}
+  - component: {fileID: 2669200761654233117}
+  - component: {fileID: 4063219753043364058}
   - component: {fileID: 361692226299448901}
   m_Layer: 2
   m_Name: Town center rank 2
@@ -34,19 +35,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &4063219753043364058
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4063219753043364056}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 100, y: 20, z: 100}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &4063219753043364059
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -97,6 +85,41 @@ MonoBehaviour:
   worktimeEnd: 18
   collidingWithOtherTown: 0
   currentlyCraftedBuildingIsOutsideOfTownRange: 0
+--- !u!114 &2669200761654233117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4063219753043364056}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea4b01e482c9e7042b05e37e7508fdf9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cohorts: []
+  leaderPlayer: {fileID: 0}
+  leaderCitizen: {fileID: 0}
+  townAlliegence: {fileID: 4063219753043364059}
+  cohortLimitSize: 15
+  armyLoyality: 0
+  cohortPrefab: {fileID: 3554427561269732295, guid: 833849c3bfd25394d925c8939b365af0,
+    type: 3}
+  soldierPositionPrefab: {fileID: 6469400692613434273, guid: 85084d31ea5c97d4b942791e3e1b1db9,
+    type: 3}
+--- !u!65 &4063219753043364058
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4063219753043364056}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 100, y: 20, z: 100}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &361692226299448901
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -30,6 +30,7 @@ public class UI : MonoBehaviour
     public bool citizenInventoryOpen;
     public bool unfinishedBuildingOpen;
     public bool equipmentOpen;
+    public bool militaryOpen;
     
     //--------------------//
     // UI ELEMENT PREFABS //
@@ -103,6 +104,11 @@ public class UI : MonoBehaviour
             Time.timeScale = 4;
         }
         if(Input.GetKeyDown("o")){
+            gameManager.getPlayerBehavior().getSkills().increaseExperience("Woodcutting", 100000);
+            gameManager.getPlayerBehavior().getSkills().increaseExperience("Ranged", 500000);
+            gameManager.getPlayerBehavior().getSkills().increaseExperience("Magic", 100000);
+            gameManager.getPlayerBehavior().getSkills().increaseExperience("Melee", 200000);
+            gameManager.getPlayerBehavior().getSkills().increaseExperience("Resiliance", 200000);
             gameManager.getPlayerBehavior().getSkills().increaseExperience("Woodcutting", 100000);
         }
         if(Input.GetKeyDown("p")){
@@ -183,24 +189,27 @@ public class UI : MonoBehaviour
         //if(Input.GetKeyDown("space")){
         //    GameObject.FindGameObjectWithTag("MainCamera2").GetComponent<MoveCameraScript>().moveCameraToPosition(gameManager.getPlayerBehavior().getPlayerPosition());
         //}
-        if(Input.GetKeyDown("tab")){
+        if(Input.GetKeyDown("z")){
             openInventory();
         } 
-        if(Input.GetKeyDown("z")){
-            openMessageLog();
-        } 
         if(Input.GetKeyDown("x")){
-            openSkills();
-        } 
-        if(Input.GetKeyDown("c")){
             openCrafting();
         } 
-        if(Input.GetKeyDown("v")){
-            openTown();
-        }
-        if(Input.GetKeyDown("b")){
+        if(Input.GetKeyDown("c")){
             openAbilities();
         }
+        if(Input.GetKeyDown("v")){
+            openSkills();
+        } 
+        if(Input.GetKeyDown("b")){
+            openTown();
+        }
+        if(Input.GetKeyDown("n")){
+            openMilitary();
+        }
+        if(Input.GetKeyDown("m")){
+            openMessageLog();
+        } 
         if(gameManager.getCraftingSystem().getIsCrafting()){
             if(Input.GetKeyDown("q")){
                 gameManager.getCraftingSystem().rotateBuildingLeft();
@@ -447,7 +456,7 @@ public class UI : MonoBehaviour
     }
 
     //------------------//
-    // BUILDING OPEN UI //
+    // BUILDINGOPENMENU //
     //------------------//
     public void buildingOpen(){
         if(!gameManager.getCraftingSystem().getIsCrafting()){
@@ -491,7 +500,9 @@ public class UI : MonoBehaviour
     // INVENTORY
     public void buildingInventoryOpen(){
         // OPEN PLAYER INVENTORY
-        gameManager.GetUI().openInventory();
+        if(!inventoryOpen){
+            gameManager.GetUI().openInventory();
+        }
 
         //OPEN
         closeAllBuildingOptions();
@@ -702,15 +713,10 @@ public class UI : MonoBehaviour
         closeTown();
         closeAbilities();
         closeEquipment();
+        closeMilitary();
     }
     public void closeAllMainMenusOpenMenuBar(){
-        closeMessageLog();
-        closeSkills();
-        closeInventory();
-        closeCrafting();
-        closeTown();
-        closeAbilities();
-        closeEquipment();
+        closeAllMainMenus();
         openMenuBar();
     }
     public void openMenuBar(){
@@ -1168,10 +1174,13 @@ public class UI : MonoBehaviour
             return;
         }
 
+        // CLOSE OTHER MENU
+        closeAllMainMenus();
+
         // DROPDOWN OF TOWNS
         instantiateDropdown();
 
-        closeAllMainMenus();
+        openTownBuildings();
         townOpen = true;
         GameObject.FindGameObjectWithTag("TownMenuUI").transform.Find("Background").gameObject.SetActive(true);
     }  
@@ -1345,7 +1354,7 @@ public class UI : MonoBehaviour
         showItemsInTownInventory(gameManager.getItemCatalog().getItemCatalog());
     }
     public void showItemWithTypeTownInventory(string type){
-        showItemsInTownInventory(gameManager.getItemCatalog().getItemByType(type));
+        showItemsInTownInventory(gameManager.getItemCatalog().getItemByType2(type));
     }
     public void updateTownInventory(){
         GameObject inventoryList = GameObject.FindGameObjectWithTag("TownMenuUI").transform.Find("Background/Inventory/Show Inventory/Viewport/Content").gameObject; 
@@ -1437,6 +1446,7 @@ public class UI : MonoBehaviour
         citizenOpen = true;
     }
     public void closeCitizenMenu(){
+        closeAllCitizenOptions();
         GameObject.FindGameObjectWithTag("CitizenMenuUI").transform.Find("Background").gameObject.SetActive(false);
         citizenOpen = false;
     }
@@ -1613,5 +1623,45 @@ public class UI : MonoBehaviour
         // HUNGER
         content.Find("Hungerbar background/Hungerbar").transform.GetComponent<RectTransform>().sizeDelta = new Vector2((float)(268.4f/100) * playerBehavior.getHunger(), 31.39f);
         content.Find("Hungerbar background/Text").GetComponent<Text>().text = playerBehavior.getHunger().ToString() + "/100";
+    }
+
+    //--------------//
+    // MILITARYMENU //
+    //--------------//
+    public void openMilitary(){
+        if(GameObject.FindGameObjectWithTag("MilitaryMenuUI").transform.Find("Background").gameObject.activeSelf == true){
+            closeAllMainMenusOpenMenuBar();
+            return;
+        }
+
+        closeAllMainMenus();
+        GameObject.FindGameObjectWithTag("MilitaryMenuUI").transform.Find("Background").gameObject.SetActive(true);
+        updateMilitaryInterface();
+        militaryOpen = true;
+    }
+    public void closeMilitary(){
+        GameObject.FindGameObjectWithTag("MilitaryMenuUI").transform.Find("Background").gameObject.SetActive(false);
+        militaryOpen = false;
+    }
+    public void updateMilitaryInterface(){
+
+    }
+    public void clickCohort(){
+        // SELECT COHORT
+        openCohortStats();
+    }
+    public void openCohortStats(){
+        GameObject.FindGameObjectWithTag("MilitaryMenuUI").transform.Find("Background/Content/Cohort stats").gameObject.SetActive(true);
+        GameObject.FindGameObjectWithTag("MilitaryMenuUI").transform.Find("Background/Content/Army stats").gameObject.SetActive(false);
+        GameObject.FindGameObjectWithTag("MilitaryMenuUI").transform.Find("Background/Content/Commands").gameObject.SetActive(false);
+        updateCohortStatsInterface();
+    }
+    public void closeCohortStats(){
+        GameObject.FindGameObjectWithTag("MilitaryMenuUI").transform.Find("Background/Content/Cohort stats").gameObject.SetActive(false);
+        GameObject.FindGameObjectWithTag("MilitaryMenuUI").transform.Find("Background/Content/Army stats").gameObject.SetActive(true);
+        GameObject.FindGameObjectWithTag("MilitaryMenuUI").transform.Find("Background/Content/Commands").gameObject.SetActive(true);
+    }
+    public void updateCohortStatsInterface(){
+
     }
 }

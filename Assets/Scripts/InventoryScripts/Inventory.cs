@@ -311,6 +311,7 @@ public class Inventory : MonoBehaviour
         }
     }
 
+
     public List<InventorySlot> getFreeInventorySpaceForItem(string itemName, int amount){
         List<InventorySlot> freeInventorySlots = new List<InventorySlot>();
 
@@ -360,13 +361,19 @@ public class Inventory : MonoBehaviour
 
     public bool sendItemFromThisToOther(Inventory inv2, string itemName, int amount){
         if(inv2.checkIfInventoryHasSpaceForItem(itemName, amount)){
-            if(this.checkIfListOfItemsAreInInventory(new Dictionary<string, int>{{itemName, amount}})){
-                inv2.addItemToInventory(itemName, amount);
-                this.removeItemFromInventory(itemName, amount);
-                return true;
+            if(this.getAmountOfSpecificItem(itemName) != 0){
+                if(this.getAmountOfSpecificItem(itemName) >= amount){
+                    inv2.addItemToInventory(itemName, amount);
+                    this.removeItemFromInventory(itemName, amount);
+                    return true;
+                } else {
+                    inv2.addItemToInventory(itemName, this.getAmountOfSpecificItem(itemName));
+                    this.removeItemFromInventory(itemName, this.getAmountOfSpecificItem(itemName));
+                    Debug.Log(itemName + " " + this.getAmountOfSpecificItem(itemName) + " " + this.transform.name + " " + inv2.transform.name);
+                    Debug.Log("Didnt have the full amount to transfer, so sent what the inventory had of that item");
+                }
             } else {
-                gameManager.getMessageLogText().addMessageToLog("Cant send item from inventory 1 to inventory 2, because inv1 doesnt have the item");
-                Debug.Log(itemName + " " + amount + " " + this.transform.name + " " + inv2.transform.name);
+                Debug.Log("Inventory didnt have " + itemName + ". No transfer was made.");
             }
         } else {
             gameManager.getMessageLogText().addMessageToLog("Could not transfer item to inventory, since its not enough space");
@@ -416,7 +423,7 @@ public class Inventory : MonoBehaviour
             gameManager.GetUI().openUnfinishedBuilding();
             //Debug.Log("updating unfinished building inventory");
         }
-        if(GameObject.FindGameObjectWithTag("TownMenuUI").transform.Find("Background").gameObject.activeSelf){
+        if(GameObject.FindGameObjectWithTag("TownMenuUI").transform.Find("Background/Inventory").gameObject.activeSelf){
             gameManager.GetUI().updateTownInventory();
             //Debug.Log("updating town inventory");
         }

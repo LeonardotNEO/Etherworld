@@ -933,7 +933,7 @@ public class ItemCatalog : MonoBehaviour
                     /*Armor*/               0,
                     /*Ranged*/              0,
                     /*Magic*/               0,
-                    /*Melee*/               2,
+                    /*Melee*/               5,
                     /*Attackspeed*/         10,
                     /*Attackrange*/         1.5f,
                     /*Critchance*/          1.01f,
@@ -958,7 +958,7 @@ public class ItemCatalog : MonoBehaviour
                     /*Armor*/               0,
                     /*Ranged*/              0,
                     /*Magic*/               0,
-                    /*Melee*/               5,
+                    /*Melee*/               20,
                     /*Attackspeed*/         5,
                     /*Attackrange*/         2f,
                     /*Critchance*/          1.1f,
@@ -983,7 +983,7 @@ public class ItemCatalog : MonoBehaviour
                     /*Armor*/               0,
                     /*Ranged*/              0,
                     /*Magic*/               0,
-                    /*Melee*/               10,
+                    /*Melee*/               25,
                     /*Attackspeed*/         5,
                     /*Attackrange*/         2f,
                     /*Critchance*/          1.1f,
@@ -1600,11 +1600,21 @@ public class ItemCatalog : MonoBehaviour
         selectedItem = item;
     }
 
-    public List<Item> getItemByType(string type){
+    public List<Item> getItemByType1(string type){
         List<Item> items = new List<Item>();
 
         foreach(Item item in itemCatalog){
-            if(item.getType().Equals(type)){
+            if(item.getItemType1().Equals(type)){
+                items.Add(item);
+            }
+        }
+        return items;
+    }
+    public List<Item> getItemByType2(string type){
+        List<Item> items = new List<Item>();
+
+        foreach(Item item in itemCatalog){
+            if(item.getItemType2().Equals(type)){
                 items.Add(item);
             }
         }

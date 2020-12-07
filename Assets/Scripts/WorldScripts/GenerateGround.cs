@@ -31,12 +31,11 @@ public class GenerateGround : MonoBehaviour
         amountTreesToSpawn = Random.Range(500, 1500);
         for(int i = 0; i < amountTreesToSpawn; i++){
             
-            GameObject spawn = Instantiate(treePrefab, new Vector3(Random.Range(transform.position.x + 150, transform.position.x - 150), transform.position.y, Random.Range(transform.position.z + 150, transform.position.z - 150)), transform.rotation);
-            Collider[] intersecting = Physics.OverlapSphere(new Vector3(spawn.transform.position.x, spawn.transform.position.y + 4.5f, spawn.transform.position.z), 2f);
+            Vector3 spawnPosition = new Vector3(Random.Range(transform.position.x + 150, transform.position.x - 150), transform.position.y, Random.Range(transform.position.z + 150, transform.position.z - 150));
+            Collider[] intersecting = Physics.OverlapSphere(spawnPosition, 2f);
             List<Collider> intersectingList = new List<Collider>();
 
             float randomVector3Scale = Random.Range(1.3f, 2.0f);
-            spawn.transform.localScale = new Vector3(randomVector3Scale, randomVector3Scale, randomVector3Scale);
 
             foreach(Collider collider in intersecting){
                 if(collider.transform.name.Equals("Spherecollider")){
@@ -45,22 +44,22 @@ public class GenerateGround : MonoBehaviour
                     intersectingList.Add(collider);
                 }
             }
-            
-            
-            spawn.transform.parent = GameObject.Find("Resources").transform;
-            if(intersectingList.Count != 4){
-                Destroy(spawn);
+        
+            if(intersectingList.Count > 2){
                 actualSpawnedTrees--;
+            } else {
+                GameObject spawn = Instantiate(treePrefab, spawnPosition, transform.rotation);
+                spawn.transform.parent = GameObject.Find("Resources").transform;
+                spawn.transform.localScale = new Vector3(randomVector3Scale, randomVector3Scale, randomVector3Scale);
+                actualSpawnedTrees++;
             }
-            actualSpawnedTrees++;
         }
 
         amountStoneToSpawn = Random.Range(100, 200);
         for(int i = 0; i < amountStoneToSpawn; i++){
             
-            GameObject spawn = Instantiate(stonePrefab, new Vector3(Random.Range(transform.position.x + 150, transform.position.x - 150), transform.position.y, Random.Range(transform.position.z + 150, transform.position.z - 150)), transform.rotation);
-            Collider[] intersecting = Physics.OverlapSphere(new Vector3(spawn.transform.position.x, spawn.transform.position.y, spawn.transform.position.z), 0.5f);
-            spawn.transform.parent = GameObject.Find("Resources").transform;
+            Vector3 spawnPosition = new Vector3(Random.Range(transform.position.x + 150, transform.position.x - 150), transform.position.y, Random.Range(transform.position.z + 150, transform.position.z - 150));
+            Collider[] intersecting = Physics.OverlapSphere(spawnPosition, 2f);
 
             List<Collider> intersectingList = new List<Collider>();
 
@@ -71,14 +70,14 @@ public class GenerateGround : MonoBehaviour
                     intersectingList.Add(collider);
                 }
             }
-            //for(int y = 0; y < intersecting.Length; y++){
-            //    Debug.Log(intersecting[y].name);
-            //}
-            if(intersectingList.Count != 4){
-                Destroy(spawn);
+
+            if(intersectingList.Count > 2){
                 actualSpawnedStone--;
+            } else {
+                GameObject spawn = Instantiate(stonePrefab, spawnPosition, transform.rotation);
+                spawn.transform.parent = GameObject.Find("Resources").transform;
+                actualSpawnedStone++;
             }
-            actualSpawnedStone++;
         }
     }
 

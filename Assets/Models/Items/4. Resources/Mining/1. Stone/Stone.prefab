@@ -75,8 +75,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b292f7335baf61a4c9bca83f2c2c4716, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemAmount: 6
-  itemName: Running shoes
+  itemAmount: 9
+  itemName: Greatsword
   walkingToItemBool: 0
 --- !u!64 &4521286826779047719
 MeshCollider:

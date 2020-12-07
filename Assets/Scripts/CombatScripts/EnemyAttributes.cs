@@ -498,9 +498,8 @@ public class EnemyAttributes : MonoBehaviour
             level = 
                 (skills.getSkillByName("Magic").getLevel() + 
                 skills.getSkillByName("Ranged").getLevel() + 
-                skills.getSkillByName("Onehand").getLevel() +
-                skills.getSkillByName("Twohand").getLevel() +
-                skills.getSkillByName("Resiliance").getLevel())/5;
+                skills.getSkillByName("Melee").getLevel() +
+                skills.getSkillByName("Resiliance").getLevel())/4;
         } else {
             return level;
         }

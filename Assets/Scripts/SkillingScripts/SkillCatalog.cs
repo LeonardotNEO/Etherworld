@@ -8,21 +8,20 @@ public class SkillCatalog : MonoBehaviour
 
     void Awake()
     {
+        addSkillToCatalog("Resiliance");
+        addSkillToCatalog("Melee");
+        addSkillToCatalog("Ranged");
+        addSkillToCatalog("Magic");
         addSkillToCatalog("Woodcutting");
         addSkillToCatalog("Mining");
         addSkillToCatalog("Crafting");
         addSkillToCatalog("Engineering");
-        addSkillToCatalog("Resiliance");
-        addSkillToCatalog("Onehand");
-        addSkillToCatalog("Twohand");
-        addSkillToCatalog("Ranged");
-        addSkillToCatalog("Magic");
-        addSkillToCatalog("Leadership");
         addSkillToCatalog("Commanding");
-        addSkillToCatalog("Administration");
-        addSkillToCatalog("Researching");
-        addSkillToCatalog("Surgeoning");
         addSkillToCatalog("Founding");
+        //addSkillToCatalog("Leadership"); <- A part of founding
+        addSkillToCatalog("Administration");
+        //addSkillToCatalog("Researching"); <- Teachnology not planned yet, building perks are unlocked through other skills
+        addSkillToCatalog("Surgeoning");
     }
 
     public List<string> getSkillCatalog(){
